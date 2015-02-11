@@ -35318,7 +35318,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithController:"), 
     var ___r1;
 }
 ,["BOOL"])]);
-}p;8;CPView.jt;143591;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.ji;26;CPLayoutConstraintEngine.jt;143201;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
+}p;8;CPView.jt;145537;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.ji;26;CPLayoutConstraintEngine.jt;145147;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
 objj_registerTypeDef(the_typedef);
 }{var the_typedef = objj_allocateTypeDef("Variable");
 objj_registerTypeDef(the_typedef);
@@ -36549,7 +36549,13 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
         return (CPMultipleValueOrBinding == null ? null : CPMultipleValueOrBinding.isa.objj_msgSend0(CPMultipleValueOrBinding, "class"));
     return objj_msgSendSuper({ receiver:self, super_class:objj_getMetaClass("CPView").super_class }, "_binderClassForBinding:", aBinding);
 }
-,["Class","CPString"]), new objj_method(sel_getUid("keyPathsForValuesAffectingFrame"), function $CPView__keyPathsForValuesAffectingFrame(self, _cmd)
+,["Class","CPString"]), new objj_method(sel_getUid("automaticallyNotifiesObserversForKey:"), function $CPView__automaticallyNotifiesObserversForKey_(self, _cmd, theKey)
+{
+    if ((theKey == null ? null : theKey.isa.objj_msgSend1(theKey, "isEqualToString:", "constraints")))
+        return NO;
+    return objj_msgSendSuper({ receiver:self, super_class:objj_getMetaClass("CPView").super_class }, "automaticallyNotifiesObserversForKey:", theKey);
+}
+,["BOOL","CPString"]), new objj_method(sel_getUid("keyPathsForValuesAffectingFrame"), function $CPView__keyPathsForValuesAffectingFrame(self, _cmd)
 {
     return CPSet.isa.objj_msgSend2(CPSet, "setWithObjects:", "frameOrigin", "frameSize");
 }
@@ -37459,25 +37465,31 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 {
     if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")) == 0)
         return;
-    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
     self.isa.objj_msgSend1(self, "_addConstraints:", constraints);
-    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
     self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", YES);
 }
 ,["void","CPArray"]), new objj_method(sel_getUid("_addConstraints:"), function $CPView___addConstraints_(self, _cmd, constraints)
 {
+    var externalIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
     (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
     {
-        if (((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "containsObject:", aConstraint)))
+        if (((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
             return;
         (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setContainer:", self));
         (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "resolveConstant"));
         (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", YES));
         ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
         ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-        ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObject:", aConstraint));
+        (externalIndexes == null ? null : externalIndexes.isa.objj_msgSend1(externalIndexes, "addIndex:", idx));
         var ___r1;
     }));
+    if ((externalIndexes == null ? null : externalIndexes.isa.objj_msgSend0(externalIndexes, "count")) == 0)
+        return;
+    var newIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")), (externalIndexes == null ? null : externalIndexes.isa.objj_msgSend0(externalIndexes, "count"))));
+    self.isa.objj_msgSend3(self, "willChange:valuesAtIndexes:forKey:", CPKeyValueChangeInsertion, newIndexes, "constraints");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "objectsAtIndexes:", externalIndexes))));
+    self.isa.objj_msgSend3(self, "didChange:valuesAtIndexes:forKey:", CPKeyValueChangeInsertion, newIndexes, "constraints");
+    var ___r1;
 }
 ,["void","CPArray"]), new objj_method(sel_getUid("removeConstraint:"), function $CPView__removeConstraint_(self, _cmd, aConstraint)
 {
@@ -37487,13 +37499,20 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 {
     if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")) == 0)
         return;
-    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
-    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsInArray:", constraints));
-    (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(cst, idx, stop)
+    var removeIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
     {
-        (cst == null ? null : cst.isa.objj_msgSend1(cst, "_setActive:", NO));
+        if ((constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
+        {
+            (removeIndexes == null ? null : removeIndexes.isa.objj_msgSend1(removeIndexes, "addIndex:", idx));
+            (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", NO));
+        }
     }));
-    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
+    if ((removeIndexes == null ? null : removeIndexes.isa.objj_msgSend0(removeIndexes, "count")) == 0)
+        return;
+    self.isa.objj_msgSend3(self, "willChange:valuesAtIndexes:forKey:", CPKeyValueChangeRemoval, removeIndexes, "constraints");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", removeIndexes));
+    self.isa.objj_msgSend3(self, "didChange:valuesAtIndexes:forKey:", CPKeyValueChangeRemoval, removeIndexes, "constraints");
     self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", YES);
     var ___r1;
 }

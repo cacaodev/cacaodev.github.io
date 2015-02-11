@@ -12646,7 +12646,7 @@ if (typeof window !== 'undefined')
     {
         window.clearTimeout(aTimeoutID);
     };
-}p;12;CPTimeZone.jt;21904;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;8;CPDate.ji;10;CPLocale.jt;21827;objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPLocale.j", YES);CPTimeZoneNameStyleStandard = 0;
+}p;12;CPTimeZone.jt;21870;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;8;CPDate.ji;10;CPLocale.jt;21793;objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPLocale.j", YES);CPTimeZoneNameStyleStandard = 0;
 CPTimeZoneNameStyleShortStandard = 1;
 CPTimeZoneNameStyleDaylightSaving = 2;
 CPTimeZoneNameStyleShortDaylightSaving = 3;
@@ -12857,7 +12857,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
     var date = CPDate.isa.objj_msgSend0(CPDate, "date"),
         abbreviation = ((String(((String(date)).split("("))[1])).split(")"))[0];
     systemTimeZone = self.isa.objj_msgSend1(self, "timeZoneWithAbbreviation:", abbreviation);
-    ((___r1 = (CPNotification == null ? null : CPNotification.isa.objj_msgSend0(CPNotification, "defaultCenter"))), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPSystemTimeZoneDidChangeNotification, systemTimeZone));
+    ((___r1 = CPNotification.isa.objj_msgSend0(CPNotification, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPSystemTimeZoneDidChangeNotification, systemTimeZone));
     var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("systemTimeZone"), function $CPTimeZone__systemTimeZone(self, _cmd)
