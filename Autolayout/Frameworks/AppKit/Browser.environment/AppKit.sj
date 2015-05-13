@@ -257,7 +257,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "initWithObjectsAndKeys:", CPNull.isa.objj_msgSend0(CPNull, "null"), "background-color", CPNull.isa.objj_msgSend0(CPNull, "null"), "divider-color");
 }
 ,["CPDictionary"])]);
-}p;18;_CPDisplayServer.jt;3010;@STATIC;1.0;I;22;Foundation/CPRunLoop.jt;2964;objj_executeFile("Foundation/CPRunLoop.j", NO);var displayObjects = [],
+}p;18;_CPDisplayServer.jt;2857;@STATIC;1.0;I;22;Foundation/CPRunLoop.jt;2811;objj_executeFile("Foundation/CPRunLoop.j", NO);var displayObjects = [],
     displayObjectsByUID = {},
     layoutObjects = [],
     layoutObjectsByUID = {},
@@ -286,12 +286,10 @@ meta_class = the_class.isa;objj_registerClassPair(the_class);
 class_addMethods(meta_class, [new objj_method(sel_getUid("lock"), function $_CPDisplayServer__lock(self, _cmd)
 {
     locked++;
-    CPLog.warn("_CPDisplayServer: locked level = " + locked);
 }
 ,["void"]), new objj_method(sel_getUid("unlock"), function $_CPDisplayServer__unlock(self, _cmd)
 {
     locked--;
-    CPLog.warn("_CPDisplayServer: " + (locked ? "locked level = " + locked : "unlocked"));
 }
 ,["void"]), new objj_method(sel_getUid("run"), function $_CPDisplayServer__run(self, _cmd)
 {
@@ -929,14 +927,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:control:"
     var ___r1, ___r2;
 }
 ,["void","CPRange"])]);
-}p;18;_CPPopoverWindow.jt;27344;@STATIC;1.0;I;21;Foundation/CPObject.ji;10;CPButton.ji;8;CPMenu.ji;9;CPPanel.jt;27258;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("CPButton.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPPanel.j", YES);CPClosableOnBlurWindowMask = 1 << 4;
+}p;18;_CPPopoverWindow.jt;28093;@STATIC;1.0;I;21;Foundation/CPObject.ji;10;CPButton.ji;8;CPMenu.ji;9;CPPanel.jt;28007;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("CPButton.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPPanel.j", YES);CPClosableOnBlurWindowMask = 1 << 4;
 CPPopoverAppearanceMinimal = 0;
 CPPopoverAppearanceHUD = 1;
 var _CPPopoverWindow_shouldClose_ = 1 << 4,
     _CPPopoverWindow_didClose_ = 1 << 5,
     _CPPopoverWindow_didShow_ = 1 << 6;
 {var the_class = objj_allocateClassPair(CPPanel, "_CPPopoverWindow"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_animates"), new objj_ivar("_targetView"), new objj_ivar("_appearance"), new objj_ivar("_isClosing"), new objj_ivar("_isOpening"), new objj_ivar("_closeOnBlur"), new objj_ivar("_browserAnimates"), new objj_ivar("_isObservingFrame"), new objj_ivar("_shouldPerformAnimation"), new objj_ivar("_implementedDelegateMethods"), new objj_ivar("_targetRect"), new objj_ivar("_targetWindow"), new objj_ivar("_orderOutTransitionFunction"), new objj_ivar("_transitionCompleteFunction"), new objj_ivar("_orderFrontTransitionFunction")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_animates"), new objj_ivar("_targetView"), new objj_ivar("_appearance"), new objj_ivar("_isClosing"), new objj_ivar("_isOpening"), new objj_ivar("_closeOnBlur"), new objj_ivar("_browserAnimates"), new objj_ivar("_isObservingFrame"), new objj_ivar("_shouldPerformAnimation"), new objj_ivar("_targetRect"), new objj_ivar("_targetWindow"), new objj_ivar("_orderOutTransitionFunction"), new objj_ivar("_transitionCompleteFunction"), new objj_ivar("_orderFrontTransitionFunction")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("animates"), function $_CPPopoverWindow__animates(self, _cmd)
 {
     return self._animates;
@@ -1034,16 +1032,24 @@ class_addMethods(the_class, [new objj_method(sel_getUid("animates"), function $_
     if (self._isObservingFrame)
         return;
     self._isObservingFrame = YES;
-    ((___r1 = self._targetView), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "addObserver:forKeyPath:options:context:", self, "frame", 0, nil));
-    var ___r1;
+    var view = self._targetView;
+    while (view)
+    {
+        (view == null ? null : view.isa.objj_msgSend(view, "addObserver:forKeyPath:options:context:", self, "frame", 0, nil));
+        view = (view == null ? null : view.isa.objj_msgSend0(view, "superview"));
+    }
 }
 ,["void"]), new objj_method(sel_getUid("_removeFrameObserver"), function $_CPPopoverWindow___removeFrameObserver(self, _cmd)
 {
     if (!self._isObservingFrame)
         return;
     self._isObservingFrame = NO;
-    ((___r1 = self._targetView), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "removeObserver:forKeyPath:", self, "frame"));
-    var ___r1;
+    var view = self._targetView;
+    while (view)
+    {
+        (view == null ? null : view.isa.objj_msgSend2(view, "removeObserver:forKeyPath:", self, "frame"));
+        view = (view == null ? null : view.isa.objj_msgSend0(view, "superview"));
+    }
 }
 ,["void"]), new objj_method(sel_getUid("observeValueForKeyPath:ofObject:change:context:"), function $_CPPopoverWindow__observeValueForKeyPath_ofObject_change_context_(self, _cmd, aPath, anObject, theChange, aContext)
 {
@@ -1335,7 +1341,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("animates"), function $_
     ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_popoverWindowDidClose"));
     var ___r1;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("_currentTransformMatrix"), function $_CPPopoverWindow___currentTransformMatrix(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("_didReceivePlatformWindowWillCloseNotification:"), function $_CPPopoverWindow___didReceivePlatformWindowWillCloseNotification_(self, _cmd, aNotification)
+{
+    objj_msgSendSuper({ receiver:self, super_class:objj_getClass("_CPPopoverWindow").super_class }, "_didReceivePlatformWindowWillCloseNotification:", aNotification);
+    self.isa.objj_msgSend1(self, "_orderOutRecursively:", YES);
+}
+,["void","CPNotification"]), new objj_method(sel_getUid("_currentTransformMatrix"), function $_CPPopoverWindow___currentTransformMatrix(self, _cmd)
 {
     return (window.getComputedStyle(self._DOMElement, null))[CPBrowserStyleProperty("transform")];
 }
@@ -1360,7 +1371,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("animates"), function $_
     if (!self.isa.objj_msgSend0(self, "isVisible") || !self._targetWindow)
         return;
     var mouseWindow = (anEvent == null ? null : anEvent.isa.objj_msgSend0(anEvent, "window"));
-    if (mouseWindow === self || (mouseWindow == null ? null : mouseWindow.isa.objj_msgSend1(mouseWindow, "_hasAncestorWindow:", self)) || !self.isa.objj_msgSend1(self, "_hasOnlyTransientChild:", self))
+    if (mouseWindow === self || (mouseWindow == null ? null : mouseWindow.isa.objj_msgSend1(mouseWindow, "_hasAncestorWindow:", self)) || !self.isa.objj_msgSend1(self, "_hasOnlyTransientChild:", self) || (mouseWindow == null ? null : mouseWindow.isa.objj_msgSend0(mouseWindow, "platformWindow")) != self.isa.objj_msgSend0(self, "platformWindow"))
     {
         self.isa.objj_msgSend0(self, "_trapNextMouseDown");
     }
@@ -3670,7 +3681,7 @@ solveCurveX = function(x, epsilon)
     ay = 1.0 - cy - by;
     return solve(t, solveEpsilon(duration));
 };
-p;15;CPApplication.jt;54611;@STATIC;1.0;I;21;Foundation/CPBundle.ji;25;CPApplication_Constants.ji;17;CPCompatibility.ji;14;CPColorPanel.ji;10;CPCursor.ji;22;CPDocumentController.ji;9;CPEvent.ji;8;CPMenu.ji;13;CPResponder.ji;14;CPThemeBlend.ji;14;CPCibLoading.ji;9;CPPanel.ji;12;CPPlatform.ji;20;CPWindowController.ji;18;_CPPopoverWindow.jt;54293;objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("CPApplication_Constants.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPColorPanel.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDocumentController.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPThemeBlend.j", YES);objj_executeFile("CPCibLoading.j", YES);objj_executeFile("CPPanel.j", YES);objj_executeFile("CPPlatform.j", YES);objj_executeFile("CPWindowController.j", YES);objj_executeFile("_CPPopoverWindow.j", YES);{var the_typedef = objj_allocateTypeDef("CPModalSession");
+p;15;CPApplication.jt;55102;@STATIC;1.0;I;21;Foundation/CPBundle.ji;25;CPApplication_Constants.ji;17;CPCompatibility.ji;14;CPColorPanel.ji;10;CPCursor.ji;22;CPDocumentController.ji;9;CPEvent.ji;8;CPMenu.ji;13;CPResponder.ji;14;CPThemeBlend.ji;14;CPCibLoading.ji;9;CPPanel.ji;12;CPPlatform.ji;20;CPWindowController.ji;18;_CPPopoverWindow.jt;54784;objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("CPApplication_Constants.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPColorPanel.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDocumentController.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPThemeBlend.j", YES);objj_executeFile("CPCibLoading.j", YES);objj_executeFile("CPPanel.j", YES);objj_executeFile("CPPlatform.j", YES);objj_executeFile("CPWindowController.j", YES);objj_executeFile("_CPPopoverWindow.j", YES);{var the_typedef = objj_allocateTypeDef("CPModalSession");
 objj_registerTypeDef(the_typedef);
 }var CPMainCibFile = "CPMainCibFile",
     CPMainCibFileHumanFriendly = "Main cib file base name",
@@ -3870,6 +3881,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("themeBlend"), function 
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("activateIgnoringOtherApps:"), function $CPApplication__activateIgnoringOtherApps_(self, _cmd, shouldIgnoreOtherApps)
 {
+    if (self._isActive)
+        return;
     self.isa.objj_msgSend0(self, "_willBecomeActive");
     CPPlatform.isa.objj_msgSend1(CPPlatform, "activateIgnoringOtherApps:", shouldIgnoreOtherApps);
     self._isActive = YES;
@@ -3877,6 +3890,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("themeBlend"), function 
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("deactivate"), function $CPApplication__deactivate(self, _cmd)
 {
+    if (!self._isActive)
+        return;
     self.isa.objj_msgSend0(self, "_willResignActive");
     CPPlatform.isa.objj_msgSend0(CPPlatform, "deactivate");
     self._isActive = NO;
@@ -3893,6 +3908,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("themeBlend"), function 
 ,["void","id"]), new objj_method(sel_getUid("run"), function $CPApplication__run(self, _cmd)
 {
     self.isa.objj_msgSend0(self, "finishLaunching");
+    self.isa.objj_msgSend1(self, "sendEvent:", CPEvent.isa.objj_msgSend(CPEvent, "otherEventWithType:location:modifierFlags:timestamp:windowNumber:context:subtype:data1:data2:", CPAppKitDefined, CGPointMakeZero(), 0, CPEvent.isa.objj_msgSend0(CPEvent, "currentTimestamp"), ((___r1 = self._keyWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "windowNumber")), nil, nil, nil, nil));
+    var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("runModalForWindow:"), function $CPApplication__runModalForWindow_(self, _cmd, aWindow)
 {
@@ -5108,11 +5125,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     self.isa.objj_msgSend0(self, "_selectionDidChange");
 }
 ,["void"])]);
-}p;36;CPAutoresizingMaskLayoutConstraint.jt;8627;@STATIC;1.0;i;20;CPLayoutConstraint.jt;8583;objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPAutoresizingMaskLayoutConstraint"),
+}p;36;CPAutoresizingMaskLayoutConstraint.jt;8651;@STATIC;1.0;i;20;CPLayoutConstraint.jt;8607;objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPAutoresizingMaskLayoutConstraint"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:"), function $CPAutoresizingMaskLayoutConstraint__initWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(self, _cmd, item1, att1, relation, item2, att2, multiplier, constant)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPAutoresizingMaskLayoutConstraint").super_class }, "initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:", item1, att1, relation, item2, att2, multiplier, constant);
+    self._active = YES;
     return self;
 }
 ,["id","id","CPLayoutAttribute","CPLayoutRelation","id","CPLayoutAttribute","double","double"]), new objj_method(sel_getUid("viewForAutoresizingMask"), function $CPAutoresizingMaskLayoutConstraint__viewForAutoresizingMask(self, _cmd)
@@ -9622,7 +9640,7 @@ var makeImagesFromObject = function(object, isVertical, imageFactory)
             else
                 makeImagesFromObject(object[key], isVertical, imageFactory);
 };
-p;14;CPColorPanel.jt;30798;@STATIC;1.0;i;10;CPButton.ji;10;CPCookie.ji;9;CPPanel.ji;14;CPPasteboard.ji;8;CPView.ji;15;CPColorPicker.ji;21;CPSliderColorPicker.jt;30658;objj_executeFile("CPButton.j", YES);objj_executeFile("CPCookie.j", YES);objj_executeFile("CPPanel.j", YES);objj_executeFile("CPPasteboard.j", YES);objj_executeFile("CPView.j", YES);CPWheelColorPickerMode = 1;
+p;14;CPColorPanel.jt;30771;@STATIC;1.0;i;10;CPButton.ji;10;CPCookie.ji;9;CPPanel.ji;14;CPPasteboard.ji;8;CPView.ji;15;CPColorPicker.ji;21;CPSliderColorPicker.jt;30631;objj_executeFile("CPButton.j", YES);objj_executeFile("CPCookie.j", YES);objj_executeFile("CPPanel.j", YES);objj_executeFile("CPPasteboard.j", YES);objj_executeFile("CPView.j", YES);CPWheelColorPickerMode = 1;
 CPSliderColorPickerMode = 2;
 CPColorPickerViewWidth = 265;
 CPColorPickerViewHeight = 370;
@@ -9635,7 +9653,7 @@ var PREVIEW_HEIGHT = 20.0,
 var SharedColorPanel = nil,
     ColorPickerClasses = [];
 {var the_class = objj_allocateClassPair(CPPanel, "CPColorPanel"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_toolbar"), new objj_ivar("_swatchView"), new objj_ivar("_previewView"), new objj_ivar("_opacitySlider"), new objj_ivar("_colorPickers"), new objj_ivar("_currentView"), new objj_ivar("_activePicker"), new objj_ivar("_color"), new objj_ivar("_target"), new objj_ivar("_action"), new objj_ivar("_mode")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_swatchView"), new objj_ivar("_previewView"), new objj_ivar("_opacitySlider"), new objj_ivar("_colorPickers"), new objj_ivar("_currentView"), new objj_ivar("_activePicker"), new objj_ivar("_color"), new objj_ivar("_target"), new objj_ivar("_action"), new objj_ivar("_mode")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPColorPanel__init(self, _cmd)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPColorPanel").super_class }, "initWithContentRect:styleMask:", CGRectMake(500.0, 50.0, 219.0, 370.0), CPTitledWindowMask | CPClosableWindowMask | CPResizableWindowMask);
@@ -10485,7 +10503,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeObject:forKey:", self.isa.objj_msgSend0(self, "isBordered"), CPColorWellBorderedKey));
 }
 ,["void","CPCoder"])]);
-}p;12;CPComboBox.jt;54197;@STATIC;1.0;i;8;CPText.ji;13;CPTextField.ji;14;_CPPopUpList.jt;54128;objj_executeFile("CPText.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPPopUpList.j", YES);{var the_protocol = objj_allocateProtocol("CPComboBoxDelegate");
+}p;12;CPComboBox.jt;54419;@STATIC;1.0;i;8;CPText.ji;13;CPTextField.ji;14;_CPPopUpList.jt;54350;objj_executeFile("CPText.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPPopUpList.j", YES);{var the_protocol = objj_allocateProtocol("CPComboBoxDelegate");
 var aProtocol = objj_getProtocol("CPObject");
 if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPComboBoxDelegate\"");
 protocol_addProtocol(the_protocol, aProtocol);
@@ -11013,7 +11031,9 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
         var element = self.isa.objj_msgSend0(self, "_inputElement");
         window.setTimeout(function()
         {
+            var previousScrollingOrigin = self.isa.objj_msgSend0(self, "_scrollToVisibleRectAndReturnPreviousOrigin");
             element.focus();
+            self.isa.objj_msgSend1(self, "_restorePreviousScrollingOrigin:", previousScrollingOrigin);
         }, 0);
         return NO;
     }
@@ -11359,7 +11379,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:comboBox:
     return NO;
 }
 ,["BOOL"])]);
-}p;17;CPCompatibility.jt;10248;@STATIC;1.0;i;19;CPEvent_Constants.ji;12;CPPlatform.jt;10187;objj_executeFile("CPEvent_Constants.j", YES);objj_executeFile("CPPlatform.j", YES);CPUnknownBrowserEngine = 0;
+}p;17;CPCompatibility.jt;10500;@STATIC;1.0;i;19;CPEvent_Constants.ji;12;CPPlatform.jt;10439;objj_executeFile("CPEvent_Constants.j", YES);objj_executeFile("CPPlatform.j", YES);CPUnknownBrowserEngine = 0;
 CPGeckoBrowserEngine = 1;
 CPInternetExplorerBrowserEngine = 2;
 CPKHTMLBrowserEngine = 3;
@@ -11594,7 +11614,11 @@ CPBrowserCSSProperty = function(aProperty)
         browserProperty = parts.join("-");
     return browserProperty.toLowerCase();
 }
-p;31;CPContentSizeLayoutConstraint.jt;6849;@STATIC;1.0;I;24;Foundation/_CGGeometry.ji;20;CPLayoutConstraint.jt;6776;objj_executeFile("Foundation/_CGGeometry.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPContentSizeLayoutConstraint"),
+CPBrowserBackingStorePixelRatio = function(context)
+{
+    return context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
+}
+p;31;CPContentSizeLayoutConstraint.jt;5373;@STATIC;1.0;I;24;Foundation/_CGGeometry.ji;20;CPLayoutConstraint.jt;5300;objj_executeFile("Foundation/_CGGeometry.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPContentSizeLayoutConstraint"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_huggingPriority"), new objj_ivar("_compressPriority"), new objj_ivar("_orientation")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("huggingPriority"), function $CPContentSizeLayoutConstraint__huggingPriority(self, _cmd)
 {
@@ -11625,10 +11649,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("huggingPriority"), func
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPContentSizeLayoutConstraint").super_class }, "init");
     if (self)
     {
+        objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPContentSizeLayoutConstraint").super_class }, "_init");
         self._huggingPriority = huggingPriority;
         self._compressPriority = compressionResistancePriority;
         self._orientation = orientation;
         self._constant = value;
+        self._container = anItem;
         self._firstItem = anItem;
         self._secondItem = nil;
     }
@@ -11651,35 +11677,21 @@ class_addMethods(the_class, [new objj_method(sel_getUid("huggingPriority"), func
         return NO;
     return YES;
 }
-,["BOOL","id"]), new objj_method(sel_getUid("huggingHash"), function $CPContentSizeLayoutConstraint__huggingHash(self, _cmd)
+,["BOOL","id"]), new objj_method(sel_getUid("variableForOrientation"), function $CPContentSizeLayoutConstraint__variableForOrientation(self, _cmd)
 {
-    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@%d%d%d%d", "HUG", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), self._orientation, self._constant, self._huggingPriority);
+    return self._orientation ? ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableHeight")) : ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableWidth"));
     var ___r1;
 }
-,["CPString"]), new objj_method(sel_getUid("compressHash"), function $CPContentSizeLayoutConstraint__compressHash(self, _cmd)
+,["Variable"]), new objj_method(sel_getUid("valueForOrientation"), function $CPContentSizeLayoutConstraint__valueForOrientation(self, _cmd)
 {
-    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@%d%d%d%d", "COMPR", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), self._orientation, self._constant, self._compressPriority);
+    var itemRect = ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame"));
+    return self._orientation ? CGRectGetHeight(itemRect) : CGRectGetWidth(itemRect);
     var ___r1;
 }
-,["CPString"]), new objj_method(sel_getUid("toJSON"), function $CPContentSizeLayoutConstraint__toJSON(self, _cmd)
+,["Variable"]), new objj_method(sel_getUid("description"), function $CPContentSizeLayoutConstraint__description(self, _cmd)
 {
-    var frame = ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")),
-        value = self._orientation ? CGRectGetHeight(frame) : CGRectGetWidth(frame),
-        variable = self._orientation ? ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableHeight")) : ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableWidth")),
-        constant = self._constant,
-        containerUID = ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")),
-        containerName = ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID"));
-    return [{uuid: self.isa.objj_msgSend0(self, "huggingHash"), relation: CPLayoutRelationLessThanOrEqual, priority: self._huggingPriority, type: "SizeConstraint", container: containerUID, containerName: containerName, value: value, constant: constant, variable: variable, orientation: self._orientation}, {uuid: self.isa.objj_msgSend0(self, "compressHash"), relation: CPLayoutRelationGreaterThanOrEqual, priority: self._compressPriority, type: "SizeConstraint", container: containerUID, containerName: containerName, value: value, constant: constant, variable: variable, orientation: self._orientation}];
+    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@:[%@(%@)] hug=%@ compressionResistance=%@%@", self._orientation ? "V" : "H", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), self._constant, self._huggingPriority, self._compressPriority, self._active ? "" : " [inactive]");
     var ___r1;
-}
-,["Object"]), new objj_method(sel_getUid("description"), function $CPContentSizeLayoutConstraint__description(self, _cmd)
-{
-    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@:[%@(%@)] hug=%@ compressionResistance=%@", self.isa.objj_msgSend0(self, "_orientationDescription"), ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), self._constant, self._huggingPriority, self._compressPriority);
-    var ___r1;
-}
-,["CPString"]), new objj_method(sel_getUid("_orientationDescription"), function $CPContentSizeLayoutConstraint___orientationDescription(self, _cmd)
-{
-    return self._orientation ? "V" : "H";
 }
 ,["CPString"])]);
 }p;11;CPControl.jt;38954;@STATIC;1.0;I;24;Foundation/CPFormatter.jI;20;Foundation/CPTimer.ji;8;CPFont.ji;10;CPShadow.ji;8;CPView.ji;19;CPKeyValueBinding.jt;38817;objj_executeFile("Foundation/CPFormatter.j", NO);objj_executeFile("Foundation/CPTimer.j", NO);objj_executeFile("CPFont.j", YES);objj_executeFile("CPShadow.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPKeyValueBinding.j", YES);{var the_protocol = objj_allocateProtocol("CPControlTextEditingDelegate");
@@ -13990,7 +14002,7 @@ CPDragOperationPrivate = 1 << 3;
 CPDragOperationMove = 1 << 4;
 CPDragOperationDelete = 1 << 5;
 CPDragOperationEvery = -1;
-p;9;CPEvent.jt;18273;@STATIC;1.0;i;19;CPEvent_Constants.jI;21;Foundation/CPObject.jI;26;Foundation/CPObjJRuntime.jI;21;Foundation/CPString.ji;17;CPCompatibility.ji;12;CGGeometry.ji;8;CPText.jt;18095;objj_executeFile("CPEvent_Constants.j", YES);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPText.j", YES);{var the_typedef = objj_allocateTypeDef("DOMEvent");
+p;9;CPEvent.jt;18317;@STATIC;1.0;i;19;CPEvent_Constants.jI;21;Foundation/CPObject.jI;26;Foundation/CPObjJRuntime.jI;21;Foundation/CPString.ji;17;CPCompatibility.ji;12;CGGeometry.ji;8;CPText.jt;18139;objj_executeFile("CPEvent_Constants.j", YES);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPText.j", YES);{var the_typedef = objj_allocateTypeDef("DOMEvent");
 objj_registerTypeDef(the_typedef);
 }{var the_typedef = objj_allocateTypeDef("CPEventType");
 objj_registerTypeDef(the_typedef);
@@ -14055,6 +14067,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_initWithType:"), funct
         self._subtype = aSubtype;
         self._data1 = aData1;
         self._data2 = aData2;
+        self._windowNumber = aWindowNumber;
     }
     return self;
 }
@@ -16953,7 +16966,7 @@ CPIsControllerMarker = function(anObject)
 };
 var CPBinderPlaceholderMarkers = [CPMultipleValuesMarker, CPNoSelectionMarker, CPNotApplicableMarker, CPNullMarker],
     CPBinderPlaceholderOptions = [CPMultipleValuesPlaceholderBindingOption, CPNoSelectionPlaceholderBindingOption, CPNotApplicablePlaceholderBindingOption, CPNullPlaceholderBindingOption];
-p;20;CPLayoutConstraint.jt;28067;@STATIC;1.0;I;21;Foundation/CPObject.jI;21;Foundation/CPString.ji;26;CPLayoutConstraintEngine.jt;27964;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("CPLayoutRelation");
+p;20;CPLayoutConstraint.jt;27380;@STATIC;1.0;I;21;Foundation/CPObject.jI;21;Foundation/CPString.ji;26;CPLayoutConstraintEngine.jt;27277;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("CPLayoutRelation");
 objj_registerTypeDef(the_typedef);
 }CPLayoutRelationLessThanOrEqual = -1;
 CPLayoutRelationEqual = 0;
@@ -16986,11 +16999,8 @@ CPLayoutPriorityDragThatCannotResizeWindow = 490;
 CPLayoutPriorityDefaultLow = 250;
 CPLayoutPriorityFittingSizeCompression = 50;
 var CPLayoutAttributeLabels = ["NotAnAttribute", "left", "right", "top", "bottom", "left", "right", "width", "height", "centerX", "centerY", "baseline"];
-var CPLayoutItemIsNull = 1 << 1,
-    CPLayoutItemIsContainer = 1 << 2,
-    CPLayoutItemIsNotContainer = 1 << 3;
 {var the_class = objj_allocateClassPair(CPObject, "CPLayoutConstraint"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_container"), new objj_ivar("_firstItem"), new objj_ivar("_secondItem"), new objj_ivar("_firstAttribute"), new objj_ivar("_secondAttribute"), new objj_ivar("_relation"), new objj_ivar("_constant"), new objj_ivar("_coefficient"), new objj_ivar("_priority"), new objj_ivar("_active"), new objj_ivar("_identifier"), new objj_ivar("_contraintFlags"), new objj_ivar("_symbolicConstant"), new objj_ivar("_shouldBeArchived"), new objj_ivar("_addedToEngine")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_container"), new objj_ivar("_firstItem"), new objj_ivar("_secondItem"), new objj_ivar("_firstAttribute"), new objj_ivar("_secondAttribute"), new objj_ivar("_relation"), new objj_ivar("_constant"), new objj_ivar("_coefficient"), new objj_ivar("_priority"), new objj_ivar("_active"), new objj_ivar("_identifier"), new objj_ivar("_contraintFlags"), new objj_ivar("_symbolicConstant"), new objj_ivar("_shouldBeArchived"), new objj_ivar("_addedToEngine"), new objj_ivar("_needsReplace"), new objj_ivar("_engineConstraints")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $CPLayoutConstraint__container(self, _cmd)
 {
     return self._container;
@@ -17095,15 +17105,31 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     self._shouldBeArchived = newValue;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("addedToEngine"), function $CPLayoutConstraint__addedToEngine(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("_addedToEngine"), function $CPLayoutConstraint___addedToEngine(self, _cmd)
 {
     return self._addedToEngine;
 }
-,["BOOL"]), new objj_method(sel_getUid("setAddedToEngine:"), function $CPLayoutConstraint__setAddedToEngine_(self, _cmd, newValue)
+,["BOOL"]), new objj_method(sel_getUid("_setAddedToEngine:"), function $CPLayoutConstraint___setAddedToEngine_(self, _cmd, newValue)
 {
     self._addedToEngine = newValue;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:"), function $CPLayoutConstraint__initWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(self, _cmd, item1, att1, relation, item2, att2, multiplier, constant)
+,["void","BOOL"]), new objj_method(sel_getUid("_needsReplace"), function $CPLayoutConstraint___needsReplace(self, _cmd)
+{
+    return self._needsReplace;
+}
+,["BOOL"]), new objj_method(sel_getUid("_setNeedsReplace:"), function $CPLayoutConstraint___setNeedsReplace_(self, _cmd, newValue)
+{
+    self._needsReplace = newValue;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("_engineConstraints"), function $CPLayoutConstraint___engineConstraints(self, _cmd)
+{
+    return self._engineConstraints;
+}
+,["CPArray"]), new objj_method(sel_getUid("_setEngineConstraints:"), function $CPLayoutConstraint___setEngineConstraints_(self, _cmd, newValue)
+{
+    self._engineConstraints = newValue;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:"), function $CPLayoutConstraint__initWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(self, _cmd, item1, att1, relation, item2, att2, multiplier, constant)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPLayoutConstraint").super_class }, "init");
     (self == null ? null : self.isa.objj_msgSend1(self, "_setFirstItem:", item1));
@@ -17127,9 +17153,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 ,["CPString"]), new objj_method(sel_getUid("_init"), function $CPLayoutConstraint___init(self, _cmd)
 {
     self._container = nil;
+    self._engineConstraints = nil;
     self._contraintFlags = 0;
     self._active = NO;
     self._addedToEngine = NO;
+    self._needsReplace = NO;
 }
 ,["void"]), new objj_method(sel_getUid("_findCommonAncestorForItem:andItem:"), function $CPLayoutConstraint___findCommonAncestorForItem_andItem_(self, _cmd, firstItem, secondItem)
 {
@@ -17200,6 +17228,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     if (aConstant !== self._constant)
     {
         self._constant = aConstant;
+        self.isa.objj_msgSend0(self, "setNeedsReplaceIfNeeded");
         ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNeedsUpdateConstraints:", YES));
     }
     var ___r1;
@@ -17214,11 +17243,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     if (aPriority !== self._priority)
     {
         self._priority = aPriority;
+        self.isa.objj_msgSend0(self, "setNeedsReplaceIfNeeded");
         ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNeedsUpdateConstraints:", YES));
     }
     var ___r1;
 }
-,["void","CPLayoutPriority"]), new objj_method(sel_getUid("hash"), function $CPLayoutConstraint__hash(self, _cmd)
+,["void","CPLayoutPriority"]), new objj_method(sel_getUid("setNeedsReplaceIfNeeded"), function $CPLayoutConstraint__setNeedsReplaceIfNeeded(self, _cmd)
+{
+    if (self._addedToEngine)
+        self._needsReplace = YES;
+}
+,["void"]), new objj_method(sel_getUid("hash"), function $CPLayoutConstraint__hash(self, _cmd)
 {
     return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%d%d%d%d%d%d%d%d", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), self._firstAttribute, self._secondAttribute, self._relation, self._constant, self._coefficient, self._priority);
     var ___r1;
@@ -17231,25 +17266,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
         return NO;
     return YES;
 }
-,["BOOL","id"]), new objj_method(sel_getUid("toJSON"), function $CPLayoutConstraint__toJSON(self, _cmd)
-{
-    if (self._container == nil)
-        CPLog.warn(self + " container is nil and it should not");
-    var firstItemJSON = JSONForItem(self._container, self._firstItem, self._firstAttribute),
-        secondItemJSON = JSONForItem(self._container, self._secondItem, self._secondAttribute);
-    var firstOffset = alignmentRectOffsetForItem(self._firstItem, self._firstAttribute),
-        secondOffset = alignmentRectOffsetForItem(self._secondItem, self._secondAttribute),
-        constant = self._constant + secondOffset * self._coefficient - firstOffset;
-    return [{type: "Constraint", uuid: self.isa.objj_msgSend0(self, "hash"), container: ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), firstItem: firstItemJSON, secondItem: secondItemJSON, relation: self._relation, multiplier: self._coefficient, constant: constant, priority: self._priority, flags: self._contraintFlags}];
-    var ___r1;
-}
-,["Object"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraint__description(self, _cmd)
+,["BOOL","id"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraint__description(self, _cmd)
 {
     var term1 = self._firstItem && self._firstAttribute ? CPString.isa.objj_msgSend3(CPString, "stringWithFormat:", "%@.%@", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), CPStringFromAttribute(self._firstAttribute)) : "",
         term2 = self._secondItem && self._secondAttribute && self._coefficient ? CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@.%@ x%@", ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), CPStringFromAttribute(self._secondAttribute), self._coefficient) : "",
         identifier = self._identifier ? CPString.isa.objj_msgSend1(CPString, "stringWithFormat:", " [%@]") : "",
-        plusMinus = self._constant < 0 ? "" : "+";
-    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@ %@ %@ %@%@ (%@)%@", term1, CPStringFromRelation(self._relation), term2, plusMinus, self._constant, self._priority, identifier);
+        plusMinus = self._constant < 0 ? "" : "+",
+        active = self._active ? "" : " [inactive]";
+    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@ %@ %@ %@%@ (%@)%@%@", term1, CPStringFromRelation(self._relation), term2, plusMinus, self._constant, self._priority, identifier, active);
     var ___r1;
 }
 ,["CPString"]), new objj_method(sel_getUid("_replaceItem:withItem:"), function $CPLayoutConstraint___replaceItem_withItem_(self, _cmd, anItem, aNewItem)
@@ -17257,14 +17281,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     if (anItem === self._firstItem)
     {
         self._firstItem = aNewItem;
-        CPLog.debug("In Constraint replaced " + ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")) + " with " + (aNewItem == null ? null : aNewItem.isa.objj_msgSend0(aNewItem, "UID")));
     }
     else if (anItem === self._secondItem)
     {
         self._secondItem = aNewItem;
-        CPLog.debug("In Constraint replaced " + ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")) + " with " + (aNewItem == null ? null : aNewItem.isa.objj_msgSend0(aNewItem, "UID")));
     }
-    var ___r1;
 }
 ,["void","id","id"]), new objj_method(sel_getUid("resolveConstant"), function $CPLayoutConstraint__resolveConstant(self, _cmd)
 {
@@ -17298,7 +17319,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     refConstant(constant);
     return result;
 }
-,["BOOL","ref","CPString","ref"])]);
+,["BOOL","ref","CPString","ref"]), new objj_method(sel_getUid("_frameBasedConstant"), function $CPLayoutConstraint___frameBasedConstant(self, _cmd)
+{
+    var firstOffset = alignmentRectOffsetForItem(self._firstItem, self._firstAttribute),
+        secondOffset = alignmentRectOffsetForItem(self._secondItem, self._secondAttribute);
+    return self._constant + secondOffset * self._coefficient - firstOffset;
+}
+,["float"]), new objj_method(sel_getUid("_isContainerItem:"), function $CPLayoutConstraint___isContainerItem_(self, _cmd, anItem)
+{
+    return anItem !== nil && anItem == self._container;
+}
+,["BOOL","id"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("keyPathsForValuesAffectingValueForKey:"), function $CPLayoutConstraint__keyPathsForValuesAffectingValueForKey_(self, _cmd, key)
 {
     if (key == "description")
@@ -17394,13 +17425,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return self;
 }
 ,["id","CPCoder"])]);
-}var JSONForItem = function(aContainer, anItem, anAttribute)
-{
-    if (anItem == nil || anAttribute == CPLayoutAttributeNotAnAttribute)
-        return {attribute: CPLayoutAttributeNotAnAttribute, flags: CPLayoutItemIsNull};
-    return {uuid: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "UID")), name: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "debugID")), left: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableMinX")), top: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableMinY")), width: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableWidth")), height: (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableHeight")), attribute: anAttribute, flags: CPLayoutConstraintFlags(aContainer, anItem)};
-};
-var alignmentRectOffsetForItem = function(anItem, anAttribute)
+}var alignmentRectOffsetForItem = function(anItem, anAttribute)
 {
     if (anAttribute === CPLayoutAttributeNotAnAttribute || anItem == nil)
         return 0;
@@ -17457,199 +17482,420 @@ var CPStringFromRelation = function(relation)
 var CPLayoutConstraintFlags = function(aContainer, anItem)
 {
     if (anItem == nil)
-        return CPLayoutItemIsNull;
+        return 2;
     else if (anItem == aContainer)
-        return CPLayoutItemIsContainer;
+        return 4;
     else
-        return CPLayoutItemIsNotContainer;
+        return 8;
 };
-p;26;CPLayoutConstraintEngine.jt;10316;@STATIC;1.0;I;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;21;Foundation/CPBundle.jI;23;Foundation/CPIndexSet.ji;20;CPLayoutConstraint.ji;9;Engine.jsi;4;c.jst;10143;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("Engine.js", YES);objj_executeFile("c.js", YES);{var the_typedef = objj_allocateTypeDef("Engine");
+p;26;CPLayoutConstraintEngine.jt;19490;@STATIC;1.0;I;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;21;Foundation/CPBundle.jI;23;Foundation/CPIndexSet.ji;20;CPLayoutConstraint.ji;4;c.jst;19330;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("c.js", YES);{var the_typedef = objj_allocateTypeDef("SimplexSolver");
+objj_registerTypeDef(the_typedef);
+}{var the_typedef = objj_allocateTypeDef("Map");
 objj_registerTypeDef(the_typedef);
 }{var the_class = objj_allocateClassPair(CPObject, "CPLayoutConstraintEngine"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_engine"), new objj_ivar("_CPEngineRegisteredItems")]);objj_registerClassPair(the_class);
-class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPLayoutConstraintEngine__init(self, _cmd)
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_simplexSolver"), new objj_ivar("_constraintContainerMap"), new objj_ivar("_variableOwnerMap"), new objj_ivar("_editingVariables"), new objj_ivar("_defaultEditStrength"), new objj_ivar("_delegate")]);objj_registerClassPair(the_class);
+class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $CPLayoutConstraintEngine__delegate(self, _cmd)
+{
+    return self._delegate;
+}
+,["id"]), new objj_method(sel_getUid("_setDelegate:"), function $CPLayoutConstraintEngine___setDelegate_(self, _cmd, newValue)
+{
+    self._delegate = newValue;
+}
+,["void","id"]), new objj_method(sel_getUid("initWithDelegate:"), function $CPLayoutConstraintEngine__initWithDelegate_(self, _cmd, aDelegate)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPLayoutConstraintEngine").super_class }, "init");
-    self._CPEngineRegisteredItems = objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "init");
-    var onvaluechange = function(v, records)
+    self._variableOwnerMap = new Map();
+    self._constraintContainerMap = new Map();
+    self._editingVariables = nil;
+    self._defaultEditStrength = c.Strength.strong;
+    self._delegate = aDelegate;
+    self._simplexSolver = new c.SimplexSolver();
+    self._simplexSolver.autoSolve = false;
+    self._simplexSolver.onsolved = function(changes)
     {
-        var uid = v._identifier;
-        records[uid] = (records[uid] || 0) | v._tag;
-    };
-    var onsolved = function(records)
-    {
-        for (var uuid in records)
+        changes.forEach(function(change)
         {
-            var item = self._CPEngineRegisteredItems[uuid],
-                mask = records[uuid];
-            if (mask !== 0)
-            {
-                (item == null ? null : item.isa.objj_msgSend1(item, "_setConstraintBasedNeedsLayoutMask:", mask));
-                ((___r1 = (item == null ? null : item.isa.objj_msgSend0(item, "superview"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
-            }
-        }
-        var ___r1;
+            var variable = change.variable,
+                owner = self._variableOwnerMap.get(variable);
+            ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "engine:variableDidChange:withOwner:", self, variable, owner));
+            var ___r1;
+        });
     };
-    self._engine = new Engine(false, onvaluechange, onsolved);
     return self;
 }
-,["id"]), new objj_method(sel_getUid("registerItem:forIdentifier:"), function $CPLayoutConstraintEngine__registerItem_forIdentifier_(self, _cmd, anItem, anIdentifier)
+,["id","id"]), new objj_method(sel_getUid("disableOnSolvedNotification"), function $CPLayoutConstraintEngine__disableOnSolvedNotification(self, _cmd)
 {
-    if (anItem && anIdentifier)
+    self._simplexSolver.onsolved = function()
     {
-        self._CPEngineRegisteredItems[anIdentifier] = anItem;
-    }
+    };
 }
-,["void","id","CPString"]), new objj_method(sel_getUid("registeredItemForIdentifier:"), function $CPLayoutConstraintEngine__registeredItemForIdentifier_(self, _cmd, anIdentifier)
+,["void"]), new objj_method(sel_getUid("suggestValues:forVariables:withPriority:"), function $CPLayoutConstraintEngine__suggestValues_forVariables_withPriority_(self, _cmd, values, variables, priority)
 {
-    if (anIdentifier !== nil)
-        return self._CPEngineRegisteredItems[anIdentifier];
-    return nil;
-}
-,["id","CPString"]), new objj_method(sel_getUid("registeredItems"), function $CPLayoutConstraintEngine__registeredItems(self, _cmd)
-{
-    var str = "";
-    for (var key in self._CPEngineRegisteredItems)
+    if (self._editingVariables == nil)
     {
-        var obj = self._CPEngineRegisteredItems[key];
-        str += key + " = " + (obj == null ? null : obj.isa.objj_msgSend0(obj, "debugID")) + "\n";
+        variables.forEach(function(variable)
+        {
+            self._simplexSolver.addEditVar(variable, self._defaultEditStrength, 1);
+        });
+        self._editingVariables = variables;
     }
-    return str;
+    self._editingVariables.forEach(function(variable, idx)
+    {
+        self._simplexSolver.suggestValue(variable, values[idx]);
+    });
+    self._simplexSolver.resolve();
 }
-,["CPString"]), new objj_method(sel_getUid("unregisterItemWithIdentifier:"), function $CPLayoutConstraintEngine__unregisterItemWithIdentifier_(self, _cmd, anIdentifier)
+,["void","CPArray","CPArray","CPLayoutPriority"]), new objj_method(sel_getUid("stopEditing"), function $CPLayoutConstraintEngine__stopEditing(self, _cmd)
 {
-    if (anIdentifier !== nil)
-        delete self._CPEngineRegisteredItems[anIdentifier];
-}
-,["void","CPString"]), new objj_method(sel_getUid("disableOnSolvedNotification"), function $CPLayoutConstraintEngine__disableOnSolvedNotification(self, _cmd)
-{
-    self._engine.disableOnSolvedNotification();
-}
-,["void"]), new objj_method(sel_getUid("suggestSize:forItem:priority:"), function $CPLayoutConstraintEngine__suggestSize_forItem_priority_(self, _cmd, aSize, anItem, priority)
-{
-    var variables = [(anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableWidth")), (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableHeight"))],
-        values = [aSize.width, aSize.height];
-    self._engine.suggestValues(variables, values, priority);
-}
-,["void","CGSize","id","CPLayoutPriority"]), new objj_method(sel_getUid("suggestOrigin:forItem:priority:"), function $CPLayoutConstraintEngine__suggestOrigin_forItem_priority_(self, _cmd, aPoint, anItem, priority)
-{
-    var variables = [(anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableMinX")), (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableMinY"))],
-        values = [aPoint.x, aPoint.y];
-    self._engine.suggestValues(variables, values, priority);
-}
-,["void","CGPoint","id","CPLayoutPriority"]), new objj_method(sel_getUid("stopEditing"), function $CPLayoutConstraintEngine__stopEditing(self, _cmd)
-{
-    self._engine.stopEditing();
+    if (self._editingVariables !== nil)
+    {
+        var error = nil;
+        try        {
+            self._simplexSolver.removeAllEditVars();
+            self._editingVariables = nil;
+        }
+        catch(e)         {
+            error = e;
+        }        finally         {
+            if (error !== nil)
+                EngineError(error + " EDIT_VARIABLES were " + self._editingVariables);
+        }
+    }
 }
 ,["void"]), new objj_method(sel_getUid("solve"), function $CPLayoutConstraintEngine__solve(self, _cmd)
 {
-    self._engine.solve();
+    self._simplexSolver.solve();
 }
 ,["void"]), new objj_method(sel_getUid("resolve"), function $CPLayoutConstraintEngine__resolve(self, _cmd)
 {
-    self._engine.resolve();
+    self._simplexSolver.resolve();
 }
-,["void"]), new objj_method(sel_getUid("addStayConstraintsForItem:priority:"), function $CPLayoutConstraintEngine__addStayConstraintsForItem_priority_(self, _cmd, anItem, aPriority)
+,["void"]), new objj_method(sel_getUid("replaceStayConstraintsForItem:priority:"), function $CPLayoutConstraintEngine__replaceStayConstraintsForItem_priority_(self, _cmd, anItem, aPriority)
 {
-    var container = (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "UID")),
-        variables = [(anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableWidth")), (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableHeight"))],
-        json_constraints = [];
-    for (var i = 0; i < variables.length; i++)
+    var widthStay = CreateStayConstraint((anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableWidth")), aPriority),
+        heightStay = CreateStayConstraint((anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "_variableHeight")), aPriority),
+        containerId = (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "debugID")),
+        type = "StayConstraint",
+        toRemove = [];
+    var onAdd = function(constraint)
     {
-        var variable = variables[i],
-            hash = container + "_" + variable.name + "_" + variable.valueOf();
-        json_constraints.push({uuid: hash, variable: variable, priority: aPriority});
-    }
-    var args = {type: "StayConstraint", container: container, constraints: json_constraints};
-    self._engine.replaceConstraints(args);
+        self._constraintContainerMap.set(constraint, {"Type": type, "Container": anItem});
+        EngineLog("Added " + type + " in " + containerId + " : " + constraint.toString());
+    };
+    var onAddError = function(error, constraint)
+    {
+        EngineWarn(containerId + ": could not add " + type + " " + constraint.toString() + " with error " + error);
+    };
+    var onRemove = function(constraint)
+    {
+        self._constraintContainerMap.delete(constraint);
+        EngineLog("Removed " + type + " in " + containerId + " : " + constraint.toString());
+    };
+    var onRemoveError = function(error, constraint)
+    {
+        EngineWarn(containerId + ": could not remove " + type + " " + constraint.toString() + " with error " + error);
+    };
+    var toRemove = [];
+    self._constraintContainerMap.forEach(function(viewAndType, engine_constraint)
+    {
+        if (viewAndType.Container == anItem && viewAndType.Type == type)
+            toRemove.push(engine_constraint);
+    });
+    toRemove.forEach(function(engine_constraint, idx)
+    {
+        RemoveConstraint(self._simplexSolver, engine_constraint, onRemove, onRemoveError);
+    });
+    AddConstraint(self._simplexSolver, widthStay, onAdd, onAddError);
+    AddConstraint(self._simplexSolver, heightStay, onAdd, onAddError);
 }
-,["void","id","CPLayoutPriority"]), new objj_method(sel_getUid("solver_replaceConstraints:"), function $CPLayoutConstraintEngine__solver_replaceConstraints_(self, _cmd, constraintsByView)
+,["void","id","CPLayoutPriority"]), new objj_method(sel_getUid("_addOrRemoveConstraintsIfNeeded:"), function $CPLayoutConstraintEngine___addOrRemoveConstraintsIfNeeded_(self, _cmd, constraints)
 {
-    CPLog.debug("Constraints to replace = \n");
-    var errors = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init"),
-        constraintByHash = objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "init"),
-        result = NO;
-    (constraintsByView == null ? null : constraintsByView.isa.objj_msgSend1(constraintsByView, "enumerateKeysAndObjectsUsingBlock:", function(container, constraintsByType, stop)
-    {
-        CPLog.debug(((___r1 = self._CPEngineRegisteredItems[container]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")) + " = " + (constraintsByType == null ? null : constraintsByType.isa.objj_msgSend0(constraintsByType, "description")));
-        (constraintsByType == null ? null : constraintsByType.isa.objj_msgSend1(constraintsByType, "enumerateKeysAndObjectsUsingBlock:", function(type, constraints, stop)
-        {
-            var json_constraints = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init");
-            (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(constraint, idx, stop)
-            {
-                (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "setAddedToEngine:", YES));
-                (constraintByHash == null ? null : constraintByHash.isa.objj_msgSend2(constraintByHash, "setObject:forKey:", constraint, (constraint == null ? null : constraint.isa.objj_msgSend0(constraint, "hash"))));
-                (json_constraints == null ? null : json_constraints.isa.objj_msgSend1(json_constraints, "addObjectsFromArray:", (constraint == null ? null : constraint.isa.objj_msgSend0(constraint, "toJSON"))));
-            }));
-            var args = {type: type, container: container, constraints: json_constraints};
-            result |= self._engine.replaceConstraints(args, errors);
-        }));
-        var ___r1;
-    }));
-    if ((errors == null ? null : errors.isa.objj_msgSend0(errors, "count")))
-    {
-        (errors == null ? null : errors.isa.objj_msgSend1(errors, "enumerateObjectsUsingBlock:", function(solverError, idx, stop)
-        {
-            var type = solverError.type,
-                reason = solverError.reason();
-            if (type == "c.RequiredFailure")
-            {
-                var hash = solverError.userInfo.uuid,
-                    constraint = (constraintByHash == null ? null : constraintByHash.isa.objj_msgSend1(constraintByHash, "objectForKey:", hash));
-                (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "setAddedToEngine:", NO));
-                CPLog.warn(reason + " : " + (constraint == null ? null : constraint.isa.objj_msgSend0(constraint, "description")));
-            }
-            else
-                CPLog.error(reason);
-        }));
-    }
-    return result;
-}
-,["BOOL","CPDictionary"]), new objj_method(sel_getUid("solver_removeConstraints:"), function $CPLayoutConstraintEngine__solver_removeConstraints_(self, _cmd, constraints)
-{
-    var args = [];
+    var result = NO;
     (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
     {
-        (args == null ? null : args.isa.objj_msgSend1(args, "addObject:", (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "toJSON"))));
+        var isInEngine = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_addedToEngine")),
+            isActive = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive")),
+            needsReplace = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_needsReplace"));
+        if (needsReplace)
+        {
+            result |= self.isa.objj_msgSend1(self, "removeConstraint:", aConstraint);
+            (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setEngineConstraints:", nil));
+            result |= self.isa.objj_msgSend1(self, "addConstraint:", aConstraint);
+            (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setNeedsReplace:", NO));
+        }
+        else
+        {
+            if (isActive && !isInEngine)
+                result |= self.isa.objj_msgSend1(self, "addConstraint:", aConstraint);
+            if (!isActive && isInEngine)
+                result |= self.isa.objj_msgSend1(self, "removeConstraint:", aConstraint);
+        }
     }));
-    self._engine.removeConstraints(args);
+    return result;
 }
-,["void","CPArray"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraintEngine__description(self, _cmd)
+,["BOOL","CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPLayoutConstraintEngine__addConstraint_(self, _cmd, aConstraint)
 {
-    return self._engine.description();
-}
-,["CPString"]), new objj_method(sel_getUid("variableForItem:tag:"), function $CPLayoutConstraintEngine__variableForItem_tag_(self, _cmd, anItem, tag)
-{
-    var uuid = (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "UID")),
-        prefix = (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "debugID")),
-        frame = (anItem == null ? null : anItem.isa.objj_msgSend0(anItem, "frame")),
-        name,
-        value;
-    switch(tag) {
-    case 2:
-        name = "minX";
-        value = CGRectGetMinX(frame);
-        break;
-    case 4:
-        name = "minY";
-        value = CGRectGetMinY(frame);
-        break;
-    case 8:
-        name = "width";
-        value = CGRectGetWidth(frame);
-        break;
-    case 16:
-        name = "height";
-        value = CGRectGetHeight(frame);
-        break;
-default:
-        name = "unknown";
-        value = 0;
+    var type = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")),
+        container = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "container")),
+        containerId = (container == null ? null : container.isa.objj_msgSend0(container, "debugID")),
+        result = NO;
+    var onsuccess = function(constraint)
+    {
+        self._constraintContainerMap.set(constraint, {"Type": type, "Container": container});
+        EngineLog("Added " + type + " in " + containerId + " : " + constraint.toString());
+        result = YES;
+    };
+    var onerror = function(error, constraint)
+    {
+        EngineWarn(containerId + ": could not add " + type + " " + constraint.toString() + " with error " + error);
+        result = NO;
+    };
+    var engine_constraints = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_engineConstraints"));
+    if (!engine_constraints)
+    {
+        engine_constraints = type == "SizeConstraint" ? CreateSizeConstraints(aConstraint) : CreateConstraint(aConstraint);
+        (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setEngineConstraints:", engine_constraints));
     }
-    return self._engine.Variable(uuid, prefix, name, tag, value);
+    (engine_constraints == null ? null : engine_constraints.isa.objj_msgSend1(engine_constraints, "enumerateObjectsUsingBlock:", function(engine_constraint, idx, stop)
+    {
+        AddConstraint(self._simplexSolver, engine_constraint, onsuccess, onerror);
+        if (!result)
+            stop(YES);
+    }));
+    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setAddedToEngine:", YES));
+    return result;
 }
-,["Variable","id","CPInteger"])]);
-}p;18;CPLevelIndicator.jt;17198;@STATIC;1.0;i;11;CPControl.ji;20;CPWindow_Constants.jt;17137;objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);{var the_typedef = objj_allocateTypeDef("CPTickMarkPosition");
+,["BOOL","CPLayoutConstraint"]), new objj_method(sel_getUid("removeConstraint:"), function $CPLayoutConstraintEngine__removeConstraint_(self, _cmd, aConstraint)
+{
+    var type = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")),
+        container = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "container")),
+        containerId = (container == null ? null : container.isa.objj_msgSend0(container, "debugID")),
+        result = NO;
+    var engine_constraints = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_engineConstraints"));
+    var onsuccess = function(constraint)
+    {
+        self._constraintContainerMap.delete(constraint);
+        EngineLog("Removed " + type + " in " + containerId + " : " + constraint.toString());
+        result = YES;
+    };
+    var onerror = function(error, constraint)
+    {
+        EngineWarn(containerId + ": could not remove " + type + " " + constraint.toString() + " with error " + error);
+        result = NO;
+    };
+    (engine_constraints == null ? null : engine_constraints.isa.objj_msgSend1(engine_constraints, "enumerateObjectsUsingBlock:", function(engine_constraint, idx, stop)
+    {
+        RemoveConstraint(self._simplexSolver, engine_constraint, onsuccess, onerror);
+        if (!result)
+            stop(YES);
+    }));
+    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setAddedToEngine:", NO));
+    return result;
+}
+,["BOOL","CPLayoutConstraint"]), new objj_method(sel_getUid("variableWithPrefix:name:value:owner:"), function $CPLayoutConstraintEngine__variableWithPrefix_name_value_owner_(self, _cmd, aPrefix, aName, aValue, anOwner)
+{
+    var variable = new c.Variable({prefix: aPrefix, name: aName, value: aValue});
+    self._variableOwnerMap.set(variable, anOwner);
+    return variable;
+}
+,["Variable","CPString","CPString","float","id"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraintEngine__description(self, _cmd)
+{
+    var str = "Engine Constraints:\n";
+    self._constraintContainerMap.forEach(function(engine_constraint, TypeAndContainer)
+    {
+        str += ((___r1 = TypeAndContainer.Container), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")) + " " + TypeAndContainer.Type + " " + engine_constraint.toString() + "\n";
+        var ___r1;
+    });
+    return str + "\nInternalInfo:\n" + self._simplexSolver.getInternalInfo();
+}
+,["CPString"])]);
+}var StrengthForPriority = function(p)
+{
+    if (p >= 1000)
+        return {strength: c.Strength.required, weight: p};
+    return {strength: c.Strength.medium, weight: p};
+};
+var CreateConstraint = function(aConstraint)
+{
+    var firstAttribute = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstAttribute")),
+        secondAttribute = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondAttribute")),
+        firstItem = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem")),
+        secondItem = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem")),
+        firstIsContainer = (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_isContainerItem:", firstItem)),
+        secondIsContainer = (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_isContainerItem:", secondItem)),
+        relation = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "relation")),
+        multiplier = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "multiplier")),
+        constant = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_frameBasedConstant")),
+        priority = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "priority")),
+        sw = StrengthForPriority(priority),
+        constraint,
+        rhs_term;
+    var lhs_term = expressionForAttribute(firstAttribute, firstIsContainer, firstItem),
+        secondExp = expressionForAttribute(secondAttribute, secondIsContainer, secondItem);
+    if (secondExp.isConstant)
+        rhs_term = new c.Expression.fromConstant(secondExp.constant * multiplier + constant);
+    else if (multiplier === 0)
+        rhs_term = new c.Expression.fromConstant(constant);
+    else
+        rhs_term = c.plus(c.times(secondExp, multiplier), constant);
+    switch(relation) {
+    case CPLayoutRelationLessThanOrEqual:
+        constraint = new c.Inequality(lhs_term, c.LEQ, rhs_term, sw.strength, sw.weight);
+        break;
+    case CPLayoutRelationGreaterThanOrEqual:
+        constraint = new c.Inequality(lhs_term, c.GEQ, rhs_term, sw.strength, sw.weight);
+        break;
+    case CPLayoutRelationEqual:
+        constraint = new c.Equation(lhs_term, rhs_term, sw.strength, sw.weight);
+        break;
+    }
+    return [constraint];
+};
+var CreateSizeConstraints = function(aConstraint)
+{
+    var variable = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "variableForOrientation")),
+        huggingPriority = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "huggingPriority")),
+        compressPriority = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "compressPriority")),
+        constant = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "constant")),
+        hugg = CreateInequality(variable, 0, constant, huggingPriority),
+        anticompr = CreateInequality(variable, 1, constant, compressPriority);
+    return [hugg, anticompr];
+};
+var CreateInequality = function(variable, isGreaterOrLess, constant, priority)
+{
+    var variableExp = new c.Expression.fromVariable(variable),
+        constantExp = new c.Expression.fromConstant(constant),
+        relation = isGreaterOrLess ? c.GEQ : c.LEQ,
+        sw = StrengthForPriority(priority);
+    return new c.Inequality(variableExp, relation, constantExp, sw.strength, sw.weight);
+};
+var CreateStayConstraint = function(variable, priority)
+{
+    var sw = StrengthForPriority(priority);
+    return new c.StayConstraint(variable, sw.strength, sw.weight);
+};
+var expressionForAttribute = function(attribute, isContainer, item)
+{
+    if (item == nil || attribute === CPLayoutAttributeNotAnAttribute)
+        return new c.Expression.fromConstant(0);
+    var left = (item == null ? null : item.isa.objj_msgSend0(item, "_variableMinX")),
+        top = (item == null ? null : item.isa.objj_msgSend0(item, "_variableMinY")),
+        width = (item == null ? null : item.isa.objj_msgSend0(item, "_variableWidth")),
+        height = (item == null ? null : item.isa.objj_msgSend0(item, "_variableHeight")),
+        exp;
+    switch(attribute) {
+    case CPLayoutAttributeLeading:
+    case CPLayoutAttributeLeft:
+        exp = expressionForAttributeLeft(left, isContainer);
+        break;
+    case CPLayoutAttributeTrailing:
+    case CPLayoutAttributeRight:
+        exp = expressionForAttributeRight(left, width, isContainer);
+        break;
+    case CPLayoutAttributeTop:
+        exp = expressionForAttributeTop(top, isContainer);
+        break;
+    case CPLayoutAttributeBaseline:
+    case CPLayoutAttributeBottom:
+        exp = expressionForAttributeBottom(top, height, isContainer);
+        break;
+    case CPLayoutAttributeWidth:
+        exp = new c.Expression.fromVariable(width);
+        break;
+    case CPLayoutAttributeHeight:
+        exp = new c.Expression.fromVariable(height);
+        break;
+    case CPLayoutAttributeCenterX:
+        exp = expressionForAttributeCenterX(left, width, isContainer);
+        break;
+    case CPLayoutAttributeCenterY:
+        exp = expressionForAttributeCenterY(top, height, isContainer);
+        break;
+    }
+    return exp;
+};
+var expressionForAttributeLeft = function(variable, isContainer)
+{
+    if (!isContainer)
+        return new c.Expression.fromVariable(variable);
+    return new c.Expression.fromConstant(0);
+};
+var expressionForAttributeTop = function(variable, isContainer)
+{
+    if (!isContainer)
+        return new c.Expression.fromVariable(variable);
+    return new c.Expression.fromConstant(0);
+};
+var expressionForAttributeRight = function(leftVariable, widthVariable, isContainer)
+{
+    if (isContainer)
+        return new c.Expression.fromVariable(widthVariable);
+    return (new c.Expression.fromVariable(leftVariable)).plus(widthVariable);
+};
+var expressionForAttributeBottom = function(topVariable, heightVariable, isContainer)
+{
+    if (isContainer)
+        return new c.Expression.fromVariable(heightVariable);
+    return (new c.Expression.fromVariable(topVariable)).plus(heightVariable);
+};
+var expressionForAttributeCenterX = function(leftVariable, widthVariable, isContainer)
+{
+    var midWidth = (new c.Expression.fromVariable(widthVariable)).divide(2);
+    if (isContainer)
+        return midWidth;
+    var left = new c.Expression.fromVariable(leftVariable);
+    return c.plus(left, midWidth);
+};
+var expressionForAttributeCenterY = function(topVariable, heightVariable, isContainer)
+{
+    var midHeight = (new c.Expression.fromVariable(heightVariable)).divide(2);
+    if (isContainer)
+        return midHeight;
+    var top = new c.Expression.fromVariable(topVariable);
+    return c.plus(top, midHeight);
+};
+var AddConstraint = function(solver, constraint, onsuccess, onerror)
+{
+    var didError = false;
+    try    {
+        solver.addConstraint(constraint);
+    }
+    catch(e)     {
+        onerror(e, constraint);
+        didError = true;
+    }    finally     {
+        if (!didError)
+            onsuccess(constraint);
+    }
+};
+var RemoveConstraint = function(solver, constraint, onsuccess, onerror)
+{
+    var didError = false;
+    try    {
+        solver.removeConstraint(constraint);
+    }
+    catch(e)     {
+        onerror(e, constraint);
+        didError = true;
+    }    finally     {
+        if (!didError)
+            onsuccess(constraint);
+    }
+};
+var EngineLog = function(str)
+{
+    console.log('%c [Engine]: ' + str, 'color:darkblue; font-weight:bold');
+};
+var EngineWarn = function(str)
+{
+    console.warn('%c [Engine]: ' + str, 'color:brown; font-weight:bold');
+};
+var EngineError = function(str)
+{
+    console.error('%c [Engine]: ' + str, 'color:darkred; font-weight:bold');
+};
+p;18;CPLevelIndicator.jt;17198;@STATIC;1.0;i;11;CPControl.ji;20;CPWindow_Constants.jt;17137;objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);{var the_typedef = objj_allocateTypeDef("CPTickMarkPosition");
 objj_registerTypeDef(the_typedef);
 }CPTickMarkBelow = 0;
 CPTickMarkAbove = 1;
@@ -22455,7 +22701,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     self.isa.objj_msgSend1(self, "setKnobProportion:", aProportion);
 }
 ,["void","float","float"])]);
-}p;14;CPScrollView.jt;65294;@STATIC;1.0;I;33;Foundation/CPNotificationCenter.ji;7;CPBox.ji;12;CPClipView.ji;12;CPScroller.ji;8;CPView.jt;65179;objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("CPBox.j", YES);objj_executeFile("CPClipView.j", YES);objj_executeFile("CPScroller.j", YES);objj_executeFile("CPView.j", YES);var _isBrowserUsingOverlayScrollers = function()
+}p;14;CPScrollView.jt;65602;@STATIC;1.0;I;33;Foundation/CPNotificationCenter.ji;7;CPBox.ji;12;CPClipView.ji;12;CPScroller.ji;8;CPView.jt;65487;objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("CPBox.j", YES);objj_executeFile("CPClipView.j", YES);objj_executeFile("CPScroller.j", YES);objj_executeFile("CPView.j", YES);{var the_protocol = objj_allocateProtocol("CPScrollViewDelegate");
+var aProtocol = objj_getProtocol("CPObject");
+if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPScrollViewDelegate\"");
+protocol_addProtocol(the_protocol, aProtocol);
+objj_registerProtocol(the_protocol);
+}var _isBrowserUsingOverlayScrollers = function()
 {
     var outer = document.createElement('div'),
         inner = document.createElement('p');
@@ -23442,12 +23693,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeInt:forKey:", self._scrollerKnobStyle, CPScrollViewScrollerKnobStyleKey));
 }
 ,["void","CPCoder"])]);
-}p;15;CPSearchField.jt;35024;@STATIC;1.0;i;10;CPButton.ji;8;CPMenu.ji;12;CPMenuItem.ji;13;CPTextField.jt;34942;objj_executeFile("CPButton.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPMenuItem.j", YES);objj_executeFile("CPTextField.j", YES);CPSearchFieldRecentsTitleMenuItemTag = 1000;
+}p;15;CPSearchField.jt;35436;@STATIC;1.0;i;10;CPButton.ji;8;CPMenu.ji;12;CPMenuItem.ji;13;CPTextField.jt;35354;objj_executeFile("CPButton.j", YES);objj_executeFile("CPMenu.j", YES);objj_executeFile("CPMenuItem.j", YES);objj_executeFile("CPTextField.j", YES);CPSearchFieldRecentsTitleMenuItemTag = 1000;
 CPSearchFieldRecentsMenuItemTag = 1001;
 CPSearchFieldClearRecentsMenuItemTag = 1002;
 CPSearchFieldNoRecentsMenuItemTag = 1003;
-var CPAutosavedRecentsChangedNotification = "CPAutosavedRecentsChangedNotification";
-var RECENT_SEARCH_PREFIX = "   ";
+var CPAutosavedRecentsChangedNotification = "CPAutosavedRecentsChangedNotification",
+    RECENT_SEARCH_PREFIX = "   ";
 {var the_class = objj_allocateClassPair(CPTextField, "CPSearchField"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_searchButton"), new objj_ivar("_cancelButton"), new objj_ivar("_searchMenuTemplate"), new objj_ivar("_searchMenu"), new objj_ivar("_recentsAutosaveName"), new objj_ivar("_recentSearches"), new objj_ivar("_maximumRecents"), new objj_ivar("_sendsWholeSearchString"), new objj_ivar("_sendsSearchStringImmediately"), new objj_ivar("_canResignFirstResponder"), new objj_ivar("_partialStringTimer")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), function $CPSearchField__initWithFrame_(self, _cmd, frame)
@@ -23573,14 +23824,16 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["CGRect","CGRect"]), new objj_method(sel_getUid("searchButtonRectForBounds:"), function $CPSearchField__searchButtonRectForBounds_(self, _cmd, rect)
 {
-    var size = ((___r1 = self.isa.objj_msgSend1(self, "valueForThemeAttribute:", "image-search")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")) || CGSizeMakeZero();
-    return CGRectMake(5, (CGRectGetHeight(rect) - size.height) / 2, size.width, size.height);
+    var size = ((___r1 = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "image-search")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")) || CGSizeMakeZero(),
+        inset = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "image-search-inset");
+    return CGRectMake(inset.left - inset.right, inset.top - inset.bottom + (CGRectGetHeight(rect) - size.height) / 2, size.width, size.height);
     var ___r1;
 }
 ,["CGRect","CGRect"]), new objj_method(sel_getUid("cancelButtonRectForBounds:"), function $CPSearchField__cancelButtonRectForBounds_(self, _cmd, rect)
 {
-    var size = ((___r1 = self.isa.objj_msgSend1(self, "valueForThemeAttribute:", "image-cancel")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")) || CGSizeMakeZero();
-    return CGRectMake(CGRectGetWidth(rect) - size.width - 5, (CGRectGetHeight(rect) - size.width) / 2, size.height, size.height);
+    var size = ((___r1 = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "image-cancel")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")) || CGSizeMakeZero(),
+        inset = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "image-cancel-inset");
+    return CGRectMake(CGRectGetWidth(rect) - size.width + inset.left - inset.right, inset.top - inset.bottom + (CGRectGetHeight(rect) - size.width) / 2, size.height, size.height);
     var ___r1;
 }
 ,["CGRect","CGRect"]), new objj_method(sel_getUid("searchMenuTemplate"), function $CPSearchField__searchMenuTemplate(self, _cmd)
@@ -23903,7 +24156,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
 }
 ,["CPString"]), new objj_method(sel_getUid("themeAttributes"), function $CPSearchField__themeAttributes(self, _cmd)
 {
-    return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "initWithObjectsAndKeys:", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-search", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-find", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-cancel", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-cancel-pressed");
+    return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "initWithObjectsAndKeys:", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-search", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-find", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-cancel", CPNull.isa.objj_msgSend0(CPNull, "null"), "image-cancel-pressed", CGInsetMake(0, 0, 0, 5), "image-search-inset", CGInsetMake(0, 5, 0, 0), "image-cancel-inset");
 }
 ,["CPDictionary"]), new objj_method(sel_getUid("_keyboardDelayForPartialSearchString:"), function $CPSearchField___keyboardDelayForPartialSearchString_(self, _cmd, string)
 {
@@ -23959,14 +24212,22 @@ class_addMethods(the_class, [new objj_method(sel_getUid("isSecure"), function $C
     return YES;
 }
 ,["BOOL"])]);
-}p;20;CPSegmentedControl.jt;49924;@STATIC;1.0;I;20;Foundation/CPArray.ji;11;CPControl.ji;20;CPWindow_Constants.ji;21;_CPImageAndTextView.ji;8;CPMenu.jt;49800;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);objj_executeFile("CPMenu.j", YES);{var the_typedef = objj_allocateTypeDef("CPSegmentSwitchTracking");
+}p;20;CPSegmentedControl.jt;53552;@STATIC;1.0;I;20;Foundation/CPArray.ji;11;CPControl.ji;20;CPWindow_Constants.ji;21;_CPImageAndTextView.ji;8;CPMenu.jt;53428;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);objj_executeFile("CPMenu.j", YES);{var the_typedef = objj_allocateTypeDef("CPSegmentSwitchTracking");
 objj_registerTypeDef(the_typedef);
 }CPSegmentSwitchTrackingSelectOne = 0;
 CPSegmentSwitchTrackingSelectAny = 1;
 CPSegmentSwitchTrackingMomentary = 2;
 {var the_class = objj_allocateClassPair(CPControl, "CPSegmentedControl"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_segments"), new objj_ivar("_themeStates"), new objj_ivar("_selectedSegment"), new objj_ivar("_segmentStyle"), new objj_ivar("_trackingMode"), new objj_ivar("_trackingSegment"), new objj_ivar("_trackingHighlighted")]);objj_registerClassPair(the_class);
-class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), function $CPSegmentedControl__initWithFrame_(self, _cmd, aRect)
+class_addMethods(the_class, [new objj_method(sel_getUid("segments"), function $CPSegmentedControl__segments(self, _cmd)
+{
+    return self._segments;
+}
+,["CPArray"]), new objj_method(sel_getUid("_setSegments:"), function $CPSegmentedControl___setSegments_(self, _cmd, newValue)
+{
+    self._segments = newValue;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("initWithFrame:"), function $CPSegmentedControl__initWithFrame_(self, _cmd, aRect)
 {
     self._segments = [];
     self._themeStates = [];
@@ -23975,6 +24236,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     {
         self._selectedSegment = -1;
         self._trackingMode = CPSegmentSwitchTrackingSelectOne;
+        self._trackingHighlighted = NO;
+        self._trackingSegment = -1;
     }
     return self;
 }
@@ -23985,48 +24248,78 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["void","CPControlSize"]), new objj_method(sel_getUid("selectedTag"), function $CPSegmentedControl__selectedTag(self, _cmd)
 {
-    return ((___r1 = self._segments[self._selectedSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tag"));
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", self._selectedSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tag"));
+    var ___r1, ___r2;
+}
+,["int"]), new objj_method(sel_getUid("setSegments:"), function $CPSegmentedControl__setSegments_(self, _cmd, segments)
+{
+    ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "removeAllObjects"));
+    ((___r1 = self._themeStates), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "removeAllObjects"));
+    self.isa.objj_msgSend2(self, "insertSegments:atIndexes:", segments, CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(0, (segments == null ? null : segments.isa.objj_msgSend0(segments, "count")))));
     var ___r1;
 }
-,["int"]), new objj_method(sel_getUid("setSegmentCount:"), function $CPSegmentedControl__setSegmentCount_(self, _cmd, aCount)
+,["void","CPArray"]), new objj_method(sel_getUid("insertSegments:atIndexes:"), function $CPSegmentedControl__insertSegments_atIndexes_(self, _cmd, segments, indices)
 {
-    if (self._segments.length == aCount)
+    if ((segments == null ? null : segments.isa.objj_msgSend0(segments, "count")) == 0)
         return;
-    var height = CGRectGetHeight(self.isa.objj_msgSend0(self, "bounds")),
-        dividersBefore = MAX(0, self._segments.length - 1),
-        dividersAfter = MAX(0, aCount - 1);
-    if (self._segments.length < aCount)
-    {
-        for (var index = self._segments.length; index < aCount; ++index)
-        {
-            self._segments[index] = ((___r1 = (_CPSegmentItem == null ? null : _CPSegmentItem.isa.objj_msgSend0(_CPSegmentItem, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "init"));
-            self._themeStates[index] = CPThemeStateNormal;
-        }
-    }
-    else if (aCount < self._segments.length)
-    {
-        self._segments.length = aCount;
-        self._themeStates.length = aCount;
-    }
-    if (self._selectedSegment >= self._segments.length)
-        self._selectedSegment = -1;
-    var thickness = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "divider-thickness"),
-        frame = self.isa.objj_msgSend0(self, "frame"),
-        widthOfAllSegments = 0,
-        dividerExtraSpace = (((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")) - 1) * thickness;
-    for (var i = 0; i < ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")); i++)
-        widthOfAllSegments += ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width"));
-    self.isa.objj_msgSend1(self, "setFrameSize:", CGSizeMake(widthOfAllSegments + dividerExtraSpace, frame.size.height));
-    self.isa.objj_msgSend1(self, "tileWithChangedSegment:", 0);
+    var newStates = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init"),
+        count = (indices == null ? null : indices.isa.objj_msgSend0(indices, "count"));
+    while (count--)
+        (newStates == null ? null : newStates.isa.objj_msgSend1(newStates, "addObject:", CPThemeStateNormal));
+    ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "insertObjects:atIndexes:", segments, indices));
+    ((___r1 = self._themeStates), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "insertObjects:atIndexes:", newStates, indices));
     var ___r1;
 }
-,["void","unsigned"]), new objj_method(sel_getUid("segmentCount"), function $CPSegmentedControl__segmentCount(self, _cmd)
+,["void","CPArray","CPIndexSet"]), new objj_method(sel_getUid("removeSegmentsAtIndexes:"), function $CPSegmentedControl__removeSegmentsAtIndexes_(self, _cmd, indices)
 {
-    return self._segments.length;
+    if ((indices == null ? null : indices.isa.objj_msgSend0(indices, "count")) == 0)
+        return;
+    ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", indices));
+    ((___r1 = self._themeStates), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", indices));
+    var ___r1;
+}
+,["void","CPIndexSet"]), new objj_method(sel_getUid("setSegmentCount:"), function $CPSegmentedControl__setSegmentCount_(self, _cmd, aCount)
+{
+    var prevCount = ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count"));
+    if (aCount == prevCount)
+        return;
+    if (aCount > prevCount)
+    {
+        var count = aCount - prevCount,
+            segments = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init");
+        while (count--)
+            (segments == null ? null : segments.isa.objj_msgSend1(segments, "addObject:", ((___r1 = (_CPSegmentItem == null ? null : _CPSegmentItem.isa.objj_msgSend0(_CPSegmentItem, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "init"))));
+        self.isa.objj_msgSend2(self, "insertSegments:atIndexes:", segments, CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(prevCount, aCount - prevCount)));
+    }
+    else
+        self.isa.objj_msgSend1(self, "removeSegmentsAtIndexes:", CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(aCount, prevCount - aCount)));
+    self.isa.objj_msgSend0(self, "_updateSelectionIfNeeded");
+    self.isa.objj_msgSend1(self, "tileWithChangedSegment:", MAX(MIN(prevCount, aCount) - 1, 0));
+    var ___r1;
+}
+,["void","unsigned"]), new objj_method(sel_getUid("_updateSelectionIfNeeded"), function $CPSegmentedControl___updateSelectionIfNeeded(self, _cmd)
+{
+    if (self._selectedSegment >= self.isa.objj_msgSend0(self, "segmentCount"))
+        self._selectedSegment = -1;
+}
+,["void"]), new objj_method(sel_getUid("segmentCount"), function $CPSegmentedControl__segmentCount(self, _cmd)
+{
+    return ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count"));
+    var ___r1;
 }
 ,["unsigned"]), new objj_method(sel_getUid("setSelectedSegment:"), function $CPSegmentedControl__setSelectedSegment_(self, _cmd, aSegment)
 {
-    self.isa.objj_msgSend2(self, "setSelected:forSegment:", YES, aSegment);
+    if (self._selectedSegment == aSegment)
+        return;
+    if (aSegment == -1)
+    {
+        var count = self.isa.objj_msgSend0(self, "segmentCount");
+        while (count--)
+            self.isa.objj_msgSend2(self, "setSelected:forSegment:", NO, count);
+        self._selectedSegment = -1;
+    }
+    else
+        self.isa.objj_msgSend2(self, "setSelected:forSegment:", YES, aSegment);
 }
 ,["void","unsigned"]), new objj_method(sel_getUid("selectedSegment"), function $CPSegmentedControl__selectedSegment(self, _cmd)
 {
@@ -24035,24 +24328,26 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 ,["unsigned"]), new objj_method(sel_getUid("selectSegmentWithTag:"), function $CPSegmentedControl__selectSegmentWithTag_(self, _cmd, aTag)
 {
     var index = 0;
-    for (; index < self._segments.length; ++index)
-        if (self._segments[index].tag == aTag)
+    for (; index < ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")); ++index)
+        if (((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", index))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tag")) == aTag)
         {
             self.isa.objj_msgSend1(self, "setSelectedSegment:", index);
             return YES;
         }
     return NO;
+    var ___r1, ___r2;
 }
 ,["BOOL","int"]), new objj_method(sel_getUid("_selectSegmentWithLabel:"), function $CPSegmentedControl___selectSegmentWithLabel_(self, _cmd, aLabel)
 {
     var index = 0;
-    for (; index < self._segments.length; ++index)
-        if (self._segments[index].label == aLabel)
+    for (; index < ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")); ++index)
+        if (((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", index))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "label")) == aLabel)
         {
             self.isa.objj_msgSend1(self, "setSelectedSegment:", index);
             return YES;
         }
     return NO;
+    var ___r1, ___r2;
 }
 ,["BOOL","CPString"]), new objj_method(sel_getUid("isTracking"), function $CPSegmentedControl__isTracking(self, _cmd)
 {
@@ -24066,7 +24361,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     {
         var index = 0,
             selected = NO;
-        for (; index < self._segments.length; ++index)
+        for (; index < self.isa.objj_msgSend0(self, "segmentCount"); ++index)
             if (((___r1 = self._segments[index]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "selected")))
                 if (selected)
                     self.isa.objj_msgSend2(self, "setSelected:forSegment:", NO, index);
@@ -24076,7 +24371,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     else if (self._trackingMode == CPSegmentSwitchTrackingMomentary)
     {
         var index = 0;
-        for (; index < self._segments.length; ++index)
+        for (; index < self.isa.objj_msgSend0(self, "segmentCount"); ++index)
             if (((___r1 = self._segments[index]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "selected")))
                 self.isa.objj_msgSend2(self, "setSelected:forSegment:", NO, index);
     }
@@ -24088,50 +24383,50 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["CPSegmentSwitchTracking"]), new objj_method(sel_getUid("setWidth:forSegment:"), function $CPSegmentedControl__setWidth_forSegment_(self, _cmd, aWidth, aSegment)
 {
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setWidth:", aWidth));
+    ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setWidth:", aWidth));
     self.isa.objj_msgSend1(self, "tileWithChangedSegment:", aSegment);
-    var ___r1;
+    var ___r1, ___r2;
 }
 ,["void","float","unsigned"]), new objj_method(sel_getUid("widthForSegment:"), function $CPSegmentedControl__widthForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width"));
+    var ___r1, ___r2;
 }
 ,["float","unsigned"]), new objj_method(sel_getUid("setImage:forSegment:"), function $CPSegmentedControl__setImage_forSegment_(self, _cmd, anImage, aSegment)
 {
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setImage:", anImage));
+    ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setImage:", anImage));
     self.isa.objj_msgSend1(self, "tileWithChangedSegment:", aSegment);
-    var ___r1;
+    var ___r1, ___r2;
 }
 ,["void","CPImage","unsigned"]), new objj_method(sel_getUid("imageForSegment:"), function $CPSegmentedControl__imageForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "image"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "image"));
+    var ___r1, ___r2;
 }
 ,["CPImage","unsigned"]), new objj_method(sel_getUid("setLabel:forSegment:"), function $CPSegmentedControl__setLabel_forSegment_(self, _cmd, aLabel, aSegment)
 {
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setLabel:", aLabel));
+    ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setLabel:", aLabel));
     self.isa.objj_msgSend1(self, "tileWithChangedSegment:", aSegment);
-    var ___r1;
+    var ___r1, ___r2;
 }
 ,["void","CPString","unsigned"]), new objj_method(sel_getUid("labelForSegment:"), function $CPSegmentedControl__labelForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "label"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "label"));
+    var ___r1, ___r2;
 }
 ,["CPString","unsigned"]), new objj_method(sel_getUid("setMenu:forSegment:"), function $CPSegmentedControl__setMenu_forSegment_(self, _cmd, aMenu, aSegment)
 {
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setMenu:", aMenu));
-    var ___r1;
+    ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setMenu:", aMenu));
+    var ___r1, ___r2;
 }
 ,["void","CPMenu","unsigned"]), new objj_method(sel_getUid("menuForSegment:"), function $CPSegmentedControl__menuForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "menu"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "menu"));
+    var ___r1, ___r2;
 }
 ,["CPMenu","unsigned"]), new objj_method(sel_getUid("setSelected:forSegment:"), function $CPSegmentedControl__setSelected_forSegment_(self, _cmd, isSelected, aSegment)
 {
-    var segment = self._segments[aSegment];
+    var segment = ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "objectAtIndex:", aSegment));
     if ((segment == null ? null : segment.isa.objj_msgSend0(segment, "selected")) == isSelected)
         return;
     (segment == null ? null : segment.isa.objj_msgSend1(segment, "setSelected:", isSelected));
@@ -24140,7 +24435,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     {
         var oldSelectedSegment = self._selectedSegment;
         self._selectedSegment = aSegment;
-        if (self._trackingMode == CPSegmentSwitchTrackingSelectOne && oldSelectedSegment != aSegment && oldSelectedSegment != -1)
+        if (self._trackingMode == CPSegmentSwitchTrackingSelectOne && oldSelectedSegment != aSegment && oldSelectedSegment != -1 && oldSelectedSegment < self._segments.length)
         {
             ((___r1 = self._segments[oldSelectedSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setSelected:", NO));
             self._themeStates[oldSelectedSegment] = CPThemeStateNormal;
@@ -24155,14 +24450,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["void","BOOL","unsigned"]), new objj_method(sel_getUid("isSelectedForSegment:"), function $CPSegmentedControl__isSelectedForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "selected"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "selected"));
+    var ___r1, ___r2;
 }
 ,["BOOL","unsigned"]), new objj_method(sel_getUid("setEnabled:forSegment:"), function $CPSegmentedControl__setEnabled_forSegment_(self, _cmd, shouldBeEnabled, aSegment)
 {
-    if (((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "enabled")) === shouldBeEnabled)
+    var segment = ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "objectAtIndex:", aSegment));
+    if ((segment == null ? null : segment.isa.objj_msgSend0(segment, "enabled")) === shouldBeEnabled)
         return;
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setEnabled:", shouldBeEnabled));
+    (segment == null ? null : segment.isa.objj_msgSend1(segment, "setEnabled:", shouldBeEnabled));
     if (shouldBeEnabled)
         self._themeStates[aSegment] = self._themeStates[aSegment].without(CPThemeStateDisabled);
     else
@@ -24173,18 +24469,18 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["void","BOOL","unsigned"]), new objj_method(sel_getUid("isEnabledForSegment:"), function $CPSegmentedControl__isEnabledForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "enabled"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "enabled"));
+    var ___r1, ___r2;
 }
 ,["BOOL","unsigned"]), new objj_method(sel_getUid("setTag:forSegment:"), function $CPSegmentedControl__setTag_forSegment_(self, _cmd, aTag, aSegment)
 {
-    ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setTag:", aTag));
-    var ___r1;
+    ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setTag:", aTag));
+    var ___r1, ___r2;
 }
 ,["void","int","unsigned"]), new objj_method(sel_getUid("tagForSegment:"), function $CPSegmentedControl__tagForSegment_(self, _cmd, aSegment)
 {
-    return ((___r1 = self._segments[aSegment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tag"));
-    var ___r1;
+    return ((___r1 = ((___r2 = self._segments), ___r2 == null ? null : ___r2.isa.objj_msgSend1(___r2, "objectAtIndex:", aSegment))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tag"));
+    var ___r1, ___r2;
 }
 ,["int","unsigned"]), new objj_method(sel_getUid("drawSegmentBezel:highlight:"), function $CPSegmentedControl__drawSegmentBezel_highlight_(self, _cmd, aSegment, shouldHighlight)
 {
@@ -24200,11 +24496,10 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["void","int","BOOL"]), new objj_method(sel_getUid("_leftOffsetForSegment:"), function $CPSegmentedControl___leftOffsetForSegment_(self, _cmd, segment)
 {
-    var bezelInset = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset");
     if (segment == 0)
-        return bezelInset.left;
+        return self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset").left;
     var thickness = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "divider-thickness");
-    return self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", segment - 1) + self.isa.objj_msgSend1(self, "widthForSegment:", segment - 1) + thickness;
+    return self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", segment - 1) + CGRectGetWidth(self.isa.objj_msgSend1(self, "frameForSegment:", segment - 1)) + thickness;
 }
 ,["float","unsigned"]), new objj_method(sel_getUid("_indexOfLastSegment"), function $CPSegmentedControl___indexOfLastSegment(self, _cmd)
 {
@@ -24231,20 +24526,20 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     else if (aName.indexOf("segment-bezel") === 0)
     {
         var segment = parseInt(aName.substring("segment-bezel-".length), 10),
-            frame = CGRectCreateCopy(((___r1 = self._segments[segment]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")));
+            frame = CGRectCreateCopy(self.isa.objj_msgSend1(self, "frameForSegment:", segment));
         if (segment === 0)
         {
             frame.origin.x += contentInset.left;
             frame.size.width -= contentInset.left;
         }
-        if (segment === self._segments.length - 1)
+        if (segment === self.isa.objj_msgSend0(self, "segmentCount") - 1)
             frame.size.width = CGRectGetWidth(self.isa.objj_msgSend0(self, "bounds")) - contentInset.right - frame.origin.x;
         return frame;
     }
     else if (aName.indexOf("divider-bezel") === 0)
     {
         var segment = parseInt(aName.substring("divider-bezel-".length), 10),
-            width = self.isa.objj_msgSend1(self, "widthForSegment:", segment),
+            width = CGRectGetWidth(self.isa.objj_msgSend1(self, "frameForSegment:", segment)),
             left = self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", segment),
             thickness = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "divider-thickness");
         return CGRectMake(left + width, bezelInset.top, thickness, height);
@@ -24255,7 +24550,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
         return self.isa.objj_msgSend1(self, "contentFrameForSegment:", segment);
     }
     return objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPSegmentedControl").super_class }, "rectForEphemeralSubviewNamed:", aName);
-    var ___r1;
 }
 ,["CGRect","CPString"]), new objj_method(sel_getUid("createEphemeralSubviewNamed:"), function $CPSegmentedControl__createEphemeralSubviewNamed_(self, _cmd, aName)
 {
@@ -24266,7 +24560,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 ,["CPView","CPString"]), new objj_method(sel_getUid("layoutSubviews"), function $CPSegmentedControl__layoutSubviews(self, _cmd)
 {
-    if (self._segments.length <= 0)
+    if (self.isa.objj_msgSend0(self, "segmentCount") <= 0)
         return;
     var themeState = self._themeStates[0],
         isDisabled = self.isa.objj_msgSend1(self, "hasThemeState:", CPThemeStateDisabled),
@@ -24319,7 +24613,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
         if (i == count - 1)
             continue;
         var borderState = self._themeStates[i].and(self._themeStates[i + 1]);
-        borderState = borderState.hasThemeState(CPThemeStateSelected) && !borderState.hasThemeState(CPThemeStateHighlighted) ? CPThemeStateSelected : CPThemeStateNormal;
         borderState = isDisabled ? borderState.and(CPThemeStateDisabled) : borderState;
         if (isControlSizeSmall)
             borderState = borderState.and(CPThemeStateControlSizeSmall);
@@ -24333,86 +24626,84 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 ,["void"]), new objj_method(sel_getUid("drawSegment:highlight:"), function $CPSegmentedControl__drawSegment_highlight_(self, _cmd, aSegment, shouldHighlight)
 {
 }
-,["void","int","BOOL"]), new objj_method(sel_getUid("tileWithChangedSegment:"), function $CPSegmentedControl__tileWithChangedSegment_(self, _cmd, aSegment)
+,["void","int","BOOL"]), new objj_method(sel_getUid("tile"), function $CPSegmentedControl__tile(self, _cmd)
 {
-    if (aSegment >= self._segments.length)
+    self.isa.objj_msgSend1(self, "tileWithChangedSegment:", 0);
+}
+,["void"]), new objj_method(sel_getUid("tileWithChangedSegment:"), function $CPSegmentedControl__tileWithChangedSegment_(self, _cmd, aSegment)
+{
+    var segmentCount = self.isa.objj_msgSend0(self, "segmentCount");
+    if (aSegment < 0 || segmentCount > 0 && aSegment >= segmentCount)
         return;
-    var segment = self._segments[aSegment],
-        segmentWidth = (segment == null ? null : segment.isa.objj_msgSend0(segment, "width")),
-        themeState = self._themeState.hasThemeState(CPThemeStateDisabled) ? self._themeStates[aSegment].and(CPThemeStateDisabled) : self._themeStates[aSegment],
-        contentInset = self.isa.objj_msgSend2(self, "valueForThemeAttribute:inState:", "content-inset", themeState),
-        font = self.isa.objj_msgSend0(self, "font");
-    if (!segmentWidth)
+    var width = 0;
+    if (segmentCount > 0)
     {
-        if ((segment == null ? null : segment.isa.objj_msgSend0(segment, "image")) && (segment == null ? null : segment.isa.objj_msgSend0(segment, "label")))
-            segmentWidth = ((___r1 = (segment == null ? null : segment.isa.objj_msgSend0(segment, "label"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "sizeWithFont:", font)).width + ((___r1 = (segment == null ? null : segment.isa.objj_msgSend0(segment, "image"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")).width + contentInset.left + contentInset.right;
-        else if (segment.image)
-            segmentWidth = ((___r1 = (segment == null ? null : segment.isa.objj_msgSend0(segment, "image"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "size")).width + contentInset.left + contentInset.right;
-        else if (segment.label)
-            segmentWidth = ((___r1 = (segment == null ? null : segment.isa.objj_msgSend0(segment, "label"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "sizeWithFont:", font)).width + contentInset.left + contentInset.right;
-        else
-            segmentWidth = 0.0;
+        for (var i = aSegment; i < segmentCount; i++)
+            ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setFrame:", CGRectMakeZero()));
+        width = CGRectGetMaxX(self.isa.objj_msgSend1(self, "frameForSegment:", segmentCount - 1));
     }
-    var delta = segmentWidth - CGRectGetWidth((segment == null ? null : segment.isa.objj_msgSend0(segment, "frame")));
-    if (!delta)
-    {
-        self.isa.objj_msgSend0(self, "setNeedsLayout");
-        self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES);
-        return;
-    }
-    var frame = self.isa.objj_msgSend0(self, "frame");
-    self.isa.objj_msgSend1(self, "setFrameSize:", CGSizeMake(CGRectGetWidth(frame) + delta, CGRectGetHeight(frame)));
-    (segment == null ? null : segment.isa.objj_msgSend1(segment, "setWidth:", segmentWidth));
-    (segment == null ? null : segment.isa.objj_msgSend1(segment, "setFrame:", self.isa.objj_msgSend1(self, "frameForSegment:", aSegment)));
-    var index = aSegment + 1;
-    for (; index < self._segments.length; ++index)
-    {
-        ((___r1 = self._segments[index]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")).origin.x += delta;
-        self.isa.objj_msgSend2(self, "drawSegmentBezel:highlight:", index, NO);
-        self.isa.objj_msgSend2(self, "drawSegment:highlight:", index, NO);
-    }
-    self.isa.objj_msgSend2(self, "drawSegmentBezel:highlight:", aSegment, NO);
-    self.isa.objj_msgSend2(self, "drawSegment:highlight:", aSegment, NO);
+    self.isa.objj_msgSend1(self, "setFrameSize:", CGSizeMake(width, CGRectGetHeight(self.isa.objj_msgSend0(self, "frame"))));
     self.isa.objj_msgSend0(self, "setNeedsLayout");
     self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES);
     var ___r1;
 }
-,["void","unsigned"]), new objj_method(sel_getUid("frameForSegment:"), function $CPSegmentedControl__frameForSegment_(self, _cmd, aSegment)
+,["void","CPInteger"]), new objj_method(sel_getUid("frameForSegment:"), function $CPSegmentedControl__frameForSegment_(self, _cmd, aSegment)
 {
-    return self.isa.objj_msgSend1(self, "bezelFrameForSegment:", aSegment);
+    var segment = ((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "objectAtIndex:", aSegment)),
+        frame = (segment == null ? null : segment.isa.objj_msgSend0(segment, "frame"));
+    if (CGRectEqualToRect(frame, CGRectMakeZero()))
+    {
+        frame = self.isa.objj_msgSend1(self, "bezelFrameForSegment:", aSegment);
+        (segment == null ? null : segment.isa.objj_msgSend1(segment, "setFrame:", frame));
+    }
+    return frame;
+    var ___r1;
 }
 ,["CGRect","unsigned"]), new objj_method(sel_getUid("bezelFrameForSegment:"), function $CPSegmentedControl__bezelFrameForSegment_(self, _cmd, aSegment)
 {
-    var height = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "min-size").height,
-        bezelInset = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset"),
+    var left = self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", aSegment),
+        top = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset").top,
         width = self.isa.objj_msgSend1(self, "widthForSegment:", aSegment),
-        left = self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", aSegment);
-    return CGRectMake(left, bezelInset.top, width, height);
+        height = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "min-size").height;
+    if (width == 0)
+    {
+        var themeState = self._themeState.hasThemeState(CPThemeStateDisabled) ? self._themeStates[aSegment].and(CPThemeStateDisabled) : self._themeStates[aSegment],
+            contentInset = self.isa.objj_msgSend2(self, "valueForThemeAttribute:inState:", "content-inset", themeState),
+            contentInsetWidth = contentInset.left + contentInset.right,
+            segment = self._segments[aSegment],
+            label = (segment == null ? null : segment.isa.objj_msgSend0(segment, "label")),
+            image = (segment == null ? null : segment.isa.objj_msgSend0(segment, "image"));
+        width = (label ? (label == null ? null : label.isa.objj_msgSend1(label, "sizeWithFont:", self.isa.objj_msgSend0(self, "font"))).width : 4.0) + (image ? (image == null ? null : image.isa.objj_msgSend0(image, "size")).width : 0) + contentInsetWidth;
+    }
+    return CGRectMake(left, top, width, height);
 }
 ,["CGRect","unsigned"]), new objj_method(sel_getUid("contentFrameForSegment:"), function $CPSegmentedControl__contentFrameForSegment_(self, _cmd, aSegment)
 {
     var height = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "min-size").height,
         contentInset = self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "content-inset"),
-        width = self.isa.objj_msgSend1(self, "widthForSegment:", aSegment),
+        width = CGRectGetWidth(self.isa.objj_msgSend1(self, "frameForSegment:", aSegment)),
         left = self.isa.objj_msgSend1(self, "_leftOffsetForSegment:", aSegment);
     return CGRectMake(left + contentInset.left, contentInset.top, width - contentInset.left - contentInset.right, height - contentInset.top - contentInset.bottom);
 }
-,["CGRect","unsigned"]), new objj_method(sel_getUid("testSegment:"), function $CPSegmentedControl__testSegment_(self, _cmd, aPoint)
+,["CGRect","unsigned"]), new objj_method(sel_getUid("_minimumFrameSize"), function $CPSegmentedControl___minimumFrameSize(self, _cmd)
+{
+    return CGSizeMake(CGRectGetWidth(self.isa.objj_msgSend0(self, "frame")), self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "min-size").height);
+}
+,["CGSize"]), new objj_method(sel_getUid("testSegment:"), function $CPSegmentedControl__testSegment_(self, _cmd, aPoint)
 {
     var location = self.isa.objj_msgSend2(self, "convertPoint:fromView:", aPoint, nil),
-        count = self._segments.length;
+        count = self.isa.objj_msgSend0(self, "segmentCount");
     while (count--)
-        if (CGRectContainsPoint(((___r1 = self._segments[count]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")), aPoint))
+        if (CGRectContainsPoint(self.isa.objj_msgSend1(self, "frameForSegment:", count), aPoint))
             return count;
-    if (self._segments.length)
+    if (self.isa.objj_msgSend0(self, "segmentCount"))
     {
-        var adjustedLastFrame = CGRectCreateCopy(((___r1 = self._segments[self._segments.length - 1]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")));
+        var adjustedLastFrame = CGRectCreateCopy(self.isa.objj_msgSend1(self, "frameForSegment:", self._segments.length - 1));
         adjustedLastFrame.size.width = CGRectGetWidth(self.isa.objj_msgSend0(self, "bounds")) - adjustedLastFrame.origin.x;
         if (CGRectContainsPoint(adjustedLastFrame, aPoint))
-            return self._segments.length - 1;
+            return self.isa.objj_msgSend0(self, "segmentCount") - 1;
     }
     return -1;
-    var ___r1;
 }
 ,["unsigned","CGPoint"]), new objj_method(sel_getUid("mouseDown:"), function $CPSegmentedControl__mouseDown_(self, _cmd, anEvent)
 {
@@ -24444,7 +24735,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
             if (self._trackingMode == CPSegmentSwitchTrackingMomentary)
             {
                 self.isa.objj_msgSend2(self, "setSelected:forSegment:", NO, self._trackingSegment);
-                self._selectedSegment = -1;
+                self._selectedSegment = CPNotFound;
             }
         }
         self.isa.objj_msgSend2(self, "drawSegmentBezel:highlight:", self._trackingSegment, NO);
@@ -24477,7 +24768,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 ,["void","CPEvent"]), new objj_method(sel_getUid("setFont:"), function $CPSegmentedControl__setFont_(self, _cmd, aFont)
 {
     objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPSegmentedControl").super_class }, "setFont:", aFont);
-    self.isa.objj_msgSend1(self, "tileWithChangedSegment:", 0);
+    self.isa.objj_msgSend0(self, "tile");
 }
 ,["void","CPFont"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), function $CPSegmentedControl__defaultThemeClass(self, _cmd)
@@ -24511,35 +24802,35 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPSegmentedControlSelectedKey)))
             self._selectedSegment = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeIntForKey:", CPSegmentedControlSelectedKey));
         else
-            self._selectedSegment = -1;
+            self._selectedSegment = CPNotFound;
         if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPSegmentedControlTrackingModeKey)))
             self._trackingMode = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeIntForKey:", CPSegmentedControlTrackingModeKey));
         else
             self._trackingMode = CPSegmentSwitchTrackingSelectOne;
-        for (var i = 0; i < self._segments.length; i++)
+        for (var i = 0; i < (self == null ? null : self.isa.objj_msgSend0(self, "segmentCount")); i++)
             self._themeStates[i] = ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "selected")) ? CPThemeStateSelected : CPThemeStateNormal;
-        for (var i = 0; i < self._segments.length; i++)
-            (self == null ? null : self.isa.objj_msgSend1(self, "tileWithChangedSegment:", i));
+        (self == null ? null : self.isa.objj_msgSend0(self, "tile"));
         var thickness = (self == null ? null : self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "divider-thickness")),
             dividerExtraSpace = (((___r1 = self._segments), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")) - 1) * thickness,
             difference = MAX(originalWidth - (self == null ? null : self.isa.objj_msgSend0(self, "frame")).size.width - dividerExtraSpace, 0.0),
-            remainingWidth = FLOOR(difference / self._segments.length),
+            remainingWidth = FLOOR(difference / (self == null ? null : self.isa.objj_msgSend0(self, "segmentCount"))),
             widthOfAllSegments = 0;
-        for (var i = 0; i < self._segments.length; i++)
+        for (var i = 0; i < (self == null ? null : self.isa.objj_msgSend0(self, "segmentCount")); i++)
         {
-            (self == null ? null : self.isa.objj_msgSend2(self, "setWidth:forSegment:", ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width")) + remainingWidth, i));
-            widthOfAllSegments += ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width"));
+            var frame = ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame"));
+            frame.size.width += remainingWidth;
+            widthOfAllSegments += CGRectGetWidth(frame);
         }
         var leftOversPixel = originalWidth - (widthOfAllSegments + dividerExtraSpace);
-        if (leftOversPixel < self._segments.length - 1)
+        if (leftOversPixel < (self == null ? null : self.isa.objj_msgSend0(self, "segmentCount")) - 1)
         {
             for (var i = 0; i < leftOversPixel; i++)
             {
-                (self == null ? null : self.isa.objj_msgSend2(self, "setWidth:forSegment:", ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "width")) + 1, i));
+                ((___r1 = self._segments[i]), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")).size.width += 1;
             }
         }
-        (self == null ? null : self.isa.objj_msgSend1(self, "setFrameSize:", CGSizeMake(originalWidth, (self == null ? null : self.isa.objj_msgSend0(self, "frame")).size.height)));
-        (self == null ? null : self.isa.objj_msgSend1(self, "tileWithChangedSegment:", 0));
+        (self == null ? null : self.isa.objj_msgSend1(self, "setFrameSize:", CGSizeMake(originalWidth, CGRectGetHeight((self == null ? null : self.isa.objj_msgSend0(self, "frame"))))));
+        (self == null ? null : self.isa.objj_msgSend0(self, "tile"));
     }
     return self;
     var ___r1;
@@ -26872,7 +27163,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("metricsOfFont:"), func
     return CPPlatformString.isa.objj_msgSend1(CPPlatformString, "metricsOfFont:", aFont);
 }
 ,["CPDictionary","CPFont"])]);
-}p;15;CPTableColumn.jt;27381;@STATIC;1.0;I;25;Foundation/CPDictionary.jI;21;Foundation/CPObject.jI;23;Foundation/CPIndexSet.jI;29;Foundation/CPSortDescriptor.jI;21;Foundation/CPString.ji;13;CPTextField.jt;27199;objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("Foundation/CPSortDescriptor.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPTextField.j", YES);CPTableColumnNoResizing = 0;
+}p;15;CPTableColumn.jt;27677;@STATIC;1.0;I;25;Foundation/CPDictionary.jI;21;Foundation/CPObject.jI;23;Foundation/CPIndexSet.jI;29;Foundation/CPSortDescriptor.jI;21;Foundation/CPString.ji;13;CPTextField.jt;27495;objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("Foundation/CPSortDescriptor.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPTextField.j", YES);CPTableColumnNoResizing = 0;
 CPTableColumnAutoresizingMask = 1 << 0;
 CPTableColumnUserResizingMask = 1 << 1;
 {var the_class = objj_allocateClassPair(CPObject, "CPTableColumn"),
@@ -27100,10 +27391,18 @@ meta_class = the_class.isa;objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("setValueFor:"), function $CPTableColumnValueBinder__setValueFor_(self, _cmd, aBinding)
 {
     var tableView = ((___r1 = self._source), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "tableView")),
-        column = ((___r1 = (tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "tableColumns"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", self._source)),
-        rowIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(0, (tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "numberOfRows")))),
-        columnIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndex:", column);
-    (tableView == null ? null : tableView.isa.objj_msgSend2(tableView, "_reloadDataForRowIndexes:columnIndexes:", rowIndexes, columnIndexes));
+        newNumberOfRows = (tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "_numberOfRows"));
+    if ((tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "numberOfRows")) == newNumberOfRows)
+    {
+        var rowIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(0, newNumberOfRows)),
+            column = ((___r1 = (tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "tableColumns"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", self._source)),
+            columnIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndex:", column);
+        (tableView == null ? null : tableView.isa.objj_msgSend2(tableView, "_reloadDataForRowIndexes:columnIndexes:", rowIndexes, columnIndexes));
+    }
+    else
+    {
+        (tableView == null ? null : tableView.isa.objj_msgSend0(tableView, "reloadData"));
+    }
     var ___r1;
 }
 ,["void","CPString"]), new objj_method(sel_getUid("_defaultSortDescriptorPrototype"), function $CPTableColumnValueBinder___defaultSortDescriptorPrototype(self, _cmd)
@@ -27286,7 +27585,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     CPException.isa.objj_msgSend2(CPException, "raise:reason:", CPUnsupportedMethodException, "dataCellForRow: is not supported. Use -dataViewForRow:row instead.");
 }
 ,["id","CPInteger"])]);
-}p;19;CPTableHeaderView.jt;43667;@STATIC;1.0;i;15;CPTableColumn.ji;13;CPTableView.ji;8;CPView.ji;10;CPCursor.ji;21;_CPImageAndTextView.jt;43556;objj_executeFile("CPTableColumn.j", YES);objj_executeFile("CPTableView.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPTableColumnHeaderView"),
+}p;19;CPTableHeaderView.jt;43424;@STATIC;1.0;i;15;CPTableColumn.ji;8;CPView.ji;10;CPCursor.ji;21;_CPImageAndTextView.jt;43331;objj_executeFile("CPTableColumn.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPTableColumnHeaderView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_textField")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), function $_CPTableColumnHeaderView__initWithFrame_(self, _cmd, frame)
 {
@@ -27427,8 +27726,8 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
 ,["CPDictionary"])]);
 }var _CPTableColumnHeaderViewStringValueKey = "_CPTableColumnHeaderViewStringValueKey",
     _CPTableColumnHeaderViewFontKey = "_CPTableColumnHeaderViewFontKey",
-    _CPTableColumnHeaderViewImageKey = "_CPTableColumnHeaderViewImageKey";
-_CPTableColumnHeaderViewIsDraggingKey = "_CPTableColumnHeaderViewIsDraggingKey";
+    _CPTableColumnHeaderViewImageKey = "_CPTableColumnHeaderViewImageKey",
+    _CPTableColumnHeaderViewIsDraggingKey = "_CPTableColumnHeaderViewIsDraggingKey";
 {
 var the_class = objj_getClass("_CPTableColumnHeaderView")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"_CPTableColumnHeaderView\"");
@@ -27439,7 +27738,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         (self == null ? null : self.isa.objj_msgSend0(self, "_init"));
         (self == null ? null : self.isa.objj_msgSend1(self, "_setIndicatorImage:", (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", _CPTableColumnHeaderViewImageKey))));
         (self == null ? null : self.isa.objj_msgSend1(self, "setStringValue:", (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", _CPTableColumnHeaderViewStringValueKey))));
-        (self == null ? null : self.isa.objj_msgSend1(self, "setFont:", (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", _CPTableColumnHeaderViewFontKey))));
         (self == null ? null : self.isa.objj_msgSend1(self, "setFont:", (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", _CPTableColumnHeaderViewFontKey))));
     }
     return self;
@@ -27889,7 +28187,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeObject:forKey:", self._tableView, CPTableHeaderViewTableViewKey));
 }
 ,["void","CPCoder"])]);
-}p;13;CPTableView.jt;257959;@STATIC;1.0;I;20;Foundation/CPArray.jI;23;Foundation/CPIndexSet.ji;24;CPDragServer_Constants.ji;12;CGGradient.ji;7;CPCib.ji;17;CPCompatibility.ji;11;CPControl.ji;13;CPImageView.ji;12;CPScroller.ji;14;CPScrollView.ji;15;CPTableColumn.ji;19;CPTableHeaderView.ji;8;CPText.ji;15;_CPCornerView.jt;257660;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPDragServer_Constants.j", YES);objj_executeFile("CGGradient.j", YES);objj_executeFile("CPCib.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPControl.j", YES);objj_executeFile("CPImageView.j", YES);objj_executeFile("CPScroller.j", YES);objj_executeFile("CPScrollView.j", YES);objj_executeFile("CPTableColumn.j", YES);objj_executeFile("CPTableHeaderView.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("_CPCornerView.j", YES);CPTableViewColumnDidMoveNotification = "CPTableViewColumnDidMoveNotification";
+}p;13;CPTableView.jt;260837;@STATIC;1.0;I;20;Foundation/CPArray.jI;23;Foundation/CPIndexSet.ji;24;CPDragServer_Constants.ji;12;CGGradient.ji;7;CPCib.ji;17;CPCompatibility.ji;11;CPControl.ji;13;CPImageView.ji;12;CPScroller.ji;14;CPScrollView.ji;15;CPTableColumn.ji;19;CPTableHeaderView.ji;8;CPText.ji;15;_CPCornerView.jt;260538;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPDragServer_Constants.j", YES);objj_executeFile("CGGradient.j", YES);objj_executeFile("CPCib.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPControl.j", YES);objj_executeFile("CPImageView.j", YES);objj_executeFile("CPScroller.j", YES);objj_executeFile("CPScrollView.j", YES);objj_executeFile("CPTableColumn.j", YES);objj_executeFile("CPTableHeaderView.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("_CPCornerView.j", YES);CPTableViewColumnDidMoveNotification = "CPTableViewColumnDidMoveNotification";
 CPTableViewColumnDidResizeNotification = "CPTableViewColumnDidResizeNotification";
 CPTableViewSelectionDidChangeNotification = "CPTableViewSelectionDidChangeNotification";
 CPTableViewSelectionIsChangingNotification = "CPTableViewSelectionIsChangingNotification";
@@ -28110,8 +28408,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
 ,["id"]), new objj_method(sel_getUid("reloadData"), function $CPTableView__reloadData(self, _cmd)
 {
     self.isa.objj_msgSend0(self, "_reloadDataViews");
-    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
-    var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("reloadDataForRowIndexes:columnIndexes:"), function $CPTableView__reloadDataForRowIndexes_columnIndexes_(self, _cmd, rowIndexes, columnIndexes)
 {
@@ -28367,6 +28663,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
     else
         self._dirtyTableColumnRangeIndex = MIN(index, self._dirtyTableColumnRangeIndex);
     self.isa.objj_msgSend0(self, "reloadData");
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
     var ___r1;
 }
 ,["void","CPTableColumn"]), new objj_method(sel_getUid("_setDraggedColumn:"), function $CPTableView___setDraggedColumn_(self, _cmd, columnIndex)
@@ -29693,6 +29990,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         var dataViewsForRows = self._dataViewsForRows[row],
             tableColumnUID = (tableColumn == null ? null : tableColumn.isa.objj_msgSend0(tableColumn, "UID"));
         delete dataViewsForRows[tableColumnUID];
+        self.isa.objj_msgSend3(self, "_sendDelegateWillRemoveView:forTableColumn:row:", dataView, tableColumn, row);
         self.isa.objj_msgSend1(self, "_enqueueReusableDataView:", dataView);
     });
     var ___r1;
@@ -29756,8 +30054,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         }
         self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES);
     }
-    if (self._implementedDelegateMethods & CPTableViewDelegate_tableView_willDisplayView_forTableColumn_row_)
-        ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "tableView:willDisplayView:forTableColumn:row:", self, dataView, tableColumn, row));
+    self.isa.objj_msgSend3(self, "_sendDelegateWillDisplayView:forTableColumn:row:", dataView, tableColumn, row);
     return dataView;
     var ___r1;
 }
@@ -29825,7 +30122,37 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         view = self.isa.objj_msgSend2(self, "_unarchiveViewWithIdentifier:owner:", anIdentifier, anOwner);
     return view;
 }
-,["id","CPString","id"]), new objj_method(sel_getUid("_unarchiveViewWithIdentifier:owner:"), function $CPTableView___unarchiveViewWithIdentifier_owner_(self, _cmd, anIdentifier, anOwner)
+,["id","CPString","id"]), new objj_method(sel_getUid("viewAtColumn:row:makeIfNecessary:"), function $CPTableView__viewAtColumn_row_makeIfNecessary_(self, _cmd, column, row, makeIfNecessary)
+{
+    if (row > self._numberOfRows - 1)
+        CPException.isa.objj_msgSend2(CPException, "raise:reason:", CPInvalidArgumentException, "Row " + row + " out of row range [0-" + (self._numberOfRows - 1) + "] for rowViewAtRow:createIfNeeded:");
+    if (column > self._tableColumns.length - 1)
+        CPException.isa.objj_msgSend2(CPException, "raise:reason:", CPInvalidArgumentException, "Column " + column + " out of row range [0-" + (self._tableColumns.length - 1) + "] for rowViewAtRow:createIfNeeded:");
+    var dataViewsForRow = self._dataViewsForRows[row],
+        tableColumn = self._tableColumns[column],
+        tableColumnUID = (tableColumn == null ? null : tableColumn.isa.objj_msgSend0(tableColumn, "UID")),
+        view = dataViewsForRow ? dataViewsForRow[tableColumnUID] : nil;
+    if (!makeIfNecessary)
+        return view || nil;
+    if (!view)
+    {
+        if (!dataViewsForRow)
+        {
+            dataViewsForRow = {};
+            self._dataViewsForRows[row] = dataViewsForRow;
+        }
+        view = self.isa.objj_msgSend2(self, "preparedViewAtColumn:row:", column, row);
+        if ((view == null ? null : view.isa.objj_msgSend0(view, "superview")) !== self)
+            self.isa.objj_msgSend1(self, "addSubview:", view);
+        dataViewsForRow[tableColumnUID] = view;
+        ((___r1 = self._exposedRows), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addIndex:", row));
+        ((___r1 = self._exposedColumns), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addIndex:", column));
+        self.isa.objj_msgSend0(self, "setNeedsLayout");
+    }
+    return view;
+    var ___r1;
+}
+,["id","CPInteger","CPInteger","BOOL"]), new objj_method(sel_getUid("_unarchiveViewWithIdentifier:owner:"), function $CPTableView___unarchiveViewWithIdentifier_owner_(self, _cmd, anIdentifier, anOwner)
 {
     var cib = ((___r1 = self._archivedDataViews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "objectForKey:", anIdentifier));
     if (!cib && !self._unavailable_custom_cibs[anIdentifier])
@@ -29867,10 +30194,13 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
 ,["void"]), new objj_method(sel_getUid("enumerateAvailableViewsUsingBlock:"), function $CPTableView__enumerateAvailableViewsUsingBlock_(self, _cmd, handler)
 {
     self.isa.objj_msgSend0(self, "reloadData");
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
     self.isa.objj_msgSend3(self, "_enumerateViewsInRows:columns:usingBlock:", self._exposedRows, self._exposedColumns, handler);
+    var ___r1;
 }
 ,["void","Function"]), new objj_method(sel_getUid("_enumerateViewsInRows:columns:usingBlock:"), function $CPTableView___enumerateViewsInRows_columns_usingBlock_(self, _cmd, rowIndexes, columnIndexes, handler)
 {
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
     (rowIndexes == null ? null : rowIndexes.isa.objj_msgSend1(rowIndexes, "enumerateIndexesUsingBlock:", function(rowIndex, stopRow)
     {
         var dataViewsForRow = self._dataViewsForRows[rowIndex];
@@ -29888,9 +30218,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
             var ___r1;
         }));
     }));
+    var ___r1;
 }
 ,["void","CPIndexSet","CPIndexSet","Function"]), new objj_method(sel_getUid("_enumerateViewsInRows:tableColumns:usingBlock:"), function $CPTableView___enumerateViewsInRows_tableColumns_usingBlock_(self, _cmd, rowIndexes, tableColumns, handler)
 {
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
     (rowIndexes == null ? null : rowIndexes.isa.objj_msgSend1(rowIndexes, "enumerateIndexesUsingBlock:", function(rowIndex, stopRow)
     {
         var dataViewsForRow = self._dataViewsForRows[rowIndex];
@@ -29907,6 +30239,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
                 stopRow(YES);
         }));
     }));
+    var ___r1;
 }
 ,["void","CPIndexSet","CPArray","Function"]), new objj_method(sel_getUid("_enqueueReusableDataView:"), function $CPTableView___enqueueReusableDataView_(self, _cmd, aDataView)
 {
@@ -30259,7 +30592,9 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
 ,["void"]), new objj_method(sel_getUid("viewWillMoveToSuperview:"), function $CPTableView__viewWillMoveToSuperview_(self, _cmd, aView)
 {
     if ((aView == null ? null : aView.isa.objj_msgSend1(aView, "isKindOfClass:", (CPClipView == null ? null : CPClipView.isa.objj_msgSend0(CPClipView, "class")))))
+    {
         self._observedClipView = aView;
+    }
     else
     {
         self.isa.objj_msgSend0(self, "_stopObservingClipView");
@@ -30286,6 +30621,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
 {
     ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "makeFirstResponder:", self));
     var row = self.isa.objj_msgSend1(self, "rowAtPoint:", aPoint);
+    self._clickedRow = row;
+    self._clickedColumn = self.isa.objj_msgSend1(self, "columnAtPoint:", aPoint);
     if (row < 0 && self._allowsEmptySelection)
     {
         if (self.isa.objj_msgSend0(self, "_sendDelegateSelectionShouldChangeInTableView"))
@@ -30328,11 +30665,18 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
     }
     else
         (CPApp == null ? null : CPApp.isa.objj_msgSend1(CPApp, "sendEvent:", anEvent));
+    if ((anEvent == null ? null : anEvent.isa.objj_msgSend0(anEvent, "type")) == CPLeftMouseUp)
+    {
+        self._clickedRow = CPNotFound;
+        self._clickedColumn = CPNotFound;
+    }
     var ___r1;
 }
 ,["void","CPEvent"]), new objj_method(sel_getUid("continueTracking:at:"), function $CPTableView__continueTracking_at_(self, _cmd, lastPoint, aPoint)
 {
     var row = self.isa.objj_msgSend1(self, "rowAtPoint:", aPoint);
+    self._clickedRow = row;
+    self._clickedColumn = self.isa.objj_msgSend1(self, "columnAtPoint:", aPoint);
     if (!self._isSelectingSession && self.isa.objj_msgSend0(self, "_dataSourceRespondsToWriteRowsWithIndexesToPasteboard"))
     {
         if (row >= 0 && (ABS(self._startTrackingPoint.x - aPoint.x) > 3 || self._verticalMotionCanDrag && ABS(self._startTrackingPoint.y - aPoint.y) > 3) || ((___r1 = self._selectedRowIndexes), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "containsIndex:", row)))
@@ -30390,9 +30734,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         column,
         rowIndex,
         shouldEdit = YES;
+    self._clickedRow = self.isa.objj_msgSend1(self, "rowAtPoint:", aPoint);
+    self._clickedColumn = self.isa.objj_msgSend1(self, "columnAtPoint:", aPoint);
     if (self.isa.objj_msgSend0(self, "_dataSourceRespondsToWriteRowsWithIndexesToPasteboard"))
     {
-        rowIndex = self.isa.objj_msgSend1(self, "rowAtPoint:", aPoint);
+        rowIndex = self._clickedRow;
         if (rowIndex !== -1)
         {
             if (((___r1 = self._draggedRowIndexes), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")) > 0)
@@ -30406,7 +30752,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
     }
     if (!self._isViewBased && mouseIsUp && !self._trackingPointMovedOutOfClickSlop && ((___r1 = (CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "currentEvent"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "clickCount")) > 1 && (self.isa.objj_msgSend0(self, "_dataSourceRespondsToSetObjectValueForTableColumnRow") || self.isa.objj_msgSend1(self, "infoForBinding:", "content")))
     {
-        columnIndex = self.isa.objj_msgSend1(self, "columnAtPoint:", lastPoint);
+        columnIndex = self._clickedColumn;
         if (columnIndex !== -1)
         {
             column = self._tableColumns[columnIndex];
@@ -30425,11 +30771,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         }
     }
     if (((___r1 = (CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "currentEvent"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "clickCount")) === 2 && self._doubleAction)
-    {
-        self._clickedRow = self.isa.objj_msgSend1(self, "rowAtPoint:", aPoint);
-        self._clickedColumn = self.isa.objj_msgSend1(self, "columnAtPoint:", lastPoint);
         self.isa.objj_msgSend2(self, "sendAction:to:", self._doubleAction, self._target);
-    }
     var ___r1;
 }
 ,["void","CGPoint","CGPoint","BOOL"]), new objj_method(sel_getUid("draggingEntered:"), function $CPTableView__draggingEntered_(self, _cmd, sender)
@@ -30741,11 +31083,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
         column,
         row;
     self.isa.objj_msgSend3(self, "getColumn:row:forView:", function(__input) { if (arguments.length) return column = __input; return column; }, function(__input) { if (arguments.length) return row = __input; return row; }, responder);
-    if (row == CPNotFound && column == CPNotFound)
-        self.isa.objj_msgSend0(self, "_notifyViewDidResignFirstResponder");
     self._editingRow = row;
     self._editingColumn = column;
-    self.isa.objj_msgSend0(self, "_notifyViewDidBecomeFirstResponder");
+    if (responder !== self && self._editingRow == CPNotFound && self._editingColumn == CPNotFound)
+        self.isa.objj_msgSend0(self, "_notifyViewDidResignFirstResponder");
+    else
+        self.isa.objj_msgSend0(self, "_notifyViewDidBecomeFirstResponder");
     if (!self._isViewBased && self._editingRow !== CPNotFound && (responder == null ? null : responder.isa.objj_msgSend1(responder, "isKindOfClass:", CPTextField.isa.objj_msgSend0(CPTextField, "class"))) && (responder == null ? null : responder.isa.objj_msgSend0(responder, "isEditable")))
     {
         (responder == null ? null : responder.isa.objj_msgSend1(responder, "setBezeled:", YES));
@@ -30828,6 +31171,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("disableAutomaticResizin
     if (!self.isa.objj_msgSend1(self, "isRowSelected:", rowIndex))
         ((___r1 = CPException.isa.objj_msgSend3(CPException, "exceptionWithName:reason:userInfo:", "Error", "Attempt to edit row " + rowIndex + " when not selected.", nil)), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "raise"));
     self.isa.objj_msgSend0(self, "reloadData");
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
     self.isa.objj_msgSend1(self, "scrollRowToVisible:", rowIndex);
     self.isa.objj_msgSend1(self, "scrollColumnToVisible:", columnIndex);
     self._editingRow = rowIndex;
@@ -32084,7 +32428,7 @@ CPRightTextMovement = 20;
 CPUpTextMovement = 21;
 CPDownTextMovement = 22;
 CPCancelTextMovement = 23;
-p;13;CPTextField.jt;89077;@STATIC;1.0;i;11;CPControl.ji;17;CPStringDrawing.ji;17;CPCompatibility.ji;8;CPText.ji;20;CPWindow_Constants.ji;21;_CPImageAndTextView.jt;88934;objj_executeFile("CPControl.j", YES);objj_executeFile("CPStringDrawing.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);{var the_protocol = objj_allocateProtocol("CPTextFieldDelegate");
+p;13;CPTextField.jt;91746;@STATIC;1.0;i;11;CPControl.ji;17;CPStringDrawing.ji;17;CPCompatibility.ji;8;CPText.ji;20;CPWindow_Constants.ji;21;_CPImageAndTextView.jt;91603;objj_executeFile("CPControl.j", YES);objj_executeFile("CPStringDrawing.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPImageAndTextView.j", YES);{var the_protocol = objj_allocateProtocol("CPTextFieldDelegate");
 var aProtocol = objj_getProtocol("CPControlTextEditingDelegate");
 if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPTextFieldDelegate\"");
 protocol_addProtocol(the_protocol, aProtocol);
@@ -32126,7 +32470,9 @@ CPTextFieldBlurFunction = function(anEvent, owner, domElement, inputElement, res
         {
             window.setTimeout(function()
             {
+                var previousScrollingOrigin = (owner == null ? null : owner.isa.objj_msgSend0(owner, "_scrollToVisibleRectAndReturnPreviousOrigin"));
                 inputElement.focus();
+                (owner == null ? null : owner.isa.objj_msgSend1(owner, "_restorePreviousScrollingOrigin:", previousScrollingOrigin));
             }, 0.0);
         }
     }
@@ -32409,7 +32755,9 @@ class_addMethods(the_class, [new objj_method(sel_getUid("setControlSize:"), func
     {
         if (CPTextFieldInputOwner !== self)
             return;
+        var previousScrollingOrigin = self.isa.objj_msgSend0(self, "_scrollToVisibleRectAndReturnPreviousOrigin");
         element.focus();
+        self.isa.objj_msgSend1(self, "_restorePreviousScrollingOrigin:", previousScrollingOrigin);
         if (!self._willBecomeFirstResponderByClick)
             self.isa.objj_msgSend2(self, "_selectText:immediately:", self, YES);
         self._willBecomeFirstResponderByClick = NO;
@@ -32483,12 +32831,15 @@ default:
         }
         if (self.isa.objj_msgSend1(self, "_valueIsValid:", newValue) === NO)
         {
+            var previousScrollingOrigin = self.isa.objj_msgSend0(self, "_scrollToVisibleRectAndReturnPreviousOrigin");
             element.focus();
+            self.isa.objj_msgSend1(self, "_restorePreviousScrollingOrigin:", previousScrollingOrigin);
             return NO;
         }
     }
     self.isa.objj_msgSend1(self, "_setObserveWindowKeyNotifications:", NO);
-    self.isa.objj_msgSend0(self, "_resignFirstKeyResponder");
+    if (((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "isKeyWindow")))
+        self.isa.objj_msgSend0(self, "_resignFirstKeyResponder");
     self._isEditing = NO;
     if (self.isa.objj_msgSend0(self, "isEditable"))
     {
@@ -32498,6 +32849,7 @@ default:
     }
     self.isa.objj_msgSend1(self, "textDidBlur:", CPNotification.isa.objj_msgSend3(CPNotification, "notificationWithName:object:userInfo:", CPTextFieldDidBlurNotification, self, nil));
     return YES;
+    var ___r1;
 }
 ,["BOOL"]), new objj_method(sel_getUid("_resignFirstKeyResponder"), function $CPTextField___resignFirstKeyResponder(self, _cmd)
 {
@@ -33281,13 +33633,36 @@ default:
     var wind = self.isa.objj_msgSend0(self, "window");
     if (!wind)
         return NO;
+    var scrollView = self.isa.objj_msgSend0(self, "enclosingScrollView"),
+        previousContentViewBoundsOrigin;
+    var previousScrollingOrigin = self.isa.objj_msgSend0(self, "_scrollToVisibleRectAndReturnPreviousOrigin");
     var frame = self.isa.objj_msgSend1(self, "convertRectToBase:", self.isa.objj_msgSend1(self, "contentRectForBounds:", self.isa.objj_msgSend0(self, "bounds"))),
         usableRect = ((___r1 = (wind == null ? null : wind.isa.objj_msgSend0(wind, "platformWindow"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "usableContentFrame"));
     frame.origin = (wind == null ? null : wind.isa.objj_msgSend1(wind, "convertBaseToGlobal:", frame.origin));
+    self.isa.objj_msgSend1(self, "_restorePreviousScrollingOrigin:", previousScrollingOrigin);
     return CGRectGetMinX(frame) >= CGRectGetMinX(usableRect) && CGRectGetMaxX(frame) <= CGRectGetMaxX(usableRect) && CGRectGetMinY(frame) >= CGRectGetMinY(usableRect) && CGRectGetMaxY(frame) <= CGRectGetMaxY(usableRect);
     var ___r1;
 }
-,["BOOL"])]);
+,["BOOL"]), new objj_method(sel_getUid("_scrollToVisibleRectAndReturnPreviousOrigin"), function $CPTextField___scrollToVisibleRectAndReturnPreviousOrigin(self, _cmd)
+{
+    var scrollView = self.isa.objj_msgSend0(self, "enclosingScrollView"),
+        previousContentViewBoundsOrigin;
+    if ((scrollView == null ? null : scrollView.isa.objj_msgSend1(scrollView, "isKindOfClass:", (CPScrollView == null ? null : CPScrollView.isa.objj_msgSend0(CPScrollView, "class")))))
+    {
+        previousContentViewBoundsOrigin = CGPointMakeCopy(((___r1 = (scrollView == null ? null : scrollView.isa.objj_msgSend0(scrollView, "contentView"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "boundsOrigin")));
+        if (!((___r1 = self.isa.objj_msgSend0(self, "superview")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "scrollRectToVisible:", self.isa.objj_msgSend0(self, "frame"))))
+            previousContentViewBoundsOrigin = nil;
+    }
+    return previousContentViewBoundsOrigin;
+    var ___r1;
+}
+,["CGPoint"]), new objj_method(sel_getUid("_restorePreviousScrollingOrigin:"), function $CPTextField___restorePreviousScrollingOrigin_(self, _cmd, scrollingOrigin)
+{
+    if (scrollingOrigin)
+        ((___r1 = ((___r2 = self.isa.objj_msgSend0(self, "enclosingScrollView")), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "contentView"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setBoundsOrigin:", scrollingOrigin));
+    var ___r1, ___r2;
+}
+,["void","CGPoint"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("_binderClassForBinding:"), function $CPTextField___binderClassForBinding_(self, _cmd, aBinding)
 {
     if (aBinding === CPValueBinding)
@@ -34070,7 +34445,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("bundle"), function $CPT
     var ___r1, ___r2;
 }
 ,["void","CPBundle"])]);
-}p;14;CPTokenField.jt;75585;@STATIC;1.0;I;27;Foundation/CPCharacterSet.jI;23;Foundation/CPIndexSet.jI;20;Foundation/CPTimer.ji;21;_CPAutocompleteMenu.ji;10;CPButton.ji;15;CPPopUpButton.ji;14;CPScrollView.ji;13;CPTableView.ji;8;CPText.ji;13;CPTextField.ji;20;CPWindow_Constants.jt;75327;objj_executeFile("Foundation/CPCharacterSet.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("Foundation/CPTimer.j", NO);objj_executeFile("_CPAutocompleteMenu.j", YES);objj_executeFile("CPButton.j", YES);objj_executeFile("CPPopUpButton.j", YES);objj_executeFile("CPScrollView.j", YES);objj_executeFile("CPTableView.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("CPWindow_Constants.j", YES);{var the_protocol = objj_allocateProtocol("CPTokenFieldDelegate");
+}p;14;CPTokenField.jt;76447;@STATIC;1.0;I;27;Foundation/CPCharacterSet.jI;23;Foundation/CPIndexSet.jI;20;Foundation/CPTimer.ji;21;_CPAutocompleteMenu.ji;10;CPButton.ji;15;CPPopUpButton.ji;14;CPScrollView.ji;13;CPTableView.ji;8;CPText.ji;13;CPTextField.ji;20;CPWindow_Constants.jt;76189;objj_executeFile("Foundation/CPCharacterSet.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("Foundation/CPTimer.j", NO);objj_executeFile("_CPAutocompleteMenu.j", YES);objj_executeFile("CPButton.j", YES);objj_executeFile("CPPopUpButton.j", YES);objj_executeFile("CPScrollView.j", YES);objj_executeFile("CPTableView.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("CPWindow_Constants.j", YES);{var the_protocol = objj_allocateProtocol("CPTokenFieldDelegate");
 var aProtocol = objj_getProtocol("CPObject");
 if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPTokenFieldDelegate\"");
 protocol_addProtocol(the_protocol, aProtocol);
@@ -34343,7 +34718,9 @@ default:
         self.isa.objj_msgSend1(self, "textDidBeginEditing:", CPNotification.isa.objj_msgSend3(CPNotification, "notificationWithName:object:userInfo:", CPControlTextDidBeginEditingNotification, self, nil));
         window.setTimeout(function()
         {
+            var previousScrollingOrigin = self.isa.objj_msgSend0(self, "_scrollToVisibleRectAndReturnPreviousOrigin");
             element.focus();
+            self.isa.objj_msgSend1(self, "_restorePreviousScrollingOrigin:", previousScrollingOrigin);
             CPTokenFieldInputOwner = self;
         }, 0.0);
         self.isa.objj_msgSend1(self, "textDidFocus:", CPNotification.isa.objj_msgSend3(CPNotification, "notificationWithName:object:userInfo:", CPTextFieldDidFocusNotification, self, nil));
@@ -34766,7 +35143,17 @@ default:
     ((___r1 = ((___r2 = self.isa.objj_msgSend0(self, "window")), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "platformWindow"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_propagateCurrentDOMEvent:", YES));
     var ___r1, ___r2;
 }
-,["void","CPEvent"]), new objj_method(sel_getUid("textDidChange:"), function $CPTokenField__textDidChange_(self, _cmd, aNotification)
+,["void","CPEvent"]), new objj_method(sel_getUid("performKeyEquivalent:"), function $CPTokenField__performKeyEquivalent_(self, _cmd, anEvent)
+{
+    var characters = (anEvent == null ? null : anEvent.isa.objj_msgSend0(anEvent, "characters"));
+    if (self.isa.objj_msgSend1(self, "hasThemeState:", CPThemeStateAutocompleting) && (characters === CPNewlineCharacter || characters === CPCarriageReturnCharacter))
+    {
+        self.isa.objj_msgSend1(self, "keyDown:", anEvent);
+        return YES;
+    }
+    return objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPTokenField").super_class }, "performKeyEquivalent:", anEvent);
+}
+,["BOOL","CPEvent"]), new objj_method(sel_getUid("textDidChange:"), function $CPTokenField__textDidChange_(self, _cmd, aNotification)
 {
     if ((aNotification == null ? null : aNotification.isa.objj_msgSend0(aNotification, "object")) !== self)
         return;
@@ -36423,7 +36810,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithController:"), 
     var ___r1;
 }
 ,["BOOL"])]);
-}p;8;CPView.jt;177054;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.ji;26;CPLayoutConstraintEngine.jt;176664;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
+}p;8;CPView.jt;177436;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.ji;26;CPLayoutConstraintEngine.jt;177046;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
 objj_registerTypeDef(the_typedef);
 }{var the_typedef = objj_allocateTypeDef("Variable");
 objj_registerTypeDef(the_typedef);
@@ -36448,6 +36835,7 @@ CPViewHeightSizable = 16;
 CPViewMaxYMargin = 32;
 CPViewBoundsDidChangeNotification = "CPViewBoundsDidChangeNotification";
 CPViewFrameDidChangeNotification = "CPViewFrameDidChangeNotification";
+CPViewNoInstrinsicMetric = -1;
 var CachedNotificationCenter = nil,
     CachedThemeAttributes = nil;
 var DOMElementPrototype = nil,
@@ -36459,9 +36847,9 @@ var DOMElementPrototype = nil,
 var CPViewFlags = {},
     CPViewHasCustomDrawRect = 1 << 0,
     CPViewHasCustomLayoutSubviews = 1 << 1;
-CPViewNoInstrinsicMetric = -1;
+var CPViewHighDPIDrawingEnabled = YES;
 {var the_class = objj_allocateClassPair(CPResponder, "CPView"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_window"), new objj_ivar("_superview"), new objj_ivar("_subviews"), new objj_ivar("_graphicsContext"), new objj_ivar("_tag"), new objj_ivar("_identifier"), new objj_ivar("_frame"), new objj_ivar("_bounds"), new objj_ivar("_boundsTransform"), new objj_ivar("_inverseBoundsTransform"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_isHidden"), new objj_ivar("_hitTests"), new objj_ivar("_clipsToBounds"), new objj_ivar("_postsFrameChangedNotifications"), new objj_ivar("_postsBoundsChangedNotifications"), new objj_ivar("_inhibitFrameAndBoundsChangedNotifications"), new objj_ivar("_inLiveResize"), new objj_ivar("_isSuperviewAClipView"), new objj_ivar("_DOMElement"), new objj_ivar("_DOMContentsElement"), new objj_ivar("_DOMImageParts"), new objj_ivar("_DOMImageSizes"), new objj_ivar("_backgroundType"), new objj_ivar("_dirtyRect"), new objj_ivar("_opacity"), new objj_ivar("_backgroundColor"), new objj_ivar("_autoresizesSubviews"), new objj_ivar("_autoresizingMask"), new objj_ivar("_layer"), new objj_ivar("_wantsLayer"), new objj_ivar("_isInFullScreenMode"), new objj_ivar("_fullScreenModeState"), new objj_ivar("_isScaled"), new objj_ivar("_hierarchyScaleSize"), new objj_ivar("_scaleSize"), new objj_ivar("_needsLayout"), new objj_ivar("_ephemeralSubviews"), new objj_ivar("_theme"), new objj_ivar("_themeClass"), new objj_ivar("_themeAttributes"), new objj_ivar("_themeState"), new objj_ivar("_ephemeralSubviewsForNames"), new objj_ivar("_ephereralSubviews"), new objj_ivar("_nextKeyView"), new objj_ivar("_previousKeyView"), new objj_ivar("_viewClassFlags"), new objj_ivar("_toolTip"), new objj_ivar("_toolTipFunctionIn"), new objj_ivar("_toolTipFunctionOut"), new objj_ivar("_toolTipInstalled"), new objj_ivar("_isObserving"), new objj_ivar("_constraintsArray"), new objj_ivar("_autoresizingConstraints"), new objj_ivar("_internalConstraints"), new objj_ivar("_huggingPriorities"), new objj_ivar("_compressionPriorities"), new objj_ivar("_storedIntrinsicContentSize"), new objj_ivar("_updateConstraintsFlags"), new objj_ivar("_needsUpdateConstraints"), new objj_ivar("_autolayoutEnabled"), new objj_ivar("_translatesAutoresizingMaskIntoConstraints"), new objj_ivar("_isRegistredInEngine"), new objj_ivar("_variableMinX"), new objj_ivar("_variableMinY"), new objj_ivar("_variableWidth"), new objj_ivar("_variableHeight"), new objj_ivar("_constraintBasedNeedsLayoutMask")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_window"), new objj_ivar("_superview"), new objj_ivar("_subviews"), new objj_ivar("_graphicsContext"), new objj_ivar("_tag"), new objj_ivar("_identifier"), new objj_ivar("_frame"), new objj_ivar("_bounds"), new objj_ivar("_boundsTransform"), new objj_ivar("_inverseBoundsTransform"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_isHidden"), new objj_ivar("_hitTests"), new objj_ivar("_clipsToBounds"), new objj_ivar("_postsFrameChangedNotifications"), new objj_ivar("_postsBoundsChangedNotifications"), new objj_ivar("_inhibitFrameAndBoundsChangedNotifications"), new objj_ivar("_inLiveResize"), new objj_ivar("_isSuperviewAClipView"), new objj_ivar("_DOMElement"), new objj_ivar("_DOMContentsElement"), new objj_ivar("_DOMImageParts"), new objj_ivar("_DOMImageSizes"), new objj_ivar("_backgroundType"), new objj_ivar("_dirtyRect"), new objj_ivar("_opacity"), new objj_ivar("_backgroundColor"), new objj_ivar("_autoresizesSubviews"), new objj_ivar("_autoresizingMask"), new objj_ivar("_layer"), new objj_ivar("_wantsLayer"), new objj_ivar("_isInFullScreenMode"), new objj_ivar("_fullScreenModeState"), new objj_ivar("_isScaled"), new objj_ivar("_hierarchyScaleSize"), new objj_ivar("_scaleSize"), new objj_ivar("_needToSetTransformMatrix"), new objj_ivar("_highDPIRatio"), new objj_ivar("_needsLayout"), new objj_ivar("_ephemeralSubviews"), new objj_ivar("_theme"), new objj_ivar("_themeClass"), new objj_ivar("_themeAttributes"), new objj_ivar("_themeState"), new objj_ivar("_ephemeralSubviewsForNames"), new objj_ivar("_ephereralSubviews"), new objj_ivar("_nextKeyView"), new objj_ivar("_previousKeyView"), new objj_ivar("_viewClassFlags"), new objj_ivar("_toolTip"), new objj_ivar("_toolTipFunctionIn"), new objj_ivar("_toolTipFunctionOut"), new objj_ivar("_toolTipInstalled"), new objj_ivar("_isObserving"), new objj_ivar("_variableMinX"), new objj_ivar("_variableMinY"), new objj_ivar("_variableWidth"), new objj_ivar("_variableHeight"), new objj_ivar("_constraintsArray"), new objj_ivar("_autoresizingConstraints"), new objj_ivar("_internalConstraints"), new objj_ivar("_huggingPriorities"), new objj_ivar("_compressionPriorities"), new objj_ivar("_storedIntrinsicContentSize"), new objj_ivar("_needsUpdateConstraints"), new objj_ivar("_autolayoutEnabled"), new objj_ivar("_translatesAutoresizingMaskIntoConstraints"), new objj_ivar("_updateConstraintsFlags"), new objj_ivar("_constraintBasedNeedsLayoutMask")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function $CPView__identifier(self, _cmd)
 {
     return self._identifier;
@@ -36557,18 +36945,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     }
     self._viewClassFlags = CPViewFlags[classUID];
 }
-,["void"]), new objj_method(sel_getUid("_setupToolTipHandlers"), function $CPView___setupToolTipHandlers(self, _cmd)
-{
-    self._toolTipInstalled = NO;
-    self._toolTipFunctionIn = function(e)
-    {
-        (_CPToolTip == null ? null : _CPToolTip.isa.objj_msgSend1(_CPToolTip, "scheduleToolTipForView:", self));
-    };
-    self._toolTipFunctionOut = function(e)
-    {
-        (_CPToolTip == null ? null : _CPToolTip.isa.objj_msgSend0(_CPToolTip, "invalidateCurrentToolTipIfNeeded"));
-    };
-}
 ,["void"]), new objj_method(sel_getUid("init"), function $CPView__init(self, _cmd)
 {
     return self.isa.objj_msgSend1(self, "initWithFrame:", CGRectMakeZero());
@@ -36609,7 +36985,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
         self._DOMElement.style.height = MAX(0.0, ROUND(height)) + "px";
         self._DOMImageParts = [];
         self._DOMImageSizes = [];
-        (self == null ? null : self.isa.objj_msgSend0(self, "_setupToolTipHandlers"));
         (self == null ? null : self.isa.objj_msgSend0(self, "_setupViewFlags"));
         (self == null ? null : self.isa.objj_msgSend0(self, "_loadThemeAttributes"));
         (self == null ? null : self.isa.objj_msgSend0(self, "_initConstraintsIvars"));
@@ -36624,15 +36999,29 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     if (aToolTip && !(aToolTip == null ? null : aToolTip.isa.objj_msgSend1(aToolTip, "isKindOfClass:", CPString)))
         aToolTip = (aToolTip == null ? null : aToolTip.isa.objj_msgSend0(aToolTip, "description"));
     self._toolTip = aToolTip;
-    if (self._toolTip)
+    self.isa.objj_msgSend0(self, "_manageToolTipInstallation");
+}
+,["void","CPString"]), new objj_method(sel_getUid("_manageToolTipInstallation"), function $CPView___manageToolTipInstallation(self, _cmd)
+{
+    if (self.isa.objj_msgSend0(self, "window") && self._toolTip)
         self.isa.objj_msgSend0(self, "_installToolTipEventHandlers");
     else
         self.isa.objj_msgSend0(self, "_uninstallToolTipEventHandlers");
 }
-,["void","CPString"]), new objj_method(sel_getUid("_installToolTipEventHandlers"), function $CPView___installToolTipEventHandlers(self, _cmd)
+,["void"]), new objj_method(sel_getUid("_installToolTipEventHandlers"), function $CPView___installToolTipEventHandlers(self, _cmd)
 {
     if (self._toolTipInstalled)
         return;
+    if (!self._toolTipFunctionIn)
+        self._toolTipFunctionIn = function(e)
+        {
+            (_CPToolTip == null ? null : _CPToolTip.isa.objj_msgSend1(_CPToolTip, "scheduleToolTipForView:", self));
+        };
+    if (!self._toolTipFunctionOut)
+        self._toolTipFunctionOut = function(e)
+        {
+            (_CPToolTip == null ? null : _CPToolTip.isa.objj_msgSend0(_CPToolTip, "invalidateCurrentToolTipIfNeeded"));
+        };
     if (self._DOMElement.addEventListener)
     {
         self._DOMElement.addEventListener("mouseover", self._toolTipFunctionIn, YES);
@@ -36663,6 +37052,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
         self._DOMElement.detachEvent("onkeypress", self._toolTipFunctionOut);
         self._DOMElement.detachEvent("onmouseout", self._toolTipFunctionOut);
     }
+    self._toolTipFunctionIn = nil;
+    self._toolTipFunctionOut = nil;
     self._toolTipInstalled = NO;
 }
 ,["void"]), new objj_method(sel_getUid("superview"), function $CPView__superview(self, _cmd)
@@ -36850,6 +37241,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     else
         self.isa.objj_msgSend1(self, "unsetThemeState:", CPThemeStateKeyWindow);
     self.isa.objj_msgSend0(self, "viewDidMoveToWindow");
+    self.isa.objj_msgSend0(self, "_manageToolTipInstallation");
     ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_dirtyKeyViewLoop"));
     var ___r1;
 }
@@ -37014,13 +37406,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     self.isa.objj_msgSend0(self, "setNeedsLayout");
     self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES);
     self.isa.objj_msgSend1(self, "_setDisplayServerSetStyleSize:", size);
-    if (self._DOMContentsElement)
-    {
-        self._DOMContentsElement.width = MAX(0.0, ROUND(size.width));
-        self._DOMContentsElement.height = MAX(0.0, ROUND(size.height));
-        self._DOMContentsElement.style.width = MAX(0.0, ROUND(size.width)) + "px";
-        self._DOMContentsElement.style.height = MAX(0.0, ROUND(size.height)) + "px";
-    }
     if (self._backgroundType !== BackgroundTrivialColor)
     {
         if (self._backgroundType === BackgroundTransparentColor)
@@ -37142,6 +37527,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     var scale = self.isa.objj_msgSend0(self, "scaleSize");
     self._DOMElement.style.width = MAX(0.0, ROUND(aSize.width * 1 / scale.width)) + "px";
     self._DOMElement.style.height = MAX(0.0, ROUND(aSize.height * 1 / scale.height)) + "px";
+    if (self._DOMContentsElement)
+    {
+        self._DOMContentsElement.width = MAX(0.0, ROUND(aSize.width * self._highDPIRatio * 1 / scale.width));
+        self._DOMContentsElement.height = MAX(0.0, ROUND(aSize.height * self._highDPIRatio * 1 / scale.height));
+        self._DOMContentsElement.style.width = MAX(0.0, ROUND(aSize.width * 1 / scale.width)) + "px";
+        self._DOMContentsElement.style.height = MAX(0.0, ROUND(aSize.height * 1 / scale.height)) + "px";
+        self._needToSetTransformMatrix = YES;
+    }
 }
 ,["void","CGSize"]), new objj_method(sel_getUid("setBounds:"), function $CPView__setBounds_(self, _cmd, bounds)
 {
@@ -38049,14 +38442,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     {
         var graphicsPort = CGBitmapGraphicsContextCreate();
         var width = CGRectGetWidth(self._frame),
-            height = CGRectGetHeight(self._frame);
+            height = CGRectGetHeight(self._frame),
+            devicePixelRatio = window.devicePixelRatio || 1,
+            backingStoreRatio = CPBrowserBackingStorePixelRatio(graphicsPort);
+        self._highDPIRatio = CPViewHighDPIDrawingEnabled ? devicePixelRatio / backingStoreRatio : 1;
         self._DOMContentsElement = graphicsPort.DOMElement;
         self._DOMContentsElement.style.zIndex = -100;
         self._DOMContentsElement.style.overflow = "hidden";
         self._DOMContentsElement.style.position = "absolute";
         self._DOMContentsElement.style.visibility = "visible";
-        self._DOMContentsElement.width = MAX(0.0, ROUND(width));
-        self._DOMContentsElement.height = MAX(0.0, ROUND(height));
+        self._DOMContentsElement.width = MAX(0.0, ROUND(width * self._highDPIRatio));
+        self._DOMContentsElement.height = MAX(0.0, ROUND(height * self._highDPIRatio));
         if (NULL)
             var ____p = CGPointApplyAffineTransform(CGPointMake(0.0, 0.0), NULL);
         else
@@ -38069,7 +38465,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
             self._DOMElement.style.webkitTransform = 'translateX(0)';
         self._DOMElement.appendChild(self._DOMContentsElement);
         self._graphicsContext = CPGraphicsContext.isa.objj_msgSend2(CPGraphicsContext, "graphicsContextWithGraphicsPort:flipped:", graphicsPort, YES);
+        self._needToSetTransformMatrix = YES;
     }
+    if (self._needToSetTransformMatrix)
+        ((___r1 = self._graphicsContext), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "graphicsPort")).setTransform(self._highDPIRatio, 0, 0, self._highDPIRatio, 0, 0);
+    self._needToSetTransformMatrix = NO;
     CPGraphicsContext.isa.objj_msgSend1(CPGraphicsContext, "setCurrentContext:", self._graphicsContext);
     CGContextSaveGState(((___r1 = self._graphicsContext), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "graphicsPort")));
     var ___r1;
@@ -38082,13 +38482,22 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
 }
 ,["void"]), new objj_method(sel_getUid("setNeedsLayout"), function $CPView__setNeedsLayout(self, _cmd)
 {
-    if (self._autolayoutEnabled || self._viewClassFlags & CPViewHasCustomLayoutSubviews)
+    self.isa.objj_msgSend1(self, "setNeedsLayout:", YES);
+}
+,["void"]), new objj_method(sel_getUid("setNeedsLayout:"), function $CPView__setNeedsLayout_(self, _cmd, needsLayout)
+{
+    if ((self._autolayoutEnabled || self._viewClassFlags & CPViewHasCustomLayoutSubviews) && self._needsLayout !== needsLayout)
     {
-        self._needsLayout = YES;
-        _CPDisplayServerAddLayoutObject(self);
+        self._needsLayout = needsLayout;
+        if (needsLayout)
+            _CPDisplayServerAddLayoutObject(self);
     }
 }
-,["void"]), new objj_method(sel_getUid("layoutIfNeeded"), function $CPView__layoutIfNeeded(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("needsLayout"), function $CPView__needsLayout(self, _cmd)
+{
+    return self._needsLayout;
+}
+,["BOOL"]), new objj_method(sel_getUid("layoutIfNeeded"), function $CPView__layoutIfNeeded(self, _cmd)
 {
     if (self._needsLayout)
     {
@@ -38100,10 +38509,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
 {
     ((___r1 = self._subviews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(subview, idx, stop)
     {
-        if ((subview == null ? null : subview.isa.objj_msgSend0(subview, "_constraintBasedNeedsLayoutMask")) !== 0)
-            _CPViewUpdateEngineFrame(subview);
+        (subview == null ? null : subview.isa.objj_msgSend0(subview, "_updateGeometryIfNeeded"));
     }));
     var ___r1;
+}
+,["void"]), new objj_method(sel_getUid("_updateGeometryIfNeeded"), function $CPView___updateGeometryIfNeeded(self, _cmd)
+{
+    if (self._constraintBasedNeedsLayoutMask > 0)
+    {
+        _CPViewUpdateEngineFrame(self);
+        self._constraintBasedNeedsLayoutMask = 0;
+    }
 }
 ,["void"]), new objj_method(sel_getUid("isOpaque"), function $CPView__isOpaque(self, _cmd)
 {
@@ -38146,15 +38562,32 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
         rectInDocumentView = self.isa.objj_msgSend2(self, "convertRect:toView:", aRect, documentView);
     if (CGRectContainsRect(documentViewVisibleRect, rectInDocumentView))
         return NO;
-    var scrollPoint = CGPointMakeCopy(documentViewVisibleRect.origin);
-    if (CGRectGetMinX(rectInDocumentView) < CGRectGetMinX(documentViewVisibleRect))
-        scrollPoint.x = CGRectGetMinX(rectInDocumentView);
-    else if (CGRectGetMaxX(rectInDocumentView) > CGRectGetMaxX(documentViewVisibleRect))
-        scrollPoint.x += CGRectGetMaxX(rectInDocumentView) - CGRectGetMaxX(documentViewVisibleRect);
-    if (CGRectGetMinY(rectInDocumentView) < CGRectGetMinY(documentViewVisibleRect))
-        scrollPoint.y = CGRectGetMinY(rectInDocumentView);
-    else if (CGRectGetMaxY(rectInDocumentView) > CGRectGetMaxY(documentViewVisibleRect))
-        scrollPoint.y += CGRectGetMaxY(rectInDocumentView) - CGRectGetMaxY(documentViewVisibleRect);
+    var currentScrollPoint = documentViewVisibleRect.origin,
+        scrollPoint = CGPointMakeCopy(currentScrollPoint),
+        rectInDocumentViewMinX = CGRectGetMinX(rectInDocumentView),
+        documentViewVisibleRectMinX = CGRectGetMinX(documentViewVisibleRect),
+        doesItFitForWidth = documentViewVisibleRect.size.width >= rectInDocumentView.size.width;
+    if (rectInDocumentViewMinX < documentViewVisibleRectMinX && doesItFitForWidth)
+        scrollPoint.x = rectInDocumentViewMinX;
+    else if (CGRectGetMaxX(rectInDocumentView) > CGRectGetMaxX(documentViewVisibleRect) && doesItFitForWidth)
+        scrollPoint.x = CGRectGetMaxX(rectInDocumentView) - documentViewVisibleRect.size.width;
+    else if (rectInDocumentViewMinX > documentViewVisibleRectMinX)
+        scrollPoint.x = rectInDocumentViewMinX;
+    else if (CGRectGetMaxX(rectInDocumentView) < CGRectGetMaxX(documentViewVisibleRect))
+        scrollPoint.x = CGRectGetMaxX(rectInDocumentView) - documentViewVisibleRect.size.width;
+    var rectInDocumentViewMinY = CGRectGetMinY(rectInDocumentView),
+        documentViewVisibleRectMinY = CGRectGetMinY(documentViewVisibleRect),
+        doesItFitForHeight = documentViewVisibleRect.size.height >= rectInDocumentView.size.height;
+    if (rectInDocumentViewMinY < documentViewVisibleRectMinY && doesItFitForHeight)
+        scrollPoint.y = rectInDocumentViewMinY;
+    else if (CGRectGetMaxY(rectInDocumentView) > CGRectGetMaxY(documentViewVisibleRect) && doesItFitForHeight)
+        scrollPoint.y = CGRectGetMaxY(rectInDocumentView) - documentViewVisibleRect.size.height;
+    else if (rectInDocumentViewMinY > documentViewVisibleRectMinY)
+        scrollPoint.y = rectInDocumentViewMinY;
+    else if (CGRectGetMaxY(rectInDocumentView) < CGRectGetMaxY(documentViewVisibleRect))
+        scrollPoint.y = CGRectGetMaxY(rectInDocumentView) - documentViewVisibleRect.size.height;
+    if (CGPointEqualToPoint(scrollPoint, currentScrollPoint))
+        return NO;
     (enclosingClipView == null ? null : enclosingClipView.isa.objj_msgSend1(enclosingClipView, "scrollToPoint:", scrollPoint));
     return YES;
 }
@@ -38216,7 +38649,15 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
         return (CPMultipleValueOrBinding == null ? null : CPMultipleValueOrBinding.isa.objj_msgSend0(CPMultipleValueOrBinding, "class"));
     return objj_msgSendSuper({ receiver:self, super_class:objj_getMetaClass("CPView").super_class }, "_binderClassForBinding:", aBinding);
 }
-,["Class","CPString"]), new objj_method(sel_getUid("automaticallyNotifiesObserversForKey:"), function $CPView__automaticallyNotifiesObserversForKey_(self, _cmd, theKey)
+,["Class","CPString"]), new objj_method(sel_getUid("setHighDPIDrawingEnabled:"), function $CPView__setHighDPIDrawingEnabled_(self, _cmd, isEnabled)
+{
+    CPViewHighDPIDrawingEnabled = isEnabled;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("isHighDPIDrawingEnabled"), function $CPView__isHighDPIDrawingEnabled(self, _cmd)
+{
+    return CPViewHighDPIDrawingEnabled;
+}
+,["BOOL"]), new objj_method(sel_getUid("automaticallyNotifiesObserversForKey:"), function $CPView__automaticallyNotifiesObserversForKey_(self, _cmd, theKey)
 {
     if ((theKey == null ? null : theKey.isa.objj_msgSend1(theKey, "isEqualToString:", "constraints")))
         return NO;
@@ -38740,7 +39181,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             self._autoresizingMask = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeIntForKey:", CPViewAutoresizingMaskKey)) || CPViewNotSizable;
         self._autoresizesSubviews = !(aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPViewAutoresizesSubviewsKey)) || (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeBoolForKey:", CPViewAutoresizesSubviewsKey));
         self._hitTests = !(aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPViewHitTestsKey)) || (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeBoolForKey:", CPViewHitTestsKey));
-        (self == null ? null : self.isa.objj_msgSend0(self, "_setupToolTipHandlers"));
         self._toolTip = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewToolTipKey));
         if (self._toolTip)
             (self == null ? null : self.isa.objj_msgSend0(self, "_installToolTipEventHandlers"));
@@ -38851,7 +39291,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeSize:forKey:", self.isa.objj_msgSend0(self, "scaleSize"), CPViewScaleKey));
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeSize:forKey:", self.isa.objj_msgSend0(self, "_hierarchyScaleSize"), CPViewSizeScaleKey));
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeBool:forKey:", self._isScaled, CPViewIsScaledKey));
-    var constraints = ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "arrayWithObjectsPassingTest:", function(obj, idx)
+    var constraints = ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "filteredArrayUsingBlock:", function(obj, idx)
     {
         return (obj == null ? null : obj.isa.objj_msgSend0(obj, "shouldBeArchived"));
     }));
@@ -38868,38 +39308,9 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }{
 var the_class = objj_getClass("CPView")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPView\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_variableMinX"), function $CPView___variableMinX(self, _cmd)
-{
-    if (!self._variableMinX)
-        self._variableMinX = ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "variableForItem:tag:", self, 2));
-    return self._variableMinX;
-    var ___r1;
-}
-,["Variable"]), new objj_method(sel_getUid("_variableMinY"), function $CPView___variableMinY(self, _cmd)
-{
-    if (!self._variableMinY)
-        self._variableMinY = ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "variableForItem:tag:", self, 4));
-    return self._variableMinY;
-    var ___r1;
-}
-,["Variable"]), new objj_method(sel_getUid("_variableWidth"), function $CPView___variableWidth(self, _cmd)
-{
-    if (!self._variableWidth)
-        self._variableWidth = ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "variableForItem:tag:", self, 8));
-    return self._variableWidth;
-    var ___r1;
-}
-,["Variable"]), new objj_method(sel_getUid("_variableHeight"), function $CPView___variableHeight(self, _cmd)
-{
-    if (!self._variableHeight)
-        self._variableHeight = ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "variableForItem:tag:", self, 16));
-    return self._variableHeight;
-    var ___r1;
-}
-,["Variable"]), new objj_method(sel_getUid("_initConstraintsIvars"), function $CPView___initConstraintsIvars(self, _cmd)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_initConstraintsIvars"), function $CPView___initConstraintsIvars(self, _cmd)
 {
     self._autolayoutEnabled = NO;
-    self._isRegistredInEngine = NO;
     self._updateConstraintsFlags = 4;
     self._constraintBasedNeedsLayoutMask = 0;
     self._autoresizingConstraints = nil;
@@ -38915,43 +39326,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_layoutEngine"));
     var ___r1;
 }
-,["CPLayoutConstraintEngine"]), new objj_method(sel_getUid("suggestFrameSize:"), function $CPView__suggestFrameSize_(self, _cmd, newSize)
-{
-    var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
-    (engine == null ? null : engine.isa.objj_msgSend0(engine, "beginUpdates"));
-    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsAtWindowLevelIfNeeded"));
-    (engine == null ? null : engine.isa.objj_msgSend2(engine, "suggestSize:forItem:", [newSize.width, newSize.height], self));
-    (engine == null ? null : engine.isa.objj_msgSend0(engine, "endUpdates"));
-    var ___r1;
-}
-,["void","CGSize"]), new objj_method(sel_getUid("suggestFrameOrigin:"), function $CPView__suggestFrameOrigin_(self, _cmd, aPoint)
-{
-    var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
-    (engine == null ? null : engine.isa.objj_msgSend0(engine, "beginUpdates"));
-    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsAtWindowLevelIfNeeded"));
-    (engine == null ? null : engine.isa.objj_msgSend2(engine, "suggesOrigin:forItem:", [aPoint.x, aPoint.y], self));
-    (engine == null ? null : engine.isa.objj_msgSend0(engine, "endUpdates"));
-    var ___r1;
-}
-,["void","CGPoint"]), new objj_method(sel_getUid("valueForVariable:"), function $CPView__valueForVariable_(self, _cmd, aTag)
-{
-    var frame = self.isa.objj_msgSend0(self, "frame");
-    switch(aTag) {
-    case 2:
-        return CGRectGetMinX(frame);
-        break;
-    case 4:
-        return CGRectGetMinY(frame);
-        break;
-    case 8:
-        return CGRectGetWidth(frame);
-        break;
-    case 16:
-        return CGRectGetHeight(frame);
-        break;
-    }
-}
-,["id","int"]), new objj_method(sel_getUid("debugID"), function $CPView__debugID(self, _cmd)
+,["CPLayoutConstraintEngine"]), new objj_method(sel_getUid("debugID"), function $CPView__debugID(self, _cmd)
 {
     if (self.isa.objj_msgSend0(self, "className") == "_CPCibCustomView")
         return "(CPCibCustomView)" + (self.isa.objj_msgSend0(self, "identifier") || "");
@@ -38962,23 +39337,9 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     if (self._autolayoutEnabled !== flag)
     {
         self._autolayoutEnabled = flag;
-        CPLog.debug(self.isa.objj_msgSend0(self, "debugID") + " " + _cmd + self._autolayoutEnabled);
     }
 }
-,["void","BOOL"]), new objj_method(sel_getUid("registerInEngineIfNeeded"), function $CPView__registerInEngineIfNeeded(self, _cmd)
-{
-    if (!self._isRegistredInEngine)
-    {
-        var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
-        if (engine)
-        {
-            (engine == null ? null : engine.isa.objj_msgSend2(engine, "registerItem:forIdentifier:", self, self.isa.objj_msgSend0(self, "UID")));
-            self._isRegistredInEngine = YES;
-            CPLog.debug("Registered " + self.isa.objj_msgSend0(self, "UID") + "=" + self.isa.objj_msgSend0(self, "debugID"));
-        }
-    }
-}
-,["void"]), new objj_method(sel_getUid("_contentHuggingPriorities"), function $CPView___contentHuggingPriorities(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("_contentHuggingPriorities"), function $CPView___contentHuggingPriorities(self, _cmd)
 {
     if (!self._huggingPriorities)
         self._huggingPriorities = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_defaultHuggingPriorities"));
@@ -39058,28 +39419,17 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     if (isNoIntrinsicWidth && isNoIntrinsicHeight)
         return constraints;
     var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities"),
-        compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities"),
-        oldContentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
+        compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
     if (!isNoIntrinsicWidth)
     {
         var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.width, huggingPriorities.width, compressionResistancePriorities.width, CPLayoutConstraintOrientationHorizontal));
-        if (oldContentSizeConstraints !== nil)
-        {
-            var idx = (oldContentSizeConstraints == null ? null : oldContentSizeConstraints.isa.objj_msgSend1(oldContentSizeConstraints, "indexOfObject:", constraint));
-            if (idx !== CPNotFound)
-                constraint = (oldContentSizeConstraints == null ? null : oldContentSizeConstraints.isa.objj_msgSend1(oldContentSizeConstraints, "objectAtIndex:", idx));
-        }
+        (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "_setActive:", YES));
         (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
     }
     if (!isNoIntrinsicHeight)
     {
         var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.height, huggingPriorities.height, compressionResistancePriorities.height, CPLayoutConstraintOrientationVertical));
-        if (oldContentSizeConstraints !== nil)
-        {
-            var idx = (oldContentSizeConstraints == null ? null : oldContentSizeConstraints.isa.objj_msgSend1(oldContentSizeConstraints, "indexOfObject:", constraint));
-            if (idx !== CPNotFound)
-                constraint = (oldContentSizeConstraints == null ? null : oldContentSizeConstraints.isa.objj_msgSend1(oldContentSizeConstraints, "objectAtIndex:", idx));
-        }
+        (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "_setActive:", YES));
         (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
     }
     return constraints;
@@ -39087,10 +39437,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["CPArray"]), new objj_method(sel_getUid("setContentHuggingPriority:forOrientation:"), function $CPView__setContentHuggingPriority_forOrientation_(self, _cmd, aPriority, orientation)
 {
-    var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
-    SetSizeValue(huggingPriorities, aPriority, orientation);
-    var constr = self.isa.objj_msgSend1(self, "_contentSizeConstraintForOrientation:", orientation);
-    (constr == null ? null : constr.isa.objj_msgSend1(constr, "setHuggingPriority:", aPriority));
+    if (self.isa.objj_msgSend1(self, "contentHuggingPriorityForOrientation:", orientation) !== aPriority)
+    {
+        var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
+        SetSizeValue(huggingPriorities, aPriority, orientation);
+        self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", YES);
+    }
 }
 ,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentHuggingPriorityForOrientation:"), function $CPView__contentHuggingPriorityForOrientation_(self, _cmd, orientation)
 {
@@ -39099,10 +39451,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("setContentCompressionResistancePriority:forOrientation:"), function $CPView__setContentCompressionResistancePriority_forOrientation_(self, _cmd, aPriority, orientation)
 {
-    var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
-    SetSizeValue(compressionResistancePriorities, aPriority, orientation);
-    var constr = self.isa.objj_msgSend1(self, "_contentSizeConstraintForOrientation:", orientation);
-    (constr == null ? null : constr.isa.objj_msgSend1(constr, "setCompressPriority:", aPriority));
+    if (self.isa.objj_msgSend1(self, "contentCompressionResistancePriorityForOrientation:", orientation) !== aPriority)
+    {
+        var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
+        SetSizeValue(compressionResistancePriorities, aPriority, orientation);
+        self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", YES);
+    }
 }
 ,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentCompressionResistancePriorityForOrientation:"), function $CPView__contentCompressionResistancePriorityForOrientation_(self, _cmd, orientation)
 {
@@ -39121,7 +39475,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         return (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend1(contentSizeConstraints, "objectAtIndex:", idx));
     return nil;
 }
-,["CPLayoutConstraint","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("constraints"), function $CPView__constraints(self, _cmd)
+,["CPLayoutConstraint","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("_constraints"), function $CPView___constraints(self, _cmd)
 {
     var constraints = CPArray.isa.objj_msgSend1(CPArray, "arrayWithArray:", self._constraintsArray);
     ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aView, idx, stop)
@@ -39135,14 +39489,21 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return constraints;
     var ___r1;
 }
+,["CPArray"]), new objj_method(sel_getUid("constraints"), function $CPView__constraints(self, _cmd)
+{
+    var constraints = self.isa.objj_msgSend0(self, "_constraints");
+    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "filteredArrayUsingBlock:", function(aConstraint, idx, stop)
+    {
+        return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive")) == YES;
+    }));
+}
 ,["CPArray"]), new objj_method(sel_getUid("_constraintsExcludingContentSizeConstraints"), function $CPView___constraintsExcludingContentSizeConstraints(self, _cmd)
 {
-    var constraints = self.isa.objj_msgSend0(self, "constraints");
-    var indexes = (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "indexesOfObjectsPassingTest:", function(aConstraint, idx, stop)
+    var constraints = self.isa.objj_msgSend0(self, "_constraints");
+    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "filteredArrayUsingBlock:", function(aConstraint, idx, stop)
     {
         return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")) !== "SizeConstraint";
     }));
-    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "objectsAtIndexes:", indexes));
 }
 ,["CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPView__addConstraint_(self, _cmd, aConstraint)
 {
@@ -39157,7 +39518,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["void","CPArray"]), new objj_method(sel_getUid("_addConstraints:"), function $CPView___addConstraints_(self, _cmd, constraints)
 {
-    var externalIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
+    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
     (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
     {
         if (((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
@@ -39167,16 +39528,10 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", YES));
         ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
         ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-        (externalIndexes == null ? null : externalIndexes.isa.objj_msgSend1(externalIndexes, "addIndex:", idx));
+        ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObject:", aConstraint));
         var ___r1;
     }));
-    if ((externalIndexes == null ? null : externalIndexes.isa.objj_msgSend0(externalIndexes, "count")) == 0)
-        return;
-    var newIndexes = CPIndexSet.isa.objj_msgSend1(CPIndexSet, "indexSetWithIndexesInRange:", CPMakeRange(((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "count")), (externalIndexes == null ? null : externalIndexes.isa.objj_msgSend0(externalIndexes, "count"))));
-    self.isa.objj_msgSend3(self, "willChange:valuesAtIndexes:forKey:", CPKeyValueChangeInsertion, newIndexes, "constraints");
-    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "objectsAtIndexes:", externalIndexes))));
-    self.isa.objj_msgSend3(self, "didChange:valuesAtIndexes:forKey:", CPKeyValueChangeInsertion, newIndexes, "constraints");
-    var ___r1;
+    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
 }
 ,["void","CPArray"]), new objj_method(sel_getUid("removeConstraint:"), function $CPView__removeConstraint_(self, _cmd, aConstraint)
 {
@@ -39184,62 +39539,58 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["void","CPLayoutConstraint"]), new objj_method(sel_getUid("removeConstraints:"), function $CPView__removeConstraints_(self, _cmd, constraints)
 {
-    if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")) == 0)
-        return;
-    var removeIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
+    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
     ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
     {
         if ((constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
         {
-            (removeIndexes == null ? null : removeIndexes.isa.objj_msgSend1(removeIndexes, "addIndex:", idx));
             (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", NO));
         }
     }));
-    if ((removeIndexes == null ? null : removeIndexes.isa.objj_msgSend0(removeIndexes, "count")) == 0)
-        return;
-    self.isa.objj_msgSend3(self, "willChange:valuesAtIndexes:forKey:", CPKeyValueChangeRemoval, removeIndexes, "constraints");
-    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", removeIndexes));
-    self.isa.objj_msgSend3(self, "didChange:valuesAtIndexes:forKey:", CPKeyValueChangeRemoval, removeIndexes, "constraints");
     self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", YES);
+    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
     var ___r1;
 }
-,["void","CPArray"]), new objj_method(sel_getUid("_updateConstraintsForSubtree:"), function $CPView___updateConstraintsForSubtree_(self, _cmd, constraintsByView)
+,["void","CPArray"]), new objj_method(sel_getUid("updateConstraintsForSubtreeIfNeeded"), function $CPView__updateConstraintsForSubtreeIfNeeded(self, _cmd)
 {
-    if (self.isa.objj_msgSend0(self, "needsUpdateConstraints"))
+    self.isa.objj_msgSend0(self, "_updateConstraintsForSubtreeIfNeeded");
+}
+,["void"]), new objj_method(sel_getUid("_updateConstraintsForSubtreeIfNeeded"), function $CPView___updateConstraintsForSubtreeIfNeeded(self, _cmd)
+{
+    var result = NO;
+    if (self._updateConstraintsFlags !== 0)
     {
-        var constraintsDict = objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "init"),
-            constraintUpdate = self.isa.objj_msgSend0(self, "_needsUpdateConstraints"),
-            sizeConstraintUpdate = self.isa.objj_msgSend0(self, "_needsUpdateSizeConstraints");
+        var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
         self.isa.objj_msgSend0(self, "updateConstraints");
-        if (constraintUpdate)
+        if (self._updateConstraintsFlags & 2)
         {
             var constraints = self.isa.objj_msgSend0(self, "_constraintsExcludingContentSizeConstraints");
-            (constraintsDict == null ? null : constraintsDict.isa.objj_msgSend2(constraintsDict, "setObject:forKey:", constraints, "Constraint"));
+            result |= (engine == null ? null : engine.isa.objj_msgSend1(engine, "_addOrRemoveConstraintsIfNeeded:", constraints));
+            self.isa.objj_msgSend0(self, "_clearInactiveConstraints");
             self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", NO);
         }
-        if (sizeConstraintUpdate)
+        if (self._updateConstraintsFlags & 4)
         {
             var contentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
             if (contentSizeConstraints)
             {
-                (constraintsDict == null ? null : constraintsDict.isa.objj_msgSend2(constraintsDict, "setObject:forKey:", contentSizeConstraints, "SizeConstraint"));
+                result |= (engine == null ? null : engine.isa.objj_msgSend1(engine, "_addOrRemoveConstraintsIfNeeded:", contentSizeConstraints));
+                self.isa.objj_msgSend0(self, "_clearInactiveContentSizeConstraints");
                 self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", NO);
             }
         }
-        (constraintsByView == null ? null : constraintsByView.isa.objj_msgSend2(constraintsByView, "setObject:forKey:", constraintsDict, self.isa.objj_msgSend0(self, "UID")));
     }
-    self.isa.objj_msgSend0(self, "registerInEngineIfNeeded");
     ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aSubview, idx, stop)
     {
-        CPLog.debug((aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "debugID")) + " isAutolayoutEnabled=" + (aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "isAutolayoutEnabled")));
         if ((aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "isAutolayoutEnabled")))
         {
-            (aSubview == null ? null : aSubview.isa.objj_msgSend1(aSubview, "_updateConstraintsForSubtree:", constraintsByView));
+            result |= (aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "_updateConstraintsForSubtreeIfNeeded"));
         }
     }));
+    return result;
     var ___r1;
 }
-,["void","CPDictionary"]), new objj_method(sel_getUid("needsUpdateConstraints"), function $CPView__needsUpdateConstraints(self, _cmd)
+,["BOOL"]), new objj_method(sel_getUid("needsUpdateConstraints"), function $CPView__needsUpdateConstraints(self, _cmd)
 {
     return self._updateConstraintsFlags !== 0;
 }
@@ -39315,12 +39666,20 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         return;
     if (self.isa.objj_msgSend0(self, "_needsUpdateSizeConstraints"))
     {
-        var oldContentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
-        if (oldContentSizeConstraints !== nil)
-            ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsInArray:", oldContentSizeConstraints));
-        var newContentSizeConstraints = self.isa.objj_msgSend0(self, "_generateContentSizeConstraints");
+        var newContentSizeConstraints = self.isa.objj_msgSend0(self, "_generateContentSizeConstraints"),
+            contentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
+        if ((newContentSizeConstraints == null ? null : newContentSizeConstraints.isa.objj_msgSend1(newContentSizeConstraints, "isEqualToArray:", contentSizeConstraints)))
+            return;
+        self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
+        if (contentSizeConstraints)
+        {
+            (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend2(contentSizeConstraints, "makeObjectsPerformSelector:withObject:", sel_getUid("_setActive:"), NO));
+            (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend1(contentSizeConstraints, "addObjectsFromArray:", newContentSizeConstraints));
+        }
+        else
+            self.isa.objj_msgSend1(self, "_setContentSizeConstraints:", newContentSizeConstraints);
         ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", newContentSizeConstraints));
-        self.isa.objj_msgSend1(self, "_setContentSizeConstraints:", newContentSizeConstraints);
+        self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
     }
     var ___r1;
 }
@@ -39332,7 +39691,23 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         mask = self.isa.objj_msgSend0(self, "autoresizingMask");
     return CPAutoresizingMaskLayoutConstraint.isa.objj_msgSend(CPAutoresizingMaskLayoutConstraint, "constraintsWithAutoresizingMask:subitem:frame:superitem:bounds:", mask, self, frame, superview, bounds);
 }
-,["CPArray"]), new objj_method(sel_getUid("hasAmbiguousLayout"), function $CPView__hasAmbiguousLayout(self, _cmd)
+,["CPArray"]), new objj_method(sel_getUid("_clearInactiveConstraints"), function $CPView___clearInactiveConstraints(self, _cmd)
+{
+    self.isa.objj_msgSend1(self, "_clearInactiveConstraintsInArray:", self._constraintsArray);
+}
+,["void"]), new objj_method(sel_getUid("_clearInactiveContentSizeConstraints"), function $CPView___clearInactiveContentSizeConstraints(self, _cmd)
+{
+    self.isa.objj_msgSend1(self, "_clearInactiveConstraintsInArray:", self._internalConstraints);
+}
+,["void"]), new objj_method(sel_getUid("_clearInactiveConstraintsInArray:"), function $CPView___clearInactiveConstraintsInArray_(self, _cmd, aConstraintsArray)
+{
+    var indexes = (aConstraintsArray == null ? null : aConstraintsArray.isa.objj_msgSend1(aConstraintsArray, "indexesOfObjectsPassingTest:", function(constraint, idx, stop)
+    {
+        return (constraint == null ? null : constraint.isa.objj_msgSend0(constraint, "isActive")) == NO;
+    }));
+    (aConstraintsArray == null ? null : aConstraintsArray.isa.objj_msgSend1(aConstraintsArray, "removeObjectsAtIndexes:", indexes));
+}
+,["void","CPArray"]), new objj_method(sel_getUid("hasAmbiguousLayout"), function $CPView__hasAmbiguousLayout(self, _cmd)
 {
 }
 ,["BOOL"]), new objj_method(sel_getUid("layout"), function $CPView__layout(self, _cmd)
@@ -39356,18 +39731,62 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         self.isa.objj_msgSend0(self, "layoutSubviews");
     var ___r1;
 }
-,["void"]), new objj_method(sel_getUid("updateConstraintsForSubtreeIfNeeded"), function $CPView__updateConstraintsForSubtreeIfNeeded(self, _cmd)
+,["void"]), new objj_method(sel_getUid("_variableMinX"), function $CPView___variableMinX(self, _cmd)
 {
-    var constraintsByView = CPDictionary.isa.objj_msgSend0(CPDictionary, "dictionary");
-    self.isa.objj_msgSend1(self, "_updateConstraintsForSubtree:", constraintsByView);
-    return ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "solver_replaceConstraints:", constraintsByView));
+    if (!self._variableMinX)
+        self._variableMinX = self.isa.objj_msgSend2(self, "newVariableWithName:value:", "minX", CGRectGetMinX(self.isa.objj_msgSend0(self, "frame")));
+    return self._variableMinX;
+}
+,["Variable"]), new objj_method(sel_getUid("_variableMinY"), function $CPView___variableMinY(self, _cmd)
+{
+    if (!self._variableMinY)
+        self._variableMinY = self.isa.objj_msgSend2(self, "newVariableWithName:value:", "minY", CGRectGetMinY(self.isa.objj_msgSend0(self, "frame")));
+    return self._variableMinY;
+}
+,["Variable"]), new objj_method(sel_getUid("_variableWidth"), function $CPView___variableWidth(self, _cmd)
+{
+    if (!self._variableWidth)
+        self._variableWidth = self.isa.objj_msgSend2(self, "newVariableWithName:value:", "width", CGRectGetWidth(self.isa.objj_msgSend0(self, "frame")));
+    return self._variableWidth;
+}
+,["Variable"]), new objj_method(sel_getUid("_variableHeight"), function $CPView___variableHeight(self, _cmd)
+{
+    if (!self._variableHeight)
+        self._variableHeight = self.isa.objj_msgSend2(self, "newVariableWithName:value:", "height", CGRectGetHeight(self.isa.objj_msgSend0(self, "frame")));
+    return self._variableHeight;
+}
+,["Variable"]), new objj_method(sel_getUid("newVariableWithName:value:"), function $CPView__newVariableWithName_value_(self, _cmd, aName, aValue)
+{
+    return ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "variableWithPrefix:name:value:owner:", self.isa.objj_msgSend0(self, "debugID"), aName, aValue, self));
     var ___r1;
 }
-,["BOOL"]), new objj_method(sel_getUid("updateEngineFrame"), function $CPView__updateEngineFrame(self, _cmd)
+,["Variable","CPString","float"]), new objj_method(sel_getUid("updateEngineFrame"), function $CPView__updateEngineFrame(self, _cmd)
 {
     _CPViewUpdateEngineFrame(self);
 }
-,["void"])]);
+,["void"]), new objj_method(sel_getUid("_informContainerThatVariableDidChange:"), function $CPView___informContainerThatVariableDidChange_(self, _cmd, aVariable)
+{
+    var name = aVariable.name,
+        mask;
+    switch(name) {
+    case "minX":
+        mask = 2;
+        break;
+    case "minY":
+        mask = 4;
+        break;
+    case "width":
+        mask = 8;
+        break;
+    case "height":
+        mask = 16;
+        break;
+    }
+    self._constraintBasedNeedsLayoutMask |= mask;
+    ((___r1 = self.isa.objj_msgSend0(self, "superview")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
+    var ___r1;
+}
+,["void","Variable"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("requiresConstraintBasedLayout"), function $CPView__requiresConstraintBasedLayout(self, _cmd)
 {
     return NO;
@@ -39384,7 +39803,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("requiresConstraintBase
 }{
 var the_class = objj_getClass("CPArray")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPArray\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("arrayWithObjectsPassingTest:"), function $CPArray__arrayWithObjectsPassingTest_(self, _cmd, aFunction)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("filteredArrayUsingBlock:"), function $CPArray__filteredArrayUsingBlock_(self, _cmd, aFunction)
 {
     var result = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init");
     self.isa.objj_msgSend1(self, "enumerateObjectsUsingBlock:", function(obj, idx, stop)
@@ -39427,7 +39846,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     {
         (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake((aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableWidth")).valueOf(), CGRectGetHeight(frame))));
     }
-    (aView == null ? null : aView.isa.objj_msgSend1(aView, "_setConstraintBasedNeedsLayoutMask:", 0));
 };
 var SetSizeValue = function(size, value, idx)
 {
@@ -41672,8 +42090,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("establishConnection"), 
 ,["void"])]);
 }{var the_class = objj_allocateClassPair(CPCibControlConnector, "_CPCibControlConnector"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
-}p;20;CPCibHelpConnector.jt;1905;@STATIC;1.0;i;16;CPCibConnector.jt;1865;objj_executeFile("CPCibConnector.j", YES);{var the_class = objj_allocateClassPair(CPCibConnector, "CPCibHelpConnector"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_destination"), new objj_ivar("_file"), new objj_ivar("_marker")]);objj_registerClassPair(the_class);
+}p;20;CPCibHelpConnector.jt;1874;@STATIC;1.0;i;16;CPCibConnector.jt;1834;objj_executeFile("CPCibConnector.j", YES);{var the_class = objj_allocateClassPair(CPCibConnector, "CPCibHelpConnector"),
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_file"), new objj_ivar("_marker")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), function $CPCibHelpConnector__initWithCoder_(self, _cmd, aCoder)
 {
     if (self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPCibHelpConnector").super_class }, "initWithCoder:", aCoder))
@@ -46916,7 +47334,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("nextTextField"), functi
     return CGRectMakeCopy(bounds);
 }
 ,["CGRect","CGRect"])]);
-}p;14;CPDatePicker.jt;34082;@STATIC;1.0;i;11;CPControl.ji;8;CPFont.ji;13;CPTextField.ji;24;_CPDatePickerTextField.ji;23;_CPDatePickerCalendar.jI;20;Foundation/CPArray.jI;21;Foundation/CPObject.jI;19;Foundation/CPDate.jI;21;Foundation/CPLocale.jI;23;Foundation/CPTimeZone.jt;33830;objj_executeFile("CPControl.j", YES);objj_executeFile("CPFont.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPDatePickerTextField.j", YES);objj_executeFile("_CPDatePickerCalendar.j", YES);objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPDate.j", NO);objj_executeFile("Foundation/CPLocale.j", NO);objj_executeFile("Foundation/CPTimeZone.j", NO);var CPDatePicker_validateProposedDateValue_timeInterval = 1 << 1;
+}p;14;CPDatePicker.jt;34265;@STATIC;1.0;i;11;CPControl.ji;8;CPFont.ji;13;CPTextField.ji;24;_CPDatePickerTextField.ji;23;_CPDatePickerCalendar.jI;20;Foundation/CPArray.jI;21;Foundation/CPObject.jI;19;Foundation/CPDate.jI;21;Foundation/CPLocale.jI;23;Foundation/CPTimeZone.jt;34013;objj_executeFile("CPControl.j", YES);objj_executeFile("CPFont.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPDatePickerTextField.j", YES);objj_executeFile("_CPDatePickerCalendar.j", YES);objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPDate.j", NO);objj_executeFile("Foundation/CPLocale.j", NO);objj_executeFile("Foundation/CPTimeZone.j", NO);var CPDatePicker_validateProposedDateValue_timeInterval = 1 << 1;
 CPSingleDateMode = 0;
 CPRangeDateMode = 1;
 CPTextFieldAndStepperDatePickerStyle = 0;
@@ -47141,6 +47559,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("isBordered"), function 
 }
 ,["void","CPDate"]), new objj_method(sel_getUid("_setDateValue:timeInterval:"), function $CPDatePicker___setDateValue_timeInterval_(self, _cmd, aDateValue, aTimeInterval)
 {
+    if (!isFinite(aDateValue))
+    {
+        CPException.isa.objj_msgSend2(CPException, "raise:reason:", CPInvalidArgumentException, "aDateValue is not valid");
+        return;
+    }
     if (self._minDate)
         aDateValue = new Date(MAX(aDateValue, self._minDate));
     if (self._maxDate)
@@ -47437,8 +47860,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     self.setMilliseconds(99);
 }
 ,["void"])]);
-}p;18;_CPMenuBarWindow.jt;22641;@STATIC;1.0;i;9;CPPanel.ji;16;_CPMenuManager.jt;22587;objj_executeFile("CPPanel.j", YES);objj_executeFile("_CPMenuManager.j", YES);{var the_class = objj_allocateClassPair(CPPanel, "_CPMenuBarWindow"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_menu"), new objj_ivar("_highlightView"), new objj_ivar("_menuItemViews"), new objj_ivar("_trackingMenuItem"), new objj_ivar("_iconImageView"), new objj_ivar("_titleField"), new objj_ivar("_textColor"), new objj_ivar("_titleColor"), new objj_ivar("_textShadowColor"), new objj_ivar("_titleShadowColor"), new objj_ivar("_highlightColor"), new objj_ivar("_highlightTextColor"), new objj_ivar("_highlightTextShadowColor")]);objj_registerClassPair(the_class);
+}p;18;_CPMenuBarWindow.jt;22617;@STATIC;1.0;i;9;CPPanel.ji;16;_CPMenuManager.jt;22563;objj_executeFile("CPPanel.j", YES);objj_executeFile("_CPMenuManager.j", YES);{var the_class = objj_allocateClassPair(CPPanel, "_CPMenuBarWindow"),
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_highlightView"), new objj_ivar("_menuItemViews"), new objj_ivar("_trackingMenuItem"), new objj_ivar("_iconImageView"), new objj_ivar("_titleField"), new objj_ivar("_textColor"), new objj_ivar("_titleColor"), new objj_ivar("_textShadowColor"), new objj_ivar("_titleShadowColor"), new objj_ivar("_highlightColor"), new objj_ivar("_highlightTextColor"), new objj_ivar("_highlightTextShadowColor")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $_CPMenuBarWindow__init(self, _cmd)
 {
     var contentRect = ((___r1 = CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "contentBounds"));
@@ -50811,8 +51234,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("dictionary"), function 
     var ___r1;
 }
 ,["CPString","CPString"])]);
-}p;24;_CPRuleEditorViewSlice.jt;7035;@STATIC;1.0;i;8;CPView.jt;7004;objj_executeFile("CPView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPRuleEditorViewSlice"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_ruleEditor"), new objj_ivar("_indentation"), new objj_ivar("_rowIndex"), new objj_ivar("_animationTargetRect"), new objj_ivar("_selected"), new objj_ivar("_lastSelected"), new objj_ivar("_backgroundColor"), new objj_ivar("_editable")]);objj_registerClassPair(the_class);
+}p;24;_CPRuleEditorViewSlice.jt;6647;@STATIC;1.0;i;8;CPView.jt;6616;objj_executeFile("CPView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPRuleEditorViewSlice"),
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_ruleEditor"), new objj_ivar("_indentation"), new objj_ivar("_rowIndex"), new objj_ivar("_animationTargetRect"), new objj_ivar("_selected"), new objj_ivar("_lastSelected"), new objj_ivar("_editable")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("indentation"), function $_CPRuleEditorViewSlice__indentation(self, _cmd)
 {
     return self._indentation;
@@ -50853,15 +51276,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("indentation"), function
 {
     self._lastSelected = newValue;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("backgroundColor"), function $_CPRuleEditorViewSlice__backgroundColor(self, _cmd)
-{
-    return self._backgroundColor;
-}
-,["CPColor"]), new objj_method(sel_getUid("setBackgroundColor:"), function $_CPRuleEditorViewSlice__setBackgroundColor_(self, _cmd, newValue)
-{
-    self._backgroundColor = newValue;
-}
-,["void","CPColor"]), new objj_method(sel_getUid("isEditable"), function $_CPRuleEditorViewSlice__isEditable(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("isEditable"), function $_CPRuleEditorViewSlice__isEditable(self, _cmd)
 {
     return self._editable;
 }
@@ -52070,8 +52485,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_templateType"), functi
 }
 ,["int"]), new objj_method(sel_getUid("copy"), function $CPPredicateEditorRowTemplate__copy(self, _cmd)
 {
-    var views = CPArray.isa.objj_msgSend0(CPArray, "array");
-    var copy = ((___r1 = ((___r2 = self.isa.objj_msgSend0(self, "class")), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "init"));
+    var views = CPArray.isa.objj_msgSend0(CPArray, "array"),
+        copy = ((___r1 = ((___r2 = self.isa.objj_msgSend0(self, "class")), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "init"));
     (copy == null ? null : copy.isa.objj_msgSend1(copy, "_setTemplateType:", self._templateType));
     (copy == null ? null : copy.isa.objj_msgSend1(copy, "_setOptions:", self._predicateOptions));
     (copy == null ? null : copy.isa.objj_msgSend1(copy, "_setModifier:", self._predicateModifier));
@@ -54369,8 +54784,8 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return CGRectInset(contentRect, 1.0, 1.0);
 }
 ,["CGRect","CGRect"])]);
-}p;18;_CPHUDWindowView.jt;8567;@STATIC;1.0;i;10;CPButton.ji;13;CPTextField.ji;24;_CPTitleableWindowView.jt;8486;objj_executeFile("CPButton.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);{var the_class = objj_allocateClassPair(_CPTitleableWindowView, "_CPHUDWindowView"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_toolbarView"), new objj_ivar("_closeButton")]);objj_registerClassPair(the_class);
+}p;18;_CPHUDWindowView.jt;8536;@STATIC;1.0;i;10;CPButton.ji;13;CPTextField.ji;24;_CPTitleableWindowView.jt;8455;objj_executeFile("CPButton.j", YES);objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);{var the_class = objj_allocateClassPair(_CPTitleableWindowView, "_CPHUDWindowView"),
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_closeButton")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("contentRectForFrameRect:"), function $_CPHUDWindowView__contentRectForFrameRect_(self, _cmd, aFrameRect)
 {
     var contentRect = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "contentRectForFrameRect:", aFrameRect));
@@ -54817,7 +55232,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "init");
 }
 ,["CPDictionary"])]);
-}p;23;_CPStandardWindowView.jt;23079;@STATIC;1.0;i;10;CPButton.ji;24;_CPTitleableWindowView.jt;23015;objj_executeFile("CPButton.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);var _CPStandardWindowViewDividerViewHeight = 1.0;
+}p;23;_CPStandardWindowView.jt;23048;@STATIC;1.0;i;10;CPButton.ji;24;_CPTitleableWindowView.jt;22984;objj_executeFile("CPButton.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);var _CPStandardWindowViewDividerViewHeight = 1.0;
 {var the_class = objj_allocateClassPair(CPView, "_CPTexturedWindowHeadView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_isSheet"), new objj_ivar("_parentView"), new objj_ivar("_gradientView"), new objj_ivar("_solidView")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("_isSheet"), function $_CPTexturedWindowHeadView___isSheet(self, _cmd)
@@ -54872,7 +55287,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
 }
 ,["CPDictionary"])]);
 }{var the_class = objj_allocateClassPair(_CPTitleableWindowView, "_CPStandardWindowView"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_headView"), new objj_ivar("_dividerView"), new objj_ivar("_bodyView"), new objj_ivar("_toolbarView"), new objj_ivar("_closeButton"), new objj_ivar("_minimizeButton"), new objj_ivar("_isDocumentEdited"), new objj_ivar("_isSheet")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_headView"), new objj_ivar("_dividerView"), new objj_ivar("_bodyView"), new objj_ivar("_closeButton"), new objj_ivar("_minimizeButton"), new objj_ivar("_isDocumentEdited"), new objj_ivar("_isSheet")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask:"), function $_CPStandardWindowView__initWithFrame_styleMask_(self, _cmd, aFrame, aStyleMask)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("_CPStandardWindowView").super_class }, "initWithFrame:styleMask:", aFrame, aStyleMask);
@@ -55888,15 +56303,17 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("contentRectForFrameRec
     return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "initWithObjectsAndKeys:", 25, "title-bar-height", CGInsetMakeZero(), "shadow-inset", 5, "shadow-distance", CPColor.isa.objj_msgSend0(CPColor, "clearColor"), "window-shadow-color", CGSizeMakeZero(), "size-indicator", CPNull.isa.objj_msgSend0(CPNull, "null"), "resize-indicator", CPColor.isa.objj_msgSend0(CPColor, "blackColor"), "attached-sheet-shadow-color", 8, "shadow-height", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image-origin", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image-size", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-active-image", CPNull.isa.objj_msgSend0(CPNull, "null"), "bezel-color", CPColor.isa.objj_msgSend0(CPColor, "blackColor"), "title-text-color", CPFont.isa.objj_msgSend1(CPFont, "systemFontOfSize:", CPFontCurrentSystemSize), "title-font", CPNull.isa.objj_msgSend0(CPNull, "null"), "title-text-shadow-color", CGSizeMakeZero(), "title-text-shadow-offset", CPCenterTextAlignment, "title-alignment", CPLineBreakByTruncatingTail, "title-line-break-mode", CPTopVerticalTextAlignment, "title-vertical-alignment");
 }
 ,["CPDictionary"])]);
-}p;10;CPWindow.jt;144541;@STATIC;1.0;I;25;Foundation/CPCountedSet.jI;33;Foundation/CPNotificationCenter.jI;26;Foundation/CPUndoManager.ji;12;CGGeometry.ji;13;CPAnimation.ji;10;CPCursor.ji;14;CPDragServer.ji;9;CPEvent.ji;18;CPPlatformWindow.ji;22;CPPlatformWindow+DOM.ji;13;CPResponder.ji;10;CPScreen.ji;8;CPText.ji;8;CPView.ji;20;CPWindow_Constants.ji;31;_CPBorderlessBridgeWindowView.ji;25;_CPBorderlessWindowView.ji;23;_CPDocModalWindowView.ji;18;_CPHUDWindowView.ji;20;_CPModalWindowView.ji;22;_CPPopoverWindowView.ji;21;_CPShadowWindowView.ji;23;_CPStandardWindowView.ji;22;_CPToolTipWindowView.ji;26;CPLayoutConstraintEngine.jt;143926;objj_executeFile("Foundation/CPCountedSet.j", NO);objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPUndoManager.j", NO);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPAnimation.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDragServer.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPPlatformWindow+DOM.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPScreen.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPBorderlessBridgeWindowView.j", YES);objj_executeFile("_CPBorderlessWindowView.j", YES);objj_executeFile("_CPDocModalWindowView.j", YES);objj_executeFile("_CPHUDWindowView.j", YES);objj_executeFile("_CPModalWindowView.j", YES);objj_executeFile("_CPPopoverWindowView.j", YES);objj_executeFile("_CPShadowWindowView.j", YES);objj_executeFile("_CPStandardWindowView.j", YES);objj_executeFile("_CPToolTipWindowView.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPWindowFullPlatformWindowSession");
+}p;10;CPWindow.jt;150654;@STATIC;1.0;I;25;Foundation/CPCountedSet.jI;33;Foundation/CPNotificationCenter.jI;26;Foundation/CPUndoManager.ji;12;CGGeometry.ji;13;CPAnimation.ji;10;CPCursor.ji;14;CPDragServer.ji;9;CPEvent.ji;18;CPPlatformWindow.ji;22;CPPlatformWindow+DOM.ji;13;CPResponder.ji;10;CPScreen.ji;8;CPText.ji;8;CPView.ji;20;CPWindow_Constants.ji;31;_CPBorderlessBridgeWindowView.ji;25;_CPBorderlessWindowView.ji;23;_CPDocModalWindowView.ji;18;_CPHUDWindowView.ji;20;_CPModalWindowView.ji;22;_CPPopoverWindowView.ji;21;_CPShadowWindowView.ji;23;_CPStandardWindowView.ji;22;_CPToolTipWindowView.ji;26;CPLayoutConstraintEngine.jt;150039;objj_executeFile("Foundation/CPCountedSet.j", NO);objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPUndoManager.j", NO);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPAnimation.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDragServer.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPPlatformWindow+DOM.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPScreen.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPBorderlessBridgeWindowView.j", YES);objj_executeFile("_CPBorderlessWindowView.j", YES);objj_executeFile("_CPDocModalWindowView.j", YES);objj_executeFile("_CPHUDWindowView.j", YES);objj_executeFile("_CPModalWindowView.j", YES);objj_executeFile("_CPPopoverWindowView.j", YES);objj_executeFile("_CPShadowWindowView.j", YES);objj_executeFile("_CPStandardWindowView.j", YES);objj_executeFile("_CPToolTipWindowView.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPWindowFullPlatformWindowSession");
 objj_registerTypeDef(the_typedef);
 }{var the_protocol = objj_allocateProtocol("CPWindowDelegate");
 var aProtocol = objj_getProtocol("CPObject");
 if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPWindowDelegate\"");
 protocol_addProtocol(the_protocol, aProtocol);
 objj_registerProtocol(the_protocol);
-}var CPWindowDelegate_windowShouldClose_ = 1 << 1;
-(CPWindowDelegate_windowWillReturnUndoManager_ = 1 << 2, CPWindowDelegate_windowWillClose_ = 1 << 3);
+}var CPWindowDelegate_windowShouldClose_ = 1 << 1,
+    CPWindowDelegate_windowWillReturnUndoManager_ = 1 << 2,
+    CPWindowDelegate_windowWillClose_ = 1 << 3,
+    CPWindowDelegate_windowWillResize_toSize_ = 1 << 4;
 var CPWindowSaveImage = nil,
     CPWindowResizeTime = 0.2,
     CPWindowResizeStyleGlobalChangeNotification = "CPWindowResizeStyleGlobalChangeNotification",
@@ -56136,6 +56553,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         self._fullPlatformWindowSession = _CPWindowFullPlatformWindowSessionMake(self._windowView, self.isa.objj_msgSend1(self, "contentRectForFrameRect:", self.isa.objj_msgSend0(self, "frame")), self.isa.objj_msgSend0(self, "hasShadow"), self.isa.objj_msgSend0(self, "level"));
         var fullPlatformWindowViewClass = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_windowViewClassForFullPlatformWindowStyleMask:", self._styleMask)),
             windowView = ((___r1 = (fullPlatformWindowViewClass == null ? null : fullPlatformWindowViewClass.isa.objj_msgSend0(fullPlatformWindowViewClass, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "initWithFrame:styleMask:", CGRectMakeZero(), self._styleMask));
+        if (self._platformWindow != CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow") && ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_hasInitializeInstanceWithWindow")))
+            ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setContentRect:", self.isa.objj_msgSend0(self, "frame")));
         self.isa.objj_msgSend1(self, "_setWindowView:", windowView);
         self.isa.objj_msgSend1(self, "setLevel:", CPBackgroundWindowLevel);
         self.isa.objj_msgSend1(self, "setHasShadow:", NO);
@@ -56238,6 +56657,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
             {
                 size.width = newSize.width;
                 size.height = newSize.height;
+                if (!self._isAnimating)
+                    size = self.isa.objj_msgSend1(self, "_sendDelegateWindowWillResizeToSize:", size);
                 ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setFrameSize:", size));
                 if (self._hasShadow)
                     ((___r1 = self._shadowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
@@ -56250,6 +56671,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         if (originMoved)
             self.isa.objj_msgSend1(self, "_moveChildWindows:", delta);
     }
+    if (((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_canUpdateContentRect")) && self._isFullPlatformWindow && self._platformWindow != CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow"))
+        ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setContentRect:", aFrame));
     var ___r1;
 }
 ,["void","CGRect","BOOL","BOOL","BOOL","BOOL"]), new objj_method(sel_getUid("_constrainFrame:toUsableScreenWidth:andHeight:"), function $CPWindow___constrainFrame_toUsableScreenWidth_andHeight_(self, _cmd, aFrame, constrainWidth, constrainHeight)
@@ -56331,6 +56754,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
 }
 ,["void","id"]), new objj_method(sel_getUid("_orderFront"), function $CPWindow___orderFront(self, _cmd)
 {
+    if (!self._isVisible)
+        ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setShouldUpdateContentRect:", NO));
     if (self._isSheet)
         ((___r1 = self._parentView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "orderFront:", self));
     var wasVisible = self._isVisible;
@@ -56344,6 +56769,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         self.isa.objj_msgSend1(self, "makeFirstResponder:", self._initialFirstResponder);
     if (!CPApp._mainWindow)
         self.isa.objj_msgSend0(self, "makeMainWindow");
+    ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setShouldUpdateContentRect:", YES));
     var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("_parentDidOrderInChild"), function $CPWindow___parentDidOrderInChild(self, _cmd)
@@ -56351,12 +56777,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
 }
 ,["void"]), new objj_method(sel_getUid("_windowWillBeAddedToTheDOM"), function $CPWindow___windowWillBeAddedToTheDOM(self, _cmd)
 {
+    ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "addObserver:selector:name:object:", self, sel_getUid("_didReceivePlatformWindowWillCloseNotification:"), _CPPlatformWindowWillCloseNotification, self._platformWindow));
     ((___r1 = self.isa.objj_msgSend0(self, "contentView")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_addObservers"));
     var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("_windowWillBeRemovedFromTheDOM"), function $CPWindow___windowWillBeRemovedFromTheDOM(self, _cmd)
 {
+    ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "removeObserver:name:object:", self, _CPPlatformWindowWillCloseNotification, nil));
     ((___r1 = self.isa.objj_msgSend0(self, "contentView")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_removeObservers"));
+    self._hasBecomeKeyWindow = NO;
     var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("orderBack:"), function $CPWindow__orderBack_(self, _cmd, aSender)
@@ -56382,6 +56811,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
     if (recursive)
         ((___r1 = self._childWindows), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "makeObjectsPerformSelector:withObject:", sel_getUid("_orderOutRecursively:"), recursive));
     if (self.isa.objj_msgSend0(self, "_sharesChromeWithPlatformWindow"))
+        ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "orderOut:", self));
+    if (self._isFullPlatformWindow && self._platformWindow != CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow"))
         ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "orderOut:", self));
     ((___r1 = self._platformWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "order:window:relativeTo:", CPWindowOut, self, nil));
     self.isa.objj_msgSend1(self, "makeFirstResponder:", nil);
@@ -56598,6 +57029,9 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
     (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowDidResizeNotification, self));
     (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowWillBeginSheetNotification, self));
     (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowDidEndSheetNotification, self));
+    (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowDidMiniaturizeNotification, self));
+    (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowDidDeminiaturizeNotification, self));
+    (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend3(defaultCenter, "removeObserver:name:object:", self._delegate, CPWindowWillMiniaturizeNotification, self));
     self._delegate = aDelegate;
     self._implementedDelegateMethods = 0;
     if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowShouldClose:"))))
@@ -56606,6 +57040,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         self._implementedDelegateMethods |= CPWindowDelegate_windowWillReturnUndoManager_;
     if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowWillClose:"))))
         self._implementedDelegateMethods |= CPWindowDelegate_windowWillClose_;
+    if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowWillResize:toSize:"))))
+        self._implementedDelegateMethods |= CPWindowDelegate_windowWillResize_toSize_;
     if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowDidResignKey:"))))
         (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowDidResignKey:"), CPWindowDidResignKeyNotification, self));
     if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowDidBecomeKey:"))))
@@ -56622,6 +57058,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowWillBeginSheet:"), CPWindowWillBeginSheetNotification, self));
     if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowDidEndSheet:"))))
         (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowDidEndSheet:"), CPWindowDidEndSheetNotification, self));
+    if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowDidMiniaturize:"))))
+        (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowDidMiniaturize:"), CPWindowDidMiniaturizeNotification, self));
+    if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowWillMiniaturize:"))))
+        (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowWillMiniaturize:"), CPWindowWillMiniaturizeNotification, self));
+    if (((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "respondsToSelector:", sel_getUid("windowDidDeminiaturize:"))))
+        (defaultCenter == null ? null : defaultCenter.isa.objj_msgSend(defaultCenter, "addObserver:selector:name:object:", self._delegate, sel_getUid("windowDidDeminiaturize:"), CPWindowDidDeminiaturizeNotification, self));
     var ___r1;
 }
 ,["void","id"]), new objj_method(sel_getUid("delegate"), function $CPWindow__delegate(self, _cmd)
@@ -56807,6 +57249,8 @@ default:
     }
     var point = (anEvent == null ? null : anEvent.isa.objj_msgSend0(anEvent, "locationInWindow"));
     switch(type) {
+    case CPAppKitDefined:
+        return (CPApp == null ? null : CPApp.isa.objj_msgSend1(CPApp, "activateIgnoringOtherApps:", YES));
     case CPFlagsChanged:
         return ((___r1 = self.isa.objj_msgSend0(self, "firstResponder")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "flagsChanged:", anEvent));
     case CPKeyUp:
@@ -56946,6 +57390,7 @@ default:
     }
     self.isa.objj_msgSend0(self, "_setupFirstResponder");
     self._hasBecomeKeyWindow = YES;
+    self._platformWindow._currentKeyWindow = self;
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "noteKeyWindowStateChanged"));
     ((___r1 = self._contentView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_notifyWindowDidBecomeKey"));
     ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPWindowDidBecomeKeyNotification, self));
@@ -56979,6 +57424,7 @@ default:
         ((___r1 = self._firstResponder), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "resignKeyWindow"));
     if (CPApp._keyWindow === self)
         CPApp._keyWindow = nil;
+    self._platformWindow._currentKeyWindow = nil;
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "noteKeyWindowStateChanged"));
     ((___r1 = self._contentView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_notifyWindowDidResignKey"));
     ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPWindowDidResignKeyNotification, self));
@@ -57212,6 +57658,7 @@ default:
 ,["void"]), new objj_method(sel_getUid("becomeMainWindow"), function $CPWindow__becomeMainWindow(self, _cmd)
 {
     CPApp._mainWindow = self;
+    self._platformWindow._currentMainWindow = self;
     self.isa.objj_msgSend0(self, "_synchronizeSaveMenuWithDocumentSaving");
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "noteMainWindowStateChanged"));
     ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPWindowDidBecomeMainNotification, self));
@@ -57222,6 +57669,7 @@ default:
     ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "postNotificationName:object:", CPWindowDidResignMainNotification, self));
     if (CPApp._mainWindow === self)
         CPApp._mainWindow = nil;
+    self._platformWindow._currentMainWindow = nil;
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "noteMainWindowStateChanged"));
     var ___r1;
 }
@@ -57787,7 +58235,13 @@ default:
     else
         objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPWindow").super_class }, "setValue:forKey:", aValue, aKey);
 }
-,["void","id","CPString"])]);
+,["void","id","CPString"]), new objj_method(sel_getUid("_didReceivePlatformWindowWillCloseNotification:"), function $CPWindow___didReceivePlatformWindowWillCloseNotification_(self, _cmd, aNotification)
+{
+    if ((aNotification == null ? null : aNotification.isa.objj_msgSend0(aNotification, "object")) != self._platformWindow)
+        return;
+    self.isa.objj_msgSend0(self, "close");
+}
+,["void","CPNotification"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("_binderClassForBinding:"), function $CPWindow___binderClassForBinding_(self, _cmd, aBinding)
 {
     if ((aBinding == null ? null : aBinding.isa.objj_msgSend1(aBinding, "hasPrefix:", CPDisplayPatternTitleBinding)))
@@ -57891,7 +58345,14 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "windowWillClose:", self));
     var ___r1;
 }
-,["void"])]);
+,["void"]), new objj_method(sel_getUid("_sendDelegateWindowWillResizeToSize:"), function $CPWindow___sendDelegateWindowWillResizeToSize_(self, _cmd, aSize)
+{
+    if (!(self._implementedDelegateMethods & CPWindowDelegate_windowWillResize_toSize_))
+        return aSize;
+    return ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "windowWillResize:toSize:", self, aSize));
+    var ___r1;
+}
+,["CGSize","CGSize"])]);
 }{
 var the_class = objj_getClass("CPWindow")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPWindow\"");
@@ -58086,7 +58547,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 {
     if (!self._layoutEngine)
     {
-        self._layoutEngine = ((___r1 = CPLayoutConstraintEngine.isa.objj_msgSend0(CPLayoutConstraintEngine, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "init"));
+        self._layoutEngine = ((___r1 = CPLayoutConstraintEngine.isa.objj_msgSend0(CPLayoutConstraintEngine, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithDelegate:", self));
         self.isa.objj_msgSend1(self, "_updateWindowStayConstraintsInEngine:", self._layoutEngine);
     }
     return self._layoutEngine;
@@ -58106,14 +58567,16 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 {
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
     ((___r1 = self._contentView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-    return ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsForSubtreeIfNeeded"));
+    return ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_updateConstraintsForSubtreeIfNeeded"));
     var ___r1;
 }
 ,["BOOL"]), new objj_method(sel_getUid("_suggestFrameSize:"), function $CPWindow___suggestFrameSize_(self, _cmd, newSize)
 {
-    var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
+    var engine = self.isa.objj_msgSend0(self, "_layoutEngine"),
+        variables = objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableWidth")), ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableHeight"))], 2),
+        values = objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [newSize.width, newSize.height], 2);
     self.isa.objj_msgSend0(self, "updateConstraintsAtWindowLevelIfNeeded");
-    (engine == null ? null : engine.isa.objj_msgSend3(engine, "suggestSize:forItem:priority:", newSize, self._windowView, CPLayoutPriorityDragThatCanResizeWindow));
+    (engine == null ? null : engine.isa.objj_msgSend3(engine, "suggestValues:forVariables:withPriority:", values, variables, CPLayoutPriorityDragThatCanResizeWindow));
     ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateEngineFrame"));
     var ___r1;
 }
@@ -58153,7 +58616,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 {
     if (!self._layoutLock)
     {
-        CPLog.debug(_cmd);
         self._layoutLock = YES;
         _CPDisplayServer.isa.objj_msgSend0(_CPDisplayServer, "lock");
         var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
@@ -58184,12 +58646,20 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         oldSize = ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "storedIntrinsicContentSize"));
     if (!CGSizeEqualToSize(newSize, oldSize))
     {
-        (anEngine == null ? null : anEngine.isa.objj_msgSend2(anEngine, "addStayConstraintsForItem:priority:", self._windowView, CPLayoutPriorityWindowSizeStayPut));
+        (anEngine == null ? null : anEngine.isa.objj_msgSend2(anEngine, "replaceStayConstraintsForItem:priority:", self._windowView, CPLayoutPriorityWindowSizeStayPut));
         ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setStoredIntrinsicContentSize:", CGSizeMakeCopy(newSize)));
     }
     var ___r1;
 }
 ,["void","id"])]);
+}{
+var the_class = objj_getClass("CPWindow")
+if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPWindow\"");
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("engine:variableDidChange:withOwner:"), function $CPWindow__engine_variableDidChange_withOwner_(self, _cmd, anEngine, aVariable, anOwner)
+{
+    (anOwner == null ? null : anOwner.isa.objj_msgSend1(anOwner, "_informContainerThatVariableDidChange:", aVariable));
+}
+,["void","id","Object","id"])]);
 }_CPWindowFullPlatformWindowSessionMake = function(aWindowView, aContentRect, hasShadow, aLevel)
 {
     return {windowView: aWindowView, contentRect: aContentRect, hasShadow: hasShadow, level: aLevel};
@@ -58508,11 +58978,11 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
     var ___r1;
 }
 ,["CPDictionary","CPFont"])]);
-}p;18;CPPlatformWindow.jt;8335;@STATIC;1.0;I;25;Foundation/CPDictionary.jI;21;Foundation/CPObject.ji;14;CPKeyBinding.ji;12;CPPlatform.jt;8224;objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("CPKeyBinding.j", YES);objj_executeFile("CPPlatform.j", YES);{var the_typedef = objj_allocateTypeDef("DOMWindow");
+}p;18;CPPlatformWindow.jt;9775;@STATIC;1.0;I;25;Foundation/CPDictionary.jI;21;Foundation/CPObject.ji;14;CPKeyBinding.ji;12;CPPlatform.jt;9664;objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("CPKeyBinding.j", YES);objj_executeFile("CPPlatform.j", YES);{var the_typedef = objj_allocateTypeDef("DOMWindow");
 objj_registerTypeDef(the_typedef);
 }var PrimaryPlatformWindow = NULL;
 {var the_class = objj_allocateClassPair(CPObject, "CPPlatformWindow"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_contentRect"), new objj_ivar("_level"), new objj_ivar("_hasShadow"), new objj_ivar("_shadowStyle"), new objj_ivar("_title"), new objj_ivar("_DOMWindow"), new objj_ivar("_DOMBodyElement"), new objj_ivar("_DOMFocusElement"), new objj_ivar("_DOMEventGuard"), new objj_ivar("_DOMScrollingElement"), new objj_ivar("_hideDOMScrollingElementTimeout"), new objj_ivar("_windowLevels"), new objj_ivar("_windowLayers"), new objj_ivar("_mouseIsDown"), new objj_ivar("_mouseDownIsRightClick"), new objj_ivar("_lastMouseEventLocation"), new objj_ivar("_mouseDownWindow"), new objj_ivar("_lastMouseUp"), new objj_ivar("_lastMouseDown"), new objj_ivar("_charCodes"), new objj_ivar("_keyCode"), new objj_ivar("_lastKey"), new objj_ivar("_capsLockActive"), new objj_ivar("_DOMEventMode"), new objj_ivar("_platformPasteboard"), new objj_ivar("_overriddenEventType")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_contentRect"), new objj_ivar("_level"), new objj_ivar("_hasShadow"), new objj_ivar("_shadowStyle"), new objj_ivar("_title"), new objj_ivar("_shouldUpdateContentRect"), new objj_ivar("_hasInitializeInstanceWithWindow"), new objj_ivar("_DOMWindow"), new objj_ivar("_DOMBodyElement"), new objj_ivar("_DOMFocusElement"), new objj_ivar("_DOMEventGuard"), new objj_ivar("_DOMScrollingElement"), new objj_ivar("_hideDOMScrollingElementTimeout"), new objj_ivar("_windowLevels"), new objj_ivar("_windowLayers"), new objj_ivar("_mouseIsDown"), new objj_ivar("_mouseDownIsRightClick"), new objj_ivar("_lastMouseEventLocation"), new objj_ivar("_mouseDownWindow"), new objj_ivar("_lastMouseUp"), new objj_ivar("_lastMouseDown"), new objj_ivar("_charCodes"), new objj_ivar("_keyCode"), new objj_ivar("_lastKey"), new objj_ivar("_capsLockActive"), new objj_ivar("_DOMEventMode"), new objj_ivar("_platformPasteboard"), new objj_ivar("_overriddenEventType"), new objj_ivar("_currentKeyWindow"), new objj_ivar("_previousKeyWindow"), new objj_ivar("_currentMainWindow"), new objj_ivar("_previousMainWindow")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithContentRect:"), function $CPPlatformWindow__initWithContentRect_(self, _cmd, aRect)
 {
     self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPPlatformWindow").super_class }, "init");
@@ -58525,7 +58995,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithContentRect:"),
     }
     return self;
 }
-,["id","CGRect"]), new objj_method(sel_getUid("init"), function $CPPlatformWindow__init(self, _cmd)
+,["id","CGRect"]), new objj_method(sel_getUid("initWithWindow:"), function $CPPlatformWindow__initWithWindow_(self, _cmd, aWindow)
+{
+    self = (self == null ? null : self.isa.objj_msgSend1(self, "initWithContentRect:", CGRectMakeCopy((aWindow == null ? null : aWindow.isa.objj_msgSend0(aWindow, "frame")))));
+    self._hasInitializeInstanceWithWindow = YES;
+    (aWindow == null ? null : aWindow.isa.objj_msgSend1(aWindow, "setPlatformWindow:", self));
+    (aWindow == null ? null : aWindow.isa.objj_msgSend1(aWindow, "setFullPlatformWindow:", YES));
+    return self;
+}
+,["id","CPWindow"]), new objj_method(sel_getUid("init"), function $CPPlatformWindow__init(self, _cmd)
 {
     return self.isa.objj_msgSend1(self, "initWithContentRect:", CGRectMake(0.0, 0.0, 400.0, 500.0));
 }
@@ -58634,7 +59112,19 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithContentRect:"),
 {
     return self._title;
 }
-,["CPString"])]);
+,["CPString"]), new objj_method(sel_getUid("_canUpdateContentRect"), function $CPPlatformWindow___canUpdateContentRect(self, _cmd)
+{
+    return self._shouldUpdateContentRect && self._hasInitializeInstanceWithWindow;
+}
+,["BOOL"]), new objj_method(sel_getUid("_hasInitializeInstanceWithWindow"), function $CPPlatformWindow___hasInitializeInstanceWithWindow(self, _cmd)
+{
+    return self._hasInitializeInstanceWithWindow;
+}
+,["BOOL"]), new objj_method(sel_getUid("_setShouldUpdateContentRect:"), function $CPPlatformWindow___setShouldUpdateContentRect_(self, _cmd, aBoolean)
+{
+    self._shouldUpdateContentRect = aBoolean;
+}
+,["void","BOOL"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("visiblePlatformWindows"), function $CPPlatformWindow__visiblePlatformWindows(self, _cmd)
 {
     return CPSet.isa.objj_msgSend0(CPSet, "set");
@@ -59106,7 +59596,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPPla
     var ___r1;
 }
 ,["boolean","DOMEvent"])]);
-}p;22;CPPlatformWindow+DOM.jt;62394;@STATIC;1.0;I;33;Foundation/CPNotificationCenter.jI;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;18;Foundation/CPSet.jI;20;Foundation/CPTimer.ji;25;CPApplication_Constants.ji;17;CPCompatibility.ji;10;CPCursor.ji;18;CPDOMWindowLayer.ji;24;CPDragServer_Constants.ji;9;CPEvent.ji;14;CPPasteboard.ji;12;CPPlatform.ji;22;CPPlatformPasteboard.ji;26;CPPlatformWindow+DOMKeys.ji;18;CPPlatformWindow.ji;8;CPText.ji;20;CPWindow_Constants.jt;61949;objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("Foundation/CPTimer.j", NO);objj_executeFile("CPApplication_Constants.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDOMWindowLayer.j", YES);objj_executeFile("CPDragServer_Constants.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPasteboard.j", YES);objj_executeFile("CPPlatform.j", YES);objj_executeFile("CPPlatformPasteboard.j", YES);objj_executeFile("CPPlatformWindow+DOMKeys.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPWindow_Constants.j", YES);var PlatformWindows = CPSet.isa.objj_msgSend0(CPSet, "set");
+}p;22;CPPlatformWindow+DOM.jt;69195;@STATIC;1.0;I;33;Foundation/CPNotificationCenter.jI;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;18;Foundation/CPSet.jI;20;Foundation/CPTimer.ji;25;CPApplication_Constants.ji;17;CPCompatibility.ji;10;CPCursor.ji;18;CPDOMWindowLayer.ji;24;CPDragServer_Constants.ji;9;CPEvent.ji;14;CPPasteboard.ji;12;CPPlatform.ji;22;CPPlatformPasteboard.ji;26;CPPlatformWindow+DOMKeys.ji;18;CPPlatformWindow.ji;8;CPText.ji;20;CPWindow_Constants.jt;68750;objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("Foundation/CPTimer.j", NO);objj_executeFile("CPApplication_Constants.j", YES);objj_executeFile("CPCompatibility.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDOMWindowLayer.j", YES);objj_executeFile("CPDragServer_Constants.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPasteboard.j", YES);objj_executeFile("CPPlatform.j", YES);objj_executeFile("CPPlatformPasteboard.j", YES);objj_executeFile("CPPlatformWindow+DOMKeys.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPWindow_Constants.j", YES);var PlatformWindows = CPSet.isa.objj_msgSend0(CPSet, "set");
 var CPDOMEventGetClickCount,
     StopDOMEventPropagation,
     StopContextMenuDOMEventPropagation;
@@ -59156,6 +59646,8 @@ var ModifierKeyCodes = [CPKeyCodes.META, CPKeyCodes.WEBKIT_RIGHT_META, CPKeyCode
     supportsNativeDragAndDrop = CPPlatform.isa.objj_msgSend0(CPPlatform, "supportsDragAndDrop");
 var resizeTimer = nil;
 var PreventScroll = true;
+var blurTimer = nil;
+_CPPlatformWindowWillCloseNotification = "_CPPlatformWindowWillCloseNotification";
 {
 var the_class = objj_getClass("CPPlatformWindow")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPPlatformWindow\"");
@@ -59307,6 +59799,18 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         touchEventCallback = function(anEvent)
     {
         touchEventImplementation(self, nil, anEvent);
+    },
+        onFocusEventSelector = sel_getUid("focusEvent:"),
+        onFocusEventImplementation = class_getMethodImplementation(theClass, onFocusEventSelector),
+        onFocusEventCallback = function(anEvent)
+    {
+        onFocusEventImplementation(self, nil, anEvent);
+    },
+        onBlurEventSelector = sel_getUid("blurEvent:"),
+        onBlurEventImplementation = class_getMethodImplementation(theClass, onBlurEventSelector),
+        onBlurEventCallback = function(anEvent)
+    {
+        onBlurEventImplementation(self, nil, anEvent);
     };
     if (theDocument.addEventListener)
     {
@@ -59334,8 +59838,13 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         self._DOMWindow.addEventListener("wheel", scrollEventCallback, NO);
         self._DOMWindow.addEventListener("mousewheel", scrollEventCallback, NO);
         self._DOMWindow.addEventListener("resize", resizeEventCallback, NO);
+        self._DOMWindow.addEventListener("blur", onBlurEventCallback, NO);
+        self._DOMWindow.addEventListener("focus", onFocusEventCallback, NO);
         self._DOMWindow.addEventListener("unload", function()
         {
+            self._DOMWindow.removeEventListener("unload", arguments.callee, NO);
+            self.isa.objj_msgSend1(self, "blurEvent:", nil);
+            self.isa.objj_msgSend0(self, "_notifyPlatformWindowWillClose");
             self.isa.objj_msgSend0(self, "updateFromNativeContentRect");
             self.isa.objj_msgSend0(self, "_removeLayers");
             theDocument.removeEventListener("mouseup", mouseEventCallback, NO);
@@ -59349,6 +59858,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             theDocument.removeEventListener("touchend", touchEventCallback, NO);
             theDocument.removeEventListener("touchmove", touchEventCallback, NO);
             self._DOMWindow.removeEventListener("resize", resizeEventCallback, NO);
+            self._DOMWindow.removeEventListener("blur", onBlurEventCallback, NO);
+            self._DOMWindow.removeEventListener("focus", onFocusEventCallback, NO);
             self._DOMWindow.removeEventListener("DOMMouseScroll", scrollEventCallback, NO);
             self._DOMWindow.removeEventListener("wheel", scrollEventCallback, NO);
             self._DOMWindow.removeEventListener("mousewheel", scrollEventCallback, NO);
@@ -59369,6 +59880,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         theDocument.attachEvent("onkeydown", keyEventCallback);
         theDocument.attachEvent("onkeypress", keyEventCallback);
         self._DOMWindow.attachEvent("onresize", resizeEventCallback);
+        self._DOMWindow.attachEvent("onfocus", onFocusEventCallback);
+        self._DOMWindow.attachEvent("onblur", onBlurEventCallback);
         self._DOMWindow.onmousewheel = scrollEventCallback;
         theDocument.onmousewheel = scrollEventCallback;
         self._DOMBodyElement.ondrag = function()
@@ -59381,6 +59894,9 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         };
         self._DOMWindow.attachEvent("onunload", function()
         {
+            self._DOMWindow.detachEvent("unload", arguments.callee);
+            self.isa.objj_msgSend1(self, "blurEvent:", nil);
+            self.isa.objj_msgSend0(self, "_notifyPlatformWindowWillClose");
             self.isa.objj_msgSend0(self, "updateFromNativeContentRect");
             self.isa.objj_msgSend0(self, "_removeLayers");
             theDocument.detachEvent("onmouseup", mouseEventCallback);
@@ -59392,6 +59908,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             theDocument.detachEvent("onkeydown", keyEventCallback);
             theDocument.detachEvent("onkeypress", keyEventCallback);
             self._DOMWindow.detachEvent("onresize", resizeEventCallback);
+            self._DOMWindow.detachEvent("onfocus", onBlurEventCallback);
+            self._DOMWindow.detachEvent("onblur", onFocusEventCallback);
             self._DOMWindow.onmousewheel = NULL;
             theDocument.onmousewheel = NULL;
             self._DOMBodyElement.ondrag = NULL;
@@ -59412,7 +59930,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         return self._DOMWindow.focus();
     self._DOMWindow = window.open("about:blank", "_blank", "menubar=no,location=no,resizable=yes,scrollbars=no,status=no,left=" + CGRectGetMinX(self._contentRect) + ",top=" + CGRectGetMinY(self._contentRect) + ",width=" + CGRectGetWidth(self._contentRect) + ",height=" + CGRectGetHeight(self._contentRect));
     (PlatformWindows == null ? null : PlatformWindows.isa.objj_msgSend1(PlatformWindows, "addObject:", self));
-    self._DOMWindow.document.write('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"></head><body style="background-color:transparent;"></body></html>');
+    self._DOMWindow.document.write('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"></head><body style="background-color:transparent; overflow:hidden"></body></html>');
     self._DOMWindow.document.close();
     if (self != CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow"))
         self._DOMWindow.document.title = self._title;
@@ -59695,6 +60213,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["void","DOMEvent"]), new objj_method(sel_getUid("_actualResizeEvent"), function $CPPlatformWindow___actualResizeEvent(self, _cmd)
 {
+    self._shouldUpdateContentRect = NO;
     resizeTimer = nil;
     if (CPPlatform.isa.objj_msgSend0(CPPlatform, "isBrowser"))
         ((___r1 = CPApp._activeMenu), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "cancelTracking"));
@@ -59712,9 +60231,68 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     }
     ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "postNotificationName:object:userInfo:", CPApplicationDidChangeScreenParametersNotification, CPApp, nil));
     ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
+    self._shouldUpdateContentRect = YES;
     var ___r1;
 }
-,["void"]), new objj_method(sel_getUid("touchEvent:"), function $CPPlatformWindow__touchEvent_(self, _cmd, aDOMEvent)
+,["void"]), new objj_method(sel_getUid("blurEvent:"), function $CPPlatformWindow__blurEvent_(self, _cmd, aDOMEvent)
+{
+    if ((CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "keyWindow")) == self._currentKeyWindow)
+        ((___r1 = self._currentKeyWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "resignKeyWindow"));
+    if ((CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "mainWindow")) == self._currentMainWindow)
+        ((___r1 = self._currentMainWindow), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "resignMainWindow"));
+    self._previousKeyWindow = aDOMEvent ? self._currentKeyWindow : nil;
+    self._previousMainWindow = aDOMEvent ? self._currentMainWindow : nil;
+    (blurTimer == null ? null : blurTimer.isa.objj_msgSend0(blurTimer, "invalidate"));
+    blurTimer = CPTimer.isa.objj_msgSend(CPTimer, "scheduledTimerWithTimeInterval:target:selector:userInfo:repeats:", 0.2, self, sel_getUid("_blurEventTimer:"), nil, NO);
+    var ___r1;
+}
+,["void","DOMEvent"]), new objj_method(sel_getUid("_blurEventTimer:"), function $CPPlatformWindow___blurEventTimer_(self, _cmd, aTimer)
+{
+    if (!(CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "mainWindow")))
+        ((___r1 = (CPApplication == null ? null : CPApplication.isa.objj_msgSend0(CPApplication, "sharedApplication"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "deactivate"));
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
+    var ___r1;
+}
+,["void","CPTimer"]), new objj_method(sel_getUid("focusEvent:"), function $CPPlatformWindow__focusEvent_(self, _cmd, aDOMEvent)
+{
+    (blurTimer == null ? null : blurTimer.isa.objj_msgSend0(blurTimer, "invalidate"));
+    (CPApp == null ? null : CPApp.isa.objj_msgSend1(CPApp, "activateIgnoringOtherApps:", YES));
+    var keyWindow = self._previousKeyWindow;
+    if (!keyWindow)
+        keyWindow = ((___r1 = ((___r2 = ((___r3 = self._windowLayers), ___r3 == null ? null : ___r3.isa.objj_msgSend1(___r3, "objectForKey:", ((___r4 = self._windowLevels), ___r4 == null ? null : ___r4.isa.objj_msgSend0(___r4, "firstObject"))))), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "orderedWindows"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "firstObject"));
+    if (!keyWindow)
+        return;
+    self.isa.objj_msgSend1(self, "_makeKeyWindow:", keyWindow);
+    if ((keyWindow == null ? null : keyWindow.isa.objj_msgSend0(keyWindow, "isKeyWindow")) && ((keyWindow == null ? null : keyWindow.isa.objj_msgSend0(keyWindow, "firstResponder")) === keyWindow || !(keyWindow == null ? null : keyWindow.isa.objj_msgSend0(keyWindow, "firstResponder"))))
+        (keyWindow == null ? null : keyWindow.isa.objj_msgSend1(keyWindow, "makeFirstResponder:", (keyWindow == null ? null : keyWindow.isa.objj_msgSend0(keyWindow, "initialFirstResponder"))));
+    self.isa.objj_msgSend1(self, "_makeMainWindow:", keyWindow);
+    ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "limitDateForMode:", CPDefaultRunLoopMode));
+    self._previousKeyWindow = nil;
+    self._previousMainWindow = nil;
+    var ___r1, ___r2, ___r3, ___r4;
+}
+,["void","DOMEvent"]), new objj_method(sel_getUid("_makeKeyWindow:"), function $CPPlatformWindow___makeKeyWindow_(self, _cmd, aWindow)
+{
+    if ((CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "keyWindow")) === aWindow || !(aWindow == null ? null : aWindow.isa.objj_msgSend0(aWindow, "canBecomeKeyWindow")))
+        return;
+    ((___r1 = (CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "keyWindow"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "resignKeyWindow"));
+    (aWindow == null ? null : aWindow.isa.objj_msgSend0(aWindow, "becomeKeyWindow"));
+    var ___r1;
+}
+,["void","CPWindow"]), new objj_method(sel_getUid("_makeMainWindow:"), function $CPPlatformWindow___makeMainWindow_(self, _cmd, aWindow)
+{
+    if (aWindow._isSheet)
+    {
+        self.isa.objj_msgSend1(self, "_makeMainWindow:", aWindow._parentView);
+        return;
+    }
+    if ((CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "mainWindow")) === aWindow || !(aWindow == null ? null : aWindow.isa.objj_msgSend0(aWindow, "canBecomeMainWindow")))
+        return;
+    ((___r1 = (CPApp == null ? null : CPApp.isa.objj_msgSend0(CPApp, "mainWindow"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "resignMainWindow"));
+    (aWindow == null ? null : aWindow.isa.objj_msgSend0(aWindow, "becomeMainWindow"));
+    var ___r1;
+}
+,["void","CPWindow"]), new objj_method(sel_getUid("touchEvent:"), function $CPPlatformWindow__touchEvent_(self, _cmd, aDOMEvent)
 {
     if (aDOMEvent.touches && (aDOMEvent.touches.length == 1 || aDOMEvent.touches.length == 0 && aDOMEvent.changedTouches.length == 1))
     {
@@ -60103,7 +60681,12 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         domRange.select();
     }
 }
-,["void","CPRange","DOMElement"])]);
+,["void","CPRange","DOMElement"]), new objj_method(sel_getUid("_notifyPlatformWindowWillClose"), function $CPPlatformWindow___notifyPlatformWindowWillClose(self, _cmd)
+{
+    ((___r1 = CPNotificationCenter.isa.objj_msgSend0(CPNotificationCenter, "defaultCenter")), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "postNotificationName:object:userInfo:", _CPPlatformWindowWillCloseNotification, self, nil));
+    var ___r1;
+}
+,["void"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("visiblePlatformWindows"), function $CPPlatformWindow__visiblePlatformWindows(self, _cmd)
 {
     if (((___r1 = CPPlatformWindow.isa.objj_msgSend0(CPPlatformWindow, "primaryPlatformWindow")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "isVisible")))
@@ -60271,7 +60854,7 @@ default:
         return false;
     }
 };
-p;4;c.jst;48786;/**
+p;4;c.jst;48368;/**
  * Parts Copyright (C) 2011-2012, Alex Russell (slightlyoff@chromium.org)
  * Parts Copyright (C) Copyright (C) 1998-2000 Greg J. Badros
  *
@@ -60285,533 +60868,7 @@ p;4;c.jst;48786;/**
  */
 
 (function() {
-!function(a){try{!function(){}.bind(a)}catch(b){Object.defineProperty(Function.prototype,"bind",{value:function(a){var b=this;return function(){return b.apply(a,arguments)}},enumerable:!1,configurable:!0,writable:!0})}var c="undefined"!=typeof a.HTMLElement,d=function(a){for(var b=null;a&&a!=Object.prototype;){if(a.tagName){b=a.tagName;break}a=a.prototype}return b||"div"},e=1e-8,f={},g=function(a,b){if(a&&b){if("function"==typeof a[b])return a[b];var c=a.prototype;if(c&&"function"==typeof c[b])return c[b];if(c!==Object.prototype&&c!==Function.prototype)return"function"==typeof a.__super__?g(a.__super__,b):void 0}},h=a.c=function(){return h._api?h._api.apply(this,arguments):void 0};h.debug=!1,h.trace=!1,h.verbose=!1,h.traceAdded=!1,h.GC=!1,h.GEQ=1,h.LEQ=2,h.inherit=function(b){var e=null,g=null;b["extends"]&&(g=b["extends"],delete b["extends"]),b.initialize&&(e=b.initialize,delete b.initialize);var i=e||function(){};Object.defineProperty(i,"__super__",{value:g?g:Object,enumerable:!1,configurable:!0,writable:!1}),b._t&&(f[b._t]=i);var j=i.prototype=Object.create(g?g.prototype:Object.prototype);if(h.extend(j,b),c&&g&&g.prototype instanceof a.HTMLElement){var k=i,l=d(j),m=function(a){return a.__proto__=j,k.apply(a,arguments),j.created&&a.created(),j.decorate&&a.decorate(),a};this.extend(j,{upgrade:m}),i=function(){return m(a.document.createElement(l))},i.prototype=j,this.extend(i,{ctor:k})}return i},h.own=function(b,c,d){return Object.getOwnPropertyNames(b).forEach(c,d||a),b},h.extend=function(a,b){return h.own(b,function(c){var d=Object.getOwnPropertyDescriptor(b,c);try{"function"==typeof d.get||"function"==typeof d.set?Object.defineProperty(a,c,d):"function"==typeof d.value||"_"===c.charAt(0)?(d.writable=!0,d.configurable=!0,d.enumerable=!1,Object.defineProperty(a,c,d)):a[c]=b[c]}catch(e){}}),a},h.traceprint=function(a){h.verbose&&console.log(a)},h.fnenterprint=function(a){console.log("* "+a)},h.fnexitprint=function(a){console.log("- "+a)},h.assert=function(a,b){if(!a)throw new h.InternalError("Assertion failed: "+b)};var i=function(a){return"number"==typeof a?h.Expression.fromConstant(a):a instanceof h.Variable?h.Expression.fromVariable(a):a};h.plus=function(a,b){return a=i(a),b=i(b),a.plus(b)},h.minus=function(a,b){return a=i(a),b=i(b),a.minus(b)},h.times=function(a,b){return a=i(a),b=i(b),a.times(b)},h.divide=function(a,b){return a=i(a),b=i(b),a.divide(b)},h.approx=function(a,b){return a===b?!0:(a=+a,b=+b,0==a?Math.abs(b)<e:0==b?Math.abs(a)<e:Math.abs(a-b)<Math.abs(a)*e)};var j=1;h._inc=function(){return j++},h.parseJSON=function(a){return JSON.parse(a,function(a,b){if("object"!=typeof b||"string"!=typeof b._t)return b;var c=b._t,d=f[c];if(c&&d){var e=g(d,"fromJSON");if(e)return e(b,d)}return b})},"function"==typeof define&&define.amd?define(h):"object"==typeof module&&module.exports?module.exports=h:a.c=h}(this),function(a){var b=function(a,b){Object.keys(a).forEach(function(c){b[c]=a[c]})},c={};a.HashTable=a.inherit({initialize:function(){this.size=0,this._store={},this._keyStrMap={},this._deleted=0},set:function(a,b){var c=a.hashCode;"undefined"==typeof this._store[c]&&this.size++,this._store[c]=b,this._keyStrMap[c]=a},get:function(a){if(!this.size)return null;a=a.hashCode;var b=this._store[a];return"undefined"!=typeof b?this._store[a]:null},clear:function(){this.size=0,this._store={},this._keyStrMap={}},_compact:function(){var a={};b(this._store,a),this._store=a},_compactThreshold:100,_perhapsCompact:function(){this._size>30||this._deleted>this._compactThreshold&&(this._compact(),this._deleted=0)},"delete":function(a){a=a.hashCode,this._store.hasOwnProperty(a)&&(this._deleted++,delete this._store[a],this.size>0&&this.size--)},each:function(a,b){if(this.size){this._perhapsCompact();var c=this._store,d=this._keyStrMap;for(var e in this._store)this._store.hasOwnProperty(e)&&a.call(b||null,d[e],c[e])}},escapingEach:function(a,b){if(this.size){this._perhapsCompact();for(var d=this,e=this._store,f=this._keyStrMap,g=c,h=Object.keys(e),i=0;i<h.length;i++)if(function(c){d._store.hasOwnProperty(c)&&(g=a.call(b||null,f[c],e[c]))}(h[i]),g){if(void 0!==g.retval)return g;if(g.brk)break}}},clone:function(){var c=new a.HashTable;return this.size&&(c.size=this.size,b(this._store,c._store),b(this._keyStrMap,c._keyStrMap)),c},equals:function(b){if(b===this)return!0;if(!(b instanceof a.HashTable)||b._size!==this._size)return!1;for(var c=Object.keys(this._store),d=0;d<c.length;d++){var e=c[d];if(this._keyStrMap[e]!==b._keyStrMap[e]||this._store[e]!==b._store[e])return!1}return!0},toString:function(){var b="";return this.each(function(a,c){b+=a+" => "+c+"\n"}),b}})}(this.c||module.parent.exports||{}),function(a){a.HashSet=a.inherit({_t:"c.HashSet",initialize:function(){this.storage=[],this.size=0,this.hashCode=a._inc()},add:function(a){var b=this.storage;b.indexOf(a),-1==b.indexOf(a)&&(b[b.length]=a),this.size=this.storage.length},values:function(){return this.storage},has:function(a){var b=this.storage;return-1!=b.indexOf(a)},"delete":function(a){var b=this.storage.indexOf(a);return-1==b?null:(this.storage.splice(b,1)[0],this.size=this.storage.length,void 0)},clear:function(){this.storage.length=0},each:function(a,b){this.size&&this.storage.forEach(a,b)},escapingEach:function(a,b){this.size&&this.storage.forEach(a,b)},toString:function(){var a=this.size+" {",b=!0;return this.each(function(c){b?b=!1:a+=", ",a+=c}),a+="}\n"},toJSON:function(){var a=[];return this.each(function(b){a[a.length]=b.toJSON()}),{_t:"c.HashSet",data:a}},fromJSON:function(b){var c=new a.HashSet;return b.data&&(c.size=b.data.length,c.storage=b.data),c}})}(this.c||module.parent.exports||{}),function(a){a.Error=a.inherit({initialize:function(a){a&&(this._description=a)},_name:"c.Error",_description:"An error has occured in Cassowary",set description(a){this._description=a},get description(){return"("+this._name+") "+this._description},get message(){return this.description},toString:function(){return this.description}});var b=function(b,c){return a.inherit({"extends":a.Error,initialize:function(){a.Error.apply(this,arguments)},_name:b||"",_description:c||""})};a.ConstraintNotFound=b("c.ConstraintNotFound","Tried to remove a constraint never added to the tableu"),a.InternalError=b("c.InternalError"),a.NonExpression=b("c.NonExpression","The resulting expression would be non"),a.NotEnoughStays=b("c.NotEnoughStays","There are not enough stays to give specific values to every variable"),a.RequiredFailure=b("c.RequiredFailure","A required constraint cannot be satisfied"),a.TooDifficult=b("c.TooDifficult","The constraints are too difficult to solve")}(this.c||module.parent.exports||{}),function(a){var b=1e3;a.SymbolicWeight=a.inherit({_t:"c.SymbolicWeight",initialize:function(){this.value=0;for(var a=1,c=arguments.length-1;c>=0;--c)this.value+=arguments[c]*a,a*=b},toJSON:function(){return{_t:this._t,value:this.value}}})}(this.c||module.parent.exports||{}),function(a){a.Strength=a.inherit({initialize:function(b,c,d,e){this.name=b,this.symbolicWeight=c instanceof a.SymbolicWeight?c:new a.SymbolicWeight(c,d,e)},get required(){return this===a.Strength.required},toString:function(){return this.name+(this.isRequired?"":":"+this.symbolicWeight)}}),a.Strength.required=new a.Strength("<Required>",1e3,1e3,1e3),a.Strength.strong=new a.Strength("strong",1,0,0),a.Strength.medium=new a.Strength("medium",0,1,0),a.Strength.weak=new a.Strength("weak",0,0,1)}(this.c||("undefined"!=typeof module?module.parent.exports.c:{})),function(a){a.AbstractVariable=a.inherit({isDummy:!1,isExternal:!1,isPivotable:!1,isRestricted:!1,_init:function(b,c){this.hashCode=a._inc(),this.name=(c||"")+this.hashCode,b&&("undefined"!=typeof b.name&&(this.name=b.name),"undefined"!=typeof b.value&&(this.value=b.value),"undefined"!=typeof b.prefix&&(this._prefix=b.prefix),"undefined"!=typeof b.identifier&&(this._identifier=b.identifier),"undefined"!=typeof b.tag&&(this._tag=b.tag))},_prefix:"",name:"",value:0,_tag:0,_identifier:null,valueOf:function(){return this.value},toJSON:function(){var a={};return this._t&&(a._t=this._t),this.name&&(a.name=this.name),"undefined"!=typeof this.value&&(a.value=this.value),this._prefix&&(a._prefix=this._prefix),this._t&&(a._t=this._t),a},fromJSON:function(b,c){var d=new c;return a.extend(d,b),d},toString:function(){return this._prefix+"["+this.name+":"+this.value+"]"}}),a.Variable=a.inherit({_t:"c.Variable","extends":a.AbstractVariable,initialize:function(b){this._init(b,"v");var c=a.Variable._map;c&&(c[this.name]=this)},isExternal:!0}),a.DummyVariable=a.inherit({_t:"c.DummyVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"d")},isDummy:!0,isRestricted:!0,value:"dummy"}),a.ObjectiveVariable=a.inherit({_t:"c.ObjectiveVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"o")},value:"obj"}),a.SlackVariable=a.inherit({_t:"c.SlackVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"s")},isPivotable:!0,isRestricted:!0,value:"slack"})}(this.c||module.parent.exports||{}),function(a){"use strict";a.Point=a.inherit({initialize:function(b,c,d){if(b instanceof a.Variable)this._x=b;else{var e={value:b};d&&(e.name="x"+d),this._x=new a.Variable(e)}if(c instanceof a.Variable)this._y=c;else{var f={value:c};d&&(f.name="y"+d),this._y=new a.Variable(f)}},get x(){return this._x},set x(b){b instanceof a.Variable?this._x=b:this._x.value=b},get y(){return this._y},set y(b){b instanceof a.Variable?this._y=b:this._y.value=b},toString:function(){return"("+this.x+", "+this.y+")"}})}(this.c||module.parent.exports||{}),function(a){var b=function(a,b){return"number"==typeof a?a:b};a.Expression=a.inherit({initialize:function(c,d,e){this.constant=b(e,0),this.terms=new a.HashTable,c instanceof a.AbstractVariable?(d=b(d,1),this.setVariable(c,d)):"number"==typeof c&&(isNaN(c)?console.trace():this.constant=c)},initializeFromHash:function(b,c){return a.verbose&&(console.log("*******************************"),console.log("clone c.initializeFromHash"),console.log("*******************************")),a.GC&&console.log("clone c.Expression"),this.constant=b,this.terms=c.clone(),this},multiplyMe:function(a){this.constant*=a;var b=this.terms;return b.each(function(c,d){b.set(c,d*a)}),this},clone:function(){a.verbose&&(console.log("*******************************"),console.log("clone c.Expression"),console.log("*******************************"));var b=a.Expression.empty();return b.initializeFromHash(this.constant,this.terms),b},times:function(b){if("number"==typeof b)return this.clone().multiplyMe(b);if(this.isConstant)return b.times(this.constant);if(b.isConstant)return this.times(b.constant);throw new a.NonExpression},plus:function(b){return b instanceof a.Expression?this.clone().addExpression(b,1):b instanceof a.Variable?this.clone().addVariable(b,1):void 0},minus:function(b){return b instanceof a.Expression?this.clone().addExpression(b,-1):b instanceof a.Variable?this.clone().addVariable(b,-1):void 0},divide:function(b){if("number"==typeof b){if(a.approx(b,0))throw new a.NonExpression;return this.times(1/b)}if(b instanceof a.Expression){if(!b.isConstant)throw new a.NonExpression;return this.times(1/b.constant)}},addExpression:function(c,d,e,f){return c instanceof a.AbstractVariable&&(c=a.Expression.fromVariable(c)),d=b(d,1),this.constant+=d*c.constant,c.terms.each(function(a,b){this.addVariable(a,b*d,e,f)},this),this},addVariable:function(b,c,d,e){null==c&&(c=1);var f=this.terms.get(b);if(f){var g=f+c;0==g||a.approx(g,0)?(e&&e.noteRemovedVariable(b,d),this.terms.delete(b)):this.setVariable(b,g)}else a.approx(c,0)||(this.setVariable(b,c),e&&e.noteAddedVariable(b,d));return this},setVariable:function(a,b){return this.terms.set(a,b),this},anyPivotableVariable:function(){if(this.isConstant)throw new a.InternalError("anyPivotableVariable called on a constant");var b=this.terms.escapingEach(function(a){return a.isPivotable?{retval:a}:void 0});return b&&void 0!==b.retval?b.retval:null},substituteOut:function(b,c,d,e){this.setVariable.bind(this);var g=this.terms,h=g.get(b);g.delete(b),this.constant+=h*c.constant,c.terms.each(function(b,c){var f=g.get(b);if(f){var i=f+h*c;a.approx(i,0)?(e.noteRemovedVariable(b,d),g.delete(b)):g.set(b,i)}else g.set(b,h*c),e&&e.noteAddedVariable(b,d)})},changeSubject:function(a,b){this.setVariable(a,this.newSubject(b))},newSubject:function(a){var b=1/this.terms.get(a);return this.terms.delete(a),this.multiplyMe(-b),b},coefficientFor:function(a){return this.terms.get(a)||0},get isConstant(){return 0==this.terms.size},toString:function(){var b="",c=!1;if(!a.approx(this.constant,0)||this.isConstant){if(b+=this.constant,this.isConstant)return b;c=!0}return this.terms.each(function(a,d){c&&(b+=" + "),b+=d+"*"+a.toString(),c=!0}),b},equals:function(b){return b===this?!0:b instanceof a.Expression&&b.constant===this.constant&&b.terms.equals(this.terms)},Plus:function(a,b){return a.plus(b)},Minus:function(a,b){return a.minus(b)},Times:function(a,b){return a.times(b)},Divide:function(a,b){return a.divide(b)}}),a.Expression.empty=function(){return new a.Expression(void 0,1,0)},a.Expression.fromConstant=function(b){return new a.Expression(b)},a.Expression.fromValue=function(b){return b=+b,new a.Expression(void 0,b,0)},a.Expression.fromVariable=function(b){return new a.Expression(b,1,0)}}(this.c||module.parent.exports||{}),function(a){a.AbstractConstraint=a.inherit({initialize:function(b,c){this.hashCode=a._inc(),this.strength=b||a.Strength.required,this.weight=c||1},isEditConstraint:!1,isInequality:!1,isStayConstraint:!1,get required(){return this.strength===a.Strength.required},toString:function(){return this.strength+" {"+this.weight+"} ("+this.expression+")"}});var b=a.AbstractConstraint.prototype.toString,c=function(b,c,d){a.AbstractConstraint.call(this,c||a.Strength.strong,d),this.variable=b,this.expression=new a.Expression(b,-1,b.value)};a.EditConstraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(){c.apply(this,arguments)},isEditConstraint:!0,toString:function(){return"edit:"+b.call(this)}}),a.StayConstraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(){c.apply(this,arguments)},isStayConstraint:!0,toString:function(){return"stay:"+b.call(this)}});var d=a.Constraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(b,c,d){a.AbstractConstraint.call(this,c,d),this.expression=b}});a.Inequality=a.inherit({"extends":a.Constraint,_cloneOrNewCle:function(b){return b.clone?b.clone():new a.Expression(b)},initialize:function(b,c,e,f,g){var h=b instanceof a.Expression,i=e instanceof a.Expression,j=b instanceof a.AbstractVariable,k=e instanceof a.AbstractVariable,l="number"==typeof b,m="number"==typeof e;if((h||l)&&k){var n=b,o=c,p=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(n),q,r),o==a.LEQ)this.expression.multiplyMe(-1),this.expression.addVariable(p);else{if(o!=a.GEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addVariable(p,-1)}}else if(j&&(i||m)){var n=e,o=c,p=b,q=f,r=g;if(d.call(this,this._cloneOrNewCle(n),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addVariable(p);else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addVariable(p,-1)}}else{if(h&&m){var s=b,o=c,t=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(s),q,r),o==a.LEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(t));else{if(o!=a.GEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(t),-1)}return this}if(l&&i){var s=e,o=c,t=b,q=f,r=g;if(d.call(this,this._cloneOrNewCle(s),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(t));else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(t),-1)}return this}if(h&&i){var s=b,o=c,t=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(t),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(s));else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(s),-1)}}else{if(h)return d.call(this,b,c,e);if(c==a.GEQ)d.call(this,new a.Expression(e),f,g),this.expression.multiplyMe(-1),this.expression.addVariable(b);else{if(c!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");d.call(this,new a.Expression(e),f,g),this.expression.addVariable(b,-1)}}}},isInequality:!0,toString:function(){return d.prototype.toString.call(this)+" >= 0) id: "+this.hashCode}}),a.Equation=a.inherit({"extends":a.Constraint,initialize:function(b,c,e,f){if(b instanceof a.Expression&&!c||c instanceof a.Strength)d.call(this,b,c,e);else if(b instanceof a.AbstractVariable&&c instanceof a.Expression){var g=b,h=c,i=e,j=f;d.call(this,h.clone(),i,j),this.expression.addVariable(g,-1)}else if(b instanceof a.AbstractVariable&&"number"==typeof c){var g=b,k=c,i=e,j=f;d.call(this,new a.Expression(k),i,j),this.expression.addVariable(g,-1)}else if(b instanceof a.Expression&&c instanceof a.AbstractVariable){var h=b,g=c,i=e,j=f;d.call(this,h.clone(),i,j),this.expression.addVariable(g,-1)}else{if(!(b instanceof a.Expression||b instanceof a.AbstractVariable||"number"==typeof b)||!(c instanceof a.Expression||c instanceof a.AbstractVariable||"number"==typeof c))throw"Bad initializer to c.Equation";b=b instanceof a.Expression?b.clone():new a.Expression(b),c=c instanceof a.Expression?c.clone():new a.Expression(c),d.call(this,b,e,f),this.expression.addExpression(c,-1)}a.assert(this.strength instanceof a.Strength,"_strength not set")},toString:function(){return d.prototype.toString.call(this)+" = 0)"}})}(this.c||module.parent.exports||{}),function(a){a.EditInfo=a.inherit({initialize:function(a,b,c,d,e){this.constraint=a,this.editPlus=b,this.editMinus=c,this.prevEditConstant=d,this.index=e},toString:function(){return"<cn="+this.constraint+", ep="+this.editPlus+", em="+this.editMinus+", pec="+this.prevEditConstant+", index="+this.index+">"}})}(this.c||module.parent.exports||{}),function(a){a.Tableau=a.inherit({initialize:function(){this.columns=new a.HashTable,this.rows=new a.HashTable,this._infeasibleRows=new a.HashSet,this._externalRows=new a.HashSet,this._externalParametricVars=new a.HashSet},noteRemovedVariable:function(b,c){a.trace&&console.log("c.Tableau::noteRemovedVariable: ",b,c);var d=this.columns.get(b);c&&d&&d.delete(c)},noteAddedVariable:function(a,b){b&&this.insertColVar(a,b)},getInternalInfo:function(){var a="Tableau Information:\n";return a+="Rows: "+this.rows.size,a+=" (= "+(this.rows.size-1)+" constraints)",a+="\nColumns: "+this.columns.size,a+="\nInfeasible Rows: "+this._infeasibleRows.size,a+="\nExternal basic variables: "+this._externalRows.size,a+="\nExternal parametric variables: ",a+=this._externalParametricVars.size,a+="\n"},toString:function(){var a="Tableau:\n";return this.rows.each(function(b,c){a+=b,a+=" <==> ",a+=c,a+="\n"}),a+="\nColumns:\n",a+=this.columns,a+="\nInfeasible rows: ",a+=this._infeasibleRows,a+="External basic variables: ",a+=this._externalRows,a+="External parametric variables: ",a+=this._externalParametricVars},insertColVar:function(b,c){var d=this.columns.get(b);d||(d=new a.HashSet,this.columns.set(b,d)),d.add(c)},addRow:function(b,c){a.trace&&a.fnenterprint("addRow: "+b+", "+c),this.rows.set(b,c),c.terms.each(function(a){this.insertColVar(a,b),a.isExternal&&this._externalParametricVars.add(a)},this),b.isExternal&&this._externalRows.add(b),a.trace&&a.traceprint(this.toString())},removeColumn:function(b){a.trace&&a.fnenterprint("removeColumn:"+b);var c=this.columns.get(b);c?(this.columns.delete(b),c.each(function(a){var c=this.rows.get(a);c.terms.delete(b)},this)):a.trace&&console.log("Could not find var",b,"in columns"),b.isExternal&&(this._externalRows.delete(b),this._externalParametricVars.delete(b))},removeRow:function(b){a.trace&&a.fnenterprint("removeRow:"+b);var c=this.rows.get(b);return a.assert(null!=c),c.terms.each(function(c){var e=this.columns.get(c);null!=e&&(a.trace&&console.log("removing from varset:",b),e.delete(b))},this),this._infeasibleRows.delete(b),b.isExternal&&this._externalRows.delete(b),this.rows.delete(b),a.trace&&a.fnexitprint("returning "+c),c},substituteOut:function(b,c){a.trace&&a.fnenterprint("substituteOut:"+b+", "+c),a.trace&&a.traceprint(this.toString());var d=this.columns.get(b);d.each(function(a){var d=this.rows.get(a);d.substituteOut(b,c,a,this),a.isRestricted&&d.constant<0&&this._infeasibleRows.add(a)},this),b.isExternal&&(this._externalRows.add(b),this._externalParametricVars.delete(b)),this.columns.delete(b)},columnsHasKey:function(a){return!!this.columns.get(a)}})}(this.c||module.parent.exports||{}),function(a){var b=a.Tableau,c=b.prototype,d=1e-8,e=a.Strength.weak;a.SimplexSolver=a.inherit({"extends":a.Tableau,initialize:function(){a.Tableau.call(this),this._stayMinusErrorVars=[],this._stayPlusErrorVars=[],this._errorVars=new a.HashTable,this._markerVars=new a.HashTable,this._objective=new a.ObjectiveVariable({name:"Z"}),this._editVarMap=new a.HashTable,this._editVarList=[],this._slackCounter=0,this._artificialCounter=0,this._dummyCounter=0,this.autoSolve=!0,this._needsSolving=!1,this._optimizeCount=0,this.rows.set(this._objective,a.Expression.empty()),this._editVariableStack=[0],a.trace&&a.traceprint("objective expr == "+this.rows.get(this._objective))},add:function(){for(var a=0;a<arguments.length;a++)this.addConstraint(arguments[a]);return this},_addEditConstraint:function(b,c,d){var e=this._editVarMap.size,f=c[0],g=c[1],h=new a.EditInfo(b,f,g,d,e);this._editVarMap.set(b.variable,h),this._editVarList[e]={v:b.variable,info:h}},addConstraint:function(b){a.trace&&a.fnenterprint("addConstraint: "+b);var c=new Array(2),d=new Array(1),e=this.newExpression(b,c,d);return d=d[0],this.tryAddingDirectly(e)||this.addWithArtificialVariable(e),this._needsSolving=!0,b.isEditConstraint&&this._addEditConstraint(b,c,d),this.autoSolve&&(this.optimize(this._objective),this._setExternalVariables()),this},addConstraintNoException:function(b){a.trace&&a.fnenterprint("addConstraintNoException: "+b);try{return this.addConstraint(b),!0}catch(c){return!1}},addEditVar:function(b,c,d){return a.trace&&a.fnenterprint("addEditVar: "+b+" @ "+c+" {"+d+"}"),this.addConstraint(new a.EditConstraint(b,c||a.Strength.strong,d))},beginEdit:function(){return a.assert(this._editVarMap.size>0,"_editVarMap.size > 0"),this._infeasibleRows.clear(),this._resetStayConstants(),this._editVariableStack[this._editVariableStack.length]=this._editVarMap.size,this},endEdit:function(){return a.assert(this._editVarMap.size>0,"_editVarMap.size > 0"),this.resolve(),this._editVariableStack.pop(),this.removeEditVarsTo(this._editVariableStack[this._editVariableStack.length-1]),this},removeAllEditVars:function(){return this.removeEditVarsTo(0)},removeEditVarsTo:function(b){try{for(var c=this._editVarList.length,d=b;c>d;d++)this._editVarList[d]&&this.removeConstraint(this._editVarMap.get(this._editVarList[d].v).constraint);return this._editVarList.length=b,a.assert(this._editVarMap.size==b,"_editVarMap.size == n"),this}catch(e){throw new a.InternalError("Constraint not found in removeEditVarsTo")}},addPointStays:function(b){return a.trace&&console.log("addPointStays",b),b.forEach(function(a,b){this.addStay(a.x,e,Math.pow(2,b)),this.addStay(a.y,e,Math.pow(2,b))},this),this},addStay:function(b,c,d){var f=new a.StayConstraint(b,c||e,d||1);return this.addConstraint(f)},removeConstraint:function(b){a.trace&&a.fnenterprint("removeConstraintInternal: "+b),a.trace&&a.traceprint(this.toString()),this._needsSolving=!0,this._resetStayConstants();var c=this.rows.get(this._objective),d=this._errorVars.get(b);a.trace&&a.traceprint("eVars == "+d),null!=d&&d.each(function(e){var f=this.rows.get(e);null==f?c.addVariable(e,-b.weight*b.strength.symbolicWeight.value,this._objective,this):c.addExpression(f,-b.weight*b.strength.symbolicWeight.value,this._objective,this),a.trace&&a.traceprint("now eVars == "+d)},this);var e=this._markerVars.get(b);if(this._markerVars.delete(b),null==e)throw new a.InternalError("Constraint not found in removeConstraintInternal");if(a.trace&&a.traceprint("Looking to remove var "+e),null==this.rows.get(e)){var f=this.columns.get(e);a.trace&&a.traceprint("Must pivot -- columns are "+f);var g=null,h=0;f.each(function(b){if(b.isRestricted){var c=this.rows.get(b),d=c.coefficientFor(e);if(a.trace&&a.traceprint("Marker "+e+"'s coefficient in "+c+" is "+d),0>d){var f=-c.constant/d;(null==g||h>f||a.approx(f,h)&&b.hashCode<g.hashCode)&&(h=f,g=b)}}},this),null==g&&(a.trace&&a.traceprint("exitVar is still null"),f.each(function(a){if(a.isRestricted){var b=this.rows.get(a),c=b.coefficientFor(e),d=b.constant/c;(null==g||h>d)&&(h=d,g=a)}},this)),null==g&&(0==f.size?this.removeColumn(e):f.escapingEach(function(a){return a!=this._objective?(g=a,{brk:!0}):void 0},this)),null!=g&&this.pivot(e,g)}if(null!=this.rows.get(e)&&this.removeRow(e),null!=d&&d.each(function(a){a!=e&&this.removeColumn(a)},this),b.isStayConstraint){if(null!=d)for(var j=0;j<this._stayPlusErrorVars.length;j++)d.delete(this._stayPlusErrorVars[j]),d.delete(this._stayMinusErrorVars[j])}else if(b.isEditConstraint){a.assert(null!=d,"eVars != null");var k=this._editVarMap.get(b.variable);this.removeColumn(k.editMinus),this._editVarMap.delete(b.variable)}return null!=d&&this._errorVars.delete(d),this.autoSolve&&(this.optimize(this._objective),this._setExternalVariables()),this},reset:function(){throw a.trace&&a.fnenterprint("reset"),new a.InternalError("reset not implemented")},resolveArray:function(b){a.trace&&a.fnenterprint("resolveArray"+b);var c=b.length;this._editVarMap.each(function(a,d){var e=d.index;c>e&&this.suggestValue(a,b[e])},this),this.resolve()},resolvePair:function(a,b){this.suggestValue(this._editVarList[0].v,a),this.suggestValue(this._editVarList[1].v,b),this.resolve()},resolve:function(){a.trace&&a.fnenterprint("resolve()"),this.dualOptimize(),this._setExternalVariables(),this._infeasibleRows.clear(),this._resetStayConstants()},suggestValue:function(b,c){a.trace&&console.log("suggestValue("+b+", "+c+")");var d=this._editVarMap.get(b);if(!d)throw new a.Error("suggestValue for variable "+b+", but var is not an edit variable");var e=c-d.prevEditConstant;return d.prevEditConstant=c,this.deltaEditConstant(e,d.editPlus,d.editMinus),this},solve:function(){return this._needsSolving&&(this.optimize(this._objective),this._setExternalVariables()),this},setEditedValue:function(b,c){if(!this.columnsHasKey(b)&&null==this.rows.get(b))return b.value=c,this;if(!a.approx(c,b.value)){this.addEditVar(b),this.beginEdit();try{this.suggestValue(b,c)}catch(d){throw new a.InternalError("Error in setEditedValue")}this.endEdit()}return this},addVar:function(b){if(!this.columnsHasKey(b)&&null==this.rows.get(b)){try{this.addStay(b)}catch(c){throw new a.InternalError("Error in addVar -- required failure is impossible")}a.trace&&a.traceprint("added initial stay on "+b)}return this},getInternalInfo:function(){var a=c.getInternalInfo.call(this);return a+="\nSolver info:\n",a+="Stay Error Variables: ",a+=this._stayPlusErrorVars.length+this._stayMinusErrorVars.length,a+=" ("+this._stayPlusErrorVars.length+" +, ",a+=this._stayMinusErrorVars.length+" -)\n",a+="Edit Variables: "+this._editVarMap.size,a+="\n"},getDebugInfo:function(){return this.toString()+this.getInternalInfo()+"\n"},toString:function(){var a=c.getInternalInfo.call(this);return a+="\n_stayPlusErrorVars: ",a+="["+this._stayPlusErrorVars+"]",a+="\n_stayMinusErrorVars: ",a+="["+this._stayMinusErrorVars+"]",a+="\n",a+="_editVarMap:\n"+this._editVarMap,a+="\n"},addWithArtificialVariable:function(b){a.trace&&a.fnenterprint("addWithArtificialVariable: "+b);var c=new a.SlackVariable({value:++this._artificialCounter,prefix:"a"}),d=new a.ObjectiveVariable({name:"az"}),e=b.clone();a.trace&&a.traceprint("before addRows:\n"+this),this.addRow(d,e),this.addRow(c,b),a.trace&&a.traceprint("after addRows:\n"+this),this.optimize(d);var f=this.rows.get(d);if(a.trace&&a.traceprint("azTableauRow.constant == "+f.constant),!a.approx(f.constant,0))throw this.removeRow(d),this.removeColumn(c),new a.RequiredFailure;var g=this.rows.get(c);if(null!=g){if(g.isConstant)return this.removeRow(c),this.removeRow(d),void 0;var h=g.anyPivotableVariable();this.pivot(h,c)}a.assert(null==this.rows.get(c),"rowExpression(av) == null"),this.removeColumn(c),this.removeRow(d)},tryAddingDirectly:function(b){a.trace&&a.fnenterprint("tryAddingDirectly: "+b);var c=this.chooseSubject(b);return null==c?(a.trace&&a.fnexitprint("returning false"),!1):(b.newSubject(c),this.columnsHasKey(c)&&this.substituteOut(c,b),this.addRow(c,b),a.trace&&a.fnexitprint("returning true"),!0)},chooseSubject:function(b){a.trace&&a.fnenterprint("chooseSubject: "+b);var c=null,d=!1,e=!1,f=b.terms,g=f.escapingEach(function(a,b){if(d){if(!a.isRestricted&&!this.columnsHasKey(a))return{retval:a}}else if(a.isRestricted){if(!e&&!a.isDummy&&0>b){var f=this.columns.get(a);(null==f||1==f.size&&this.columnsHasKey(this._objective))&&(c=a,e=!0)}}else c=a,d=!0},this);if(g&&void 0!==g.retval)return g.retval;if(null!=c)return c;var h=0,g=f.escapingEach(function(a,b){return a.isDummy?(this.columnsHasKey(a)||(c=a,h=b),void 0):{retval:null}},this);if(g&&void 0!==g.retval)return g.retval;if(!a.approx(b.constant,0))throw new a.RequiredFailure;return h>0&&b.multiplyMe(-1),c},deltaEditConstant:function(b,c,d){a.trace&&a.fnenterprint("deltaEditConstant :"+b+", "+c+", "+d);var e=this.rows.get(c);if(null!=e)return e.constant+=b,e.constant<0&&this._infeasibleRows.add(c),void 0;var f=this.rows.get(d);if(null!=f)return f.constant+=-b,f.constant<0&&this._infeasibleRows.add(d),void 0;var g=this.columns.get(d);g||console.log("columnVars is null -- tableau is:\n"+this),g.each(function(a){var c=this.rows.get(a),e=c.coefficientFor(d);c.constant+=e*b,a.isRestricted&&c.constant<0&&this._infeasibleRows.add(a)},this)},dualOptimize:function(){a.trace&&a.fnenterprint("dualOptimize:");for(var b=this.rows.get(this._objective);this._infeasibleRows.size;){var c=this._infeasibleRows.values()[0];this._infeasibleRows.delete(c);var d=null,e=this.rows.get(c);if(e&&e.constant<0){var g,f=Number.MAX_VALUE,h=e.terms;if(h.each(function(c,e){if(e>0&&c.isPivotable){var h=b.coefficientFor(c);g=h/e,(f>g||a.approx(g,f)&&c.hashCode<d.hashCode)&&(d=c,f=g)}}),f==Number.MAX_VALUE)throw new a.InternalError("ratio == nil (MAX_VALUE) in dualOptimize");this.pivot(d,c)}}},newExpression:function(b,c,d){a.trace&&(a.fnenterprint("newExpression: "+b),a.traceprint("cn.isInequality == "+b.isInequality),a.traceprint("cn.required == "+b.required));var e=b.expression,f=a.Expression.fromConstant(e.constant),g=new a.SlackVariable,h=new a.DummyVariable,i=new a.SlackVariable,j=new a.SlackVariable,k=e.terms;if(k.each(function(a,b){var c=this.rows.get(a);c?f.addExpression(c,b):f.addVariable(a,b)},this),b.isInequality){if(a.trace&&a.traceprint("Inequality, adding slack"),++this._slackCounter,g=new a.SlackVariable({value:this._slackCounter,prefix:"s"}),f.setVariable(g,-1),this._markerVars.set(b,g),!b.required){++this._slackCounter,i=new a.SlackVariable({value:this._slackCounter,prefix:"em"}),f.setVariable(i,1);var l=this.rows.get(this._objective);l.setVariable(i,b.strength.symbolicWeight.value*b.weight),this.insertErrorVar(b,i),this.noteAddedVariable(i,this._objective)}}else if(b.required)a.trace&&a.traceprint("Equality, required"),++this._dummyCounter,h=new a.DummyVariable({value:this._dummyCounter,prefix:"d"}),c[0]=h,c[1]=h,d[0]=e.constant,f.setVariable(h,1),this._markerVars.set(b,h),a.trace&&a.traceprint("Adding dummyVar == d"+this._dummyCounter);else{a.trace&&a.traceprint("Equality, not required"),++this._slackCounter,j=new a.SlackVariable({value:this._slackCounter,prefix:"ep"}),i=new a.SlackVariable({value:this._slackCounter,prefix:"em"}),f.setVariable(j,-1),f.setVariable(i,1),this._markerVars.set(b,j);
-var l=this.rows.get(this._objective);a.trace&&console.log(l);var m=b.strength.symbolicWeight.value*b.weight;0==m&&(a.trace&&a.traceprint("cn == "+b),a.trace&&a.traceprint("adding "+j+" and "+i+" with swCoeff == "+m)),l.setVariable(j,m),this.noteAddedVariable(j,this._objective),l.setVariable(i,m),this.noteAddedVariable(i,this._objective),this.insertErrorVar(b,i),this.insertErrorVar(b,j),b.isStayConstraint?(this._stayPlusErrorVars[this._stayPlusErrorVars.length]=j,this._stayMinusErrorVars[this._stayMinusErrorVars.length]=i):b.isEditConstraint&&(c[0]=j,c[1]=i,d[0]=e.constant)}return f.constant<0&&f.multiplyMe(-1),a.trace&&a.fnexitprint("returning "+f),f},optimize:function(b){a.trace&&a.fnenterprint("optimize: "+b),a.trace&&a.traceprint(this.toString()),this._optimizeCount++;var c=this.rows.get(b);a.assert(null!=c,"zRow != null");for(var g,h,e=null,f=null;;){if(g=0,h=c.terms,h.escapingEach(function(a,b){return a.isPivotable&&g>b?(g=b,e=a,{brk:1}):void 0},this),g>=-d)return;a.trace&&console.log("entryVar:",e,"objectiveCoeff:",g);var i=Number.MAX_VALUE,j=this.columns.get(e),k=0;if(j.each(function(b){if(a.trace&&a.traceprint("Checking "+b),b.isPivotable){var c=this.rows.get(b),d=c.coefficientFor(e);a.trace&&a.traceprint("pivotable, coeff = "+d),0>d&&(k=-c.constant/d,(i>k||a.approx(k,i)&&b.hashCode<f.hashCode)&&(i=k,f=b))}},this),i==Number.MAX_VALUE)throw new a.InternalError("Objective function is unbounded in optimize");this.pivot(e,f),a.trace&&a.traceprint(this.toString())}},pivot:function(b,c){a.trace&&console.log("pivot: ",b,c);var d=!1;d&&console.time(" SimplexSolver::pivot"),null==b&&console.warn("pivot: entryVar == null"),null==c&&console.warn("pivot: exitVar == null"),d&&console.time("  removeRow");var e=this.removeRow(c);d&&console.timeEnd("  removeRow"),d&&console.time("  changeSubject"),e.changeSubject(c,b),d&&console.timeEnd("  changeSubject"),d&&console.time("  substituteOut"),this.substituteOut(b,e),d&&console.timeEnd("  substituteOut"),d&&console.time("  addRow"),this.addRow(b,e),d&&console.timeEnd("  addRow"),d&&console.timeEnd(" SimplexSolver::pivot")},_resetStayConstants:function(){a.trace&&console.log("_resetStayConstants");for(var b=this._stayPlusErrorVars,c=b.length,d=0;c>d;d++){var e=this.rows.get(b[d]);null===e&&(e=this.rows.get(this._stayMinusErrorVars[d])),null!=e&&(e.constant=0)}},_setExternalVariables:function(){a.trace&&a.fnenterprint("_setExternalVariables:"),a.trace&&a.traceprint(this.toString());var b={};this._externalParametricVars.each(function(c){null!=this.rows.get(c)?a.trace&&console.log("Error: variable"+c+" in _externalParametricVars is basic"):(c.value=0,this.onvaluechange(c,b))},this),this._externalRows.each(function(a){var c=this.rows.get(a).constant;a.value!=c&&(a.value=c,this.onvaluechange(a,b))},this),this._needsSolving=!1,this.onsolved(b)},onsolved:function(){},onvaluechange:function(){},_informCallbacks:function(){if(this._callbacks){var a=this._changed;this._callbacks.forEach(function(b){b(a)})}},_addCallback:function(a){var b=this._callbacks||(this._callbacks=[]);b[b.length]=a},insertErrorVar:function(b,c){a.trace&&a.fnenterprint("insertErrorVar:"+b+", "+c);var d=this._errorVars.get(c);d||(d=new a.HashSet,this._errorVars.set(b,d)),d.add(c)}})}(this.c||module.parent.exports||{}),function(a){a.Timer=a.inherit({initialize:function(){this.isRunning=!1,this._elapsedMs=0},start:function(){return this.isRunning=!0,this._startReading=new Date,this},stop:function(){return this.isRunning=!1,this._elapsedMs+=new Date-this._startReading,this},reset:function(){return this.isRunning=!1,this._elapsedMs=0,this},elapsedTime:function(){return this.isRunning?(this._elapsedMs+(new Date-this._startReading))/1e3:this._elapsedMs/1e3}})}(this.c||module.parent.exports||{}),this.c.parser=function(){function a(a){return'"'+a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\x08/g,"\\b").replace(/\t/g,"\\t").replace(/\n/g,"\\n").replace(/\f/g,"\\f").replace(/\r/g,"\\r").replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g,escape)+'"'}var b={parse:function(b,c){function k(a){g>e||(e>g&&(g=e,h=[]),h.push(a))}function l(){var a,b,c,d,f;if(d=e,f=e,a=z(),null!==a){for(b=[],c=m();null!==c;)b.push(c),c=m();null!==b?(c=z(),null!==c?a=[a,b,c]:(a=null,e=f)):(a=null,e=f)}else a=null,e=f;return null!==a&&(a=function(a,b){return b}(d,a[1])),null===a&&(e=d),a}function m(){var a,b,c,d;return c=e,d=e,a=P(),null!==a?(b=s(),null!==b?a=[a,b]:(a=null,e=d)):(a=null,e=d),null!==a&&(a=function(a,b){return b}(c,a[0])),null===a&&(e=c),a}function n(){var a;return b.length>e?(a=b.charAt(e),e++):(a=null,0===f&&k("any character")),a}function o(){var a;return/^[a-zA-Z]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[a-zA-Z]")),null===a&&(36===b.charCodeAt(e)?(a="$",e++):(a=null,0===f&&k('"$"')),null===a&&(95===b.charCodeAt(e)?(a="_",e++):(a=null,0===f&&k('"_"')))),a}function p(){var a;return f++,/^[\t\x0B\f \xA0\uFEFF]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\t\\x0B\\f \\xA0\\uFEFF]")),f--,0===f&&null===a&&k("whitespace"),a}function q(){var a;return/^[\n\r\u2028\u2029]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\n\\r\\u2028\\u2029]")),a}function r(){var a;return f++,10===b.charCodeAt(e)?(a="\n",e++):(a=null,0===f&&k('"\\n"')),null===a&&("\r\n"===b.substr(e,2)?(a="\r\n",e+=2):(a=null,0===f&&k('"\\r\\n"')),null===a&&(13===b.charCodeAt(e)?(a="\r",e++):(a=null,0===f&&k('"\\r"')),null===a&&(8232===b.charCodeAt(e)?(a="\u2028",e++):(a=null,0===f&&k('"\\u2028"')),null===a&&(8233===b.charCodeAt(e)?(a="\u2029",e++):(a=null,0===f&&k('"\\u2029"')))))),f--,0===f&&null===a&&k("end of line"),a}function s(){var a,c,d;return d=e,a=z(),null!==a?(59===b.charCodeAt(e)?(c=";",e++):(c=null,0===f&&k('";"')),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d),null===a&&(d=e,a=y(),null!==a?(c=r(),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d),null===a&&(d=e,a=z(),null!==a?(c=t(),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d))),a}function t(){var a,c;return c=e,f++,b.length>e?(a=b.charAt(e),e++):(a=null,0===f&&k("any character")),f--,null===a?a="":(a=null,e=c),a}function u(){var a;return f++,a=v(),null===a&&(a=x()),f--,0===f&&null===a&&k("comment"),a}function v(){var a,c,d,g,h,i,j;if(h=e,"/*"===b.substr(e,2)?(a="/*",e+=2):(a=null,0===f&&k('"/*"')),null!==a){for(c=[],i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?("*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function w(){var a,c,d,g,h,i,j;if(h=e,"/*"===b.substr(e,2)?(a="/*",e+=2):(a=null,0===f&&k('"/*"')),null!==a){for(c=[],i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null===d&&(d=q()),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null===d&&(d=q()),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?("*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function x(){var a,c,d,g,h,i,j;if(h=e,"//"===b.substr(e,2)?(a="//",e+=2):(a=null,0===f&&k('"//"')),null!==a){for(c=[],i=e,j=e,f++,d=q(),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,d=q(),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?(d=q(),null===d&&(d=t()),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function y(){var a,b;for(a=[],b=p(),null===b&&(b=w(),null===b&&(b=x()));null!==b;)a.push(b),b=p(),null===b&&(b=w(),null===b&&(b=x()));return a}function z(){var a,b;for(a=[],b=p(),null===b&&(b=r(),null===b&&(b=u()));null!==b;)a.push(b),b=p(),null===b&&(b=r(),null===b&&(b=u()));return a}function A(){var a,b;return b=e,a=C(),null===a&&(a=B()),null!==a&&(a=function(a,b){return{type:"NumericLiteral",value:b}}(b,a)),null===a&&(e=b),a}function B(){var a,c,d;if(d=e,/^[0-9]/.test(b.charAt(e))?(c=b.charAt(e),e++):(c=null,0===f&&k("[0-9]")),null!==c)for(a=[];null!==c;)a.push(c),/^[0-9]/.test(b.charAt(e))?(c=b.charAt(e),e++):(c=null,0===f&&k("[0-9]"));else a=null;return null!==a&&(a=function(a,b){return parseInt(b.join(""))}(d,a)),null===a&&(e=d),a}function C(){var a,c,d,g,h;return g=e,h=e,a=B(),null!==a?(46===b.charCodeAt(e)?(c=".",e++):(c=null,0===f&&k('"."')),null!==c?(d=B(),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)):(a=null,e=h),null!==a&&(a=function(a,b){return parseFloat(b.join(""))}(g,a)),null===a&&(e=g),a}function D(){var a,c,d,g;if(g=e,/^[\-+]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\-+]")),a=null!==a?a:"",null!==a){if(/^[0-9]/.test(b.charAt(e))?(d=b.charAt(e),e++):(d=null,0===f&&k("[0-9]")),null!==d)for(c=[];null!==d;)c.push(d),/^[0-9]/.test(b.charAt(e))?(d=b.charAt(e),e++):(d=null,0===f&&k("[0-9]"));else c=null;null!==c?a=[a,c]:(a=null,e=g)}else a=null,e=g;return a}function E(){var a,b;return f++,b=e,a=F(),null!==a&&(a=function(a,b){return b}(b,a)),null===a&&(e=b),f--,0===f&&null===a&&k("identifier"),a}function F(){var a,b,c,d,g;if(f++,d=e,g=e,a=o(),null!==a){for(b=[],c=o();null!==c;)b.push(c),c=o();null!==b?a=[a,b]:(a=null,e=g)}else a=null,e=g;return null!==a&&(a=function(a,b,c){return b+c.join("")}(d,a[0],a[1])),null===a&&(e=d),f--,0===f&&null===a&&k("identifier"),a}function G(){var a,c,d,g,h,i,j;return i=e,a=E(),null!==a&&(a=function(a,b){return{type:"Variable",name:b}}(i,a)),null===a&&(e=i),null===a&&(a=A(),null===a&&(i=e,j=e,40===b.charCodeAt(e)?(a="(",e++):(a=null,0===f&&k('"("')),null!==a?(c=z(),null!==c?(d=P(),null!==d?(g=z(),null!==g?(41===b.charCodeAt(e)?(h=")",e++):(h=null,0===f&&k('")"')),null!==h?a=[a,c,d,g,h]:(a=null,e=j)):(a=null,e=j)):(a=null,e=j)):(a=null,e=j)):(a=null,e=j),null!==a&&(a=function(a,b){return b}(i,a[2])),null===a&&(e=i))),a}function H(){var a,b,c,d,f;return a=G(),null===a&&(d=e,f=e,a=I(),null!==a?(b=z(),null!==b?(c=H(),null!==c?a=[a,b,c]:(a=null,e=f)):(a=null,e=f)):(a=null,e=f),null!==a&&(a=function(a,b,c){return{type:"UnaryExpression",operator:b,expression:c}}(d,a[0],a[2])),null===a&&(e=d)),a}function I(){var a;return 43===b.charCodeAt(e)?(a="+",e++):(a=null,0===f&&k('"+"')),null===a&&(45===b.charCodeAt(e)?(a="-",e++):(a=null,0===f&&k('"-"')),null===a&&(33===b.charCodeAt(e)?(a="!",e++):(a=null,0===f&&k('"!"')))),a}function J(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=H(),null!==a){for(b=[],j=e,c=z(),null!==c?(d=K(),null!==d?(f=z(),null!==f?(g=H(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=z(),null!==c?(d=K(),null!==d?(f=z(),null!==f?(g=H(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"MultiplicativeExpression",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function K(){var a;return 42===b.charCodeAt(e)?(a="*",e++):(a=null,0===f&&k('"*"')),null===a&&(47===b.charCodeAt(e)?(a="/",e++):(a=null,0===f&&k('"/"'))),a}function L(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=J(),null!==a){for(b=[],j=e,c=z(),null!==c?(d=M(),null!==d?(f=z(),null!==f?(g=J(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=z(),null!==c?(d=M(),null!==d?(f=z(),null!==f?(g=J(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"AdditiveExpression",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function M(){var a;return 43===b.charCodeAt(e)?(a="+",e++):(a=null,0===f&&k('"+"')),null===a&&(45===b.charCodeAt(e)?(a="-",e++):(a=null,0===f&&k('"-"'))),a}function N(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=L(),null!==a){for(b=[],j=e,c=z(),null!==c?(d=O(),null!==d?(f=z(),null!==f?(g=L(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=z(),null!==c?(d=O(),null!==d?(f=z(),null!==f?(g=L(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"Inequality",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function O(){var a;return"<="===b.substr(e,2)?(a="<=",e+=2):(a=null,0===f&&k('"<="')),null===a&&(">="===b.substr(e,2)?(a=">=",e+=2):(a=null,0===f&&k('">="')),null===a&&(60===b.charCodeAt(e)?(a="<",e++):(a=null,0===f&&k('"<"')),null===a&&(62===b.charCodeAt(e)?(a=">",e++):(a=null,0===f&&k('">"'))))),a}function P(){var a,c,d,g,h,i,j,l,m;if(j=e,l=e,a=N(),null!==a){for(c=[],m=e,d=z(),null!==d?("=="===b.substr(e,2)?(g="==",e+=2):(g=null,0===f&&k('"=="')),null!==g?(h=z(),null!==h?(i=N(),null!==i?d=[d,g,h,i]:(d=null,e=m)):(d=null,e=m)):(d=null,e=m)):(d=null,e=m);null!==d;)c.push(d),m=e,d=z(),null!==d?("=="===b.substr(e,2)?(g="==",e+=2):(g=null,0===f&&k('"=="')),null!==g?(h=z(),null!==h?(i=N(),null!==i?d=[d,g,h,i]:(d=null,e=m)):(d=null,e=m)):(d=null,e=m)):(d=null,e=m);null!==c?a=[a,c]:(a=null,e=l)}else a=null,e=l;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"Equality",operator:c[e][1],left:d,right:c[e][3]};return d}(j,a[0],a[1])),null===a&&(e=j),a}function Q(a){a.sort();for(var b=null,c=[],d=0;d<a.length;d++)a[d]!==b&&(c.push(a[d]),b=a[d]);return c}function R(){for(var a=1,c=1,d=!1,f=0;f<Math.max(e,g);f++){var h=b.charAt(f);"\n"===h?(d||a++,c=1,d=!1):"\r"===h||"\u2028"===h||"\u2029"===h?(a++,c=1,d=!0):(c++,d=!1)}return{line:a,column:c}}var d={start:l,Statement:m,SourceCharacter:n,IdentifierStart:o,WhiteSpace:p,LineTerminator:q,LineTerminatorSequence:r,EOS:s,EOF:t,Comment:u,MultiLineComment:v,MultiLineCommentNoLineTerminator:w,SingleLineComment:x,_:y,__:z,Literal:A,Integer:B,Real:C,SignedInteger:D,Identifier:E,IdentifierName:F,PrimaryExpression:G,UnaryExpression:H,UnaryOperator:I,MultiplicativeExpression:J,MultiplicativeOperator:K,AdditiveExpression:L,AdditiveOperator:M,InequalityExpression:N,InequalityOperator:O,LinearExpression:P};if(void 0!==c){if(void 0===d[c])throw new Error("Invalid rule name: "+a(c)+".")}else c="start";var e=0,f=0,g=0,h=[],S=d[c]();if(null===S||e!==b.length){var T=Math.max(e,g),U=T<b.length?b.charAt(T):null,V=R();throw new this.SyntaxError(Q(h),U,T,V.line,V.column)}return S},toSource:function(){return this._source}};return b.SyntaxError=function(b,c,d,e,f){function g(b,c){var d,e;switch(b.length){case 0:d="end of input";break;case 1:d=b[0];break;default:d=b.slice(0,b.length-1).join(", ")+" or "+b[b.length-1]}return e=c?a(c):"end of input","Expected "+d+" but "+e+" found."}this.name="SyntaxError",this.expected=b,this.found=c,this.message=g(b,c),this.offset=d,this.line=e,this.column=f},b.SyntaxError.prototype=Error.prototype,b}(),function(a){"use strict";var b=new a.SimplexSolver,c={},d={},e=a.Strength.weak;a.Strength.medium,a.Strength.strong,a.Strength.required;var i=function(f){if(d[f])return d[f];switch(f.type){case"Inequality":var g="<="==f.operator?a.LEQ:a.GEQ,h=new a.Inequality(i(f.left),g,i(f.right),e);return b.addConstraint(h),h;case"Equality":var h=new a.Equation(i(f.left),i(f.right),e);return b.addConstraint(h),h;case"MultiplicativeExpression":var h=a.times(i(f.left),i(f.right));return b.addConstraint(h),h;case"AdditiveExpression":return"+"==f.operator?a.plus(i(f.left),i(f.right)):a.minus(i(f.left),i(f.right));case"NumericLiteral":return new a.Expression(f.value);case"Variable":return c[f.name]||(c[f.name]=new a.Variable({name:f.name})),c[f.name];case"UnaryExpression":console.log("UnaryExpression...WTF?")}},j=function(a){return a.map(i)};a._api=function(){var c=Array.prototype.slice.call(arguments);if(1==c.length){if("string"==typeof c[0]){var d=a.parser.parse(c[0]);return j(d)}"function"==typeof c[0]&&b._addCallback(c[0])}}}(this.c||module.parent.exports||{});
-})();
-p;9;Engine.jst;14442;(function(){
-
-CPLayoutRelationLessThanOrEqual = -1;
-CPLayoutRelationEqual = 0;
-CPLayoutRelationGreaterThanOrEqual = 1;
-
-CPLayoutConstraintOrientationHorizontal = 0;
-CPLayoutConstraintOrientationVertical = 1;
-
-CPLayoutAttributeLeft       = 1;
-CPLayoutAttributeRight      = 2;
-CPLayoutAttributeTop        = 3;
-CPLayoutAttributeBottom     = 4;
-CPLayoutAttributeLeading    = 5;
-CPLayoutAttributeTrailing   = 6;
-CPLayoutAttributeWidth      = 7;
-CPLayoutAttributeHeight     = 8;
-CPLayoutAttributeCenterX    = 9;
-CPLayoutAttributeCenterY    = 10;
-CPLayoutAttributeBaseline   = 11;
-
-CPLayoutAttributeNotAnAttribute = 0;
-
-Engine = function(autoSolve, onvaluechange, onsolved)
-{
-    this.DISABLE_ON_SOLVED_NOTIFICATIONS = false;
-
-    this.CONSTRAINTS_BY_VIEW_AND_TYPE_MAP = [];
-
-    this.VARIABLES_MAP = {};
-
-    this.EDIT_VARIABLES = null;
-
-    this.DEFAULT_EDIT_STRENGTH = c.Strength.strong;
-
-    var simplexSolver = new c.SimplexSolver();
-    simplexSolver.autoSolve = autoSolve;
-    simplexSolver.onvaluechange = onvaluechange ? onvaluechange : this.noop();
-    simplexSolver.onsolved = onsolved ? onsolved : this.noop();
-
-    this.solver = simplexSolver;
-};
-
-Engine.prototype.disableOnSolvedNotification = function()
-{
-    this.solver.onvaluechange = this.noop();
-    this.solver.onSolved = this.noop();
-};
-
-Engine.prototype.noop = function()
-{
-};
-
-Engine.prototype.solve = function()
-{
-    this.solver.solve();
-    EngineLog("solve");
-};
-
-Engine.prototype.resolve = function()
-{
-    this.solver.resolve();
-};
-
-Engine.prototype.description = function()
-{
-    var str = "Engine Constraints:\n";
-
-    this.CONSTRAINTS_BY_VIEW_AND_TYPE_MAP.forEach(function(w)
-    {
-        str += w.toString() + "\n";
-    });
-
-    return (str + "\nInternalInfo:\n" + this.solver.getInternalInfo());
-};
-
-Engine.prototype.Variable = function(uuid, prefix, name, tag, value)
-{
-    return new c.Variable({identifier:uuid, prefix:prefix, name:name, tag:tag, value:value});
-};
-
-Engine.prototype.replaceConstraints = function(args, errors)
-{
-    var final_constraints = args.constraints,
-        container = args.container,
-        type = args.type,
-        self = this;
-
-    var current_constraints = self.CONSTRAINTS_BY_VIEW_AND_TYPE_MAP.filter(function(cst)
-    {
-        return (cst.container == container && cst.type == type);
-    });
-
-    var mutation = compareArrays(current_constraints, final_constraints, compareUUID),
-        removed = mutation.removed,
-        added = mutation.added;
-
-    EngineLog(type + ": should add " + added.length + " and remove " + removed.length);
-
-    removed.forEach(function(cst)
-    {
-        var solverError = new SolverError();
-        self.removeConstraintWithUUID(cst.uuid, type, solverError);
-
-        if (solverError.error !== null)
-            errors.push(solverError);
-    });
-
-    added.forEach(function(json)
-    {
-        var solverError = new SolverError();
-        self.addConstraintFromJSON(container, type, json, solverError);
-
-        if (solverError.error !== null)
-            errors.push(solverError);
-    });
-
-    return (removed.length > 0 || added.length > 0);
-};
-
-Engine.prototype.addConstraintFromJSON = function(container, type, json, solverError)
-{
-    var casso_constraint = null;
-
-    switch (type)
-    {
-        case "AutoresizingConstraint" :
-        case "Constraint"     : casso_constraint = this.CreateConstraint(json);
-        break;
-        case "SizeConstraint" : casso_constraint = this.CreateSizeConstraint(json);
-        break;
-        case "StayConstraint" : casso_constraint = this.CreateStayConstraint(json);
-        break;
-    }
-
-    if (casso_constraint)
-    {
-        var layoutConstraint = new LayoutConstraint(json.uuid, container, type, casso_constraint);
-        layoutConstraint.addToSolver(this.solver, solverError);
-
-        if (solverError.error == null)
-        {
-            this.CONSTRAINTS_BY_VIEW_AND_TYPE_MAP.push(layoutConstraint);
-            EngineLog("Added " + layoutConstraint.toString());
-        }
-    }
-};
-
-Engine.prototype.removeConstraintWithUUID = function(uuid, type, solverError)
-{
-    var constraints_list = this.CONSTRAINTS_BY_VIEW_AND_TYPE_MAP,
-        count = constraints_list.length;
-
-    while(count--)
-    {
-        var layoutConstraint = constraints_list[count];
-
-        if ((type == null || layoutConstraint.type == type) && layoutConstraint.uuid == uuid)
-        {
-            layoutConstraint.removeFromSolver(this.solver, solverError);
-
-            if (solverError.error == null)
-            {
-                constraints_list.splice(count, 1);
-                EngineLog("Removed " + layoutConstraint.toString());
-            }
-
-            break;
-        }
-    }
-};
-
-Engine.prototype.stopEditing = function()
-{
-    if (this.EDIT_VARIABLES !== null)
-    {
-        var error = null;
-
-        try {
-            this.solver.removeAllEditVars();
-            this.EDIT_VARIABLES = null;
-            EngineLog("removedAllEditVars");
-        }
-        catch (e)
-        {
-            error = e;
-        }
-        finally
-        {
-            if (error !== null)
-                EngineError(error + " EDIT_VARIABLES were " + this.EDIT_VARIABLES);
-        }
-    }
-};
-
-Engine.prototype.suggestValues = function(variables, values, priority)
-{
-    var solver = this.solver;
-
-    if (this.EDIT_VARIABLES == null)
-    {
-        //var sw = this.StrengthForPriority(priority);
-        var strength = this.DEFAULT_EDIT_STRENGTH;
-
-        variables.forEach(function(variable)
-        {
-           solver.addEditVar(variable, strength, 1);
-        });
-
-        this.EDIT_VARIABLES = variables;
-    }
-
-    this.EDIT_VARIABLES.forEach(function(variable, idx)
-    {
-        solver.suggestValue(variable, values[idx]);
-    });
-
-    // Perf: call the solver directly ?
-    this.resolve();
-};
-
-Engine.prototype.StrengthForPriority = function(p)
-{
-//    var h = Math.floor(p / 100),
-//        d = Math.floor((p - 100*c) / 10),
-//        n = p - 100*c - 10*d;
-//    (new c.Strength("", h, d, n))
-    if (p >= 1000)
-        return {strength:c.Strength.required, weight:p};
-
-    return {strength:c.Strength.medium, weight:p};
-};
-
-Engine.prototype.CreateConstraint = function(args)
-{
-// EngineLog("firstItem " + args.firstItem.uuid + " secondItem " + args.secondItem.uuid + " containerUUID " + args.containerUUID + " flags " + args.flags);
-
-    var first           = args.firstItem,
-        second          = args.secondItem,
-        relation        = args.relation,
-        multiplier      = args.multiplier,
-        constant        = args.constant,
-        priority        = args.priority,
-        sw              = this.StrengthForPriority(priority),
-        constraint,
-        rhs_term;
-
-    var lhs_term = this.expressionForAttribute(first.attribute, first.flags, first.left, first.top, first.width, first.height),
-        secondExp = this.expressionForAttribute(second.attribute, second.flags, second.left, second.top, second.width, second.height);
-
-    if (secondExp.isConstant)
-        rhs_term = new c.Expression.fromConstant(secondExp.constant * multiplier + constant);
-    else if (multiplier === 0)
-        rhs_term = new c.Expression.fromConstant(constant);
-    else
-        rhs_term = c.plus(c.times(secondExp, multiplier), constant);
-
-    switch(relation)
-    {
-        case CPLayoutRelationLessThanOrEqual    : constraint = new c.Inequality(lhs_term, c.LEQ, rhs_term, sw.strength, sw.weight);
-            break;
-        case CPLayoutRelationGreaterThanOrEqual : constraint = new c.Inequality(lhs_term, c.GEQ, rhs_term, sw.strength, sw.weight);
-            break;
-        case CPLayoutRelationEqual              : constraint = new c.Equation(lhs_term, rhs_term, sw.strength, sw.weight);
-            break;
-    }
-
-    return constraint;
-};
-
-Engine.prototype.CreateSizeConstraint = function(args)
-{
-    var variableExp = new c.Expression.fromVariable(args.variable),
-        constantExp = new c.Expression.fromConstant(args.constant),
-        inequality = (args.relation === CPLayoutRelationGreaterThanOrEqual) ? c.GEQ : c.LEQ,
-        sw = this.StrengthForPriority(args.priority);
-
-    return new c.Inequality(variableExp, inequality, constantExp, sw.strength, sw.weight);
-};
-
-Engine.prototype.CreateStayConstraint = function(args)
-{
-    var sw = this.StrengthForPriority(args.priority);
-
-    return new c.StayConstraint(args.variable, sw.strength, sw.weight);
-};
-
-Engine.prototype.expressionForAttribute = function(attribute, flags, left, top, width, height)
-{
-    var isNull = flags & 2;
-
-    if (isNull || attribute === CPLayoutAttributeNotAnAttribute)
-        return new c.Expression.fromConstant(0);
-
-    var isContainer = flags & 4,
-        exp;
-
-    switch(attribute)
-    {
-        case CPLayoutAttributeLeading   :
-        case CPLayoutAttributeLeft      : exp = this.expressionForAttributeLeft(left, isContainer);
-            break;
-        case CPLayoutAttributeTrailing  :
-        case CPLayoutAttributeRight     : exp = this.expressionForAttributeRight(left, width, isContainer);
-            break;
-        case CPLayoutAttributeTop       : exp = this.expressionForAttributeTop(top, isContainer);
-            break;
-        case CPLayoutAttributeBottom    : exp = this.expressionForAttributeBottom(top, height, isContainer);
-            break;
-        case CPLayoutAttributeWidth     : exp = new c.Expression.fromVariable(width);
-            break;
-        case CPLayoutAttributeHeight    : exp = new c.Expression.fromVariable(height);
-            break;
-        case CPLayoutAttributeCenterX   : exp = this.expressionForAttributeCenterX(left, width, isContainer);
-            break;
-        case CPLayoutAttributeBaseline  : exp = this.expressionForAttributeBottom(top, height, isContainer);
-            break;
-        case CPLayoutAttributeCenterY   : exp = this.expressionForAttributeCenterY(top, height, isContainer);
-            break;
-    }
-
-    return exp;
-};
-
-Engine.prototype.expressionForAttributeLeft = function(variable, isContainer)
-{
-    if (!isContainer)
-        return new c.Expression.fromVariable(variable);
-
-    return new c.Expression.fromConstant(0);
-};
-
-Engine.prototype.expressionForAttributeTop = function(variable, isContainer)
-{
-    if (!isContainer)
-        return new c.Expression.fromVariable(variable);
-
-    return new c.Expression.fromConstant(0);
-};
-
-Engine.prototype.expressionForAttributeRight = function(leftVariable, widthVariable, isContainer)
-{
-    if (isContainer)
-        return new c.Expression.fromVariable(widthVariable);
-
-    return new c.Expression.fromVariable(leftVariable).plus(widthVariable);
-};
-
-Engine.prototype.expressionForAttributeBottom = function(topVariable, heightVariable, isContainer)
-{
-    if (isContainer)
-        return new c.Expression.fromVariable(heightVariable);
-
-    return new c.Expression.fromVariable(topVariable).plus(heightVariable);
-};
-
-Engine.prototype.expressionForAttributeCenterX = function(leftVariable, widthVariable, isContainer)
-{
-    var midWidth = new c.Expression.fromVariable(widthVariable).divide(2);
-
-    if (isContainer)
-        return midWidth;
-
-    var left = new c.Expression.fromVariable(leftVariable);
-
-    return c.plus(left, midWidth);
-};
-
-Engine.prototype.expressionForAttributeCenterY = function(topVariable, heightVariable, isContainer)
-{
-    var midHeight = new c.Expression.fromVariable(heightVariable).divide(2);
-
-    if (isContainer)
-        return midHeight;
-
-    var top = new c.Expression.fromVariable(topVariable);
-
-    return c.plus(top, midHeight);
-};
-
-var LayoutConstraint = function(uuid, container, type, casso_constraint)
-{
-    this.uuid = uuid;
-    this.container = container;
-    this.type = type;
-    this.constraint = casso_constraint;
-
-    this.toString = function()
-    {
-        return (this.type + " " + this.uuid + " " + this.constraint.toString());
-    };
-
-    this.addToSolver = function(aSolver, solverError)
-    {
-        try
-        {
-            aSolver.addConstraint(this.constraint);
-        }
-        catch (e)
-        {
-            solverError.setError(e, this);
-        }
-    };
-
-    this.removeFromSolver = function(aSolver, solverError)
-    {
-        try
-        {
-            aSolver.removeConstraint(this.constraint);
-        }
-        catch (e)
-        {
-            solverError.setError(e, this);
-        }
-    };
-};
-
-var SolverError = function()
-{
-    this.error = null;
-    this.type = null;
-    this.userInfo = null;
-
-    this.setError = function(error, info)
-    {
-        this.error = error;
-        this.type = error._name;
-        this.userInfo = info;
-    };
-
-    this.reason = function()
-    {
-        return this.error.toString();
-    };
-
-    this.toString = function()
-    {
-        var desc = this.error ? this.reason() : "No Error";
-
-        if (this.userInfo)
-            desc += " : " + this.userInfo.toString();
-
-        return desc;
-    };
-
-    this.raise = function()
-    {
-        EngineWarn(this.toString());
-    }
-};
-
-var EngineLog = function(str)
-{
-    console.log('%c [Engine]: ' + str, 'color:darkblue; font-weight:bold');
-};
-
-var EngineWarn = function(str)
-{
-    console.warn('%c [Engine]: ' + str, 'color:brown; font-weight:bold');
-};
-
-var EngineError = function(str)
-{
-    console.error('%c [Engine]: ' + str, 'color:darkred; font-weight:bold');
-};
-
-var compareUUID = function(a, b)
-{
-    var uuida = a.uuid,
-        uuidb = b.uuid;
-
-    if (uuida > uuidb)
-        return 1;
-    else if (uuida < uuidb)
-        return -1;
-    else
-        return 0;
-};
-
-var compareArrays = function(o, n, sortFunction)
-{
-    // sort both arrays (or this won't work)
-    o.sort(sortFunction);
-    n.sort(sortFunction);
-
-    // don't compare if either list is empty
-    if (o.length === 0 || n.length === 0)
-        return {added:n, removed:o};
-
-    // declare temporary variables
-    var op = 0, np = 0,
-        a = [], r = [];
-
-    // compare arrays and add to add or remove lists
-    while (op < o.length && np < n.length)
-    {
-        var compare = sortFunction(o[op], n[np]);
-
-        if (compare === -1)
-        {
-            // push to diff?
-            r.push(o[op]);
-            op++;
-        }
-        else if (compare === 1)
-        {
-            // push to diff?
-            a.push(n[np]);
-            np++;
-        }
-        else
-        {
-            op++;np++;
-        }
-    }
-
-    // add remaining items
-    if (np < n.length)
-        a = a.concat(n.slice(np, n.length));
-
-    if (op < o.length)
-        r = r.concat(o.slice(op, o.length));
-
-    return {added:a, removed:r};
-};
+!function(a){"use strict";var b="undefined"!=typeof a.HTMLElement,c=function(a){for(var b=null;a&&a!=Object.prototype;){if(a.tagName){b=a.tagName;break}a=a.prototype}return b||"div"},d=1e-8,e={},f=function(a,b){if(a&&b){if("function"==typeof a[b])return a[b];var c=a.prototype;if(c&&"function"==typeof c[b])return c[b];if(c!==Object.prototype&&c!==Function.prototype)return"function"==typeof a.__super__?f(a.__super__,b):void 0}},g=!1;try{var h=new Map;h.set("foo","bar");var i=h.values();i.next(),h.forEach(function(){});var k=new Map(h);if(k.get("foo")!=h.get("foo"))throw"ctor fail";g=!0}catch(l){}var m=a.c=function(){return m._api?m._api.apply(this,arguments):void 0};m._functionalMap=g,m.GEQ=1,m.LEQ=2;var n=b?function(b,d,e){if(d&&d.prototype instanceof a.HTMLElement){var g=b,h=c(e),i=function(a){return a.__proto__=e,g.apply(a,arguments),e.created&&a.created(),e.decorate&&a.decorate(),a};m.extend(e,{upgrade:i}),b=function(){return i(a.document.createElement(h))},b.prototype=e,m.extend(b,{ctor:g})}return b}:function(a){return a};m.inherit=function(a){var b=null,c=null;a["extends"]&&(c=a["extends"],delete a["extends"]),a.initialize&&(b=a.initialize,delete a.initialize);var d=b||function(){};Object.defineProperty(d,"__super__",{value:c?c:Object,enumerable:!1,configurable:!0,writable:!1}),a._t&&(e[a._t]=d);var f=d.prototype=Object.create(c?c.prototype:Object.prototype);return m.extend(f,a),n(d,c,f,a)},m.own=function(b,c,d){return Object.getOwnPropertyNames(b).forEach(c,d||a),b},m.extend=function(a,b){return m.own(b,function(c){var d=Object.getOwnPropertyDescriptor(b,c);if("function"==typeof d.get||"function"==typeof d.set)Object.defineProperty(a,c,d);else if("function"==typeof d.value||"_"===c.charAt(0))d.writable=!0,d.configurable=!0,d.enumerable=!1,Object.defineProperty(a,c,d);else try{a[c]=b[c]}catch(e){}}),a},m.assert=function(a,b){if(!a)throw new m.InternalError("Assertion failed: "+b)};var o=function(a){return"number"==typeof a?m.Expression.fromConstant(a):a instanceof m.Variable?m.Expression.fromVariable(a):a};m.plus=function(a,b){return a=o(a),b=o(b),a.plus(b)},m.minus=function(a,b){return a=o(a),b=o(b),a.minus(b)},m.times=function(a,b){return a=o(a),b=o(b),a.times(b)},m.divide=function(a,b){return a=o(a),b=o(b),a.divide(b)},m.approx=function(a,b){return a=+a,b=+b,a===b?!0:0==a?Math.abs(b)<d:0==b?Math.abs(a)<d:Math.abs(a-b)<Math.abs(a)*d};var p=1;m._inc=function(){return p++},m.parseJSON=function(a){return JSON.parse(a,function(a,b){if("object"!=typeof b||"string"!=typeof b._t)return b;var c=b._t,d=e[c];if(c&&d){var g=f(d,"fromJSON");if(g)return g(b,d)}return b})},"function"==typeof define&&define.amd?define(m):"object"==typeof module&&module.exports?module.exports=m:a.c=m}(this),function(a){"use strict";if(a._functionalMap)a.HashTable=a.inherit({initialize:function(b){this.hashCode=a._inc(),this._store=b instanceof a.HashTable?new Map(b._store):new Map},clone:function(){return new a.HashTable(this)},get:function(a){var b=this._store.get(a.hashCode);return void 0===b?null:b[1]},clear:function(){this._store.clear()},get size(){return this._store.size},set:function(a,b){return this._store.set(a.hashCode,[a,b])},has:function(a){return this._store.has(a.hashCode)},"delete":function(a){return this._store.delete(a.hashCode)},each:function(a,b){this._store.forEach(function(c){return a.call(b||null,c[0],c[1])},b)},escapingEach:function(a,b){if(this._store.size)for(var c,e,f=this._store.values(),e=f.next();!e.done;){if(c=a.call(b||null,e.value[0],e.value[1])){if(void 0!==c.retval)return c;if(c.brk)break}e=f.next()}},equals:function(b){if(b===this)return!0;if(!(b instanceof a.HashTable)||b._size!==this._size)return!1;for(var c in this._store.keys())if(void 0==b._store.get(c))return!1;return!0}});else{var b={},c=function(a,b){Object.keys(a).forEach(function(c){b[c]=a[c]})};a.HashTable=a.inherit({initialize:function(){this.size=0,this._store={},this._keyStrMap={},this._deleted=0},set:function(a,b){var c=a.hashCode;"undefined"==typeof this._store[c]&&this.size++,this._store[c]=b,this._keyStrMap[c]=a},get:function(a){if(!this.size)return null;a=a.hashCode;var b=this._store[a];return"undefined"!=typeof b?this._store[a]:null},clear:function(){this.size=0,this._store={},this._keyStrMap={}},_compact:function(){var a={};c(this._store,a),this._store=a},_compactThreshold:100,_perhapsCompact:function(){this._size>30||this._deleted>this._compactThreshold&&(this._compact(),this._deleted=0)},"delete":function(a){a=a.hashCode,this._store.hasOwnProperty(a)&&(this._deleted++,delete this._store[a],this.size>0&&this.size--)},each:function(a,b){if(this.size){this._perhapsCompact();var c=this._store,d=this._keyStrMap;for(var e in this._store)this._store.hasOwnProperty(e)&&a.call(b||null,d[e],c[e])}},escapingEach:function(a,c){if(this.size){this._perhapsCompact();for(var d=this,e=this._store,f=this._keyStrMap,g=b,h=Object.keys(e),i=0;i<h.length;i++)if(function(b){d._store.hasOwnProperty(b)&&(g=a.call(c||null,f[b],e[b]))}(h[i]),g){if(void 0!==g.retval)return g;if(g.brk)break}}},clone:function(){var b=new a.HashTable;return this.size&&(b.size=this.size,c(this._store,b._store),c(this._keyStrMap,b._keyStrMap)),b},equals:function(b){if(b===this)return!0;if(!(b instanceof a.HashTable)||b._size!==this._size)return!1;for(var c=Object.keys(this._store),d=0;d<c.length;d++){var e=c[d];if(this._keyStrMap[e]!==b._keyStrMap[e]||this._store[e]!==b._store[e])return!1}return!0},toString:function(){var b="";return this.each(function(a,c){b+=a+" => "+c+"\n"}),b},toJSON:function(){return{_t:"c.HashTable"}},fromJSON:function(){var c=new a.HashTable;return c}})}}(this.c||module.parent.exports||{}),function(a){"use strict";a.HashSet=a._functionalMap?a.inherit({_t:"c.HashSet",initialize:function(b){this.hashCode=a._inc(),this._store=b instanceof a.HashSet?new Map(b._store):new Map},add:function(a){return this._store.set(a.hashCode,a)},has:function(a){return this._store.has(a.hashCode)},get size(){return this._store.size},clear:function(){this._store.clear()},values:function(){for(var a=[],b=this._store.values(),c=b.next();!c.done;)a.push(c.value),c=b.next();return a},first:function(){var a=this._store.values(),b=a.next();return b.done?null:b.value},"delete":function(a){this._store.delete(a.hashCode)},each:function(a,b){var c=this;this._store.forEach(function(d){return a.call(b||null,d,d,c)},b)},escapingEach:function(a,b){this.size&&this._store.forEach(a,b)},toString:function(){var a=this.size+" {",b=!0;return this.each(function(c){b?b=!1:a+=", ",a+=c}),a+="}\n"},toJSON:function(){var a=[];return this.each(function(b){a[a.length]=b.toJSON()}),{_t:"c.HashSet",data:a}},fromJSON:function(b){var c=new a.HashSet;return b.data&&(c.size=b.data.length,c._store=b.data),c}}):a.inherit({_t:"c.HashSet",initialize:function(){this._store=[],this.size=0,this.hashCode=a._inc()},add:function(a){var b=this._store;b.indexOf(a),-1==b.indexOf(a)&&(b[b.length]=a),this.size=b.length},values:function(){return this._store},first:function(){return this._store[0]},has:function(a){return-1!=this._store.indexOf(a)},"delete":function(a){var b=this._store.indexOf(a);return-1==b?null:(this._store.splice(b,1)[0],this.size=this._store.length,void 0)},clear:function(){this._store.length=0},each:function(a,b){this.size&&this._store.forEach(a,b)},escapingEach:function(a,b){this.size&&this._store.forEach(a,b)},toString:function(){var a=this.size+" {",b=!0;return this.each(function(c){b?b=!1:a+=", ",a+=c}),a+="}\n"},toJSON:function(){var a=[];return this.each(function(b){a[a.length]=b.toJSON()}),{_t:"c.HashSet",data:a}},fromJSON:function(b){var c=new a.HashSet;return b.data&&(c.size=b.data.length,c._store=b.data),c}})}(this.c||module.parent.exports||{}),function(a){"use strict";a.Error=a.inherit({initialize:function(a){a&&(this._description=a)},_name:"c.Error",_description:"An error has occured in Cassowary",set description(a){this._description=a},get description(){return"("+this._name+") "+this._description},get message(){return this.description},toString:function(){return this.description}});var b=function(b,c){return a.inherit({"extends":a.Error,initialize:function(){a.Error.apply(this,arguments)},_name:b||"",_description:c||""})};a.ConstraintNotFound=b("c.ConstraintNotFound","Tried to remove a constraint never added to the tableu"),a.InternalError=b("c.InternalError"),a.NonExpression=b("c.NonExpression","The resulting expression would be non"),a.NotEnoughStays=b("c.NotEnoughStays","There are not enough stays to give specific values to every variable"),a.RequiredFailure=b("c.RequiredFailure","A required constraint cannot be satisfied"),a.TooDifficult=b("c.TooDifficult","The constraints are too difficult to solve")}(this.c||module.parent.exports||{}),function(a){"use strict";var b=1e3;a.SymbolicWeight=a.inherit({_t:"c.SymbolicWeight",initialize:function(){this.value=0;for(var a=1,c=arguments.length-1;c>=0;--c)this.value+=arguments[c]*a,a*=b},toJSON:function(){return{_t:this._t,value:this.value}}})}(this.c||module.parent.exports||{}),function(a){a.Strength=a.inherit({initialize:function(b,c,d,e){this.name=b,this.symbolicWeight=c instanceof a.SymbolicWeight?c:new a.SymbolicWeight(c,d,e)},get required(){return this===a.Strength.required},toString:function(){return this.name+(this.required?"":":"+this.symbolicWeight)}}),a.Strength.required=new a.Strength("<Required>",1e3,1e3,1e3),a.Strength.strong=new a.Strength("strong",1,0,0),a.Strength.medium=new a.Strength("medium",0,1,0),a.Strength.weak=new a.Strength("weak",0,0,1)}(this.c||("undefined"!=typeof module?module.parent.exports.c:{})),function(a){"use strict";a.AbstractVariable=a.inherit({isDummy:!1,isExternal:!1,isPivotable:!1,isRestricted:!1,_init:function(b,c){this.hashCode=a._inc(),this.name=(c||"")+this.hashCode,b&&("undefined"!=typeof b.name&&(this.name=b.name),"undefined"!=typeof b.value&&(this.value=b.value),"undefined"!=typeof b.prefix&&(this._prefix=b.prefix))},_prefix:"",name:"",value:0,valueOf:function(){return this.value},toJSON:function(){var a={};return this._t&&(a._t=this._t),this.name&&(a.name=this.name),"undefined"!=typeof this.value&&(a.value=this.value),this._prefix&&(a._prefix=this._prefix),this._t&&(a._t=this._t),a},fromJSON:function(b,c){var d=new c;return a.extend(d,b),d},toString:function(){return this._prefix+"["+this.name+":"+this.value+"]"}}),a.Variable=a.inherit({_t:"c.Variable","extends":a.AbstractVariable,initialize:function(b){this._init(b,"v");var c=a.Variable._map;c&&(c[this.name]=this)},isExternal:!0}),a.DummyVariable=a.inherit({_t:"c.DummyVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"d")},isDummy:!0,isRestricted:!0,value:"dummy"}),a.ObjectiveVariable=a.inherit({_t:"c.ObjectiveVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"o")},value:"obj"}),a.SlackVariable=a.inherit({_t:"c.SlackVariable","extends":a.AbstractVariable,initialize:function(a){this._init(a,"s")},isPivotable:!0,isRestricted:!0,value:"slack"})}(this.c||module.parent.exports||{}),function(a){"use strict";a.Point=a.inherit({initialize:function(b,c,d){if(b instanceof a.Variable)this._x=b;else{var e={value:b};d&&(e.name="x"+d),this._x=new a.Variable(e)}if(c instanceof a.Variable)this._y=c;else{var f={value:c};d&&(f.name="y"+d),this._y=new a.Variable(f)}},get x(){return this._x},set x(b){b instanceof a.Variable?this._x=b:this._x.value=b},get y(){return this._y},set y(b){b instanceof a.Variable?this._y=b:this._y.value=b},toString:function(){return"("+this.x+", "+this.y+")"}})}(this.c||module.parent.exports||{}),function(a){"use strict";var b=function(a,b){return"number"==typeof a?a:b};a.Expression=a.inherit({initialize:function(c,d,e){this.constant=b(e,0),this.terms=new a.HashTable,this.externalVariables=new a.HashSet,Object.defineProperty(this,"solver",{enumerable:!1,configurable:!0,writable:!0,value:null}),c instanceof a.AbstractVariable?(d=b(d,1),this.setVariable(c,d)):"number"==typeof c&&(isNaN(c)?console.trace():this.constant=c)},initializeFromHash:function(a,b){return this.constant=a,this.terms=b.clone(),this},multiplyMe:function(a){this.constant*=a;var b=this.terms;return b.each(function(c,d){b.set(c,d*a)}),this},clone:function(){var b=a.Expression.empty();return b.initializeFromHash(this.constant,this.terms),b.solver=this.solver,b},times:function(b){if("number"==typeof b)return this.clone().multiplyMe(b);if(this.isConstant)return b.times(this.constant);if(b.isConstant)return this.times(b.constant);throw new a.NonExpression},plus:function(b){return b instanceof a.Expression?this.clone().addExpression(b,1):b instanceof a.Variable?this.clone().addVariable(b,1):void 0},minus:function(b){return b instanceof a.Expression?this.clone().addExpression(b,-1):b instanceof a.Variable?this.clone().addVariable(b,-1):void 0},divide:function(b){if("number"==typeof b){if(a.approx(b,0))throw new a.NonExpression;return this.times(1/b)}if(b instanceof a.Expression){if(!b.isConstant)throw new a.NonExpression;return this.times(1/b.constant)}},addExpression:function(c,d,e){return c instanceof a.AbstractVariable&&(c=a.Expression.fromVariable(c)),d=b(d,1),this.constant+=d*c.constant,c.terms.each(function(a,b){this.addVariable(a,b*d,e),this._updateIfExternal(a)},this),this},addVariable:function(b,c,d){null==c&&(c=1);var e=this.terms.get(b);if(e){var f=e+c;0==f||a.approx(f,0)?(this.solver&&this.solver.noteRemovedVariable(b,d),this.terms.delete(b)):this.setVariable(b,f)}else a.approx(c,0)||(this.setVariable(b,c),this.solver&&this.solver.noteAddedVariable(b,d));return this},_updateIfExternal:function(a){a.isExternal&&(this.externalVariables.add(a),this.solver&&this.solver._noteUpdatedExternal(a))},setVariable:function(a,b){return this.terms.set(a,b),this._updateIfExternal(a),this},anyPivotableVariable:function(){if(this.isConstant)throw new a.InternalError("anyPivotableVariable called on a constant");var b=this.terms.escapingEach(function(a){return a.isPivotable?{retval:a}:void 0});return b&&void 0!==b.retval?b.retval:null},substituteOut:function(b,c,d){var e=this.solver;if(!e)throw new a.InternalError("Expressions::substituteOut called without a solver");var f=this.setVariable.bind(this),g=this.terms,h=g.get(b);g.delete(b),this.constant+=h*c.constant,c.terms.each(function(b,c){var i=g.get(b);if(i){var j=i+h*c;a.approx(j,0)?(e.noteRemovedVariable(b,d),g.delete(b)):f(b,j)}else f(b,h*c),e&&e.noteAddedVariable(b,d)})},changeSubject:function(a,b){this.setVariable(a,this.newSubject(b))},newSubject:function(a){var b=1/this.terms.get(a);return this.terms.delete(a),this.multiplyMe(-b),b},coefficientFor:function(a){return this.terms.get(a)||0},get isConstant(){return 0==this.terms.size},toString:function(){var b="",c=!1;if(!a.approx(this.constant,0)||this.isConstant){if(b+=this.constant,this.isConstant)return b;c=!0}return this.terms.each(function(a,d){c&&(b+=" + "),b+=d+"*"+a.toString(),c=!0}),b},equals:function(b){return b===this?!0:b instanceof a.Expression&&b.constant===this.constant&&b.terms.equals(this.terms)},Plus:function(a,b){return a.plus(b)},Minus:function(a,b){return a.minus(b)},Times:function(a,b){return a.times(b)},Divide:function(a,b){return a.divide(b)}}),a.Expression.empty=function(b){var c=new a.Expression(void 0,1,0);return c.solver=b,c},a.Expression.fromConstant=function(b,c){var d=new a.Expression(b);return d.solver=c,d},a.Expression.fromValue=function(b,c){b=+b;var d=new a.Expression(void 0,b,0);return d.solver=c,d},a.Expression.fromVariable=function(b,c){var d=new a.Expression(b,1,0);return d.solver=c,d}}(this.c||module.parent.exports||{}),function(a){"use strict";a.AbstractConstraint=a.inherit({initialize:function(b,c){this.hashCode=a._inc(),this.strength=b||a.Strength.required,this.weight=c||1},isEdit:!1,isInequality:!1,isStay:!1,get required(){return this.strength===a.Strength.required},toString:function(){return this.strength+" {"+this.weight+"} ("+this.expression+")"}});var b=a.AbstractConstraint.prototype.toString,c=function(b,c,d){a.AbstractConstraint.call(this,c||a.Strength.strong,d),this.variable=b,this.expression=new a.Expression(b,-1,b.value)};a.EditConstraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(){c.apply(this,arguments)},isEdit:!0,toString:function(){return"edit:"+b.call(this)}}),a.StayConstraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(){c.apply(this,arguments)},isStay:!0,toString:function(){return"stay:"+b.call(this)}});var d=a.Constraint=a.inherit({"extends":a.AbstractConstraint,initialize:function(b,c,d){a.AbstractConstraint.call(this,c,d),this.expression=b}});a.Inequality=a.inherit({"extends":a.Constraint,_cloneOrNewCle:function(b){return b.clone?b.clone():new a.Expression(b)},initialize:function(b,c,e,f,g){var h=b instanceof a.Expression,i=e instanceof a.Expression,j=b instanceof a.AbstractVariable,k=e instanceof a.AbstractVariable,l="number"==typeof b,m="number"==typeof e;if((h||l)&&k){var n=b,o=c,p=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(n),q,r),o==a.LEQ)this.expression.multiplyMe(-1),this.expression.addVariable(p);else{if(o!=a.GEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addVariable(p,-1)}}else if(j&&(i||m)){var n=e,o=c,p=b,q=f,r=g;if(d.call(this,this._cloneOrNewCle(n),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addVariable(p);else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addVariable(p,-1)}}else{if(h&&m){var s=b,o=c,t=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(s),q,r),o==a.LEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(t));else{if(o!=a.GEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(t),-1)}return this}if(l&&i){var s=e,o=c,t=b,q=f,r=g;if(d.call(this,this._cloneOrNewCle(s),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(t));else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(t),-1)}return this}if(h&&i){var s=b,o=c,t=e,q=f,r=g;if(d.call(this,this._cloneOrNewCle(t),q,r),o==a.GEQ)this.expression.multiplyMe(-1),this.expression.addExpression(this._cloneOrNewCle(s));else{if(o!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");this.expression.addExpression(this._cloneOrNewCle(s),-1)}}else{if(h)return d.call(this,b,c,e);if(c==a.GEQ)d.call(this,new a.Expression(e),f,g),this.expression.multiplyMe(-1),this.expression.addVariable(b);else{if(c!=a.LEQ)throw new a.InternalError("Invalid operator in c.Inequality constructor");d.call(this,new a.Expression(e),f,g),this.expression.addVariable(b,-1)}}}},isInequality:!0,toString:function(){return d.prototype.toString.call(this)+" >= 0) id: "+this.hashCode}}),a.Equation=a.inherit({"extends":a.Constraint,initialize:function(b,c,e,f){if(b instanceof a.Expression&&!c||c instanceof a.Strength)d.call(this,b,c,e);else if(b instanceof a.AbstractVariable&&c instanceof a.Expression){var g=b,h=c,i=e,j=f;d.call(this,h.clone(),i,j),this.expression.addVariable(g,-1)}else if(b instanceof a.AbstractVariable&&"number"==typeof c){var g=b,k=c,i=e,j=f;d.call(this,new a.Expression(k),i,j),this.expression.addVariable(g,-1)}else if(b instanceof a.Expression&&c instanceof a.AbstractVariable){var h=b,g=c,i=e,j=f;d.call(this,h.clone(),i,j),this.expression.addVariable(g,-1)}else{if(!(b instanceof a.Expression||b instanceof a.AbstractVariable||"number"==typeof b)||!(c instanceof a.Expression||c instanceof a.AbstractVariable||"number"==typeof c))throw"Bad initializer to c.Equation";b=b instanceof a.Expression?b.clone():new a.Expression(b),c=c instanceof a.Expression?c.clone():new a.Expression(c),d.call(this,b,e,f),this.expression.addExpression(c,-1)}a.assert(this.strength instanceof a.Strength,"_strength not set")},toString:function(){return d.prototype.toString.call(this)+" = 0)"}})}(this.c||module.parent.exports||{}),function(a){"use strict";a.EditInfo=a.inherit({initialize:function(a,b,c,d,e){this.constraint=a,this.editPlus=b,this.editMinus=c,this.prevEditConstant=d,this.index=e},toString:function(){return"<cn="+this.constraint+", ep="+this.editPlus+", em="+this.editMinus+", pec="+this.prevEditConstant+", index="+this.index+">"}})}(this.c||module.parent.exports||{}),function(a){"use strict";a.Tableau=a.inherit({initialize:function(){this.columns=new a.HashTable,this.rows=new a.HashTable,this._infeasibleRows=new a.HashSet,this._externalRows=new a.HashTable},noteRemovedVariable:function(a,b){var c=this.columns.get(a);b&&c&&c.delete(b)},noteAddedVariable:function(a,b){b&&this.insertColVar(a,b)},getInternalInfo:function(){return"Tableau Information:\nRows: "+this.rows.size+" (= "+(this.rows.size-1)+" constraints)"+"\nColumns: "+this.columns.size+"\nInfeasible Rows: "+this._infeasibleRows.size+"\nExternal basic variables: "+this._externalRows.size},toString:function(){var a="Tableau:\n";return this.rows.each(function(b,c){a+=b+" <==> "+c+"\n"}),a+="\nColumns:\n",a+=this.columns,a+="\nInfeasible rows: ",a+=this._infeasibleRows,a+="External basic variables: ",a+=this._externalRows},insertColVar:function(b,c){var d=this.columns.get(b);d||(d=new a.HashSet,this.columns.set(b,d)),d.add(c)},addRow:function(a,b){this.rows.set(a,b),b.terms.each(function(b){this.insertColVar(b,a)},this),a.isExternal&&(this._externalRows.set(a,b),this._updatedExternals.add(a))},removeColumn:function(a){var b=this.columns.get(a);b&&(this.columns.delete(a),b.each(function(b){var c=this.rows.get(b);c.terms.delete(a)},this)),a.isExternal&&this._externalRows.delete(a)},removeRow:function(b){var c=this.rows.get(b);return a.assert(null!=c),c.terms.each(function(a){var d=this.columns.get(a);null!=d&&d.delete(b)},this),this._infeasibleRows.delete(b),b.isExternal&&this._externalRows.delete(b),this.rows.delete(b),c},substituteOut:function(a,b){var c=this.columns.get(a);c.each(function(c){var d=this.rows.get(c);d.substituteOut(a,b,c,this),c.isExternal&&this._updatedExternals.add(c),c.isRestricted&&d.constant<0&&this._infeasibleRows.add(c)},this),a.isExternal&&this._externalRows.set(a,b),this.columns.delete(a)},columnsHasKey:function(a){return!!this.columns.get(a)}})}(this.c||module.parent.exports||{}),function(a){var b=a.Tableau,c=b.prototype,d=1e-8,e=a.Strength.weak,f={eplus:null,eminus:null,prevEConstant:null};a.SimplexSolver=a.inherit({"extends":a.Tableau,initialize:function(){a.Tableau.call(this),this._stayMinusErrorVars=[],this._stayPlusErrorVars=[],this._errorVars=new a.HashTable,this._markerVars=new a.HashTable,this._objective=new a.ObjectiveVariable({name:"Z"}),this._editVarMap=new a.HashTable,this._editVarList=[],this._slackCounter=0,this._artificialCounter=0,this._dummyCounter=0,this.autoSolve=!0,this._needsSolving=!1,this._optimizeCount=0,this.rows.set(this._objective,a.Expression.empty(this)),this._editVariableStack=[0],this._updatedExternals=new a.HashSet},_noteUpdatedExternal:function(a){this._updatedExternals.add(a)},add:function(){for(var a=0;a<arguments.length;a++)this.addConstraint(arguments[a]);return this},addEditVar:function(b,c,d){var e=new a.EditConstraint(b,c||a.Strength.strong,d);return this.addEditConstraint(e),this},addEditConstraint:function(a){var b=f;return this.addConstraint(a),this._addEditConstraint(a,b.eplus,b.eminus,b.prevEConstant),this},_addEditConstraint:function(b,c,d,e){var f=this._editVarMap.size,g=new a.EditInfo(b,c,d,e,f);this._editVarMap.set(b.variable,g),this._editVarList[f]={v:b.variable,info:g}},addConstraint:function(b){if(b instanceof a.Constraint){var c=this;b.expression.externalVariables.each(function(a){c._noteUpdatedExternal(a)})}var d=this.newExpression(b);return d.solver=this,this.tryAddingDirectly(d)||this.addWithArtificialVariable(d),this._needsSolving=!0,this.autoSolve&&(this.optimize(this._objective),this._setExternalVariables()),this},addConstraintNoException:function(a){try{return this.addConstraint(a),!0}catch(b){return console.error(b),!1}},beginEdit:function(){return a.assert(this._editVarMap.size>0,"_editVarMap.size > 0"),this._infeasibleRows.clear(),this._resetStayConstants(),this._editVariableStack[this._editVariableStack.length]=this._editVarMap.size,this},endEdit:function(){return a.assert(this._editVarMap.size>0,"_editVarMap.size > 0"),this.resolve(),this._editVariableStack.pop(),this.removeEditVarsTo(this._editVariableStack[this._editVariableStack.length-1]),this},removeAllEditVars:function(){return this.removeEditVarsTo(0)},removeEditVarsTo:function(b){try{for(var c=this._editVarList.length,d=b;c>d;d++)this._editVarList[d]&&this.removeConstraint(this._editVarMap.get(this._editVarList[d].v).constraint);return this._editVarList.length=b,a.assert(this._editVarMap.size==b,"_editVarMap.size == n"),this}catch(e){throw new a.InternalError("Constraint not found in removeEditVarsTo")}},addPointStays:function(a){return a.forEach(function(a,b){this.addStay(a.x,e,Math.pow(2,b)),this.addStay(a.y,e,Math.pow(2,b))},this),this},addStay:function(b,c,d){var f=new a.StayConstraint(b,c||e,d||1);return this.addConstraint(f)},setConstant:function(a,b){this._setConstant(a,b),this.resolve()},removeConstraint:function(b){this._needsSolving=!0,this._resetStayConstants();var c=this.rows.get(this._objective),d=this._errorVars.get(b);null!=d&&d.each(function(a){var d=this.rows.get(a);null==d?c.addVariable(a,-b.weight*b.strength.symbolicWeight.value,this._objective,this):c.addExpression(d,-b.weight*b.strength.symbolicWeight.value,this._objective,this)},this);var e=this._markerVars.get(b);if(this._markerVars.delete(b),null==e)throw new a.InternalError("Constraint not found in removeConstraintInternal");if(null==this.rows.get(e)){var f=this.columns.get(e),g=null,h=0;f.each(function(b){if(b.isRestricted){var c=this.rows.get(b),d=c.coefficientFor(e);if(0>d){var f=-c.constant/d;(null==g||h>f||a.approx(f,h)&&b.hashCode<g.hashCode)&&(h=f,g=b)}}},this),null==g&&f.each(function(a){if(a.isRestricted){var b=this.rows.get(a),c=b.coefficientFor(e),d=b.constant/c;(null==g||h>d)&&(h=d,g=a)}},this),null==g&&(0==f.size?this.removeColumn(e):f.escapingEach(function(a){return a!=this._objective?(g=a,{brk:!0}):void 0},this)),null!=g&&this.pivot(e,g)}if(null!=this.rows.get(e)&&this.removeRow(e),null!=d&&d.each(function(a){a!=e&&this.removeColumn(a)},this),b.isStay){if(null!=d)for(var j=0;j<this._stayPlusErrorVars.length;j++)d.delete(this._stayPlusErrorVars[j]),d.delete(this._stayMinusErrorVars[j])}else if(b.isEdit){var k=this._editVarMap.get(b.variable);this.removeColumn(k.editMinus),this._editVarMap.delete(b.variable)}return null!=d&&this._errorVars.delete(d),this.autoSolve&&(this.optimize(this._objective),this._setExternalVariables()),this},reset:function(){throw new a.InternalError("reset not implemented")},resolveArray:function(a){var b=a.length;this._editVarMap.each(function(c,d){var e=d.index;b>e&&this.suggestValue(c,a[e])},this),this.resolve()},resolvePair:function(a,b){this.suggestValue(this._editVarList[0].v,a),this.suggestValue(this._editVarList[1].v,b),this.resolve()},resolve:function(){this.dualOptimize(),this._setExternalVariables(),this._infeasibleRows.clear(),this._resetStayConstants()},suggestValue:function(b,c){var d=this._editVarMap.get(b);if(!d)throw new a.Error("suggestValue for variable "+b+", but var is not an edit variable");var e=c-d.prevEditConstant;return d.prevEditConstant=c,this.deltaEditConstant(e,d.editPlus,d.editMinus),this},solve:function(){return this._needsSolving&&(this.optimize(this._objective),this._setExternalVariables()),this},setEditedValue:function(b,c){if(!this.columnsHasKey(b)&&null==this.rows.get(b))return b.value=c,this;if(!a.approx(c,b.value)){this.addEditVar(b),this.beginEdit();try{this.suggestValue(b,c)}catch(d){throw new a.InternalError("Error in setEditedValue")}this.endEdit()}return this},addVar:function(b){if(!this.columnsHasKey(b)&&null==this.rows.get(b))try{this.addStay(b)}catch(c){throw new a.InternalError("Error in addVar -- required failure is impossible")}return this},getInternalInfo:function(){var a=c.getInternalInfo.call(this);return a+="\nSolver info:\n",a+="Stay Error Variables: ",a+=this._stayPlusErrorVars.length+this._stayMinusErrorVars.length,a+=" ("+this._stayPlusErrorVars.length+" +, ",a+=this._stayMinusErrorVars.length+" -)\n",a+="Edit Variables: "+this._editVarMap.size,a+="\n"},getDebugInfo:function(){return this.toString()+this.getInternalInfo()+"\n"},toString:function(){var a=c.getInternalInfo.call(this);return a+="\n_stayPlusErrorVars: ",a+="["+this._stayPlusErrorVars+"]",a+="\n_stayMinusErrorVars: ",a+="["+this._stayMinusErrorVars+"]",a+="\n",a+="_editVarMap:\n"+this._editVarMap,a+="\n"},addWithArtificialVariable:function(b){var c=new a.SlackVariable({value:++this._artificialCounter,prefix:"a"}),d=new a.ObjectiveVariable({name:"az"}),e=b.clone();this.addRow(d,e),this.addRow(c,b),this.optimize(d);var f=this.rows.get(d);if(!a.approx(f.constant,0))throw this.removeRow(d),this.removeColumn(c),new a.RequiredFailure;var g=this.rows.get(c);if(null!=g){if(g.isConstant)return this.removeRow(c),this.removeRow(d),void 0;var h=g.anyPivotableVariable();this.pivot(h,c)}a.assert(null==this.rows.get(c),"rowExpression(av) == null"),this.removeColumn(c),this.removeRow(d)},tryAddingDirectly:function(a){var b=this.chooseSubject(a);return null==b?!1:(a.newSubject(b),this.columnsHasKey(b)&&this.substituteOut(b,a),this.addRow(b,a),!0)},chooseSubject:function(b){var c=null,d=!1,e=!1,f=b.terms,g=f.escapingEach(function(a,b){if(d){if(!a.isRestricted&&!this.columnsHasKey(a))return{retval:a}}else if(a.isRestricted){if(!e&&!a.isDummy&&0>b){var f=this.columns.get(a);(null==f||1==f.size&&this.columnsHasKey(this._objective))&&(c=a,e=!0)}}else c=a,d=!0},this);if(g&&void 0!==g.retval)return g.retval;if(null!=c)return c;var h=0,g=f.escapingEach(function(a,b){return a.isDummy?(this.columnsHasKey(a)||(c=a,h=b),void 0):{retval:null}},this);if(g&&void 0!==g.retval)return g.retval;if(!a.approx(b.constant,0))throw new a.RequiredFailure;return h>0&&b.multiplyMe(-1),c},deltaEditConstant:function(a,b,c){var d=this.rows.get(b);if(null!=d)return d.constant+=a,d.constant<0&&this._infeasibleRows.add(b),void 0;var e=this.rows.get(c);if(null!=e)return e.constant+=-a,e.constant<0&&this._infeasibleRows.add(c),void 0;var f=this.columns.get(c);f||console.log("columnVars is null -- tableau is:\n"+this),f.each(function(b){var d=this.rows.get(b),e=d.coefficientFor(c);d.constant+=e*a,b.isExternal&&this._noteUpdatedExternal(b),b.isRestricted&&d.constant<0&&this._infeasibleRows.add(b)},this)},dualOptimize:function(){for(var b=this.rows.get(this._objective);this._infeasibleRows.size;){var c=this._infeasibleRows.first();this._infeasibleRows.delete(c);var d=null,e=this.rows.get(c);if(e&&e.constant<0){var g,f=Number.MAX_VALUE,h=e.terms;if(h.each(function(c,e){if(e>0&&c.isPivotable){var h=b.coefficientFor(c);g=h/e,(f>g||a.approx(g,f)&&c.hashCode<d.hashCode)&&(d=c,f=g)}}),f==Number.MAX_VALUE)throw new a.InternalError("ratio == nil (MAX_VALUE) in dualOptimize");this.pivot(d,c)}}},newExpression:function(b){var c=f;c.eplus=null,c.eminus=null,c.prevEConstant=null;var d=b.expression,e=a.Expression.fromConstant(d.constant,this),g=new a.SlackVariable,h=new a.DummyVariable,i=new a.SlackVariable,j=new a.SlackVariable,k=d.terms;if(k.each(function(a,b){var c=this.rows.get(a);c?e.addExpression(c,b):e.addVariable(a,b)},this),b.isInequality){if(++this._slackCounter,g=new a.SlackVariable({value:this._slackCounter,prefix:"s"}),e.setVariable(g,-1),this._markerVars.set(b,g),!b.required){++this._slackCounter,i=new a.SlackVariable({value:this._slackCounter,prefix:"em"}),e.setVariable(i,1);var l=this.rows.get(this._objective);l.setVariable(i,b.strength.symbolicWeight.value*b.weight),this.insertErrorVar(b,i),this.noteAddedVariable(i,this._objective)}}else if(b.required)++this._dummyCounter,h=new a.DummyVariable({value:this._dummyCounter,prefix:"d"}),c.eplus=h,c.eminus=h,c.prevEConstant=d.constant,e.setVariable(h,1),this._markerVars.set(b,h);else{++this._slackCounter,j=new a.SlackVariable({value:this._slackCounter,prefix:"ep"}),i=new a.SlackVariable({value:this._slackCounter,prefix:"em"}),e.setVariable(j,-1),e.setVariable(i,1),this._markerVars.set(b,j);
+var l=this.rows.get(this._objective),m=b.strength.symbolicWeight.value*b.weight;l.setVariable(j,m),this.noteAddedVariable(j,this._objective),l.setVariable(i,m),this.noteAddedVariable(i,this._objective),this.insertErrorVar(b,i),this.insertErrorVar(b,j),b.isStay?(this._stayPlusErrorVars[this._stayPlusErrorVars.length]=j,this._stayMinusErrorVars[this._stayMinusErrorVars.length]=i):b.isEdit&&(c.eplus=j,c.eminus=i,c.prevEConstant=d.constant)}return e.constant<0&&e.multiplyMe(-1),e},optimize:function(b){this._optimizeCount++;var c=this.rows.get(b);a.assert(null!=c,"zRow != null");for(var g,h,e=null,f=null;;){if(g=0,h=c.terms,h.escapingEach(function(a,b){return a.isPivotable&&g>b?(g=b,e=a,{brk:1}):void 0},this),g>=-d)return;var i=Number.MAX_VALUE,j=this.columns.get(e),k=0;if(j.each(function(b){if(b.isPivotable){var c=this.rows.get(b),d=c.coefficientFor(e);0>d&&(k=-c.constant/d,(i>k||a.approx(k,i)&&b.hashCode<f.hashCode)&&(i=k,f=b))}},this),i==Number.MAX_VALUE)throw new a.InternalError("Objective function is unbounded in optimize");this.pivot(e,f)}},pivot:function(a,b){var c=!1;c&&console.time(" SimplexSolver::pivot"),null==a&&console.warn("pivot: entryVar == null"),null==b&&console.warn("pivot: exitVar == null"),c&&console.time("  removeRow");var d=this.removeRow(b);c&&console.timeEnd("  removeRow"),c&&console.time("  changeSubject"),d.changeSubject(b,a),c&&console.timeEnd("  changeSubject"),c&&console.time("  substituteOut"),this.substituteOut(a,d),c&&console.timeEnd("  substituteOut"),c&&console.time("  addRow"),this.addRow(a,d),c&&console.timeEnd("  addRow"),c&&console.timeEnd(" SimplexSolver::pivot")},_resetStayConstants:function(){for(var a=this._stayPlusErrorVars,b=a.length,c=0;b>c;c++){var d=this.rows.get(a[c]);null===d&&(d=this.rows.get(this._stayMinusErrorVars[c])),null!=d&&(d.constant=0)}},_setExternalVariables:function(){var a=[];this._updatedExternals.each(function(b){var c=b.value,d=this._externalRows.get(b);return d?(b.value=d.constant,c!==b.value&&a.push({type:"update",name:b.name,variable:b,oldValue:c}),void 0):(b.value=0,void 0)},this),this._updatedExternals.clear(),this._needsSolving=!1,this._informCallbacks(a),a.length&&this.onsolved(a)},onsolved:function(){},_informCallbacks:function(a){this._callbacks&&this._callbacks.forEach(function(b){b(a)})},_addCallback:function(a){var b=this._callbacks||(this._callbacks=[]);b[b.length]=a},insertErrorVar:function(b,c){var d=this._errorVars.get(b);d||(d=new a.HashSet,this._errorVars.set(b,d)),d.add(c)}})}(this.c||module.parent.exports||{}),function(a){"use strict";a.Timer=a.inherit({initialize:function(){this.isRunning=!1,this._elapsedMs=0},start:function(){return this.isRunning=!0,this._startReading=new Date,this},stop:function(){return this.isRunning=!1,this._elapsedMs+=new Date-this._startReading,this},reset:function(){return this.isRunning=!1,this._elapsedMs=0,this},elapsedTime:function(){return this.isRunning?(this._elapsedMs+(new Date-this._startReading))/1e3:this._elapsedMs/1e3}})}(this.c||module.parent.exports||{}),this.c.parser=function(){function a(a){return'"'+a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\x08/g,"\\b").replace(/\t/g,"\\t").replace(/\n/g,"\\n").replace(/\f/g,"\\f").replace(/\r/g,"\\r").replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g,escape)+'"'}var b={parse:function(b,c){function k(a){g>e||(e>g&&(g=e,h=[]),h.push(a))}function l(){var a,b,c,d,f;if(d=e,f=e,a=A(),null!==a){for(b=[],c=m();null!==c;)b.push(c),c=m();null!==b?(c=A(),null!==c?a=[a,b,c]:(a=null,e=f)):(a=null,e=f)}else a=null,e=f;return null!==a&&(a=function(a,b){return b}(d,a[1])),null===a&&(e=d),a}function m(){var a,b,c,d;return c=e,d=e,a=Q(),null!==a?(b=t(),null!==b?a=[a,b]:(a=null,e=d)):(a=null,e=d),null!==a&&(a=function(a,b){return b}(c,a[0])),null===a&&(e=c),a}function n(){var a;return b.length>e?(a=b.charAt(e),e++):(a=null,0===f&&k("any character")),a}function o(){var a;return/^[a-zA-Z]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[a-zA-Z]")),null===a&&(36===b.charCodeAt(e)?(a="$",e++):(a=null,0===f&&k('"$"')),null===a&&(95===b.charCodeAt(e)?(a="_",e++):(a=null,0===f&&k('"_"')))),a}function p(){var a;return a=o(),null===a&&(/^[0-9]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[0-9]"))),a}function q(){var a;return f++,/^[\t\x0B\f \xA0\uFEFF]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\t\\x0B\\f \\xA0\\uFEFF]")),f--,0===f&&null===a&&k("whitespace"),a}function r(){var a;return/^[\n\r\u2028\u2029]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\n\\r\\u2028\\u2029]")),a}function s(){var a;return f++,10===b.charCodeAt(e)?(a="\n",e++):(a=null,0===f&&k('"\\n"')),null===a&&("\r\n"===b.substr(e,2)?(a="\r\n",e+=2):(a=null,0===f&&k('"\\r\\n"')),null===a&&(13===b.charCodeAt(e)?(a="\r",e++):(a=null,0===f&&k('"\\r"')),null===a&&(8232===b.charCodeAt(e)?(a="\u2028",e++):(a=null,0===f&&k('"\\u2028"')),null===a&&(8233===b.charCodeAt(e)?(a="\u2029",e++):(a=null,0===f&&k('"\\u2029"')))))),f--,0===f&&null===a&&k("end of line"),a}function t(){var a,c,d;return d=e,a=A(),null!==a?(59===b.charCodeAt(e)?(c=";",e++):(c=null,0===f&&k('";"')),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d),null===a&&(d=e,a=z(),null!==a?(c=s(),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d),null===a&&(d=e,a=A(),null!==a?(c=u(),null!==c?a=[a,c]:(a=null,e=d)):(a=null,e=d))),a}function u(){var a,c;return c=e,f++,b.length>e?(a=b.charAt(e),e++):(a=null,0===f&&k("any character")),f--,null===a?a="":(a=null,e=c),a}function v(){var a;return f++,a=w(),null===a&&(a=y()),f--,0===f&&null===a&&k("comment"),a}function w(){var a,c,d,g,h,i,j;if(h=e,"/*"===b.substr(e,2)?(a="/*",e+=2):(a=null,0===f&&k('"/*"')),null!==a){for(c=[],i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?("*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function x(){var a,c,d,g,h,i,j;if(h=e,"/*"===b.substr(e,2)?(a="/*",e+=2):(a=null,0===f&&k('"/*"')),null!==a){for(c=[],i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null===d&&(d=r()),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,"*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null===d&&(d=r()),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?("*/"===b.substr(e,2)?(d="*/",e+=2):(d=null,0===f&&k('"*/"')),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function y(){var a,c,d,g,h,i,j;if(h=e,"//"===b.substr(e,2)?(a="//",e+=2):(a=null,0===f&&k('"//"')),null!==a){for(c=[],i=e,j=e,f++,d=r(),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==d;)c.push(d),i=e,j=e,f++,d=r(),f--,null===d?d="":(d=null,e=j),null!==d?(g=n(),null!==g?d=[d,g]:(d=null,e=i)):(d=null,e=i);null!==c?(d=r(),null===d&&(d=u()),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)}else a=null,e=h;return a}function z(){var a,b;for(a=[],b=q(),null===b&&(b=x(),null===b&&(b=y()));null!==b;)a.push(b),b=q(),null===b&&(b=x(),null===b&&(b=y()));return a}function A(){var a,b;for(a=[],b=q(),null===b&&(b=s(),null===b&&(b=v()));null!==b;)a.push(b),b=q(),null===b&&(b=s(),null===b&&(b=v()));return a}function B(){var a,b;return b=e,a=D(),null===a&&(a=C()),null!==a&&(a=function(a,b){return{type:"NumericLiteral",value:b}}(b,a)),null===a&&(e=b),a}function C(){var a,c,d;if(d=e,/^[0-9]/.test(b.charAt(e))?(c=b.charAt(e),e++):(c=null,0===f&&k("[0-9]")),null!==c)for(a=[];null!==c;)a.push(c),/^[0-9]/.test(b.charAt(e))?(c=b.charAt(e),e++):(c=null,0===f&&k("[0-9]"));else a=null;return null!==a&&(a=function(a,b){return parseInt(b.join(""))}(d,a)),null===a&&(e=d),a}function D(){var a,c,d,g,h;return g=e,h=e,a=C(),null!==a?(46===b.charCodeAt(e)?(c=".",e++):(c=null,0===f&&k('"."')),null!==c?(d=C(),null!==d?a=[a,c,d]:(a=null,e=h)):(a=null,e=h)):(a=null,e=h),null!==a&&(a=function(a,b){return parseFloat(b.join(""))}(g,a)),null===a&&(e=g),a}function E(){var a,c,d,g;if(g=e,/^[\-+]/.test(b.charAt(e))?(a=b.charAt(e),e++):(a=null,0===f&&k("[\\-+]")),a=null!==a?a:"",null!==a){if(/^[0-9]/.test(b.charAt(e))?(d=b.charAt(e),e++):(d=null,0===f&&k("[0-9]")),null!==d)for(c=[];null!==d;)c.push(d),/^[0-9]/.test(b.charAt(e))?(d=b.charAt(e),e++):(d=null,0===f&&k("[0-9]"));else c=null;null!==c?a=[a,c]:(a=null,e=g)}else a=null,e=g;return a}function F(){var a,b;return f++,b=e,a=G(),null!==a&&(a=function(a,b){return b}(b,a)),null===a&&(e=b),f--,0===f&&null===a&&k("identifier"),a}function G(){var a,b,c,d,g;if(f++,d=e,g=e,a=o(),null!==a){for(b=[],c=p();null!==c;)b.push(c),c=p();null!==b?a=[a,b]:(a=null,e=g)}else a=null,e=g;return null!==a&&(a=function(a,b,c){return b+c.join("")}(d,a[0],a[1])),null===a&&(e=d),f--,0===f&&null===a&&k("identifier"),a}function H(){var a,c,d,g,h,i,j;return i=e,a=F(),null!==a&&(a=function(a,b){return{type:"Variable",name:b}}(i,a)),null===a&&(e=i),null===a&&(a=B(),null===a&&(i=e,j=e,40===b.charCodeAt(e)?(a="(",e++):(a=null,0===f&&k('"("')),null!==a?(c=A(),null!==c?(d=Q(),null!==d?(g=A(),null!==g?(41===b.charCodeAt(e)?(h=")",e++):(h=null,0===f&&k('")"')),null!==h?a=[a,c,d,g,h]:(a=null,e=j)):(a=null,e=j)):(a=null,e=j)):(a=null,e=j)):(a=null,e=j),null!==a&&(a=function(a,b){return b}(i,a[2])),null===a&&(e=i))),a}function I(){var a,b,c,d,f;return a=H(),null===a&&(d=e,f=e,a=J(),null!==a?(b=A(),null!==b?(c=I(),null!==c?a=[a,b,c]:(a=null,e=f)):(a=null,e=f)):(a=null,e=f),null!==a&&(a=function(a,b,c){return{type:"UnaryExpression",operator:b,expression:c}}(d,a[0],a[2])),null===a&&(e=d)),a}function J(){var a;return 43===b.charCodeAt(e)?(a="+",e++):(a=null,0===f&&k('"+"')),null===a&&(45===b.charCodeAt(e)?(a="-",e++):(a=null,0===f&&k('"-"')),null===a&&(33===b.charCodeAt(e)?(a="!",e++):(a=null,0===f&&k('"!"')))),a}function K(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=I(),null!==a){for(b=[],j=e,c=A(),null!==c?(d=L(),null!==d?(f=A(),null!==f?(g=I(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=A(),null!==c?(d=L(),null!==d?(f=A(),null!==f?(g=I(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"MultiplicativeExpression",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function L(){var a;return 42===b.charCodeAt(e)?(a="*",e++):(a=null,0===f&&k('"*"')),null===a&&(47===b.charCodeAt(e)?(a="/",e++):(a=null,0===f&&k('"/"'))),a}function M(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=K(),null!==a){for(b=[],j=e,c=A(),null!==c?(d=N(),null!==d?(f=A(),null!==f?(g=K(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=A(),null!==c?(d=N(),null!==d?(f=A(),null!==f?(g=K(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"AdditiveExpression",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function N(){var a;return 43===b.charCodeAt(e)?(a="+",e++):(a=null,0===f&&k('"+"')),null===a&&(45===b.charCodeAt(e)?(a="-",e++):(a=null,0===f&&k('"-"'))),a}function O(){var a,b,c,d,f,g,h,i,j;if(h=e,i=e,a=M(),null!==a){for(b=[],j=e,c=A(),null!==c?(d=P(),null!==d?(f=A(),null!==f?(g=M(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==c;)b.push(c),j=e,c=A(),null!==c?(d=P(),null!==d?(f=A(),null!==f?(g=M(),null!==g?c=[c,d,f,g]:(c=null,e=j)):(c=null,e=j)):(c=null,e=j)):(c=null,e=j);null!==b?a=[a,b]:(a=null,e=i)}else a=null,e=i;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"Inequality",operator:c[e][1],left:d,right:c[e][3]};return d}(h,a[0],a[1])),null===a&&(e=h),a}function P(){var a;return"<="===b.substr(e,2)?(a="<=",e+=2):(a=null,0===f&&k('"<="')),null===a&&(">="===b.substr(e,2)?(a=">=",e+=2):(a=null,0===f&&k('">="')),null===a&&(60===b.charCodeAt(e)?(a="<",e++):(a=null,0===f&&k('"<"')),null===a&&(62===b.charCodeAt(e)?(a=">",e++):(a=null,0===f&&k('">"'))))),a}function Q(){var a,c,d,g,h,i,j,l,m;if(j=e,l=e,a=O(),null!==a){for(c=[],m=e,d=A(),null!==d?("=="===b.substr(e,2)?(g="==",e+=2):(g=null,0===f&&k('"=="')),null!==g?(h=A(),null!==h?(i=O(),null!==i?d=[d,g,h,i]:(d=null,e=m)):(d=null,e=m)):(d=null,e=m)):(d=null,e=m);null!==d;)c.push(d),m=e,d=A(),null!==d?("=="===b.substr(e,2)?(g="==",e+=2):(g=null,0===f&&k('"=="')),null!==g?(h=A(),null!==h?(i=O(),null!==i?d=[d,g,h,i]:(d=null,e=m)):(d=null,e=m)):(d=null,e=m)):(d=null,e=m);null!==c?a=[a,c]:(a=null,e=l)}else a=null,e=l;return null!==a&&(a=function(a,b,c){for(var d=b,e=0;e<c.length;e++)d={type:"Equality",operator:c[e][1],left:d,right:c[e][3]};return d}(j,a[0],a[1])),null===a&&(e=j),a}function R(a){a.sort();for(var b=null,c=[],d=0;d<a.length;d++)a[d]!==b&&(c.push(a[d]),b=a[d]);return c}function S(){for(var a=1,c=1,d=!1,f=0;f<Math.max(e,g);f++){var h=b.charAt(f);"\n"===h?(d||a++,c=1,d=!1):"\r"===h||"\u2028"===h||"\u2029"===h?(a++,c=1,d=!0):(c++,d=!1)}return{line:a,column:c}}var d={start:l,Statement:m,SourceCharacter:n,IdentifierStart:o,IdentifierPart:p,WhiteSpace:q,LineTerminator:r,LineTerminatorSequence:s,EOS:t,EOF:u,Comment:v,MultiLineComment:w,MultiLineCommentNoLineTerminator:x,SingleLineComment:y,_:z,__:A,Literal:B,Integer:C,Real:D,SignedInteger:E,Identifier:F,IdentifierName:G,PrimaryExpression:H,UnaryExpression:I,UnaryOperator:J,MultiplicativeExpression:K,MultiplicativeOperator:L,AdditiveExpression:M,AdditiveOperator:N,InequalityExpression:O,InequalityOperator:P,LinearExpression:Q};if(void 0!==c){if(void 0===d[c])throw new Error("Invalid rule name: "+a(c)+".")}else c="start";var e=0,f=0,g=0,h=[],T=d[c]();if(null===T||e!==b.length){var U=Math.max(e,g),V=U<b.length?b.charAt(U):null,W=S();throw new this.SyntaxError(R(h),V,U,W.line,W.column)}return T},toSource:function(){return this._source}};return b.SyntaxError=function(b,c,d,e,f){function g(b,c){var d,e;switch(b.length){case 0:d="end of input";break;case 1:d=b[0];break;default:d=b.slice(0,b.length-1).join(", ")+" or "+b[b.length-1]}return e=c?a(c):"end of input","Expected "+d+" but "+e+" found."}this.name="SyntaxError",this.expected=b,this.found=c,this.message=g(b,c),this.offset=d,this.line=e,this.column=f},b.SyntaxError.prototype=Error.prototype,b}(),function(a){"use strict";var b=new a.SimplexSolver,c={},d={},e=a.Strength.weak;a.Strength.medium,a.Strength.strong,a.Strength.required;var i=function(f){if(d[f])return d[f];switch(f.type){case"Inequality":var g="<="==f.operator?a.LEQ:a.GEQ,h=new a.Inequality(i(f.left),g,i(f.right),e);return b.addConstraint(h),h;case"Equality":var h=new a.Equation(i(f.left),i(f.right),e);return b.addConstraint(h),h;case"MultiplicativeExpression":var h=a.times(i(f.left),i(f.right));return b.addConstraint(h),h;case"AdditiveExpression":return"+"==f.operator?a.plus(i(f.left),i(f.right)):a.minus(i(f.left),i(f.right));case"NumericLiteral":return new a.Expression(f.value);case"Variable":return c[f.name]||(c[f.name]=new a.Variable({name:f.name})),c[f.name];case"UnaryExpression":console.log("UnaryExpression...WTF?")}},j=function(a){return a.map(i)};a._api=function(){var c=Array.prototype.slice.call(arguments);if(1==c.length){if("string"==typeof c[0]){var d=a.parser.parse(c[0]);return j(d)}"function"==typeof c[0]&&b._addCallback(c[0])}}}(this.c||module.parent.exports||{});
 })();
 e;
