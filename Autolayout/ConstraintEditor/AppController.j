@@ -96,6 +96,7 @@ CPLogRegister(CPLogConsole);
     @outlet CPWindow  theWindow;
     @outlet CPPopover priorityPopover;
     @outlet CPPopover addPopover;
+    @outlet CPTableView tableView;
 
     @outlet CPWindow  constraintWindow @accessors;
 
@@ -302,6 +303,7 @@ CPLog.debug(_cmd);
     }
 
     [addPopover performClose:sender];
+    [constraintWindow setNeedsLayout];
 }
 
 - (void)tableViewSelectionDidChange:(CPNotification)aNotification

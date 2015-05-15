@@ -20,6 +20,7 @@
                 <outlet property="addPopover" destination="W81-Pd-PKb" id="bgc-LD-nTe"/>
                 <outlet property="constraintWindow" destination="371" id="v2Y-6z-14Q"/>
                 <outlet property="priorityPopover" destination="1023" id="pjK-8y-Eco"/>
+                <outlet property="tableView" destination="461" id="FK1-VR-LBx"/>
                 <outlet property="theWindow" destination="371" id="459"/>
             </connections>
         </customObject>
@@ -40,7 +41,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="58" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" id="461">
-                                    <rect key="frame" x="0.0" y="0.0" width="349" height="249"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="349" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
