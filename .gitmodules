@@ -1,0 +1,4 @@
+[submodule "cappuccino"]
+	path = cappuccino
+	url = https://github.com/cacaodev/cappuccino.git
+	branch = Autolayout
