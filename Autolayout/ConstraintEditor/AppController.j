@@ -119,6 +119,7 @@ CPLogRegister(CPLogConsole);
     self = [super init];
 
     _selectedViews = @[];
+    
     windowLoaded = NO;
 
     return self;
@@ -131,12 +132,23 @@ CPLogRegister(CPLogConsole);
     [CPBundle loadCibNamed:@"Autolayout" owner:self];
 
     [constraintWindow setAutolayoutEnabled:YES];
+    [[constraintWindow contentView] addObserver:self forKeyPath:@"constraints" options:CPKeyValueObservingOptionNew context:nil];
     [constraintWindow orderFront:nil];
+}
+
+- (void)observeValueForKeyPath:(CPString)keyPath
+                      ofObject:(id)object
+                        change:(CPDictionary)change
+                       context:(void)context
+{
+    if (keyPath == @"constraints")
+    {
+        [[constraintWindow contentView] setNeedsDisplay:YES];
+    }
 }
 
 - (IBAction)constantAction:(id)sender
 {
-CPLog.debug(_cmd);
     [constraintWindow setNeedsLayout];
     [[self selectedView] setNeedsDisplay:YES];
 }
@@ -173,9 +185,15 @@ CPLog.debug(_cmd);
 
     if (![sender isHighlighted])
     {
-        [priorityPopover performClose:sender];
+        var selectedView = [self selectedView];
+        var row = [tableView rowForView:sender];
+        var constraint = [[selectedView constraints] objectAtIndex:row];
+        [constraint setPriority:priority];
+
         [constraintWindow setNeedsLayout];
-        [[self selectedView] setNeedsDisplay:YES];
+        [selectedView setNeedsDisplay:YES];
+
+        [priorityPopover performClose:sender];
     }
 }
 
@@ -308,16 +326,24 @@ CPLog.debug(_cmd);
 
 - (void)tableViewSelectionDidChange:(CPNotification)aNotification
 {
-    var table = [aNotification object],
-        selectedRow = [table selectedRow];
-
-    if (selectedRow !== CPNotFound)
-    {
-        [[self selectedView] setNeedsDisplay:YES];
-    }
+    [[self selectedView] setNeedsDisplay:YES];
 }
 
-- (CPView)tableView:(CPTableView)tableView viewForTableColumn:(CPTableColumn)tableColumn row:(CPInteger)row
+- (void)updatePrioritySlider
+{
+    var constraints = [[self selectedView] constraints];
+    
+    [tableView enumerateAvailableViewsUsingBlock:function(aCellView, row, column, stop)
+    {
+        if ([aCellView identifier] == "Constraint")
+        {
+            var priority = [[constraints objectAtIndex:row] priority];
+            [[aCellView viewWithTag:1000] setFloatValue:priority];
+        }
+    }];
+}
+
+- (CPView)tableView:(CPTableView)aTableView viewForTableColumn:(CPTableColumn)tableColumn row:(CPInteger)row
 {
     var constraintsView = [self selectedView],
         cellView = nil;
@@ -325,7 +351,7 @@ CPLog.debug(_cmd);
     if (constraintsView)
     {
         var constraint = [[constraintsView constraints] objectAtIndex:row];
-        cellView = [tableView makeViewWithIdentifier:[constraint _constraintType] owner:self];
+        cellView = [aTableView makeViewWithIdentifier:[constraint _constraintType] owner:self];
     }
 
     return cellView;
@@ -382,6 +408,7 @@ CPLog.debug(_cmd);
     }
 
     [self setSelectedViews:current_selection];
+    [self updatePrioritySlider];
 }
 
 - (CPView)selectedView
@@ -413,7 +440,7 @@ CPLog.debug(_cmd);
     BOOL _selected        @accessors(getter=selected);
     BOOL _showConstraints @accessors(property=showConstraints);
     CPIndexSet    selectedConstraintIndexes @accessors;
-    CGSize intrinsicContentSize;
+    CGSize m_intrinsicContentSize;
 }
 
 + (CPSet)keyPathsForValuesAffectingConstraints
@@ -421,32 +448,35 @@ CPLog.debug(_cmd);
     return [CPSet setWithObjects:@"intrinsicContentWidth", @"intrinsicContentHeight", @"horizontalContentHuggingPriority", @"verticalContentHuggingPriority", @"horizontalContentCompressionResistancePriority", @"verticalContentCompressionResistancePriority"];
 }
 
-- (void)observeValueForKeyPath:(CPString)keyPath
-                      ofObject:(id)object
-                        change:(CPDictionary)change
-                       context:(void)context
-{
-    if (keyPath == @"constraints")
-    {
-        [self setNeedsDisplay:YES];
-    }
-}
-
 - (BOOL)acceptsFirstMouse:(CPEvent)anEvent
 {
     return YES;
 }
 
-- (void)awakeFromCib
+- (id)initWithFrame:(CGRect)aFrame
 {
     CPLog.debug([self class] + _cmd);
-
-    [self addObserver:self forKeyPath:@"constraints" options:CPKeyValueObservingOptionNew context:nil];
+    self = [super initWithFrame:aFrame];
 
     _selected  = NO;
     _showConstraints = YES;
-    intrinsicContentSize = [super intrinsicContentSize];
+    m_intrinsicContentSize = CGSizeMake(-1,-1);
     selectedConstraintIndexes = [CPIndexSet indexSet];
+
+    return self;
+}
+
+- (id)initWithCoder:(CPCoder)aCoder
+{
+    CPLog.debug([self class] + _cmd);
+    self = [super initWithCoder:aCoder];
+
+    _selected  = NO;
+    _showConstraints = YES;
+    m_intrinsicContentSize = CGSizeMake(-1,-1);
+    selectedConstraintIndexes = [CPIndexSet indexSet];
+
+    return self;
 }
 
 - (void)mouseDown:(CPEvent)anEvent
@@ -509,7 +539,7 @@ CPLog.debug(_cmd);
         multiplier      = [aConstraint multiplier],
         constant        = [aConstraint constant],
         priority        = [aConstraint priority],
-        flags           = [aConstraint contraintFlags];
+        flags           = [aConstraint constraintFlags];
 
     if (secondAttribute === CPLayoutAttributeNotAnAttribute && firstAttribute !== CPLayoutAttributeWidth && firstAttribute !== CPLayoutAttributeHeight)
         secondAttribute = firstAttribute;
@@ -652,7 +682,10 @@ CPLog.debug(_cmd);
 
 - (CGSize)intrinsicContentSize
 {
-    return intrinsicContentSize;
+    if (m_intrinsicContentSize)
+        return m_intrinsicContentSize;
+
+    return CGSizeMake(-1,-1);
 }
 
 - (float)horizontalContentHuggingPriority
@@ -664,7 +697,6 @@ CPLog.debug(_cmd);
 {
     [self setContentHuggingPriority:aPriority forOrientation:CPLayoutConstraintOrientationHorizontal];
     [self invalidateIntrinsicContentSize];
-    [[self window] setNeedsLayout];
 }
 
 - (float)verticalContentHuggingPriority
@@ -676,7 +708,6 @@ CPLog.debug(_cmd);
 {
     [self setContentHuggingPriority:aPriority forOrientation:CPLayoutConstraintOrientationVertical];
     [self invalidateIntrinsicContentSize];
-    [[self window] setNeedsLayout];
 }
 
 - (float)horizontalContentCompressionResistancePriority
@@ -688,7 +719,6 @@ CPLog.debug(_cmd);
 {
     [self setContentCompressionResistancePriority:aPriority forOrientation:CPLayoutConstraintOrientationHorizontal];
     [self invalidateIntrinsicContentSize];
-    [[self window] setNeedsLayout];
 }
 
 - (float)verticalContentCompressionResistancePriority
@@ -700,34 +730,32 @@ CPLog.debug(_cmd);
 {
     [self setContentCompressionResistancePriority:aPriority forOrientation:CPLayoutConstraintOrientationVertical];
     [self invalidateIntrinsicContentSize];
-    [[self window] setNeedsLayout];
 }
 
 - (float)intrinsicContentWidth
 {
-    return intrinsicContentSize.width;
+    return m_intrinsicContentSize.width;
 }
 
 - (void)setIntrinsicContentWidth:(float)aWidth
 {
-    [self willChangeValueForKey:@"constraints"];
-    intrinsicContentSize.width = aWidth;
+    m_intrinsicContentSize.width = aWidth;
     [self invalidateIntrinsicContentSize];
-    [self didChangeValueForKey:@"constraints"];
 }
 
 - (float)intrinsicContentHeight
 {
-    return intrinsicContentSize.height;
+    return m_intrinsicContentSize.height;
 }
 
 - (void)setIntrinsicContentHeight:(float)aHeight
 {
-    intrinsicContentSize.height = aHeight;
+    m_intrinsicContentSize.height = aHeight;
     [self invalidateIntrinsicContentSize];
 }
 
 @end
+
 
 var LayoutConstraint = function(firstItem, firstAttr, relation, secondItem, secondAttr, multiplier, constant, priority)
 {

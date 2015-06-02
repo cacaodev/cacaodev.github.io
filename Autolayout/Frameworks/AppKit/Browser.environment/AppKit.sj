@@ -5125,15 +5125,17 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     self.isa.objj_msgSend0(self, "_selectionDidChange");
 }
 ,["void"])]);
-}p;36;CPAutoresizingMaskLayoutConstraint.jt;8651;@STATIC;1.0;i;20;CPLayoutConstraint.jt;8607;objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPAutoresizingMaskLayoutConstraint"),
+}p;36;CPAutoresizingMaskLayoutConstraint.jt;8384;@STATIC;1.0;i;20;CPLayoutConstraint.jt;8340;objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPAutoresizingMaskLayoutConstraint"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
-class_addMethods(the_class, [new objj_method(sel_getUid("initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:"), function $CPAutoresizingMaskLayoutConstraint__initWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(self, _cmd, item1, att1, relation, item2, att2, multiplier, constant)
+class_addMethods(the_class, [new objj_method(sel_getUid("isEqual:"), function $CPAutoresizingMaskLayoutConstraint__isEqual_(self, _cmd, anObject)
 {
-    self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPAutoresizingMaskLayoutConstraint").super_class }, "initWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:", item1, att1, relation, item2, att2, multiplier, constant);
-    self._active = YES;
-    return self;
+    if (anObject === self)
+        return YES;
+    if (!anObject || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "class")) !== self.isa.objj_msgSend0(self, "class") || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstAttribute")) !== self._firstAttribute || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "viewForAutoresizingMask")) !== self.isa.objj_msgSend0(self, "viewForAutoresizingMask"))
+        return NO;
+    return YES;
 }
-,["id","id","CPLayoutAttribute","CPLayoutRelation","id","CPLayoutAttribute","double","double"]), new objj_method(sel_getUid("viewForAutoresizingMask"), function $CPAutoresizingMaskLayoutConstraint__viewForAutoresizingMask(self, _cmd)
+,["BOOL","id"]), new objj_method(sel_getUid("viewForAutoresizingMask"), function $CPAutoresizingMaskLayoutConstraint__viewForAutoresizingMask(self, _cmd)
 {
     return self._firstItem !== self._container ? self._firstItem : self._secondItem;
 }
@@ -5215,8 +5217,6 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("constraintsWithAutores
     }
     (pconstraint == null ? null : pconstraint.isa.objj_msgSend1(pconstraint, "_setContainer:", superItem));
     (sconstraint == null ? null : sconstraint.isa.objj_msgSend1(sconstraint, "_setContainer:", superItem));
-    (pconstraint == null ? null : pconstraint.isa.objj_msgSend1(pconstraint, "setPriority:", 1000));
-    (sconstraint == null ? null : sconstraint.isa.objj_msgSend1(sconstraint, "setPriority:", 1000));
     return objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [pconstraint, sconstraint], 2);
 }
 ,["CPArray","unsigned","id","CGRect","id","CGRect","CPLayoutConstraintOrientation"])]);
@@ -11618,7 +11618,7 @@ CPBrowserBackingStorePixelRatio = function(context)
 {
     return context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
 }
-p;31;CPContentSizeLayoutConstraint.jt;5373;@STATIC;1.0;I;24;Foundation/_CGGeometry.ji;20;CPLayoutConstraint.jt;5300;objj_executeFile("Foundation/_CGGeometry.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPContentSizeLayoutConstraint"),
+p;31;CPContentSizeLayoutConstraint.jt;5595;@STATIC;1.0;I;24;Foundation/_CGGeometry.ji;20;CPLayoutConstraint.jt;5522;objj_executeFile("Foundation/_CGGeometry.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);{var the_class = objj_allocateClassPair(CPLayoutConstraint, "CPContentSizeLayoutConstraint"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_huggingPriority"), new objj_ivar("_compressPriority"), new objj_ivar("_orientation")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("huggingPriority"), function $CPContentSizeLayoutConstraint__huggingPriority(self, _cmd)
 {
@@ -11673,11 +11673,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("huggingPriority"), func
 {
     if (anObject === self)
         return YES;
-    if (!anObject || anObject.isa !== self.isa || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstItem")) !== self._firstItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "orientation")) !== self._orientation || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "constant")) !== self._constant || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "huggingPriority")) !== self._huggingPriority || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "compressPriority")) !== self._compressPriority)
+    if (!anObject || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "class")) !== self.isa.objj_msgSend0(self, "class") || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstItem")) !== self._firstItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "orientation")) !== self._orientation || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "constant")) !== self._constant || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "huggingPriority")) !== self._huggingPriority || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "compressPriority")) !== self._compressPriority)
         return NO;
     return YES;
 }
-,["BOOL","id"]), new objj_method(sel_getUid("variableForOrientation"), function $CPContentSizeLayoutConstraint__variableForOrientation(self, _cmd)
+,["BOOL","id"]), new objj_method(sel_getUid("resolveConstant"), function $CPContentSizeLayoutConstraint__resolveConstant(self, _cmd)
+{
+}
+,["void"]), new objj_method(sel_getUid("variableForOrientation"), function $CPContentSizeLayoutConstraint__variableForOrientation(self, _cmd)
 {
     return self._orientation ? ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableHeight")) : ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_variableWidth"));
     var ___r1;
@@ -16966,7 +16969,7 @@ CPIsControllerMarker = function(anObject)
 };
 var CPBinderPlaceholderMarkers = [CPMultipleValuesMarker, CPNoSelectionMarker, CPNotApplicableMarker, CPNullMarker],
     CPBinderPlaceholderOptions = [CPMultipleValuesPlaceholderBindingOption, CPNoSelectionPlaceholderBindingOption, CPNotApplicablePlaceholderBindingOption, CPNullPlaceholderBindingOption];
-p;20;CPLayoutConstraint.jt;28009;@STATIC;1.0;I;21;Foundation/CPObject.jI;21;Foundation/CPString.jt;27937;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);{var the_typedef = objj_allocateTypeDef("CPLayoutRelation");
+p;20;CPLayoutConstraint.jt;26835;@STATIC;1.0;I;21;Foundation/CPObject.jI;21;Foundation/CPString.jt;26763;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);{var the_typedef = objj_allocateTypeDef("CPLayoutRelation");
 objj_registerTypeDef(the_typedef);
 }CPLayoutRelationLessThanOrEqual = -1;
 CPLayoutRelationEqual = 0;
@@ -17000,7 +17003,7 @@ CPLayoutPriorityDefaultLow = 250;
 CPLayoutPriorityFittingSizeCompression = 50;
 var CPLayoutAttributeLabels = ["NotAnAttribute", "left", "right", "top", "bottom", "left", "right", "width", "height", "centerX", "centerY", "baseline"];
 {var the_class = objj_allocateClassPair(CPObject, "CPLayoutConstraint"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_container"), new objj_ivar("_firstItem"), new objj_ivar("_secondItem"), new objj_ivar("_firstAttribute"), new objj_ivar("_secondAttribute"), new objj_ivar("_relation"), new objj_ivar("_constant"), new objj_ivar("_coefficient"), new objj_ivar("_priority"), new objj_ivar("_active"), new objj_ivar("_identifier"), new objj_ivar("_contraintFlags"), new objj_ivar("_symbolicConstant"), new objj_ivar("_shouldBeArchived"), new objj_ivar("_addedToEngine"), new objj_ivar("_needsReplace"), new objj_ivar("_engineConstraints")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_container"), new objj_ivar("_firstItem"), new objj_ivar("_secondItem"), new objj_ivar("_firstAttribute"), new objj_ivar("_secondAttribute"), new objj_ivar("_relation"), new objj_ivar("_constant"), new objj_ivar("_coefficient"), new objj_ivar("_priority"), new objj_ivar("_active"), new objj_ivar("_identifier"), new objj_ivar("_shouldBeArchived"), new objj_ivar("_constraintFlags"), new objj_ivar("_symbolicConstant"), new objj_ivar("_engineConstraints")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $CPLayoutConstraint__container(self, _cmd)
 {
     return self._container;
@@ -17053,7 +17056,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     return self._constant;
 }
-,["double"]), new objj_method(sel_getUid("setConstant:"), function $CPLayoutConstraint__setConstant_(self, _cmd, newValue)
+,["double"]), new objj_method(sel_getUid("_setConstant:"), function $CPLayoutConstraint___setConstant_(self, _cmd, newValue)
 {
     self._constant = newValue;
 }
@@ -17069,7 +17072,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     return self._priority;
 }
-,["CPLayoutPriority"]), new objj_method(sel_getUid("setPriority:"), function $CPLayoutConstraint__setPriority_(self, _cmd, newValue)
+,["CPLayoutPriority"]), new objj_method(sel_getUid("_setPriority:"), function $CPLayoutConstraint___setPriority_(self, _cmd, newValue)
 {
     self._priority = newValue;
 }
@@ -17089,15 +17092,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     self._identifier = newValue;
 }
-,["void","CPString"]), new objj_method(sel_getUid("contraintFlags"), function $CPLayoutConstraint__contraintFlags(self, _cmd)
-{
-    return self._contraintFlags;
-}
-,["unsigned"]), new objj_method(sel_getUid("_setContraintFlags:"), function $CPLayoutConstraint___setContraintFlags_(self, _cmd, newValue)
-{
-    self._contraintFlags = newValue;
-}
-,["void","unsigned"]), new objj_method(sel_getUid("shouldBeArchived"), function $CPLayoutConstraint__shouldBeArchived(self, _cmd)
+,["void","CPString"]), new objj_method(sel_getUid("shouldBeArchived"), function $CPLayoutConstraint__shouldBeArchived(self, _cmd)
 {
     return self._shouldBeArchived;
 }
@@ -17105,23 +17100,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     self._shouldBeArchived = newValue;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("_addedToEngine"), function $CPLayoutConstraint___addedToEngine(self, _cmd)
+,["void","BOOL"]), new objj_method(sel_getUid("constraintFlags"), function $CPLayoutConstraint__constraintFlags(self, _cmd)
 {
-    return self._addedToEngine;
+    return self._constraintFlags;
 }
-,["BOOL"]), new objj_method(sel_getUid("_setAddedToEngine:"), function $CPLayoutConstraint___setAddedToEngine_(self, _cmd, newValue)
+,["unsigned"]), new objj_method(sel_getUid("_setConstraintFlags:"), function $CPLayoutConstraint___setConstraintFlags_(self, _cmd, newValue)
 {
-    self._addedToEngine = newValue;
+    self._constraintFlags = newValue;
 }
-,["void","BOOL"]), new objj_method(sel_getUid("_needsReplace"), function $CPLayoutConstraint___needsReplace(self, _cmd)
-{
-    return self._needsReplace;
-}
-,["BOOL"]), new objj_method(sel_getUid("_setNeedsReplace:"), function $CPLayoutConstraint___setNeedsReplace_(self, _cmd, newValue)
-{
-    self._needsReplace = newValue;
-}
-,["void","BOOL"]), new objj_method(sel_getUid("_engineConstraints"), function $CPLayoutConstraint___engineConstraints(self, _cmd)
+,["void","unsigned"]), new objj_method(sel_getUid("_engineConstraints"), function $CPLayoutConstraint___engineConstraints(self, _cmd)
 {
     return self._engineConstraints;
 }
@@ -17154,10 +17141,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 {
     self._container = nil;
     self._engineConstraints = nil;
-    self._contraintFlags = 0;
+    self._constraintFlags = 0;
     self._active = NO;
-    self._addedToEngine = NO;
-    self._needsReplace = NO;
 }
 ,["void"]), new objj_method(sel_getUid("copy"), function $CPLayoutConstraint__copy(self, _cmd)
 {
@@ -17167,7 +17152,20 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     (copy == null ? null : copy.isa.objj_msgSend1(copy, "_setContainer:", self._container));
     return copy;
 }
-,["id"]), new objj_method(sel_getUid("_findCommonAncestorForItem:andItem:"), function $CPLayoutConstraint___findCommonAncestorForItem_andItem_(self, _cmd, firstItem, secondItem)
+,["id"]), new objj_method(sel_getUid("hash"), function $CPLayoutConstraint__hash(self, _cmd)
+{
+    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%d%d%d%d%d%d%d%d", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), self._firstAttribute, self._secondAttribute, self._relation, self._constant, self._coefficient, self._priority);
+    var ___r1;
+}
+,["CPString"]), new objj_method(sel_getUid("isEqual:"), function $CPLayoutConstraint__isEqual_(self, _cmd, anObject)
+{
+    if (anObject === self)
+        return YES;
+    if (!anObject || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "class")) !== self.isa.objj_msgSend0(self, "class") || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstItem")) !== self._firstItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "secondItem")) !== self._secondItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstAttribute")) !== self._firstAttribute || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "secondAttribute")) !== self._secondAttribute || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "relation")) !== self._relation || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "multiplier")) !== self._coefficient || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "constant")) !== self._constant || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "priority")) !== self._priority)
+        return NO;
+    return YES;
+}
+,["BOOL","id"]), new objj_method(sel_getUid("_findCommonAncestorForItem:andItem:"), function $CPLayoutConstraint___findCommonAncestorForItem_andItem_(self, _cmd, firstItem, secondItem)
 {
     var ancestor = nil;
     if (firstItem !== nil && secondItem == nil)
@@ -17180,7 +17178,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 }
 ,["id","id","id"]), new objj_method(sel_getUid("_isSubtreeRelationship"), function $CPLayoutConstraint___isSubtreeRelationship(self, _cmd)
 {
-    return (self._contraintFlags & 8 || self._contraintFlags & 64) > 0;
+    return self._constraintFlags & 8 || self._constraintFlags & 64;
 }
 ,["BOOL"]), new objj_method(sel_getUid("setActive:"), function $CPLayoutConstraint__setActive_(self, _cmd, shouldActivate)
 {
@@ -17195,7 +17193,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
         }
         else
         {
-            CPException.isa.objj_msgSend(CPException, "raise:format:", CPGenericException, "Unable to activate constraint with items %@ and %@ because they have no common ancestor. Does the constraint reference items in different view hierarchies ? That's illegal.", self._firstItem, self._secondItem);
+            CPException.isa.objj_msgSend2(CPException, "raise:reason:", CPGenericException, CPString.isa.objj_msgSend3(CPString, "stringWithFormat:", "Unable to activate constraint with items %@ and %@ because they have no common ancestor. Does the constraint reference items in different view hierarchies ? That's illegal.", self._firstItem, self._secondItem));
         }
     }
     else
@@ -17211,19 +17209,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 ,["void","BOOL"]), new objj_method(sel_getUid("_setContainer:"), function $CPLayoutConstraint___setContainer_(self, _cmd, aContainer)
 {
     self._container = aContainer;
-    self._contraintFlags = CPLayoutConstraintFlags(self._container, self._firstItem) | CPLayoutConstraintFlags(self._container, self._secondItem) << 3;
+    self._constraintFlags = CPLayoutConstraintFlags(self._container, self._firstItem) | CPLayoutConstraintFlags(self._container, self._secondItem) << 3;
 }
 ,["void","id"]), new objj_method(sel_getUid("_setFirstItem:"), function $CPLayoutConstraint___setFirstItem_(self, _cmd, anItem)
 {
-    var item = self.isa.objj_msgSend1(self, "_validateItem:", anItem);
-    (item == null ? null : item.isa.objj_msgSend1(item, "setAutolayoutEnabled:", YES));
-    self._firstItem = item;
+    self._firstItem = self.isa.objj_msgSend1(self, "_validateItem:", anItem);
 }
 ,["void","id"]), new objj_method(sel_getUid("_setSecondItem:"), function $CPLayoutConstraint___setSecondItem_(self, _cmd, anItem)
 {
-    var item = self.isa.objj_msgSend1(self, "_validateItem:", anItem);
-    (item == null ? null : item.isa.objj_msgSend1(item, "setAutolayoutEnabled:", YES));
-    self._secondItem = item;
+    self._secondItem = self.isa.objj_msgSend1(self, "_validateItem:", anItem);
 }
 ,["void","id"]), new objj_method(sel_getUid("_validateItem:"), function $CPLayoutConstraint___validateItem_(self, _cmd, anItem)
 {
@@ -17233,48 +17227,42 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
 }
 ,["id","id"]), new objj_method(sel_getUid("setConstant:"), function $CPLayoutConstraint__setConstant_(self, _cmd, aConstant)
 {
-    if (aConstant !== self._constant)
+    if (aConstant === self._constant)
+        return;
+    var CPLayoutConstraintSetConstantBlock = function()
     {
-        self._constant = aConstant;
-        self.isa.objj_msgSend0(self, "setNeedsReplaceIfNeeded");
-        ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNeedsUpdateConstraints:", YES));
-    }
+        self.isa.objj_msgSend1(self, "_setConstant:", aConstant);
+    };
+    if (self._active)
+        ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "_updateConstraint:usingBlock:", self, CPLayoutConstraintSetConstantBlock));
+    else
+        CPLayoutConstraintSetConstantBlock();
     var ___r1;
+}
+,["void","double"]), new objj_method(sel_getUid("_setConstant:"), function $CPLayoutConstraint___setConstant_(self, _cmd, aConstant)
+{
+    self._constant = aConstant;
 }
 ,["void","double"]), new objj_method(sel_getUid("setPriority:"), function $CPLayoutConstraint__setPriority_(self, _cmd, aPriority)
 {
     var priority = MAX(MIN(aPriority, CPLayoutPriorityRequired), 0);
-    self.isa.objj_msgSend1(self, "_setPriority:", priority);
+    if (priority === self._priority)
+        return;
+    var CPLayoutConstraintSetPriorityBlock = function()
+    {
+        self.isa.objj_msgSend1(self, "_setPriority:", priority);
+    };
+    if (self._active)
+        ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "_updateConstraint:usingBlock:", self, CPLayoutConstraintSetPriorityBlock));
+    else
+        CPLayoutConstraintSetPriorityBlock();
+    var ___r1;
 }
 ,["void","CPLayoutPriority"]), new objj_method(sel_getUid("_setPriority:"), function $CPLayoutConstraint___setPriority_(self, _cmd, aPriority)
 {
-    if (aPriority !== self._priority)
-    {
-        self._priority = aPriority;
-        self.isa.objj_msgSend0(self, "setNeedsReplaceIfNeeded");
-        ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNeedsUpdateConstraints:", YES));
-    }
-    var ___r1;
+    self._priority = aPriority;
 }
-,["void","CPLayoutPriority"]), new objj_method(sel_getUid("setNeedsReplaceIfNeeded"), function $CPLayoutConstraint__setNeedsReplaceIfNeeded(self, _cmd)
-{
-    if (self._addedToEngine)
-        self._needsReplace = YES;
-}
-,["void"]), new objj_method(sel_getUid("hash"), function $CPLayoutConstraint__hash(self, _cmd)
-{
-    return CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%d%d%d%d%d%d%d%d", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "UID")), self._firstAttribute, self._secondAttribute, self._relation, self._constant, self._coefficient, self._priority);
-    var ___r1;
-}
-,["CPString"]), new objj_method(sel_getUid("isEqual:"), function $CPLayoutConstraint__isEqual_(self, _cmd, anObject)
-{
-    if (anObject === self)
-        return YES;
-    if (!anObject || anObject.isa !== self.isa || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstItem")) !== self._firstItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "secondItem")) !== self._secondItem || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "firstAttribute")) !== self._firstAttribute || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "secondAttribute")) !== self._secondAttribute || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "relation")) !== self._relation || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "multiplier")) !== self._coefficient || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "constant")) !== self._constant || (anObject == null ? null : anObject.isa.objj_msgSend0(anObject, "priority")) !== self._priority)
-        return NO;
-    return YES;
-}
-,["BOOL","id"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraint__description(self, _cmd)
+,["void","CPLayoutPriority"]), new objj_method(sel_getUid("description"), function $CPLayoutConstraint__description(self, _cmd)
 {
     var term1 = self._firstItem && self._firstAttribute ? CPString.isa.objj_msgSend3(CPString, "stringWithFormat:", "%@.%@", ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), CPStringFromAttribute(self._firstAttribute)) : "",
         term2 = self._secondItem && self._secondAttribute && self._coefficient ? CPString.isa.objj_msgSend(CPString, "stringWithFormat:", "%@.%@ x%@", ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "debugID")), CPStringFromAttribute(self._secondAttribute), self._coefficient) : "",
@@ -17338,12 +17326,10 @@ class_addMethods(the_class, [new objj_method(sel_getUid("container"), function $
     return anItem !== nil && anItem == self._container;
 }
 ,["BOOL","id"])]);
-class_addMethods(meta_class, [new objj_method(sel_getUid("keyPathsForValuesAffectingValueForKey:"), function $CPLayoutConstraint__keyPathsForValuesAffectingValueForKey_(self, _cmd, key)
+class_addMethods(meta_class, [new objj_method(sel_getUid("keyPathsForValuesAffectingValueForKey:"), function $CPLayoutConstraint__keyPathsForValuesAffectingValueForKey_(self, _cmd, aKey)
 {
-    if (key == "description")
-    {
+    if (aKey == "description")
         return (CPSet == null ? null : CPSet.isa.objj_msgSend2(CPSet, "setWithObjects:", "constant", "priority"));
-    }
     return (CPSet == null ? null : CPSet.isa.objj_msgSend0(CPSet, "set"));
 }
 ,["CPSet","CPString"]), new objj_method(sel_getUid("constraintWithItem:attribute:relatedBy:toItem:attribute:multiplier:constant:"), function $CPLayoutConstraint__constraintWithItem_attribute_relatedBy_toItem_attribute_multiplier_constant_(self, _cmd, item1, att1, relation, item2, att2, multiplier, constant)
@@ -17355,7 +17341,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("keyPathsForValuesAffec
 {
     self.isa.objj_msgSend2(self, "constraints:activateOrNot:", constraints, YES);
 }
-,["void","CPArray"]), new objj_method(sel_getUid("desactivateConstraints:"), function $CPLayoutConstraint__desactivateConstraints_(self, _cmd, constrainst)
+,["void","CPArray"]), new objj_method(sel_getUid("deactivateConstraints:"), function $CPLayoutConstraint__deactivateConstraints_(self, _cmd, constraints)
 {
     self.isa.objj_msgSend2(self, "constraints:activateOrNot:", constraints, NO);
 }
@@ -17381,17 +17367,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("keyPathsForValuesAffec
 {
 var the_class = objj_getClass("CPLayoutConstraint")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPLayoutConstraint\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("awakeFromCib"), function $CPLayoutConstraint__awakeFromCib(self, _cmd)
-{
-    self.isa.objj_msgSend0(self, "_enableAutoLayoutIfNeeded");
-}
-,["void"]), new objj_method(sel_getUid("_enableAutoLayoutIfNeeded"), function $CPLayoutConstraint___enableAutoLayoutIfNeeded(self, _cmd)
-{
-    ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-    ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("encodeWithCoder:"), function $CPLayoutConstraint__encodeWithCoder_(self, _cmd, aCoder)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("encodeWithCoder:"), function $CPLayoutConstraint__encodeWithCoder_(self, _cmd, aCoder)
 {
     if (self._firstItem)
         (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeConditionalObject:forKey:", self._firstItem, CPFirstItem));
@@ -17496,7 +17472,7 @@ var CPLayoutConstraintFlags = function(aContainer, anItem)
     else
         return 8;
 };
-p;26;CPLayoutConstraintEngine.jt;19068;@STATIC;1.0;I;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;21;Foundation/CPBundle.jI;23;Foundation/CPIndexSet.ji;20;CPLayoutConstraint.ji;4;c.jst;18908;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("c.js", YES);{var the_typedef = objj_allocateTypeDef("SimplexSolver");
+p;26;CPLayoutConstraintEngine.jt;19370;@STATIC;1.0;I;21;Foundation/CPObject.jI;22;Foundation/CPRunLoop.jI;21;Foundation/CPBundle.jI;23;Foundation/CPIndexSet.ji;20;CPLayoutConstraint.ji;4;c.jst;19210;objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPRunLoop.j", NO);objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("c.js", YES);{var the_typedef = objj_allocateTypeDef("SimplexSolver");
 objj_registerTypeDef(the_typedef);
 }{var the_typedef = objj_allocateTypeDef("Map");
 objj_registerTypeDef(the_typedef);
@@ -17522,13 +17498,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
     self._simplexSolver.autoSolve = false;
     self._simplexSolver.onsolved = function(changes)
     {
+        var updatedContainers = CPSet.isa.objj_msgSend0(CPSet, "set");
         changes.forEach(function(change)
         {
             var variable = change.variable,
-                owner = self._variableOwnerMap.get(variable);
-            ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "engine:variableDidChange:withOwner:", self, variable, owner));
+                container = self._variableOwnerMap.get(variable);
+            ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend3(___r1, "engine:variableDidChange:inContainer:", self, variable, container));
+            (updatedContainers == null ? null : updatedContainers.isa.objj_msgSend1(updatedContainers, "addObject:", container));
             var ___r1;
         });
+        ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "engine:didChangeVariablesInContainers:", self, updatedContainers));
+        var ___r1;
     };
     return self;
 }
@@ -17626,7 +17606,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
     }));
     return result;
 }
-,["void","CPArray"]), new objj_method(sel_getUid("removeConstraints:"), function $CPLayoutConstraintEngine__removeConstraints_(self, _cmd, constraints)
+,["BOOL","CPArray"]), new objj_method(sel_getUid("removeConstraints:"), function $CPLayoutConstraintEngine__removeConstraints_(self, _cmd, constraints)
 {
     var result = YES;
     (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
@@ -17635,7 +17615,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
     }));
     return result;
 }
-,["void","CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPLayoutConstraintEngine__addConstraint_(self, _cmd, aConstraint)
+,["BOOL","CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPLayoutConstraintEngine__addConstraint_(self, _cmd, aConstraint)
 {
     var type = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")),
         container = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "container")),
@@ -17645,6 +17625,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
     {
         self._constraintContainerMap.set(constraint, {"Type": type, "Container": container});
         EngineLog("Added " + type + " in " + containerId + " : " + constraint.toString());
+        ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "engine:constraintDidChangeInContainer:", self, container));
+        var ___r1;
     };
     var onerror = function(error, constraint)
     {
@@ -17662,8 +17644,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
         if (!result)
             stop(YES);
     }));
-    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setAddedToEngine:", result));
-    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", result));
     return result;
 }
 ,["BOOL","CPLayoutConstraint"]), new objj_method(sel_getUid("removeConstraint:"), function $CPLayoutConstraintEngine__removeConstraint_(self, _cmd, aConstraint)
@@ -17677,6 +17657,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
     {
         self._constraintContainerMap.delete(constraint);
         EngineLog("Removed " + type + " in " + containerId + " : " + constraint.toString());
+        ((___r1 = self._delegate), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "engine:constraintDidChangeInContainer:", self, container));
+        var ___r1;
     };
     var onerror = function(error, constraint)
     {
@@ -17688,8 +17670,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("delegate"), function $C
         if (!result)
             stop(YES);
     }));
-    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setAddedToEngine:", !result));
-    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", !result));
     return result;
 }
 ,["BOOL","CPLayoutConstraint"]), new objj_method(sel_getUid("variableWithPrefix:name:value:owner:"), function $CPLayoutConstraintEngine__variableWithPrefix_name_value_owner_(self, _cmd, aPrefix, aName, aValue, anOwner)
@@ -25203,7 +25183,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     var ___r1;
 }
 ,["id","CPView","CPShadowWeight"])]);
-}p;10;CPSlider.jt;18935;@STATIC;1.0;i;11;CPControl.ji;20;CPWindow_Constants.jt;18874;objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);CPLinearSlider = 0;
+}p;10;CPSlider.jt;19117;@STATIC;1.0;i;11;CPControl.ji;20;CPWindow_Constants.jt;19056;objj_executeFile("CPControl.j", YES);objj_executeFile("CPWindow_Constants.j", YES);CPLinearSlider = 0;
 CPCircularSlider = 1;
 {var the_class = objj_allocateClassPair(CPControl, "CPSlider"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_minValue"), new objj_ivar("_maxValue"), new objj_ivar("_altIncrementValue"), new objj_ivar("_isVertical"), new objj_ivar("_dragOffset")]);objj_registerClassPair(the_class);
@@ -25487,24 +25467,27 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
 }{
 var the_class = objj_getClass("CPSlider")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPSlider\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("intrinsicContentSize"), function $CPSlider__intrinsicContentSize(self, _cmd)
-{
-    if (self.isa.objj_msgSend1(self, "hasThemeState:", CPThemeStateCircular))
-        return CGSizeMake(30.0, 30.0);
-    else if (self.isa.objj_msgSend0(self, "isVertical"))
-        return CGSizeMake(24.0, CPViewNoInstrinsicMetric);
-    else
-        return CGSizeMake(CPViewNoInstrinsicMetric, 24.0);
-}
-,["CGSize"])]);
-class_addMethods(meta_class, [new objj_method(sel_getUid("_defaultHuggingPriorities"), function $CPSlider___defaultHuggingPriorities(self, _cmd)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_contentHuggingPriorities"), function $CPSlider___contentHuggingPriorities(self, _cmd)
 {
     if (self.isa.objj_msgSend1(self, "hasThemeState:", CPThemeStateCircular))
         return CGSizeMake(CPLayoutPriorityDefaultHigh, CPLayoutPriorityDefaultHigh);
-    else if (self.isa.objj_msgSend0(self, "isVertical"))
+    else if (self.isa.objj_msgSend0(self, "isVertical") === 1)
         return CGSizeMake(CPLayoutPriorityDefaultHigh, CPLayoutPriorityDefaultLow);
     else
         return CGSizeMake(CPLayoutPriorityDefaultLow, CPLayoutPriorityDefaultHigh);
+}
+,["CGSize"]), new objj_method(sel_getUid("_contentCompressionResistancePriorities"), function $CPSlider___contentCompressionResistancePriorities(self, _cmd)
+{
+    return CGSizeMake(CPLayoutPriorityDefaultHigh, CPLayoutPriorityDefaultHigh);
+}
+,["CGSize"]), new objj_method(sel_getUid("intrinsicContentSize"), function $CPSlider__intrinsicContentSize(self, _cmd)
+{
+    if (self.isa.objj_msgSend1(self, "hasThemeState:", CPThemeStateCircular))
+        return CGSizeMake(30.0, 30.0);
+    else if (self.isa.objj_msgSend0(self, "isVertical") === 1)
+        return CGSizeMake(24.0, 24.0);
+    else
+        return CGSizeMake(24.0, 24.0);
 }
 ,["CGSize"])]);
 }var CPSliderMinValueKey = "CPSliderMinValueKey",
@@ -36811,7 +36794,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithController:"), 
     var ___r1;
 }
 ,["BOOL"])]);
-}p;8;CPView.jt;180384;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.jt;180025;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
+}p;8;CPView.jt;181379;@STATIC;1.0;I;20;Foundation/CPArray.jI;26;Foundation/CPObjJRuntime.jI;18;Foundation/CPSet.jI;23;Foundation/CPIndexSet.ji;19;CGAffineTransform.ji;12;CGGeometry.ji;9;CPColor.ji;19;CPGraphicsContext.ji;13;CPResponder.ji;9;CPTheme.ji;20;CPWindow_Constants.ji;18;_CPDisplayServer.ji;20;CPLayoutConstraint.ji;31;CPContentSizeLayoutConstraint.ji;36;CPAutoresizingMaskLayoutConstraint.jt;180992;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObjJRuntime.j", NO);objj_executeFile("Foundation/CPSet.j", NO);objj_executeFile("Foundation/CPIndexSet.j", NO);objj_executeFile("CGAffineTransform.j", YES);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPColor.j", YES);objj_executeFile("CPGraphicsContext.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPTheme.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPDisplayServer.j", YES);objj_executeFile("CPLayoutConstraint.j", YES);objj_executeFile("CPContentSizeLayoutConstraint.j", YES);objj_executeFile("CPAutoresizingMaskLayoutConstraint.j", YES);{var the_typedef = objj_allocateTypeDef("_CPViewFullScreenModeState");
 objj_registerTypeDef(the_typedef);
 }{var the_typedef = objj_allocateTypeDef("Variable");
 objj_registerTypeDef(the_typedef);
@@ -36850,7 +36833,7 @@ var CPViewFlags = {},
     CPViewHasCustomLayoutSubviews = 1 << 1;
 var CPViewHighDPIDrawingEnabled = YES;
 {var the_class = objj_allocateClassPair(CPResponder, "CPView"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_window"), new objj_ivar("_superview"), new objj_ivar("_subviews"), new objj_ivar("_graphicsContext"), new objj_ivar("_tag"), new objj_ivar("_identifier"), new objj_ivar("_frame"), new objj_ivar("_bounds"), new objj_ivar("_boundsTransform"), new objj_ivar("_inverseBoundsTransform"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_isHidden"), new objj_ivar("_hitTests"), new objj_ivar("_clipsToBounds"), new objj_ivar("_postsFrameChangedNotifications"), new objj_ivar("_postsBoundsChangedNotifications"), new objj_ivar("_inhibitFrameAndBoundsChangedNotifications"), new objj_ivar("_inLiveResize"), new objj_ivar("_isSuperviewAClipView"), new objj_ivar("_DOMElement"), new objj_ivar("_DOMContentsElement"), new objj_ivar("_DOMImageParts"), new objj_ivar("_DOMImageSizes"), new objj_ivar("_backgroundType"), new objj_ivar("_dirtyRect"), new objj_ivar("_opacity"), new objj_ivar("_backgroundColor"), new objj_ivar("_autoresizesSubviews"), new objj_ivar("_autoresizingMask"), new objj_ivar("_layer"), new objj_ivar("_wantsLayer"), new objj_ivar("_isInFullScreenMode"), new objj_ivar("_fullScreenModeState"), new objj_ivar("_isScaled"), new objj_ivar("_hierarchyScaleSize"), new objj_ivar("_scaleSize"), new objj_ivar("_needToSetTransformMatrix"), new objj_ivar("_highDPIRatio"), new objj_ivar("_needsLayout"), new objj_ivar("_ephemeralSubviews"), new objj_ivar("_theme"), new objj_ivar("_themeClass"), new objj_ivar("_themeAttributes"), new objj_ivar("_themeState"), new objj_ivar("_ephemeralSubviewsForNames"), new objj_ivar("_ephereralSubviews"), new objj_ivar("_nextKeyView"), new objj_ivar("_previousKeyView"), new objj_ivar("_viewClassFlags"), new objj_ivar("_toolTip"), new objj_ivar("_toolTipFunctionIn"), new objj_ivar("_toolTipFunctionOut"), new objj_ivar("_toolTipInstalled"), new objj_ivar("_isObserving"), new objj_ivar("_variableMinX"), new objj_ivar("_variableMinY"), new objj_ivar("_variableWidth"), new objj_ivar("_variableHeight"), new objj_ivar("_constraintsArray"), new objj_ivar("_autoresizingConstraints"), new objj_ivar("_internalConstraints"), new objj_ivar("_huggingPriorities"), new objj_ivar("_compressionPriorities"), new objj_ivar("_storedIntrinsicContentSize"), new objj_ivar("_needsUpdateConstraints"), new objj_ivar("_autolayoutEnabled"), new objj_ivar("_translatesAutoresizingMaskIntoConstraints"), new objj_ivar("_updateConstraintsFlags"), new objj_ivar("_constraintBasedNeedsLayoutMask")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_window"), new objj_ivar("_superview"), new objj_ivar("_subviews"), new objj_ivar("_graphicsContext"), new objj_ivar("_tag"), new objj_ivar("_identifier"), new objj_ivar("_frame"), new objj_ivar("_bounds"), new objj_ivar("_boundsTransform"), new objj_ivar("_inverseBoundsTransform"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_isHidden"), new objj_ivar("_hitTests"), new objj_ivar("_clipsToBounds"), new objj_ivar("_postsFrameChangedNotifications"), new objj_ivar("_postsBoundsChangedNotifications"), new objj_ivar("_inhibitFrameAndBoundsChangedNotifications"), new objj_ivar("_inLiveResize"), new objj_ivar("_isSuperviewAClipView"), new objj_ivar("_DOMElement"), new objj_ivar("_DOMContentsElement"), new objj_ivar("_DOMImageParts"), new objj_ivar("_DOMImageSizes"), new objj_ivar("_backgroundType"), new objj_ivar("_dirtyRect"), new objj_ivar("_opacity"), new objj_ivar("_backgroundColor"), new objj_ivar("_autoresizesSubviews"), new objj_ivar("_autoresizingMask"), new objj_ivar("_layer"), new objj_ivar("_wantsLayer"), new objj_ivar("_isInFullScreenMode"), new objj_ivar("_fullScreenModeState"), new objj_ivar("_isScaled"), new objj_ivar("_hierarchyScaleSize"), new objj_ivar("_scaleSize"), new objj_ivar("_needToSetTransformMatrix"), new objj_ivar("_highDPIRatio"), new objj_ivar("_needsLayout"), new objj_ivar("_ephemeralSubviews"), new objj_ivar("_theme"), new objj_ivar("_themeClass"), new objj_ivar("_themeAttributes"), new objj_ivar("_themeState"), new objj_ivar("_ephemeralSubviewsForNames"), new objj_ivar("_ephereralSubviews"), new objj_ivar("_nextKeyView"), new objj_ivar("_previousKeyView"), new objj_ivar("_viewClassFlags"), new objj_ivar("_toolTip"), new objj_ivar("_toolTipFunctionIn"), new objj_ivar("_toolTipFunctionOut"), new objj_ivar("_toolTipInstalled"), new objj_ivar("_isObserving"), new objj_ivar("_variableMinX"), new objj_ivar("_variableMinY"), new objj_ivar("_variableWidth"), new objj_ivar("_variableHeight"), new objj_ivar("_constraintsArray"), new objj_ivar("_autoresizingConstraints"), new objj_ivar("_internalConstraints"), new objj_ivar("_contentSizeConstraints"), new objj_ivar("_huggingPriorities"), new objj_ivar("_compressionPriorities"), new objj_ivar("_translatesAutoresizingMaskIntoConstraints"), new objj_ivar("_storedIntrinsicContentSize"), new objj_ivar("_needsUpdateConstraints"), new objj_ivar("_subviewsNeedUpdateConstraints"), new objj_ivar("_subviewsNeedSolvingInEngine"), new objj_ivar("_constraintBasedNeedsLayoutMask"), new objj_ivar("_isSettingFrameFromEngine"), new objj_ivar("_viewIsConstraintBased"), new objj_ivar("_viewHasConstraintBasedSubviews")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function $CPView__identifier(self, _cmd)
 {
     return self._identifier;
@@ -36891,7 +36874,23 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
 {
     self._internalConstraints = newValue;
 }
-,["void","CPArray"]), new objj_method(sel_getUid("storedIntrinsicContentSize"), function $CPView__storedIntrinsicContentSize(self, _cmd)
+,["void","CPArray"]), new objj_method(sel_getUid("_contentSizeConstraints"), function $CPView___contentSizeConstraints(self, _cmd)
+{
+    return self._contentSizeConstraints;
+}
+,["CPArray"]), new objj_method(sel_getUid("_setContentSizeConstraints:"), function $CPView___setContentSizeConstraints_(self, _cmd, newValue)
+{
+    self._contentSizeConstraints = newValue;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("translatesAutoresizingMaskIntoConstraints"), function $CPView__translatesAutoresizingMaskIntoConstraints(self, _cmd)
+{
+    return self._translatesAutoresizingMaskIntoConstraints;
+}
+,["BOOL"]), new objj_method(sel_getUid("setTranslatesAutoresizingMaskIntoConstraints:"), function $CPView__setTranslatesAutoresizingMaskIntoConstraints_(self, _cmd, newValue)
+{
+    self._translatesAutoresizingMaskIntoConstraints = newValue;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("storedIntrinsicContentSize"), function $CPView__storedIntrinsicContentSize(self, _cmd)
 {
     return self._storedIntrinsicContentSize;
 }
@@ -36906,22 +36905,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
 ,["BOOL"]), new objj_method(sel_getUid("setNeedsUpdateConstraints:"), function $CPView__setNeedsUpdateConstraints_(self, _cmd, newValue)
 {
     self._needsUpdateConstraints = newValue;
-}
-,["void","BOOL"]), new objj_method(sel_getUid("isAutolayoutEnabled"), function $CPView__isAutolayoutEnabled(self, _cmd)
-{
-    return self._autolayoutEnabled;
-}
-,["BOOL"]), new objj_method(sel_getUid("setAutolayoutEnabled:"), function $CPView__setAutolayoutEnabled_(self, _cmd, newValue)
-{
-    self._autolayoutEnabled = newValue;
-}
-,["void","BOOL"]), new objj_method(sel_getUid("translatesAutoresizingMaskIntoConstraints"), function $CPView__translatesAutoresizingMaskIntoConstraints(self, _cmd)
-{
-    return self._translatesAutoresizingMaskIntoConstraints;
-}
-,["BOOL"]), new objj_method(sel_getUid("setTranslatesAutoresizingMaskIntoConstraints:"), function $CPView__setTranslatesAutoresizingMaskIntoConstraints_(self, _cmd, newValue)
-{
-    self._translatesAutoresizingMaskIntoConstraints = newValue;
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("_constraintBasedNeedsLayoutMask"), function $CPView___constraintBasedNeedsLayoutMask(self, _cmd)
 {
@@ -36946,7 +36929,23 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     }
     self._viewClassFlags = CPViewFlags[classUID];
 }
-,["void"]), new objj_method(sel_getUid("init"), function $CPView__init(self, _cmd)
+,["void"]), new objj_method(sel_getUid("_setNeedsConstraintBasedLayout"), function $CPView___setNeedsConstraintBasedLayout(self, _cmd)
+{
+    self._viewIsConstraintBased = YES;
+}
+,["void"]), new objj_method(sel_getUid("_needsConstraintBasedLayout"), function $CPView___needsConstraintBasedLayout(self, _cmd)
+{
+    return self._viewIsConstraintBased;
+}
+,["BOOL"]), new objj_method(sel_getUid("_setHasConstraintBasedLayoutSubviews"), function $CPView___setHasConstraintBasedLayoutSubviews(self, _cmd)
+{
+    self._viewHasConstraintBasedSubviews = YES;
+}
+,["void"]), new objj_method(sel_getUid("_hasConstraintBasedLayoutSubviews"), function $CPView___hasConstraintBasedLayoutSubviews(self, _cmd)
+{
+    return self._viewHasConstraintBasedSubviews;
+}
+,["BOOL"]), new objj_method(sel_getUid("init"), function $CPView__init(self, _cmd)
 {
     return self.isa.objj_msgSend1(self, "initWithFrame:", CGRectMakeZero());
 }
@@ -36989,7 +36988,10 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
         (self == null ? null : self.isa.objj_msgSend0(self, "_setupViewFlags"));
         (self == null ? null : self.isa.objj_msgSend0(self, "_loadThemeAttributes"));
         (self == null ? null : self.isa.objj_msgSend0(self, "_initConstraintsIvars"));
-        self._identifier = nil;
+        self._translatesAutoresizingMaskIntoConstraints = YES;
+        self._huggingPriorities = nil;
+        self._compressionPriorities = nil;
+        (self == null ? null : self.isa.objj_msgSend0(self, "_updateNeedsUpdateConstraintsFlag"));
     }
     return self;
 }
@@ -37404,7 +37406,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
         ((___r1 = self._layer), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_owningViewBoundsChanged"));
     if (self._autoresizesSubviews)
         self.isa.objj_msgSend1(self, "resizeSubviewsWithOldSize:", oldSize);
-    self.isa.objj_msgSend0(self, "setNeedsLayout");
+    if (!self._isSettingFrameFromEngine || self._viewClassFlags & CPViewHasCustomLayoutSubviews)
+        self.isa.objj_msgSend0(self, "setNeedsLayout");
     self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES);
     self.isa.objj_msgSend1(self, "_setDisplayServerSetStyleSize:", size);
     if (self._backgroundType !== BackgroundTrivialColor)
@@ -37653,7 +37656,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     while (count--)
     {
         var subview = self._subviews[count];
-        if (!(subview == null ? null : subview.isa.objj_msgSend0(subview, "isAutolayoutEnabled")))
+        if (!(subview == null ? null : subview.isa.objj_msgSend0(subview, "_needsConstraintBasedLayout")))
             (subview == null ? null : subview.isa.objj_msgSend1(subview, "resizeWithOldSuperviewSize:", aSize));
     }
 }
@@ -38487,7 +38490,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
 }
 ,["void"]), new objj_method(sel_getUid("setNeedsLayout:"), function $CPView__setNeedsLayout_(self, _cmd, needsLayout)
 {
-    if ((self._autolayoutEnabled || self._viewClassFlags & CPViewHasCustomLayoutSubviews) && self._needsLayout !== needsLayout)
+    if ((self._viewHasConstraintBasedSubviews || self._viewClassFlags & CPViewHasCustomLayoutSubviews) && self._needsLayout !== needsLayout)
     {
         self._needsLayout = needsLayout;
         if (needsLayout)
@@ -38504,22 +38507,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("identifier"), function 
     {
         self._needsLayout = NO;
         self.isa.objj_msgSend0(self, "layoutSubviews");
-    }
-}
-,["void"]), new objj_method(sel_getUid("layoutSubviews"), function $CPView__layoutSubviews(self, _cmd)
-{
-    ((___r1 = self._subviews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(subview, idx, stop)
-    {
-        (subview == null ? null : subview.isa.objj_msgSend0(subview, "_updateGeometryIfNeeded"));
-    }));
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("_updateGeometryIfNeeded"), function $CPView___updateGeometryIfNeeded(self, _cmd)
-{
-    if (self._constraintBasedNeedsLayoutMask > 0)
-    {
-        _CPViewUpdateEngineFrame(self);
-        self._constraintBasedNeedsLayoutMask = 0;
     }
 }
 ,["void"]), new objj_method(sel_getUid("isOpaque"), function $CPView__isOpaque(self, _cmd)
@@ -39167,7 +39154,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         self._tag = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPViewTagKey)) ? (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeIntForKey:", CPViewTagKey)) : -1;
         self._identifier = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPReuseIdentifierKey));
         self._window = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewWindowKey));
-        self._subviews = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewSubviewsKey)) || [];
         self._superview = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewSuperviewKey));
         self._subviews = [];
         var subviews = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewSubviewsKey)) || [];
@@ -39224,17 +39210,14 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             self._themeAttributes[attributeName] = CPThemeAttributeDecode(aCoder, attributeName, attributes[count], self._theme, themeClass);
         }
         (self == null ? null : self.isa.objj_msgSend0(self, "_initConstraintsIvars"));
-        (self == null ? null : self.isa.objj_msgSend1(self, "setTranslatesAutoresizingMaskIntoConstraints:", !(aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeBoolForKey:", CPDoNotTranslateAutoresizingMask))));
+        if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPViewConstraints)))
+            self._internalConstraints = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewConstraints));
+        self._translatesAutoresizingMaskIntoConstraints = !(aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeBoolForKey:", CPDoNotTranslateAutoresizingMask));
         if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPHuggingPriority)))
             self._huggingPriorities = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeSizeForKey:", CPHuggingPriority));
         if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPAntiCompressionPriority)))
             self._compressionPriorities = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeSizeForKey:", CPAntiCompressionPriority));
-        if ((aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "containsValueForKey:", CPViewConstraints)))
-        {
-            var constraints = (aCoder == null ? null : aCoder.isa.objj_msgSend1(aCoder, "decodeObjectForKey:", CPViewConstraints));
-            if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")))
-                (self == null ? null : self.isa.objj_msgSend1(self, "addConstraints:", constraints));
-        }
+        (self == null ? null : self.isa.objj_msgSend0(self, "_updateNeedsUpdateConstraintsFlag"));
         (self == null ? null : self.isa.objj_msgSend1(self, "setNeedsDisplay:", YES));
         (self == null ? null : self.isa.objj_msgSend0(self, "setNeedsLayout"));
     }
@@ -39292,10 +39275,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeSize:forKey:", self.isa.objj_msgSend0(self, "scaleSize"), CPViewScaleKey));
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeSize:forKey:", self.isa.objj_msgSend0(self, "_hierarchyScaleSize"), CPViewSizeScaleKey));
     (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeBool:forKey:", self._isScaled, CPViewIsScaledKey));
-    var constraints = ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "filteredArrayUsingBlock:", function(obj, idx)
-    {
-        return (obj == null ? null : obj.isa.objj_msgSend0(obj, "shouldBeArchived"));
-    }));
+    var constraints = ((___r1 = self._internalConstraints), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "filteredArrayUsingBlock:", _CPViewArchiveConstraintsBlock));
     if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")))
         (aCoder == null ? null : aCoder.isa.objj_msgSend2(aCoder, "encodeObject:forKey:", constraints, CPViewConstraints));
     if (self._huggingPriorities)
@@ -39311,470 +39291,35 @@ var the_class = objj_getClass("CPView")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPView\"");
 var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_initConstraintsIvars"), function $CPView___initConstraintsIvars(self, _cmd)
 {
-    self._autolayoutEnabled = NO;
-    self._updateConstraintsFlags = 4;
+    self._viewIsConstraintBased = NO;
+    self._viewHasConstraintBasedSubviews = NO;
+    self._isSettingFrameFromEngine = NO;
+    self._subviewsNeedSolvingInEngine = NO;
     self._constraintBasedNeedsLayoutMask = 0;
     self._autoresizingConstraints = nil;
-    self._translatesAutoresizingMaskIntoConstraints = NO;
-    self._internalConstraints = nil;
-    self._constraintsArray = CPArray.isa.objj_msgSend0(CPArray, "array");
-    self._huggingPriorities = nil;
-    self._compressionPriorities = nil;
+    self._contentSizeConstraints = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init");
+    self._constraintsArray = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init");
     self._storedIntrinsicContentSize = CGSizeMake(-1, -1);
 }
-,["void"]), new objj_method(sel_getUid("_layoutEngine"), function $CPView___layoutEngine(self, _cmd)
+,["void"]), new objj_method(sel_getUid("_cibDidFinishLoadingWithOwner:"), function $CPView___cibDidFinishLoadingWithOwner_(self, _cmd, anOwner)
+{
+    if (self._internalConstraints)
+    {
+        ((___r1 = self._internalConstraints), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
+        {
+            (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_replaceCustomViewsIfNeeded"));
+        }));
+        self.isa.objj_msgSend1(self, "addConstraints:", self._internalConstraints);
+        self._internalConstraints = nil;
+    }
+    var ___r1;
+}
+,["void","id"]), new objj_method(sel_getUid("_layoutEngine"), function $CPView___layoutEngine(self, _cmd)
 {
     return ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_layoutEngine"));
     var ___r1;
 }
-,["CPLayoutConstraintEngine"]), new objj_method(sel_getUid("debugID"), function $CPView__debugID(self, _cmd)
-{
-    if (self.isa.objj_msgSend0(self, "className") == "_CPCibCustomView")
-        return "(CPCibCustomView)" + (self.isa.objj_msgSend0(self, "identifier") || "");
-    return self.isa.objj_msgSend0(self, "identifier") || self.isa.objj_msgSend0(self, "className");
-}
-,["CPString"]), new objj_method(sel_getUid("setAutolayoutEnabled:"), function $CPView__setAutolayoutEnabled_(self, _cmd, flag)
-{
-    if (self._autolayoutEnabled !== flag)
-    {
-        self._autolayoutEnabled = flag;
-    }
-}
-,["void","BOOL"]), new objj_method(sel_getUid("_contentHuggingPriorities"), function $CPView___contentHuggingPriorities(self, _cmd)
-{
-    if (!self._huggingPriorities)
-        self._huggingPriorities = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_defaultHuggingPriorities"));
-    return self._huggingPriorities;
-    var ___r1;
-}
-,["CGSize"]), new objj_method(sel_getUid("_contentCompressionResistancePriorities"), function $CPView___contentCompressionResistancePriorities(self, _cmd)
-{
-    if (!self._compressionPriorities)
-        self._compressionPriorities = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_defaultCompressionPriorities"));
-    return self._compressionPriorities;
-    var ___r1;
-}
-,["CGSize"]), new objj_method(sel_getUid("fittingSize"), function $CPView__fittingSize(self, _cmd)
-{
-    return CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric);
-}
-,["CGSize"]), new objj_method(sel_getUid("intrinsicContentSizeIsNoInstrinsicMetric"), function $CPView__intrinsicContentSizeIsNoInstrinsicMetric(self, _cmd)
-{
-    var intrinsic = self.isa.objj_msgSend0(self, "intrinsicContentSize");
-    return intrinsic.width == CPViewNoInstrinsicMetric && intrinsic.height == CPViewNoInstrinsicMetric;
-}
-,["BOOL"]), new objj_method(sel_getUid("intrinsicContentSize"), function $CPView__intrinsicContentSize(self, _cmd)
-{
-    return CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric);
-}
-,["CGSize"]), new objj_method(sel_getUid("baselineOffsetFromBottom"), function $CPView__baselineOffsetFromBottom(self, _cmd)
-{
-    return 0.0;
-}
-,["float"]), new objj_method(sel_getUid("alignmentRectForFrame:"), function $CPView__alignmentRectForFrame_(self, _cmd, frame)
-{
-    return CGRectInsetByInset(frame, self.isa.objj_msgSend0(self, "alignmentRectInsets"));
-}
-,["CGRect","CGRect"]), new objj_method(sel_getUid("frameForAlignmentRect:"), function $CPView__frameForAlignmentRect_(self, _cmd, alignmentRect)
-{
-    var invertedInset = CGInsetMakeInvertedCopy(self.isa.objj_msgSend0(self, "alignmentRectInsets"));
-    return CGRectInsetByInset(alignmentRect, invertedInset);
-}
-,["CGRect","CGRect"]), new objj_method(sel_getUid("alignmentRectInsets"), function $CPView__alignmentRectInsets(self, _cmd)
-{
-    if (self.isa.objj_msgSend1(self, "hasThemeAttribute:", "bezel-inset"))
-        return self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset");
-    return CGInsetMakeZero();
-}
-,["CGInset"]), new objj_method(sel_getUid("_internalConstraints"), function $CPView___internalConstraints(self, _cmd)
-{
-    return self._internalConstraints;
-}
-,["CPArray"]), new objj_method(sel_getUid("invalidateIntrinsicContentSize"), function $CPView__invalidateIntrinsicContentSize(self, _cmd)
-{
-    var intrinsicContentSize;
-    if (!((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "isAutolayoutEnabled")) || CGSizeEqualToSize(intrinsicContentSize = self.isa.objj_msgSend0(self, "intrinsicContentSize"), self._storedIntrinsicContentSize))
-        return;
-    self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", YES);
-    self._storedIntrinsicContentSize = CGSizeMakeCopy(intrinsicContentSize);
-    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("_contentSizeConstraints"), function $CPView___contentSizeConstraints(self, _cmd)
-{
-    return self._internalConstraints;
-}
-,["CPArray"]), new objj_method(sel_getUid("_setContentSizeConstraints:"), function $CPView___setContentSizeConstraints_(self, _cmd, constraints)
-{
-    var translate = self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints");
-    if (translate)
-        CPLog.warn("Setting contentSize constraints when autoresizing is on");
-    self.isa.objj_msgSend1(self, "_setInternalConstraints:", constraints);
-}
-,["void","CPArray"]), new objj_method(sel_getUid("_generateContentSizeConstraints"), function $CPView___generateContentSizeConstraints(self, _cmd)
-{
-    var constraints = CPArray.isa.objj_msgSend0(CPArray, "array"),
-        intrinsicContentSize = self.isa.objj_msgSend0(self, "intrinsicContentSize"),
-        isNoIntrinsicWidth = intrinsicContentSize.width === CPViewNoInstrinsicMetric,
-        isNoIntrinsicHeight = intrinsicContentSize.height === CPViewNoInstrinsicMetric;
-    if (isNoIntrinsicWidth && isNoIntrinsicHeight)
-        return constraints;
-    var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities"),
-        compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
-    if (!isNoIntrinsicWidth)
-    {
-        var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.width, huggingPriorities.width, compressionResistancePriorities.width, CPLayoutConstraintOrientationHorizontal));
-        (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "_setActive:", YES));
-        (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
-    }
-    if (!isNoIntrinsicHeight)
-    {
-        var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.height, huggingPriorities.height, compressionResistancePriorities.height, CPLayoutConstraintOrientationVertical));
-        (constraint == null ? null : constraint.isa.objj_msgSend1(constraint, "_setActive:", YES));
-        (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
-    }
-    return constraints;
-    var ___r1;
-}
-,["CPArray"]), new objj_method(sel_getUid("setContentHuggingPriority:forOrientation:"), function $CPView__setContentHuggingPriority_forOrientation_(self, _cmd, aPriority, orientation)
-{
-    if (self.isa.objj_msgSend1(self, "contentHuggingPriorityForOrientation:", orientation) !== aPriority)
-    {
-        var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
-        SetSizeValue(huggingPriorities, aPriority, orientation);
-        self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", YES);
-    }
-}
-,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentHuggingPriorityForOrientation:"), function $CPView__contentHuggingPriorityForOrientation_(self, _cmd, orientation)
-{
-    var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
-    return orientation == 0 ? huggingPriorities.width : huggingPriorities.height;
-}
-,["CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("setContentCompressionResistancePriority:forOrientation:"), function $CPView__setContentCompressionResistancePriority_forOrientation_(self, _cmd, aPriority, orientation)
-{
-    if (self.isa.objj_msgSend1(self, "contentCompressionResistancePriorityForOrientation:", orientation) !== aPriority)
-    {
-        var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
-        SetSizeValue(compressionResistancePriorities, aPriority, orientation);
-        self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", YES);
-    }
-}
-,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentCompressionResistancePriorityForOrientation:"), function $CPView__contentCompressionResistancePriorityForOrientation_(self, _cmd, orientation)
-{
-    var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
-    return orientation == 0 ? compressionResistancePriorities.width : compressionResistancePriorities.height;
-}
-,["CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("_contentSizeConstraintForOrientation:"), function $CPView___contentSizeConstraintForOrientation_(self, _cmd, orientation)
-{
-    self.isa.objj_msgSend0(self, "_updateContentSizeConstraints");
-    var contentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
-    var idx = (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend1(contentSizeConstraints, "indexOfObjectPassingTest:", function(aConstraint, idx, stop)
-    {
-        return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "orientation")) == orientation;
-    }));
-    if (idx !== CPNotFound)
-        return (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend1(contentSizeConstraints, "objectAtIndex:", idx));
-    return nil;
-}
-,["CPContentSizeLayoutConstraint","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("_constraints"), function $CPView___constraints(self, _cmd)
-{
-    var constraints = CPArray.isa.objj_msgSend1(CPArray, "arrayWithArray:", self._constraintsArray);
-    ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aView, idx, stop)
-    {
-        if ((aView == null ? null : aView.isa.objj_msgSend0(aView, "translatesAutoresizingMaskIntoConstraints")))
-        {
-            (aView == null ? null : aView.isa.objj_msgSend0(aView, "_updateAutoresizingConstraints"));
-            (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObjectsFromArray:", (aView == null ? null : aView.isa.objj_msgSend0(aView, "_autoresizingConstraints"))));
-        }
-    }));
-    return constraints;
-    var ___r1;
-}
-,["CPArray"]), new objj_method(sel_getUid("constraints"), function $CPView__constraints(self, _cmd)
-{
-    var constraints = self.isa.objj_msgSend0(self, "_constraints");
-    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "filteredArrayUsingBlock:", function(aConstraint, idx, stop)
-    {
-        return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive")) == YES;
-    }));
-}
-,["CPArray"]), new objj_method(sel_getUid("_constraintsExcludingContentSizeConstraints"), function $CPView___constraintsExcludingContentSizeConstraints(self, _cmd)
-{
-    var constraints = self.isa.objj_msgSend0(self, "_constraints");
-    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "filteredArrayUsingBlock:", function(aConstraint, idx, stop)
-    {
-        return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")) !== "SizeConstraint";
-    }));
-}
-,["CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPView__addConstraint_(self, _cmd, aConstraint)
-{
-    self.isa.objj_msgSend1(self, "addConstraints:", objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [aConstraint], 1));
-}
-,["void","CPLayoutConstraint"]), new objj_method(sel_getUid("addConstraints:"), function $CPView__addConstraints_(self, _cmd, constraints)
-{
-    if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")) == 0)
-        return;
-    self.isa.objj_msgSend1(self, "_addConstraints:", constraints);
-    self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", YES);
-}
-,["void","CPArray"]), new objj_method(sel_getUid("_addConstraints:"), function $CPView___addConstraints_(self, _cmd, constraints)
-{
-    (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
-    {
-        if (((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
-            return;
-        (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setContainer:", self));
-        (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "resolveConstant"));
-        (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", YES));
-        ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-        ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-        ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObject:", aConstraint));
-        var ___r1;
-    }));
-}
-,["void","CPArray"]), new objj_method(sel_getUid("removeConstraint:"), function $CPView__removeConstraint_(self, _cmd, aConstraint)
-{
-    self.isa.objj_msgSend1(self, "removeConstraints:", [aConstraint]);
-}
-,["void","CPLayoutConstraint"]), new objj_method(sel_getUid("removeConstraints:"), function $CPView__removeConstraints_(self, _cmd, constraints)
-{
-    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
-    {
-        if ((constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
-        {
-            (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", NO));
-        }
-    }));
-    self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", YES);
-    var ___r1;
-}
-,["void","CPArray"]), new objj_method(sel_getUid("updateConstraintsForSubtreeIfNeeded"), function $CPView__updateConstraintsForSubtreeIfNeeded(self, _cmd)
-{
-    var constraintsToAdd = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init"),
-        constraintsToRemove = objj_msgSend(objj_msgSend(CPArray, "alloc"), "init"),
-        viewsToClear = CPSet.isa.objj_msgSend0(CPSet, "set"),
-        engine = self.isa.objj_msgSend0(self, "_layoutEngine");
-    self.isa.objj_msgSend3(self, "getAdd:getRemove:getViews:", constraintsToAdd, constraintsToRemove, viewsToClear);
-    (engine == null ? null : engine.isa.objj_msgSend1(engine, "removeConstraints:", constraintsToRemove));
-    (engine == null ? null : engine.isa.objj_msgSend1(engine, "addConstraints:", constraintsToAdd));
-    (viewsToClear == null ? null : viewsToClear.isa.objj_msgSend1(viewsToClear, "enumerateObjectsUsingBlock:", function(aView)
-    {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "willChangeValueForKey:", "constraints"));
-        (aView == null ? null : aView.isa.objj_msgSend0(aView, "_clearInactiveConstraints"));
-        (aView == null ? null : aView.isa.objj_msgSend0(aView, "_clearInactiveContentSizeConstraints"));
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "didChangeValueForKey:", "constraints"));
-    }));
-    return (viewsToClear == null ? null : viewsToClear.isa.objj_msgSend0(viewsToClear, "count")) > 0;
-}
-,["BOOL"]), new objj_method(sel_getUid("getAdd:getRemove:getViews:"), function $CPView__getAdd_getRemove_getViews_(self, _cmd, toAdd, toRemove, views)
-{
-    var result = NO;
-    if (self._updateConstraintsFlags !== 0)
-    {
-        var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
-        self.isa.objj_msgSend0(self, "updateConstraints");
-        if (self._updateConstraintsFlags & 2)
-        {
-            var constraints = self.isa.objj_msgSend0(self, "_constraintsExcludingContentSizeConstraints");
-            result |= self.isa.objj_msgSend(self, "getAdd:getRemove:getViews:forConstraints:", toAdd, toRemove, views, constraints);
-            self.isa.objj_msgSend1(self, "_setNeedsUpdateConstraints:", NO);
-        }
-        if (self._updateConstraintsFlags & 4)
-        {
-            var contentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
-            if (contentSizeConstraints)
-            {
-                result |= self.isa.objj_msgSend(self, "getAdd:getRemove:getViews:forConstraints:", toAdd, toRemove, views, contentSizeConstraints);
-                self.isa.objj_msgSend1(self, "_setNeedsUpdateSizeConstraints:", NO);
-            }
-        }
-    }
-    ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aSubview, idx, stop)
-    {
-        if ((aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "isAutolayoutEnabled")))
-        {
-            result |= (aSubview == null ? null : aSubview.isa.objj_msgSend3(aSubview, "getAdd:getRemove:getViews:", toAdd, toRemove, views));
-        }
-    }));
-    return result;
-    var ___r1;
-}
-,["BOOL","CPArray","CPArray","CPSet"]), new objj_method(sel_getUid("getAdd:getRemove:getViews:forConstraints:"), function $CPView__getAdd_getRemove_getViews_forConstraints_(self, _cmd, toAdd, toRemove, views, constraints)
-{
-    var isViewInvolved = NO;
-    (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
-    {
-        if ((aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_needsReplace")))
-        {
-            var copy = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "copy"));
-            (toAdd == null ? null : toAdd.isa.objj_msgSend1(toAdd, "addObject:", copy));
-            (toRemove == null ? null : toRemove.isa.objj_msgSend1(toRemove, "addObject:", aConstraint));
-            var ridx = ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObjectIdenticalTo:", aConstraint));
-            ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "replaceObjectAtIndex:withObject:", ridx, copy));
-            isViewInvolved = YES;
-        }
-        else
-        {
-            var isInEngine = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_addedToEngine")),
-                isActive = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive"));
-            if (isActive && !isInEngine)
-            {
-                (toAdd == null ? null : toAdd.isa.objj_msgSend1(toAdd, "addObject:", aConstraint));
-                isViewInvolved = YES;
-            }
-            else if (!isActive && isInEngine)
-            {
-                (toRemove == null ? null : toRemove.isa.objj_msgSend1(toRemove, "addObject:", aConstraint));
-                isViewInvolved = YES;
-            }
-        }
-        var ___r1;
-    }));
-    if (isViewInvolved)
-        (views == null ? null : views.isa.objj_msgSend1(views, "addObject:", self));
-    CPLog.debug(_cmd + "ADD = " + (toAdd == null ? null : toAdd.isa.objj_msgSend0(toAdd, "description")) + "\nREMOVE=" + (toRemove == null ? null : toRemove.isa.objj_msgSend0(toRemove, "description")) + "\nVIEWS=" + views);
-    return isViewInvolved;
-}
-,["BOOL","CPArray","CPArray","CPSet","CPArray"]), new objj_method(sel_getUid("needsUpdateConstraints"), function $CPView__needsUpdateConstraints(self, _cmd)
-{
-    return self._updateConstraintsFlags !== 0;
-}
-,["BOOL"]), new objj_method(sel_getUid("_needsUpdateConstraints"), function $CPView___needsUpdateConstraints(self, _cmd)
-{
-    return (self._updateConstraintsFlags & 2) !== 0;
-}
-,["BOOL"]), new objj_method(sel_getUid("_needsUpdateSizeConstraints"), function $CPView___needsUpdateSizeConstraints(self, _cmd)
-{
-    return (self._updateConstraintsFlags & 4) !== 0;
-}
-,["BOOL"]), new objj_method(sel_getUid("_constraintsFlag:update:"), function $CPView___constraintsFlag_update_(self, _cmd, flag, shouldUpdate)
-{
-    if (shouldUpdate)
-    {
-        self._updateConstraintsFlags |= flag;
-        ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNeedsUpdateConstraints:", YES));
-    }
-    else
-        self._updateConstraintsFlags &= ~flag;
-    var ___r1;
-}
-,["void","unsigned","BOOL"]), new objj_method(sel_getUid("setNeedsUpdateConstraints:"), function $CPView__setNeedsUpdateConstraints_(self, _cmd, shouldUpdate)
-{
-    self.isa.objj_msgSend2(self, "_constraintsFlag:update:", 6, shouldUpdate);
-}
-,["void","BOOL"]), new objj_method(sel_getUid("_setNeedsUpdateConstraints:"), function $CPView___setNeedsUpdateConstraints_(self, _cmd, shouldUpdate)
-{
-    self.isa.objj_msgSend2(self, "_constraintsFlag:update:", 2, shouldUpdate);
-}
-,["void","BOOL"]), new objj_method(sel_getUid("_setNeedsUpdateSizeConstraints:"), function $CPView___setNeedsUpdateSizeConstraints_(self, _cmd, shouldUpdate)
-{
-    self.isa.objj_msgSend2(self, "_constraintsFlag:update:", 4, shouldUpdate);
-}
-,["void","BOOL"]), new objj_method(sel_getUid("setTranslatesAutoresizingMaskIntoConstraints:"), function $CPView__setTranslatesAutoresizingMaskIntoConstraints_(self, _cmd, translate)
-{
-    if (translate !== self._translatesAutoresizingMaskIntoConstraints)
-    {
-        self._translatesAutoresizingMaskIntoConstraints = translate;
-        ((___r1 = self.isa.objj_msgSend0(self, "superview")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setNeedsUpdateConstraints:", YES));
-    }
-    var ___r1;
-}
-,["void","BOOL"]), new objj_method(sel_getUid("updateConstraintsIfNeeded"), function $CPView__updateConstraintsIfNeeded(self, _cmd)
-{
-    if (self._needsUpdateConstraints)
-    {
-        self.isa.objj_msgSend0(self, "updateConstraints");
-        return YES;
-    }
-    return NO;
-}
-,["BOOL"]), new objj_method(sel_getUid("updateConstraints"), function $CPView__updateConstraints(self, _cmd)
-{
-    var translate = self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints");
-    if (translate)
-        self.isa.objj_msgSend0(self, "_updateAutoresizingConstraints");
-    else
-        self.isa.objj_msgSend0(self, "_updateContentSizeConstraints");
-}
-,["void"]), new objj_method(sel_getUid("_updateAutoresizingConstraints"), function $CPView___updateAutoresizingConstraints(self, _cmd)
-{
-    var autoresizingConstraints = self.isa.objj_msgSend0(self, "_autoresizingConstraints");
-    if (autoresizingConstraints == nil)
-    {
-        var constraints = self.isa.objj_msgSend0(self, "_constraintsEquivalentToAutoresizingMask");
-        self.isa.objj_msgSend1(self, "_setAutoresizingConstraints:", constraints);
-    }
-}
-,["void"]), new objj_method(sel_getUid("_updateContentSizeConstraints"), function $CPView___updateContentSizeConstraints(self, _cmd)
-{
-    if (self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints"))
-        return;
-    if (self.isa.objj_msgSend0(self, "_needsUpdateSizeConstraints"))
-    {
-        var newContentSizeConstraints = self.isa.objj_msgSend0(self, "_generateContentSizeConstraints"),
-            contentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints");
-        if ((newContentSizeConstraints == null ? null : newContentSizeConstraints.isa.objj_msgSend1(newContentSizeConstraints, "isEqualToArray:", contentSizeConstraints)))
-            return;
-        if (contentSizeConstraints)
-        {
-            (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend2(contentSizeConstraints, "makeObjectsPerformSelector:withObject:", sel_getUid("_setActive:"), NO));
-            (contentSizeConstraints == null ? null : contentSizeConstraints.isa.objj_msgSend1(contentSizeConstraints, "addObjectsFromArray:", newContentSizeConstraints));
-        }
-        else
-            self.isa.objj_msgSend1(self, "_setContentSizeConstraints:", newContentSizeConstraints);
-        ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", newContentSizeConstraints));
-    }
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("_constraintsEquivalentToAutoresizingMask"), function $CPView___constraintsEquivalentToAutoresizingMask(self, _cmd)
-{
-    var superview = self.isa.objj_msgSend0(self, "superview"),
-        bounds = (superview == null ? null : superview.isa.objj_msgSend0(superview, "bounds")),
-        frame = self.isa.objj_msgSend0(self, "frame"),
-        mask = self.isa.objj_msgSend0(self, "autoresizingMask");
-    return CPAutoresizingMaskLayoutConstraint.isa.objj_msgSend(CPAutoresizingMaskLayoutConstraint, "constraintsWithAutoresizingMask:subitem:frame:superitem:bounds:", mask, self, frame, superview, bounds);
-}
-,["CPArray"]), new objj_method(sel_getUid("_clearInactiveConstraints"), function $CPView___clearInactiveConstraints(self, _cmd)
-{
-    self.isa.objj_msgSend1(self, "_clearInactiveConstraintsInArray:", self._constraintsArray);
-}
-,["void"]), new objj_method(sel_getUid("_clearInactiveContentSizeConstraints"), function $CPView___clearInactiveContentSizeConstraints(self, _cmd)
-{
-    self.isa.objj_msgSend1(self, "_clearInactiveConstraintsInArray:", self._internalConstraints);
-}
-,["void"]), new objj_method(sel_getUid("_clearInactiveConstraintsInArray:"), function $CPView___clearInactiveConstraintsInArray_(self, _cmd, aConstraintsArray)
-{
-    var indexes = (aConstraintsArray == null ? null : aConstraintsArray.isa.objj_msgSend1(aConstraintsArray, "indexesOfObjectsPassingTest:", function(constraint, idx, stop)
-    {
-        return (constraint == null ? null : constraint.isa.objj_msgSend0(constraint, "isActive")) == NO;
-    }));
-    (aConstraintsArray == null ? null : aConstraintsArray.isa.objj_msgSend1(aConstraintsArray, "removeObjectsAtIndexes:", indexes));
-}
-,["void","CPArray"]), new objj_method(sel_getUid("hasAmbiguousLayout"), function $CPView__hasAmbiguousLayout(self, _cmd)
-{
-}
-,["BOOL"]), new objj_method(sel_getUid("layout"), function $CPView__layout(self, _cmd)
-{
-    self.isa.objj_msgSend0(self, "layoutSubviews");
-}
-,["void"]), new objj_method(sel_getUid("layoutSubtreeIfNeeded"), function $CPView__layoutSubtreeIfNeeded(self, _cmd)
-{
-    if (self.isa.objj_msgSend0(self, "updateConstraintsForSubtreeIfNeeded"))
-        ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "solve"));
-    self.isa.objj_msgSend0(self, "_layoutSubtreeIfNeeded");
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("_layoutSubtreeIfNeeded"), function $CPView___layoutSubtreeIfNeeded(self, _cmd)
-{
-    ((___r1 = self._subviews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(view, idx, stop)
-    {
-        (view == null ? null : view.isa.objj_msgSend0(view, "_layoutSubtreeIfNeeded"));
-    }));
-    if (self._constraintBasedNeedsLayoutMask > 0)
-        self.isa.objj_msgSend0(self, "layoutSubviews");
-    var ___r1;
-}
-,["void"]), new objj_method(sel_getUid("_variableMinX"), function $CPView___variableMinX(self, _cmd)
+,["CPLayoutConstraintEngine"]), new objj_method(sel_getUid("_variableMinX"), function $CPView___variableMinX(self, _cmd)
 {
     if (!self._variableMinX)
         self._variableMinX = self.isa.objj_msgSend2(self, "newVariableWithName:value:", "minX", CGRectGetMinX(self.isa.objj_msgSend0(self, "frame")));
@@ -39803,9 +39348,403 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "variableWithPrefix:name:value:owner:", self.isa.objj_msgSend0(self, "debugID"), aName, aValue, self));
     var ___r1;
 }
-,["Variable","CPString","float"]), new objj_method(sel_getUid("updateEngineFrame"), function $CPView__updateEngineFrame(self, _cmd)
+,["Variable","CPString","float"]), new objj_method(sel_getUid("debugID"), function $CPView__debugID(self, _cmd)
 {
-    _CPViewUpdateEngineFrame(self);
+    if (self.isa.objj_msgSend0(self, "className") == "_CPCibCustomView")
+        return "(CPCibCustomView)" + (self.isa.objj_msgSend0(self, "identifier") || "");
+    return self.isa.objj_msgSend0(self, "identifier") || self.isa.objj_msgSend0(self, "className");
+}
+,["CPString"]), new objj_method(sel_getUid("_contentHuggingPriorities"), function $CPView___contentHuggingPriorities(self, _cmd)
+{
+    if (!self._huggingPriorities)
+        self._huggingPriorities = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_defaultHuggingPriorities"));
+    return self._huggingPriorities;
+    var ___r1;
+}
+,["CGSize"]), new objj_method(sel_getUid("_contentCompressionResistancePriorities"), function $CPView___contentCompressionResistancePriorities(self, _cmd)
+{
+    if (!self._compressionPriorities)
+        self._compressionPriorities = ((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_defaultCompressionPriorities"));
+    return self._compressionPriorities;
+    var ___r1;
+}
+,["CGSize"]), new objj_method(sel_getUid("fittingSize"), function $CPView__fittingSize(self, _cmd)
+{
+    return CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric);
+}
+,["CGSize"]), new objj_method(sel_getUid("intrinsicContentSizeIsNoInstrinsicMetric"), function $CPView__intrinsicContentSizeIsNoInstrinsicMetric(self, _cmd)
+{
+    var intrinsic = self.isa.objj_msgSend0(self, "intrinsicContentSize");
+    return CGSizeEqualToSize(intrinsic, CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric));
+}
+,["BOOL"]), new objj_method(sel_getUid("intrinsicContentSize"), function $CPView__intrinsicContentSize(self, _cmd)
+{
+    return CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric);
+}
+,["CGSize"]), new objj_method(sel_getUid("baselineOffsetFromBottom"), function $CPView__baselineOffsetFromBottom(self, _cmd)
+{
+    return 0.0;
+}
+,["float"]), new objj_method(sel_getUid("alignmentRectForFrame:"), function $CPView__alignmentRectForFrame_(self, _cmd, frame)
+{
+    return CGRectInsetByInset(frame, self.isa.objj_msgSend0(self, "alignmentRectInsets"));
+}
+,["CGRect","CGRect"]), new objj_method(sel_getUid("frameForAlignmentRect:"), function $CPView__frameForAlignmentRect_(self, _cmd, alignmentRect)
+{
+    var invertedInset = CGInsetMakeInvertedCopy(self.isa.objj_msgSend0(self, "alignmentRectInsets"));
+    return CGRectInsetByInset(alignmentRect, invertedInset);
+}
+,["CGRect","CGRect"]), new objj_method(sel_getUid("alignmentRectInsets"), function $CPView__alignmentRectInsets(self, _cmd)
+{
+    if (self.isa.objj_msgSend1(self, "hasThemeAttribute:", "bezel-inset"))
+        return self.isa.objj_msgSend1(self, "currentValueForThemeAttribute:", "bezel-inset");
+    return CGInsetMakeZero();
+}
+,["CGInset"]), new objj_method(sel_getUid("invalidateIntrinsicContentSize"), function $CPView__invalidateIntrinsicContentSize(self, _cmd)
+{
+    if (!((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "isAutolayoutEnabled")))
+        return;
+    self.isa.objj_msgSend1(self, "setNeedsUpdateConstraints:", YES);
+    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
+    var ___r1;
+}
+,["void"]), new objj_method(sel_getUid("_setContentSizeConstraints:"), function $CPView___setContentSizeConstraints_(self, _cmd, constraints)
+{
+    var translate = self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints");
+    if (translate)
+        CPLog.warn("Setting contentSize constraints when autoresizing is on");
+    self._contentSizeConstraints = constraints;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("_generateContentSizeConstraints"), function $CPView___generateContentSizeConstraints(self, _cmd)
+{
+    var constraints = CPArray.isa.objj_msgSend0(CPArray, "array"),
+        intrinsicContentSize = self.isa.objj_msgSend0(self, "intrinsicContentSize"),
+        isNoIntrinsicWidth = intrinsicContentSize.width === CPViewNoInstrinsicMetric,
+        isNoIntrinsicHeight = intrinsicContentSize.height === CPViewNoInstrinsicMetric;
+    if (isNoIntrinsicWidth && isNoIntrinsicHeight)
+        return constraints;
+    var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities"),
+        compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
+    if (!isNoIntrinsicWidth)
+    {
+        var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.width, huggingPriorities.width, compressionResistancePriorities.width, CPLayoutConstraintOrientationHorizontal));
+        (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
+    }
+    if (!isNoIntrinsicHeight)
+    {
+        var constraint = ((___r1 = CPContentSizeLayoutConstraint.isa.objj_msgSend0(CPContentSizeLayoutConstraint, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend(___r1, "initWithLayoutItem:value:huggingPriority:compressionResistancePriority:orientation:", self, intrinsicContentSize.height, huggingPriorities.height, compressionResistancePriorities.height, CPLayoutConstraintOrientationVertical));
+        (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObject:", constraint));
+    }
+    return constraints;
+    var ___r1;
+}
+,["CPArray"]), new objj_method(sel_getUid("setContentHuggingPriority:forOrientation:"), function $CPView__setContentHuggingPriority_forOrientation_(self, _cmd, aPriority, orientation)
+{
+    if (self.isa.objj_msgSend1(self, "contentHuggingPriorityForOrientation:", orientation) !== aPriority)
+    {
+        var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
+        SetSizeValue(huggingPriorities, aPriority, orientation);
+    }
+}
+,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentHuggingPriorityForOrientation:"), function $CPView__contentHuggingPriorityForOrientation_(self, _cmd, orientation)
+{
+    var huggingPriorities = self.isa.objj_msgSend0(self, "_contentHuggingPriorities");
+    return orientation == 0 ? huggingPriorities.width : huggingPriorities.height;
+}
+,["CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("setContentCompressionResistancePriority:forOrientation:"), function $CPView__setContentCompressionResistancePriority_forOrientation_(self, _cmd, aPriority, orientation)
+{
+    if (self.isa.objj_msgSend1(self, "contentCompressionResistancePriorityForOrientation:", orientation) !== aPriority)
+    {
+        var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
+        SetSizeValue(compressionResistancePriorities, aPriority, orientation);
+    }
+}
+,["void","CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("contentCompressionResistancePriorityForOrientation:"), function $CPView__contentCompressionResistancePriorityForOrientation_(self, _cmd, orientation)
+{
+    var compressionResistancePriorities = self.isa.objj_msgSend0(self, "_contentCompressionResistancePriorities");
+    return orientation == 0 ? compressionResistancePriorities.width : compressionResistancePriorities.height;
+}
+,["CPLayoutPriority","CPLayoutConstraintOrientation"]), new objj_method(sel_getUid("constraints"), function $CPView__constraints(self, _cmd)
+{
+    var constraints = CPArray.isa.objj_msgSend1(CPArray, "arrayWithArray:", self._constraintsArray);
+    ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aView, idx, stop)
+    {
+        if ((aView == null ? null : aView.isa.objj_msgSend0(aView, "translatesAutoresizingMaskIntoConstraints")))
+        {
+            (aView == null ? null : aView.isa.objj_msgSend0(aView, "_updateAutoresizingConstraints"));
+            (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "addObjectsFromArray:", (aView == null ? null : aView.isa.objj_msgSend0(aView, "_autoresizingConstraints"))));
+        }
+    }));
+    return constraints;
+    var ___r1;
+}
+,["CPArray"]), new objj_method(sel_getUid("_constraintsExcludingContentSizeConstraints"), function $CPView___constraintsExcludingContentSizeConstraints(self, _cmd)
+{
+    var constraints = self.isa.objj_msgSend0(self, "constraints");
+    return (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "filteredArrayUsingBlock:", function(aConstraint, idx, stop)
+    {
+        return (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")) !== "SizeConstraint";
+    }));
+}
+,["CPArray"]), new objj_method(sel_getUid("addConstraint:"), function $CPView__addConstraint_(self, _cmd, aConstraint)
+{
+    self.isa.objj_msgSend1(self, "addConstraints:", objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [aConstraint], 1));
+}
+,["void","CPLayoutConstraint"]), new objj_method(sel_getUid("addConstraints:"), function $CPView__addConstraints_(self, _cmd, constraints)
+{
+    var engine = self.isa.objj_msgSend0(self, "_layoutEngine"),
+        constraintsIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet"),
+        contentSizeIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
+    (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
+    {
+        if ((aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive")))
+            return;
+        (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setContainer:", self));
+        (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "resolveConstant"));
+        var constraintFlags = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "constraintFlags"));
+        self.isa.objj_msgSend0(self, "_setHasConstraintBasedLayoutSubviews");
+        if (constraintFlags & 8)
+            ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_setNeedsConstraintBasedLayout"));
+        if (constraintFlags & 64)
+            ((___r1 = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_setNeedsConstraintBasedLayout"));
+        if ((engine == null ? null : engine.isa.objj_msgSend1(engine, "addConstraint:", aConstraint)))
+        {
+            (constraintsIndexes == null ? null : constraintsIndexes.isa.objj_msgSend1(constraintsIndexes, "addIndex:", idx));
+            (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", YES));
+            if ((aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")) == "SizeConstraint")
+                (contentSizeIndexes == null ? null : contentSizeIndexes.isa.objj_msgSend1(contentSizeIndexes, "addIndex:", idx));
+        }
+        var ___r1;
+    }));
+    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "objectsAtIndexes:", constraintsIndexes))));
+    ((___r1 = self._contentSizeConstraints), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addObjectsFromArray:", (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "objectsAtIndexes:", contentSizeIndexes))));
+    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
+    var ___r1;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("removeConstraint:"), function $CPView__removeConstraint_(self, _cmd, aConstraint)
+{
+    self.isa.objj_msgSend1(self, "removeConstraints:", objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [aConstraint], 1));
+}
+,["void","CPLayoutConstraint"]), new objj_method(sel_getUid("removeConstraints:"), function $CPView__removeConstraints_(self, _cmd, constraints)
+{
+    var engine = self.isa.objj_msgSend0(self, "_layoutEngine"),
+        constraintsIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet"),
+        contentSizeIndexes = CPIndexSet.isa.objj_msgSend0(CPIndexSet, "indexSet");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
+    {
+        if (!(aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "isActive")) || (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "indexOfObjectIdenticalTo:", aConstraint)) !== CPNotFound)
+        {
+            if ((engine == null ? null : engine.isa.objj_msgSend1(engine, "removeConstraint:", aConstraint)))
+            {
+                (constraintsIndexes == null ? null : constraintsIndexes.isa.objj_msgSend1(constraintsIndexes, "addIndex:", idx));
+                (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setActive:", NO));
+                if ((aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "_constraintType")) == "SizeConstraint")
+                    (contentSizeIndexes == null ? null : contentSizeIndexes.isa.objj_msgSend1(contentSizeIndexes, "addIndex:", ((___r1 = self._contentSizeConstraints), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "indexOfObject:", aConstraint))));
+            }
+        }
+        var ___r1;
+    }));
+    self.isa.objj_msgSend1(self, "willChangeValueForKey:", "constraints");
+    ((___r1 = self._constraintsArray), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", constraintsIndexes));
+    ((___r1 = self._contentSizeConstraints), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "removeObjectsAtIndexes:", contentSizeIndexes));
+    self.isa.objj_msgSend1(self, "didChangeValueForKey:", "constraints");
+    var ___r1;
+}
+,["void","CPArray"]), new objj_method(sel_getUid("_updateConstraint:usingBlock:"), function $CPView___updateConstraint_usingBlock_(self, _cmd, aConstraint, aFunction)
+{
+    var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
+    (engine == null ? null : engine.isa.objj_msgSend1(engine, "removeConstraint:", aConstraint));
+    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setEngineConstraints:", nil));
+    aFunction();
+    (engine == null ? null : engine.isa.objj_msgSend1(engine, "addConstraint:", aConstraint));
+}
+,["void","id","Function"]), new objj_method(sel_getUid("setTranslatesAutoresizingMaskIntoConstraints:"), function $CPView__setTranslatesAutoresizingMaskIntoConstraints_(self, _cmd, shouldTranslate)
+{
+    if (shouldTranslate !== self._translatesAutoresizingMaskIntoConstraints)
+    {
+        self._translatesAutoresizingMaskIntoConstraints = shouldTranslate;
+        self.isa.objj_msgSend0(self, "_updateNeedsUpdateConstraintsFlag");
+    }
+}
+,["void","BOOL"]), new objj_method(sel_getUid("_informSuperviewThatSubviewsNeedSolvingInEngine"), function $CPView___informSuperviewThatSubviewsNeedSolvingInEngine(self, _cmd)
+{
+    if (self._superview)
+    {
+        ((___r1 = self._superview), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_setSubviewsNeedSolvingInEngine"));
+        ((___r1 = self._superview), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_informSuperviewThatSubviewsNeedSolvingInEngine"));
+    }
+    var ___r1;
+}
+,["void"]), new objj_method(sel_getUid("_setSubviewsNeedSolvingInEngine"), function $CPView___setSubviewsNeedSolvingInEngine(self, _cmd)
+{
+    if (self._subviewsNeedSolvingInEngine == NO)
+    {
+        CPLog.debug(self.isa.objj_msgSend0(self, "debugID") + " " + _cmd);
+        self._subviewsNeedSolvingInEngine = YES;
+        return YES;
+    }
+    return NO;
+}
+,["BOOL"]), new objj_method(sel_getUid("setNeedsUpdateConstraints:"), function $CPView__setNeedsUpdateConstraints_(self, _cmd, needsUpdate)
+{
+    if (needsUpdate !== self._needsUpdateConstraints)
+    {
+        self._needsUpdateConstraints = needsUpdate;
+        if (needsUpdate)
+            ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_setSubviewsNeedUpdateConstraints"));
+    }
+    var ___r1;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("_updateNeedsUpdateConstraintsFlag"), function $CPView___updateNeedsUpdateConstraintsFlag(self, _cmd)
+{
+    self._needsUpdateConstraints = self._translatesAutoresizingMaskIntoConstraints || !self.isa.objj_msgSend0(self, "intrinsicContentSizeIsNoInstrinsicMetric");
+}
+,["void"]), new objj_method(sel_getUid("updateConstraintsForSubtreeIfNeeded"), function $CPView__updateConstraintsForSubtreeIfNeeded(self, _cmd)
+{
+    var result = self._needsUpdateConstraints;
+    if (!((___r1 = self.isa.objj_msgSend0(self, "class")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "refusesConstraintBasedLayout")))
+    {
+        ((___r1 = self.isa.objj_msgSend0(self, "subviews")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(aSubview, idx, stop)
+        {
+            result |= (aSubview == null ? null : aSubview.isa.objj_msgSend0(aSubview, "updateConstraintsForSubtreeIfNeeded"));
+        }));
+    }
+    self.isa.objj_msgSend0(self, "_updateConstraintsIfNeeded");
+    return result;
+    var ___r1;
+}
+,["BOOL"]), new objj_method(sel_getUid("_updateConstraintsIfNeeded"), function $CPView___updateConstraintsIfNeeded(self, _cmd)
+{
+    if (self._needsUpdateConstraints)
+    {
+        self.isa.objj_msgSend0(self, "updateConstraints");
+        self._needsUpdateConstraints = NO;
+    }
+}
+,["void"]), new objj_method(sel_getUid("updateConstraints"), function $CPView__updateConstraints(self, _cmd)
+{
+    var translate = self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints");
+    if (translate)
+        return self.isa.objj_msgSend0(self, "_updateAutoresizingConstraints");
+    else
+        return self.isa.objj_msgSend0(self, "_updateContentSizeConstraints");
+}
+,["void"]), new objj_method(sel_getUid("_updateAutoresizingConstraints"), function $CPView___updateAutoresizingConstraints(self, _cmd)
+{
+    var autoresizingConstraints = self.isa.objj_msgSend0(self, "_autoresizingConstraints");
+    if (autoresizingConstraints == nil)
+    {
+        var constraints = self.isa.objj_msgSend0(self, "_constraintsEquivalentToAutoresizingMask");
+        self.isa.objj_msgSend1(self, "_setAutoresizingConstraints:", constraints);
+        ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "addConstraints:", constraints));
+        (constraints == null ? null : constraints.isa.objj_msgSend2(constraints, "makeObjectsPerformSelector:withObject:", sel_getUid("_setActive:"), YES));
+        return YES;
+    }
+    return NO;
+    var ___r1;
+}
+,["BOOL"]), new objj_method(sel_getUid("_updateContentSizeConstraints"), function $CPView___updateContentSizeConstraints(self, _cmd)
+{
+    var newContentSizeConstraints = self.isa.objj_msgSend0(self, "_generateContentSizeConstraints"),
+        oldContentSizeConstraints = self.isa.objj_msgSend0(self, "_contentSizeConstraints"),
+        oldWidth = nil,
+        oldHeight = nil,
+        newWidth = nil,
+        newHeight = nil,
+        result = NO;
+    self.isa.objj_msgSend3(self, "_extractContentSizeConstraints:width:height:", oldContentSizeConstraints, function(__input) { if (arguments.length) return oldWidth = __input; return oldWidth; }, function(__input) { if (arguments.length) return oldHeight = __input; return oldHeight; });
+    self.isa.objj_msgSend3(self, "_extractContentSizeConstraints:width:height:", newContentSizeConstraints, function(__input) { if (arguments.length) return newWidth = __input; return newWidth; }, function(__input) { if (arguments.length) return newHeight = __input; return newHeight; });
+    result |= self.isa.objj_msgSend2(self, "_updateContentSizeConstraint:toConstraint:", oldWidth, newWidth);
+    result |= self.isa.objj_msgSend2(self, "_updateContentSizeConstraint:toConstraint:", oldHeight, newHeight);
+    return result;
+}
+,["BOOL"]), new objj_method(sel_getUid("_updateContentSizeConstraint:toConstraint:"), function $CPView___updateContentSizeConstraint_toConstraint_(self, _cmd, original, destination)
+{
+    var result = NO;
+    if (original == nil && destination == nil || (original == null ? null : original.isa.objj_msgSend1(original, "isEqual:", destination)))
+        return;
+    if (original !== nil && destination !== nil && !(original == null ? null : original.isa.objj_msgSend0(original, "isActive")))
+    {
+        (original == null ? null : original.isa.objj_msgSend1(original, "_setConstant:", (destination == null ? null : destination.isa.objj_msgSend0(destination, "constant"))));
+        return;
+    }
+    if (original !== nil)
+        result |= self.isa.objj_msgSend1(self, "removeConstraint:", original);
+    if (destination !== nil)
+        result |= self.isa.objj_msgSend1(self, "addConstraint:", destination);
+    return result;
+}
+,["BOOL","CPContentSizeLayoutConstraint","CPContentSizeLayoutConstraint"]), new objj_method(sel_getUid("_extractContentSizeConstraints:width:height:"), function $CPView___extractContentSizeConstraints_width_height_(self, _cmd, constraints, widthRef, heightRef)
+{
+    (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
+    {
+        var orientation = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "orientation"));
+        var widthOrHeightRef = orientation == CPLayoutConstraintOrientationHorizontal ? widthRef : heightRef;
+        widthOrHeightRef(aConstraint);
+    }));
+}
+,["void","CPArray","ref","ref"]), new objj_method(sel_getUid("_constraintsEquivalentToAutoresizingMask"), function $CPView___constraintsEquivalentToAutoresizingMask(self, _cmd)
+{
+    var superview = self.isa.objj_msgSend0(self, "superview"),
+        bounds = (superview == null ? null : superview.isa.objj_msgSend0(superview, "bounds")),
+        frame = self.isa.objj_msgSend0(self, "frame"),
+        mask = self.isa.objj_msgSend0(self, "autoresizingMask");
+    return CPAutoresizingMaskLayoutConstraint.isa.objj_msgSend(CPAutoresizingMaskLayoutConstraint, "constraintsWithAutoresizingMask:subitem:frame:superitem:bounds:", mask, self, frame, superview, bounds);
+}
+,["CPArray"]), new objj_method(sel_getUid("hasAmbiguousLayout"), function $CPView__hasAmbiguousLayout(self, _cmd)
+{
+}
+,["BOOL"]), new objj_method(sel_getUid("layout"), function $CPView__layout(self, _cmd)
+{
+    self.isa.objj_msgSend0(self, "layoutSubviews");
+}
+,["void"]), new objj_method(sel_getUid("layoutSubviews"), function $CPView__layoutSubviews(self, _cmd)
+{
+    ((___r1 = self._subviews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(subview, idx, stop)
+    {
+        (subview == null ? null : subview.isa.objj_msgSend0(subview, "_updateGeometryIfNeeded"));
+    }));
+    var ___r1;
+}
+,["void"]), new objj_method(sel_getUid("layoutSubtreeIfNeeded"), function $CPView__layoutSubtreeIfNeeded(self, _cmd)
+{
+    if (self.isa.objj_msgSend0(self, "_updateConstraintsAtWindowLevelIfNeeded") || self._subviewsNeedSolvingInEngine)
+        ((___r1 = self.isa.objj_msgSend0(self, "_layoutEngine")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "solve"));
+    self._subviewsNeedSolvingInEngine = NO;
+    var ___r1;
+}
+,["void"]), new objj_method(sel_getUid("_updateConstraintsAtWindowLevelIfNeeded"), function $CPView___updateConstraintsAtWindowLevelIfNeeded(self, _cmd)
+{
+    if (self._window)
+        return ((___r1 = self._window), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsIfNeeded"));
+    else
+        return self.isa.objj_msgSend0(self, "updateConstraintsForSubtreeIfNeeded");
+    var ___r1;
+}
+,["BOOL"]), new objj_method(sel_getUid("_updateGeometryIfNeeded"), function $CPView___updateGeometryIfNeeded(self, _cmd)
+{
+    if (self._constraintBasedNeedsLayoutMask > 0)
+    {
+        self.isa.objj_msgSend0(self, "_updateGeometry");
+        self._constraintBasedNeedsLayoutMask = 0;
+    }
+    self._subviewsNeedSolvingInEngine = NO;
+}
+,["void"]), new objj_method(sel_getUid("_updateGeometry"), function $CPView___updateGeometry(self, _cmd)
+{
+    self._isSettingFrameFromEngine = YES;
+    _CPViewUpdateEngineFrame(self, self._constraintBasedNeedsLayoutMask, self._frame, self._variableMinX, self._variableMinY, self._variableWidth, self._variableHeight);
+    self._isSettingFrameFromEngine = NO;
+}
+,["void"]), new objj_method(sel_getUid("_updateSubtreeGeometryIfNeeded"), function $CPView___updateSubtreeGeometryIfNeeded(self, _cmd)
+{
+    ((___r1 = self._subviews), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "enumerateObjectsUsingBlock:", function(view, idx, stop)
+    {
+        (view == null ? null : view.isa.objj_msgSend0(view, "_updateSubtreeGeometryIfNeeded"));
+    }));
+    self.isa.objj_msgSend0(self, "_updateGeometryIfNeeded");
+    var ___r1;
 }
 ,["void"]), new objj_method(sel_getUid("_informContainerThatVariableDidChange:"), function $CPView___informContainerThatVariableDidChange_(self, _cmd, aVariable)
 {
@@ -39826,11 +39765,13 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         break;
     }
     self._constraintBasedNeedsLayoutMask |= mask;
-    ((___r1 = self.isa.objj_msgSend0(self, "superview")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
-    var ___r1;
 }
 ,["void","Variable"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("requiresConstraintBasedLayout"), function $CPView__requiresConstraintBasedLayout(self, _cmd)
+{
+    return NO;
+}
+,["BOOL"]), new objj_method(sel_getUid("refusesConstraintBasedLayout"), function $CPView__refusesConstraintBasedLayout(self, _cmd)
 {
     return NO;
 }
@@ -39843,6 +39784,20 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("requiresConstraintBase
     return CGSizeMake(CPLayoutPriorityDefaultHigh, CPLayoutPriorityDefaultHigh);
 }
 ,["CGSize"])]);
+}{
+var the_class = objj_getClass("CPLayoutConstraint")
+if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPLayoutConstraint\"");
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_replaceCustomViewsIfNeeded"), function $CPLayoutConstraint___replaceCustomViewsIfNeeded(self, _cmd)
+{
+    if (((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "isKindOfClass:", (_CPCibCustomView == null ? null : _CPCibCustomView.isa.objj_msgSend0(_CPCibCustomView, "class")))))
+        self._firstItem = ((___r1 = self._firstItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "replacementView"));
+    if (((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "isKindOfClass:", (_CPCibCustomView == null ? null : _CPCibCustomView.isa.objj_msgSend0(_CPCibCustomView, "class")))))
+        self._secondItem = ((___r1 = self._secondItem), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "replacementView"));
+    if (((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "isKindOfClass:", (_CPCibCustomView == null ? null : _CPCibCustomView.isa.objj_msgSend0(_CPCibCustomView, "class")))))
+        self._container = ((___r1 = self._container), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "replacementView"));
+    var ___r1;
+}
+,["void"])]);
 }{
 var the_class = objj_getClass("CPArray")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPArray\"");
@@ -39859,35 +39814,33 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return result;
 }
 ,["CPArray","Function"])]);
-}var _CPViewUpdateEngineFrame = function(aView)
+}var _CPViewUpdateEngineFrame = function(aView, mask, frame, is_left, is_top, is_width, is_height)
 {
-    var frame = (aView == null ? null : aView.isa.objj_msgSend0(aView, "frame"));
-    var mask = (aView == null ? null : aView.isa.objj_msgSend0(aView, "_constraintBasedNeedsLayoutMask")),
-        pmask = mask & 6,
+    var pmask = mask & 6,
         smask = mask & 24;
     if (pmask === 6)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake((aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableMinX")).valueOf(), (aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableMinY")).valueOf())));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake(is_left.valueOf(), is_top.valueOf())));
     }
     else if (pmask === 4)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake(CGRectGetMinX(frame), (aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableMinY")).valueOf())));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake(CGRectGetMinX(frame), is_top.valueOf())));
     }
     else if (pmask === 2)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake((aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableMinX")).valueOf(), CGRectGetMinY(frame))));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameOrigin:", CGPointMake(is_left.valueOf(), CGRectGetMinY(frame))));
     }
     if (smask === 24)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake((aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableWidth")).valueOf(), (aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableHeight")).valueOf())));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake(is_width.valueOf(), is_height.valueOf())));
     }
     else if (smask === 16)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake(CGRectGetWidth(frame), (aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableHeight")).valueOf())));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake(CGRectGetWidth(frame), is_height.valueOf())));
     }
     else if (smask === 8)
     {
-        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake((aView == null ? null : aView.isa.objj_msgSend0(aView, "_variableWidth")).valueOf(), CGRectGetHeight(frame))));
+        (aView == null ? null : aView.isa.objj_msgSend1(aView, "setFrameSize:", CGSizeMake(is_width.valueOf(), CGRectGetHeight(frame))));
     }
 };
 var SetSizeValue = function(size, value, idx)
@@ -39900,6 +39853,10 @@ var SetSizeValue = function(size, value, idx)
         size.height = value;
         break;
     }
+};
+var _CPViewArchiveConstraintsBlock = function(cst, idx)
+{
+    return (cst == null ? null : cst.isa.objj_msgSend0(cst, "shouldBeArchived"));
 };
 var _CPViewFullScreenModeStateMake = function(aView)
 {
@@ -39980,6 +39937,53 @@ var _CPViewGetTransform = function(fromView, toView)
     CGAffineTransformConcatTo(transform, transform2, transform);
     return transform;
     return transform;
+};
+var Profiler = function()
+{
+    this._durations = {};
+    this._hits = {};
+    this._total = 0;
+    this._started = false;
+};
+Profiler.prototype.start = function()
+{
+    this._started = true;
+};
+Profiler.prototype.reset = function()
+{
+    this._durations = {};
+    this._hits = {};
+    this._total = 0;
+};
+Profiler.prototype.profile = function(p, aFunction, condition)
+{
+    if (typeof condition == 'undefined')
+        condition = true;
+    if (this._started == false || condition == false)
+    {
+        aFunction();
+        return;
+    }
+    var start = new Date();
+    aFunction();
+    var t = new Date() - start;
+    this._total += t;
+    this._durations[p] = (this._durations[p] || 0) + t;
+    this._hits[p] = (this._hits[p] || 0) + 1;
+};
+Profiler.prototype.print = function()
+{
+    var str = "";
+    for (var p in this._hits)
+    {
+        var hits = this._hits[p] || 0;
+        if (hits > 0)
+        {
+            var d = this._durations[p];
+            str += p + " : " + hits / d + " fpms hits:" + hits + " in " + d + "ms " + ROUND(d / this._total * 100) + "%\n";
+        }
+    }
+    console.log(str);
 };
 p;17;CPViewAnimation.jt;9243;@STATIC;1.0;i;13;CPAnimation.jt;9206;objj_executeFile("CPAnimation.j", YES);CPViewAnimationTargetKey = "CPViewAnimationTargetKey";
 CPViewAnimationStartFrameKey = "CPViewAnimationStartFrameKey";
@@ -41437,7 +41441,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     return (image == null ? null : image.isa.objj_msgSend0(image, "description"));
 }
 ,["CPString"])]);
-}p;18;_CPCibCustomView.jt;6710;@STATIC;1.0;i;8;CPView.jt;6679;objj_executeFile("CPView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPCibCustomView"),
+}p;18;_CPCibCustomView.jt;5717;@STATIC;1.0;i;8;CPView.jt;5686;objj_executeFile("CPView.j", YES);{var the_class = objj_allocateClassPair(CPView, "_CPCibCustomView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_className"), new objj_ivar("_replacementView")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("replacementView"), function $_CPCibCustomView__replacementView(self, _cmd)
 {
@@ -41510,31 +41514,15 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         (view == null ? null : view.isa.objj_msgSend1(view, "setHidden:", self.isa.objj_msgSend0(self, "isHidden")));
         (view == null ? null : view.isa.objj_msgSend1(view, "setAlphaValue:", self.isa.objj_msgSend0(self, "alphaValue")));
         (view == null ? null : view.isa.objj_msgSend1(view, "setIdentifier:", self.isa.objj_msgSend0(self, "identifier")));
-        (view == null ? null : view.isa.objj_msgSend1(view, "setAutolayoutEnabled:", self.isa.objj_msgSend0(self, "isAutolayoutEnabled")));
-        (view == null ? null : view.isa.objj_msgSend1(view, "_setNeedsUpdateConstraints:", self.isa.objj_msgSend0(self, "_needsUpdateConstraints")));
+        (view == null ? null : view.isa.objj_msgSend1(view, "setTranslatesAutoresizingMaskIntoConstraints:", self.isa.objj_msgSend0(self, "translatesAutoresizingMaskIntoConstraints")));
         ((___r1 = self._superview), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "replaceSubview:with:", self, view));
-        (view == null ? null : view.isa.objj_msgSend1(view, "setBackgroundColor:", self.isa.objj_msgSend0(self, "backgroundColor")));
         self._replacementView = view;
-        var constraints = self.isa.objj_msgSend0(self, "constraints");
-        if ((constraints == null ? null : constraints.isa.objj_msgSend0(constraints, "count")))
-        {
-            (constraints == null ? null : constraints.isa.objj_msgSend1(constraints, "enumerateObjectsUsingBlock:", function(aConstraint, idx, stop)
-            {
-                var firstItem = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "firstItem"));
-                if (firstItem && (firstItem == null ? null : firstItem.isa.objj_msgSend1(firstItem, "isKindOfClass:", _CPCibCustomView.isa.objj_msgSend0(_CPCibCustomView, "class"))))
-                {
-                    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setFirstItem:", (firstItem == null ? null : firstItem.isa.objj_msgSend0(firstItem, "replacementView"))));
-                    (firstItem == null ? null : firstItem.isa.objj_msgSend1(firstItem, "setAutolayoutEnabled:", YES));
-                }
-                var secondItem = (aConstraint == null ? null : aConstraint.isa.objj_msgSend0(aConstraint, "secondItem"));
-                if (secondItem && (secondItem == null ? null : secondItem.isa.objj_msgSend1(secondItem, "isKindOfClass:", _CPCibCustomView.isa.objj_msgSend0(_CPCibCustomView, "class"))))
-                {
-                    (aConstraint == null ? null : aConstraint.isa.objj_msgSend1(aConstraint, "_setSecondItem:", (secondItem == null ? null : secondItem.isa.objj_msgSend0(secondItem, "replacementView"))));
-                    (firstItem == null ? null : firstItem.isa.objj_msgSend1(firstItem, "setAutolayoutEnabled:", YES));
-                }
-            }));
-            (view == null ? null : view.isa.objj_msgSend1(view, "addConstraints:", self.isa.objj_msgSend0(self, "constraints")));
-        }
+        (view == null ? null : view.isa.objj_msgSend1(view, "setBackgroundColor:", self.isa.objj_msgSend0(self, "backgroundColor")));
+        (view == null ? null : view.isa.objj_msgSend1(view, "_setInternalConstraints:", self.isa.objj_msgSend0(self, "_internalConstraints")));
+        (view == null ? null : view.isa.objj_msgSend2(view, "setContentHuggingPriority:forOrientation:", self.isa.objj_msgSend1(self, "contentHuggingPriorityForOrientation:", 0), 0));
+        (view == null ? null : view.isa.objj_msgSend2(view, "setContentHuggingPriority:forOrientation:", self.isa.objj_msgSend1(self, "contentHuggingPriorityForOrientation:", 1), 1));
+        (view == null ? null : view.isa.objj_msgSend2(view, "setContentCompressionResistancePriority:forOrientation:", self.isa.objj_msgSend1(self, "contentCompressionResistancePriorityForOrientation:", 0), 0));
+        (view == null ? null : view.isa.objj_msgSend2(view, "setContentCompressionResistancePriority:forOrientation:", self.isa.objj_msgSend1(self, "contentCompressionResistancePriorityForOrientation:", 1), 1));
     }
     return view;
     var ___r1;
@@ -41579,7 +41567,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initForReadingWithData:
     return self._objects[aUID];
 }
 ,["id","int"])]);
-}p;18;_CPCibObjectData.jt;12196;@STATIC;1.0;I;20;Foundation/CPArray.jI;21;Foundation/CPObject.jI;21;Foundation/CPString.ji;23;CPCibBindingConnector.ji;16;CPCibConnector.ji;23;CPCibControlConnector.ji;20;CPCibHelpConnector.ji;22;CPCibOutletConnector.ji;33;CPCibRuntimeAttributesConnector.ji;12;CPClipView.jt;11915;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCibBindingConnector.j", YES);objj_executeFile("CPCibConnector.j", YES);objj_executeFile("CPCibControlConnector.j", YES);objj_executeFile("CPCibHelpConnector.j", YES);objj_executeFile("CPCibOutletConnector.j", YES);objj_executeFile("CPCibRuntimeAttributesConnector.j", YES);objj_executeFile("CPClipView.j", YES);{var the_class = objj_allocateClassPair(CPObject, "_CPCibObjectData"),
+}p;18;_CPCibObjectData.jt;12202;@STATIC;1.0;I;20;Foundation/CPArray.jI;21;Foundation/CPObject.jI;21;Foundation/CPString.ji;23;CPCibBindingConnector.ji;16;CPCibConnector.ji;23;CPCibControlConnector.ji;20;CPCibHelpConnector.ji;22;CPCibOutletConnector.ji;33;CPCibRuntimeAttributesConnector.ji;12;CPClipView.jt;11921;objj_executeFile("Foundation/CPArray.j", NO);objj_executeFile("Foundation/CPObject.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCibBindingConnector.j", YES);objj_executeFile("CPCibConnector.j", YES);objj_executeFile("CPCibControlConnector.j", YES);objj_executeFile("CPCibHelpConnector.j", YES);objj_executeFile("CPCibOutletConnector.j", YES);objj_executeFile("CPCibRuntimeAttributesConnector.j", YES);objj_executeFile("CPClipView.j", YES);{var the_class = objj_allocateClassPair(CPObject, "_CPCibObjectData"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_namesKeys"), new objj_ivar("_namesValues"), new objj_ivar("_accessibilityConnectors"), new objj_ivar("_accessibilityOidsKeys"), new objj_ivar("_accessibilityOidsValues"), new objj_ivar("_classesKeys"), new objj_ivar("_classesValues"), new objj_ivar("_connections"), new objj_ivar("_fontManager"), new objj_ivar("_framework"), new objj_ivar("_nextOid"), new objj_ivar("_objectsKeys"), new objj_ivar("_objectsValues"), new objj_ivar("_oidKeys"), new objj_ivar("_oidValues"), new objj_ivar("_fileOwner"), new objj_ivar("_visibleWindows"), new objj_ivar("_replacementObjects")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $_CPCibObjectData__init(self, _cmd)
 {
@@ -41720,11 +41708,14 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             instantiatedObject = self._replacementObjects[(object == null ? null : object.isa.objj_msgSend0(object, "UID"))];
         if (instantiatedObject)
             object = instantiatedObject;
-        if (object !== anOwner && (object == null ? null : object.isa.objj_msgSend1(object, "respondsToSelector:", sel_getUid("awakeFromCib"))))
+        if (object !== anOwner)
+        {
+            (object == null ? null : object.isa.objj_msgSend1(object, "_cibDidFinishLoadingWithOwner:", anOwner));
             (object == null ? null : object.isa.objj_msgSend0(object, "awakeFromCib"));
+        }
     }
-    if ((anOwner == null ? null : anOwner.isa.objj_msgSend1(anOwner, "respondsToSelector:", sel_getUid("awakeFromCib"))))
-        (anOwner == null ? null : anOwner.isa.objj_msgSend0(anOwner, "awakeFromCib"));
+    (anOwner == null ? null : anOwner.isa.objj_msgSend1(anOwner, "_cibDidFinishLoadingWithOwner:", anOwner));
+    (anOwner == null ? null : anOwner.isa.objj_msgSend0(anOwner, "awakeFromCib"));
     var ___r1;
 }
 ,["void","id","CPMutableArray"])]);
@@ -42158,11 +42149,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), funct
     var ___r1;
 }
 ,["void"])]);
-}p;14;CPCibLoading.jt;6299;@STATIC;1.0;I;21;Foundation/CPBundle.jI;25;Foundation/CPDictionary.jI;21;Foundation/CPString.ji;7;CPCib.jt;6187;objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCib.j", YES);var CPCibOwner = "CPCibOwner";
+}p;14;CPCibLoading.jt;6454;@STATIC;1.0;I;21;Foundation/CPBundle.jI;25;Foundation/CPDictionary.jI;21;Foundation/CPString.ji;7;CPCib.jt;6342;objj_executeFile("Foundation/CPBundle.j", NO);objj_executeFile("Foundation/CPDictionary.j", NO);objj_executeFile("Foundation/CPString.j", NO);objj_executeFile("CPCib.j", YES);var CPCibOwner = "CPCibOwner";
 {
 var the_class = objj_getClass("CPObject")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPObject\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("awakeFromCib"), function $CPObject__awakeFromCib(self, _cmd)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("_cibDidFinishLoadingWithOwner:"), function $CPObject___cibDidFinishLoadingWithOwner_(self, _cmd, anOwner)
+{
+}
+,["void","id"]), new objj_method(sel_getUid("awakeFromCib"), function $CPObject__awakeFromCib(self, _cmd)
 {
 }
 ,["void"])]);
@@ -55275,7 +55269,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "init");
 }
 ,["CPDictionary"])]);
-}p;23;_CPStandardWindowView.jt;23048;@STATIC;1.0;i;10;CPButton.ji;24;_CPTitleableWindowView.jt;22984;objj_executeFile("CPButton.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);var _CPStandardWindowViewDividerViewHeight = 1.0;
+}p;23;_CPStandardWindowView.jt;24369;@STATIC;1.0;i;10;CPButton.ji;24;_CPTitleableWindowView.jt;24305;objj_executeFile("CPButton.j", YES);objj_executeFile("_CPTitleableWindowView.j", YES);var _CPStandardWindowViewDividerViewHeight = 1.0;
 {var the_class = objj_allocateClassPair(CPView, "_CPTexturedWindowHeadView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_isSheet"), new objj_ivar("_parentView"), new objj_ivar("_gradientView"), new objj_ivar("_solidView")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("_isSheet"), function $_CPTexturedWindowHeadView___isSheet(self, _cmd)
@@ -55320,7 +55314,11 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_isSheet"), function $_
     var ___r1, ___r2;
 }
 ,["void","CGSize"])]);
-class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), function $_CPTexturedWindowHeadView__defaultThemeClass(self, _cmd)
+class_addMethods(meta_class, [new objj_method(sel_getUid("refusesConstraintBasedLayout"), function $_CPTexturedWindowHeadView__refusesConstraintBasedLayout(self, _cmd)
+{
+    return YES;
+}
+,["BOOL"]), new objj_method(sel_getUid("defaultThemeClass"), function $_CPTexturedWindowHeadView__defaultThemeClass(self, _cmd)
 {
     return "textured-window-head-view";
 }
@@ -55343,11 +55341,13 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask
         ((___r1 = self._headView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setHitTests:", NO));
         (self == null ? null : self.isa.objj_msgSend3(self, "addSubview:positioned:relativeTo:", self._headView, CPWindowBelow, self._titleField));
         self._dividerView = ((___r1 = CPView.isa.objj_msgSend0(CPView, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMake(0.0, CGRectGetMaxY(((___r2 = self._headView), ___r2 == null ? null : ___r2.isa.objj_msgSend0(___r2, "frame"))), CGRectGetWidth(bounds), _CPStandardWindowViewDividerViewHeight)));
+        ((___r1 = self._dividerView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "dividerView"));
         ((___r1 = self._dividerView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutoresizingMask:", CPViewWidthSizable));
         ((___r1 = self._dividerView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setHitTests:", NO));
         (self == null ? null : self.isa.objj_msgSend1(self, "addSubview:", self._dividerView));
         var y = CGRectGetMinY(((___r1 = self._dividerView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "frame")));
         self._bodyView = ((___r1 = CPView.isa.objj_msgSend0(CPView, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMake(0.0, y, CGRectGetWidth(bounds), CGRectGetHeight(bounds) - y)));
+        ((___r1 = self._bodyView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "bodyView"));
         ((___r1 = self._bodyView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutoresizingMask:", CPViewWidthSizable | CPViewHeightSizable));
         ((___r1 = self._bodyView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setHitTests:", NO));
         (self == null ? null : self.isa.objj_msgSend1(self, "addSubview:", self._bodyView));
@@ -55355,6 +55355,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask
         if (self._styleMask & CPClosableWindowMask)
         {
             self._closeButton = ((___r1 = CPButton.isa.objj_msgSend0(CPButton, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMake(8.0, 8.0, 16.0, 16.0)));
+            ((___r1 = self._closeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "closeButton"));
             ((___r1 = self._closeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setButtonType:", CPMomentaryChangeButton));
             ((___r1 = self._closeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setBordered:", NO));
             (self == null ? null : self.isa.objj_msgSend0(self, "_updateCloseButton"));
@@ -55363,6 +55364,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask
         if (self._styleMask & CPMiniaturizableWindowMask && !CPPlatform.isa.objj_msgSend0(CPPlatform, "isBrowser"))
         {
             self._minimizeButton = ((___r1 = CPButton.isa.objj_msgSend0(CPButton, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMake(27.0, 7.0, 16.0, 16.0)));
+            ((___r1 = self._minimizeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "minimizeButton"));
             ((___r1 = self._minimizeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setButtonType:", CPMomentaryChangeButton));
             ((___r1 = self._minimizeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setBordered:", NO));
             (self == null ? null : self.isa.objj_msgSend1(self, "addSubview:", self._minimizeButton));
@@ -55372,13 +55374,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask
     return self;
     var ___r1, ___r2;
 }
-,["id","CGRect","unsigned"]), new objj_method(sel_getUid("setFrameSize:"), function $_CPStandardWindowView__setFrameSize_(self, _cmd, aSize)
-{
-    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_sizeToFitWindowViewSize:", aSize));
-    objj_msgSendSuper({ receiver:self, super_class:objj_getClass("_CPStandardWindowView").super_class }, "setFrameSize:", aSize);
-    var ___r1;
-}
-,["void","CGSize"]), new objj_method(sel_getUid("viewDidMoveToWindow"), function $_CPStandardWindowView__viewDidMoveToWindow(self, _cmd)
+,["id","CGRect","unsigned"]), new objj_method(sel_getUid("viewDidMoveToWindow"), function $_CPStandardWindowView__viewDidMoveToWindow(self, _cmd)
 {
     ((___r1 = self._closeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setTarget:", self.isa.objj_msgSend0(self, "window")));
     ((___r1 = self._closeButton), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAction:", sel_getUid("performClose:")));
@@ -55538,7 +55534,26 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return contentRect;
 }
 ,["CGRect","CGRect"])]);
-}p;24;_CPTitleableWindowView.jt;6743;@STATIC;1.0;i;13;CPTextField.ji;15;_CPWindowView.jt;6686;objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPWindowView.j", YES);{var the_class = objj_allocateClassPair(_CPWindowView, "_CPTitleableWindowView"),
+}{
+var the_class = objj_getClass("_CPStandardWindowView")
+if(!the_class) throw new SyntaxError("*** Could not find definition for class \"_CPStandardWindowView\"");
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("setFrameSize:"), function $_CPStandardWindowView__setFrameSize_(self, _cmd, aSize)
+{
+    ((___r1 = self.isa.objj_msgSend0(self, "window")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_sizeToFitWindowViewSize:", aSize));
+    objj_msgSendSuper({ receiver:self, super_class:objj_getClass("_CPStandardWindowView").super_class }, "setFrameSize:", aSize);
+    var ___r1;
+}
+,["void","CGSize"]), new objj_method(sel_getUid("intrinsicContentSize"), function $_CPStandardWindowView__intrinsicContentSize(self, _cmd)
+{
+    return CGSizeMake(CPViewNoInstrinsicMetric, CPViewNoInstrinsicMetric);
+}
+,["CGSize"])]);
+class_addMethods(meta_class, [new objj_method(sel_getUid("refusesConstraintBasedLayout"), function $_CPStandardWindowView__refusesConstraintBasedLayout(self, _cmd)
+{
+    return NO;
+}
+,["BOOL"])]);
+}p;24;_CPTitleableWindowView.jt;6868;@STATIC;1.0;i;13;CPTextField.ji;15;_CPWindowView.jt;6811;objj_executeFile("CPTextField.j", YES);objj_executeFile("_CPWindowView.j", YES);{var the_class = objj_allocateClassPair(_CPWindowView, "_CPTitleableWindowView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_titleField")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask:"), function $_CPTitleableWindowView__initWithFrame_styleMask_(self, _cmd, aFrame, aStyleMask)
 {
@@ -55546,6 +55561,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:styleMask
     if (self)
     {
         self._titleField = ((___r1 = CPTextField.isa.objj_msgSend0(CPTextField, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMakeZero()));
+        ((___r1 = self._titleField), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "titleField"));
         ((___r1 = self._titleField), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setHitTests:", NO));
         ((___r1 = self._titleField), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setStringValue:", "Untitled"));
         ((___r1 = self._titleField), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "sizeToFit"));
@@ -55687,7 +55703,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("defaultThemeClass"), f
     return aFrameRect;
 }
 ,["CGRect","CGRect"])]);
-}p;15;_CPWindowView.jt;42136;@STATIC;1.0;i;13;CPImageView.ji;8;CPView.ji;20;CPWindow_Constants.jt;42061;objj_executeFile("CPImageView.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);var _CPWindowViewCornerResizeRectWidth = 10,
+}p;15;_CPWindowView.jt;42089;@STATIC;1.0;i;13;CPImageView.ji;8;CPView.ji;20;CPWindow_Constants.jt;42014;objj_executeFile("CPImageView.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);var _CPWindowViewCornerResizeRectWidth = 10,
     _CPWindowViewMinContentHeight = 2,
     _CPWindowViewResizeRegionNone = -1,
     _CPWindowViewResizeRegionTopLeft = 0,
@@ -55738,11 +55754,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("contentRectForFrameRect
     }
     return self;
 }
-,["id","CGRect","unsigned"]), new objj_method(sel_getUid("intrinsicContentSize"), function $_CPWindowView__intrinsicContentSize(self, _cmd)
-{
-    return self.isa.objj_msgSend0(self, "frameSize");
-}
-,["CGSize"]), new objj_method(sel_getUid("setDocumentEdited:"), function $_CPWindowView__setDocumentEdited_(self, _cmd, isEdited)
+,["id","CGRect","unsigned"]), new objj_method(sel_getUid("setDocumentEdited:"), function $_CPWindowView__setDocumentEdited_(self, _cmd, isEdited)
 {
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("setTitle:"), function $_CPWindowView__setTitle_(self, _cmd, aTitle)
@@ -56138,6 +56150,7 @@ default:
     if (shouldShowResizeIndicator && CPWindowResizeStyle === CPWindowResizeStyleLegacy)
     {
         self._resizeIndicator = ((___r1 = CPImageView.isa.objj_msgSend0(CPImageView, "alloc")), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "initWithFrame:", CGRectMakeZero()));
+        ((___r1 = self._resizeIndicator), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "resizeIndicator"));
         ((___r1 = self._resizeIndicator), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutoresizingMask:", CPViewMinXMargin | CPViewMinYMargin));
         self.isa.objj_msgSend1(self, "addSubview:", self._resizeIndicator);
     }
@@ -56346,7 +56359,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("contentRectForFrameRec
     return objj_msgSend(objj_msgSend(CPDictionary, "alloc"), "initWithObjectsAndKeys:", 25, "title-bar-height", CGInsetMakeZero(), "shadow-inset", 5, "shadow-distance", CPColor.isa.objj_msgSend0(CPColor, "clearColor"), "window-shadow-color", CGSizeMakeZero(), "size-indicator", CPNull.isa.objj_msgSend0(CPNull, "null"), "resize-indicator", CPColor.isa.objj_msgSend0(CPColor, "blackColor"), "attached-sheet-shadow-color", 8, "shadow-height", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image-origin", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image-size", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-image", CPNull.isa.objj_msgSend0(CPNull, "null"), "close-active-image", CPNull.isa.objj_msgSend0(CPNull, "null"), "bezel-color", CPColor.isa.objj_msgSend0(CPColor, "blackColor"), "title-text-color", CPFont.isa.objj_msgSend1(CPFont, "systemFontOfSize:", CPFontCurrentSystemSize), "title-font", CPNull.isa.objj_msgSend0(CPNull, "null"), "title-text-shadow-color", CGSizeMakeZero(), "title-text-shadow-offset", CPCenterTextAlignment, "title-alignment", CPLineBreakByTruncatingTail, "title-line-break-mode", CPTopVerticalTextAlignment, "title-vertical-alignment");
 }
 ,["CPDictionary"])]);
-}p;10;CPWindow.jt;150856;@STATIC;1.0;I;25;Foundation/CPCountedSet.jI;33;Foundation/CPNotificationCenter.jI;26;Foundation/CPUndoManager.ji;12;CGGeometry.ji;13;CPAnimation.ji;10;CPCursor.ji;14;CPDragServer.ji;9;CPEvent.ji;18;CPPlatformWindow.ji;22;CPPlatformWindow+DOM.ji;13;CPResponder.ji;10;CPScreen.ji;8;CPText.ji;8;CPView.ji;20;CPWindow_Constants.ji;31;_CPBorderlessBridgeWindowView.ji;25;_CPBorderlessWindowView.ji;23;_CPDocModalWindowView.ji;18;_CPHUDWindowView.ji;20;_CPModalWindowView.ji;22;_CPPopoverWindowView.ji;21;_CPShadowWindowView.ji;23;_CPStandardWindowView.ji;22;_CPToolTipWindowView.ji;26;CPLayoutConstraintEngine.jt;150241;objj_executeFile("Foundation/CPCountedSet.j", NO);objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPUndoManager.j", NO);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPAnimation.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDragServer.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPPlatformWindow+DOM.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPScreen.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPBorderlessBridgeWindowView.j", YES);objj_executeFile("_CPBorderlessWindowView.j", YES);objj_executeFile("_CPDocModalWindowView.j", YES);objj_executeFile("_CPHUDWindowView.j", YES);objj_executeFile("_CPModalWindowView.j", YES);objj_executeFile("_CPPopoverWindowView.j", YES);objj_executeFile("_CPShadowWindowView.j", YES);objj_executeFile("_CPStandardWindowView.j", YES);objj_executeFile("_CPToolTipWindowView.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPWindowFullPlatformWindowSession");
+}p;10;CPWindow.jt;150734;@STATIC;1.0;I;25;Foundation/CPCountedSet.jI;33;Foundation/CPNotificationCenter.jI;26;Foundation/CPUndoManager.ji;12;CGGeometry.ji;13;CPAnimation.ji;10;CPCursor.ji;14;CPDragServer.ji;9;CPEvent.ji;18;CPPlatformWindow.ji;22;CPPlatformWindow+DOM.ji;13;CPResponder.ji;10;CPScreen.ji;8;CPText.ji;8;CPView.ji;20;CPWindow_Constants.ji;31;_CPBorderlessBridgeWindowView.ji;25;_CPBorderlessWindowView.ji;23;_CPDocModalWindowView.ji;18;_CPHUDWindowView.ji;20;_CPModalWindowView.ji;22;_CPPopoverWindowView.ji;21;_CPShadowWindowView.ji;23;_CPStandardWindowView.ji;22;_CPToolTipWindowView.ji;26;CPLayoutConstraintEngine.jt;150119;objj_executeFile("Foundation/CPCountedSet.j", NO);objj_executeFile("Foundation/CPNotificationCenter.j", NO);objj_executeFile("Foundation/CPUndoManager.j", NO);objj_executeFile("CGGeometry.j", YES);objj_executeFile("CPAnimation.j", YES);objj_executeFile("CPCursor.j", YES);objj_executeFile("CPDragServer.j", YES);objj_executeFile("CPEvent.j", YES);objj_executeFile("CPPlatformWindow.j", YES);objj_executeFile("CPPlatformWindow+DOM.j", YES);objj_executeFile("CPResponder.j", YES);objj_executeFile("CPScreen.j", YES);objj_executeFile("CPText.j", YES);objj_executeFile("CPView.j", YES);objj_executeFile("CPWindow_Constants.j", YES);objj_executeFile("_CPBorderlessBridgeWindowView.j", YES);objj_executeFile("_CPBorderlessWindowView.j", YES);objj_executeFile("_CPDocModalWindowView.j", YES);objj_executeFile("_CPHUDWindowView.j", YES);objj_executeFile("_CPModalWindowView.j", YES);objj_executeFile("_CPPopoverWindowView.j", YES);objj_executeFile("_CPShadowWindowView.j", YES);objj_executeFile("_CPStandardWindowView.j", YES);objj_executeFile("_CPToolTipWindowView.j", YES);objj_executeFile("CPLayoutConstraintEngine.j", YES);{var the_typedef = objj_allocateTypeDef("_CPWindowFullPlatformWindowSession");
 objj_registerTypeDef(the_typedef);
 }{var the_protocol = objj_allocateProtocol("CPWindowDelegate");
 var aProtocol = objj_getProtocol("CPObject");
@@ -56364,7 +56377,7 @@ var CPWindowSaveImage = nil,
     CPWindowMinVisibleVerticalMargin = 2;
 var CPWindowActionMessageKeys = [CPLeftArrowFunctionKey, CPRightArrowFunctionKey, CPUpArrowFunctionKey, CPDownArrowFunctionKey, CPPageUpFunctionKey, CPPageDownFunctionKey, CPHomeFunctionKey, CPEndFunctionKey, CPEscapeFunctionKey];
 {var the_class = objj_allocateClassPair(CPResponder, "CPWindow"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_platformWindow"), new objj_ivar("_windowNumber"), new objj_ivar("_styleMask"), new objj_ivar("_frame"), new objj_ivar("_level"), new objj_ivar("_isVisible"), new objj_ivar("_hasBeenOrderedIn"), new objj_ivar("_isMiniaturized"), new objj_ivar("_isAnimating"), new objj_ivar("_hasShadow"), new objj_ivar("_isMovableByWindowBackground"), new objj_ivar("_isMovable"), new objj_ivar("_constrainsToUsableScreen"), new objj_ivar("_shadowStyle"), new objj_ivar("_showsResizeIndicator"), new objj_ivar("_positioningMask"), new objj_ivar("_positioningScreenRect"), new objj_ivar("_isDocumentEdited"), new objj_ivar("_isDocumentSaving"), new objj_ivar("_shadowView"), new objj_ivar("_windowView"), new objj_ivar("_contentView"), new objj_ivar("_toolbarView"), new objj_ivar("_mouseEnteredStack"), new objj_ivar("_leftMouseDownView"), new objj_ivar("_rightMouseDownView"), new objj_ivar("_toolbar"), new objj_ivar("_firstResponder"), new objj_ivar("_initialFirstResponder"), new objj_ivar("_hasBecomeKeyWindow"), new objj_ivar("_delegate"), new objj_ivar("_implementedDelegateMethods"), new objj_ivar("_title"), new objj_ivar("_acceptsMouseMovedEvents"), new objj_ivar("_ignoresMouseEvents"), new objj_ivar("_windowController"), new objj_ivar("_minSize"), new objj_ivar("_maxSize"), new objj_ivar("_undoManager"), new objj_ivar("_representedURL"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_inclusiveRegisteredDraggedTypes"), new objj_ivar("_defaultButton"), new objj_ivar("_defaultButtonEnabled"), new objj_ivar("_autorecalculatesKeyViewLoop"), new objj_ivar("_keyViewLoopIsDirty"), new objj_ivar("_sharesChromeWithPlatformWindow"), new objj_ivar("_DOMElement"), new objj_ivar("_autoresizingMask"), new objj_ivar("_isFullPlatformWindow"), new objj_ivar("_fullPlatformWindowSession"), new objj_ivar("_parentWindow"), new objj_ivar("_childWindows"), new objj_ivar("_childOrdering"), new objj_ivar("_sheetContext"), new objj_ivar("_parentView"), new objj_ivar("_isSheet"), new objj_ivar("_frameAnimation"), new objj_ivar("_layoutEngine"), new objj_ivar("_autolayoutEnabled"), new objj_ivar("_needsUpdateConstraints"), new objj_ivar("_needsLayout"), new objj_ivar("_layoutLock")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_platformWindow"), new objj_ivar("_windowNumber"), new objj_ivar("_styleMask"), new objj_ivar("_frame"), new objj_ivar("_level"), new objj_ivar("_isVisible"), new objj_ivar("_hasBeenOrderedIn"), new objj_ivar("_isMiniaturized"), new objj_ivar("_isAnimating"), new objj_ivar("_hasShadow"), new objj_ivar("_isMovableByWindowBackground"), new objj_ivar("_isMovable"), new objj_ivar("_constrainsToUsableScreen"), new objj_ivar("_shadowStyle"), new objj_ivar("_showsResizeIndicator"), new objj_ivar("_positioningMask"), new objj_ivar("_positioningScreenRect"), new objj_ivar("_isDocumentEdited"), new objj_ivar("_isDocumentSaving"), new objj_ivar("_shadowView"), new objj_ivar("_windowView"), new objj_ivar("_contentView"), new objj_ivar("_toolbarView"), new objj_ivar("_mouseEnteredStack"), new objj_ivar("_leftMouseDownView"), new objj_ivar("_rightMouseDownView"), new objj_ivar("_toolbar"), new objj_ivar("_firstResponder"), new objj_ivar("_initialFirstResponder"), new objj_ivar("_hasBecomeKeyWindow"), new objj_ivar("_delegate"), new objj_ivar("_implementedDelegateMethods"), new objj_ivar("_title"), new objj_ivar("_acceptsMouseMovedEvents"), new objj_ivar("_ignoresMouseEvents"), new objj_ivar("_windowController"), new objj_ivar("_minSize"), new objj_ivar("_maxSize"), new objj_ivar("_undoManager"), new objj_ivar("_representedURL"), new objj_ivar("_registeredDraggedTypes"), new objj_ivar("_registeredDraggedTypesArray"), new objj_ivar("_inclusiveRegisteredDraggedTypes"), new objj_ivar("_defaultButton"), new objj_ivar("_defaultButtonEnabled"), new objj_ivar("_autorecalculatesKeyViewLoop"), new objj_ivar("_keyViewLoopIsDirty"), new objj_ivar("_sharesChromeWithPlatformWindow"), new objj_ivar("_DOMElement"), new objj_ivar("_autoresizingMask"), new objj_ivar("_isFullPlatformWindow"), new objj_ivar("_fullPlatformWindowSession"), new objj_ivar("_parentWindow"), new objj_ivar("_childWindows"), new objj_ivar("_childOrdering"), new objj_ivar("_sheetContext"), new objj_ivar("_parentView"), new objj_ivar("_isSheet"), new objj_ivar("_frameAnimation"), new objj_ivar("_layoutEngine"), new objj_ivar("_autolayoutEnabled"), new objj_ivar("_subviewsNeedUpdateConstraints"), new objj_ivar("_needsLayout"), new objj_ivar("_layoutLock")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), function $CPWindow___hasBeenOrderedIn(self, _cmd)
 {
     return self._hasBeenOrderedIn;
@@ -56388,14 +56401,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
 ,["BOOL"]), new objj_method(sel_getUid("_setAutolayoutEnabled:"), function $CPWindow___setAutolayoutEnabled_(self, _cmd, newValue)
 {
     self._autolayoutEnabled = newValue;
-}
-,["void","BOOL"]), new objj_method(sel_getUid("needsUpdateConstraints"), function $CPWindow__needsUpdateConstraints(self, _cmd)
-{
-    return self._needsUpdateConstraints;
-}
-,["BOOL"]), new objj_method(sel_getUid("_setNeedsUpdateConstraints:"), function $CPWindow___setNeedsUpdateConstraints_(self, _cmd, newValue)
-{
-    self._needsUpdateConstraints = newValue;
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("init"), function $CPWindow__init(self, _cmd)
 {
@@ -56442,11 +56447,9 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         self._styleMask = aStyleMask;
         (self == null ? null : self.isa.objj_msgSend1(self, "setLevel:", CPNormalWindowLevel));
         self._windowView = ((___r1 = (windowViewClass == null ? null : windowViewClass.isa.objj_msgSend0(windowViewClass, "alloc"))), ___r1 == null ? null : ___r1.isa.objj_msgSend2(___r1, "initWithFrame:styleMask:", CGRectMake(0.0, 0.0, CGRectGetWidth(self._frame), CGRectGetHeight(self._frame)), aStyleMask));
-        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "windowView"));
-        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setNeedsUpdateConstraints:", YES));
-        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setNeedsUpdateSizeConstraints:", NO));
         ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "_setWindow:", self));
         ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setNextResponder:", self));
+        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setIdentifier:", "windowView"));
         self._minSize = (self == null ? null : self.isa.objj_msgSend1(self, "_calculateMinSizeForProposedSize:", CGSizeMake(0.0, 0.0)));
         self._maxSize = CGSizeMake(1000000.0, 1000000.0);
         (self == null ? null : self.isa.objj_msgSend1(self, "setMovableByWindowBackground:", aStyleMask & CPHUDBackgroundWindowMask));
@@ -56477,7 +56480,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("_hasBeenOrderedIn"), fu
         self._keyViewLoopIsDirty = NO;
         self._hasBecomeKeyWindow = NO;
         self._autolayoutEnabled = NO;
-        self._needsUpdateConstraints = YES;
+        self._subviewsNeedUpdateConstraints = YES;
         self._needsLayout = NO;
         self._layoutLock = NO;
         self._layoutEngine = nil;
@@ -58598,26 +58601,16 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 ,["CPLayoutConstraintEngine"]), new objj_method(sel_getUid("updateConstraintsIfNeeded"), function $CPWindow__updateConstraintsIfNeeded(self, _cmd)
 {
-    var result = NO;
-    if (self._needsUpdateConstraints)
-    {
-        result = self.isa.objj_msgSend0(self, "_updateConstraintsAtWindowLevel");
-        self._needsUpdateConstraints = NO;
-    }
+    if (self._subviewsNeedUpdateConstraints)
+        return self.isa.objj_msgSend0(self, "updateConstraints");
+    return NO;
+}
+,["BOOL"]), new objj_method(sel_getUid("updateConstraints"), function $CPWindow__updateConstraints(self, _cmd)
+{
+    CPLog.debug(self.isa.objj_msgSend0(self, "className") + " " + _cmd);
+    var result = ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsForSubtreeIfNeeded"));
+    self._subviewsNeedUpdateConstraints = NO;
     return result;
-}
-,["BOOL"]), new objj_method(sel_getUid("setNeedsUpdateConstraints:"), function $CPWindow__setNeedsUpdateConstraints_(self, _cmd, flag)
-{
-    if (flag !== self._needsUpdateConstraints)
-    {
-        self._needsUpdateConstraints = flag;
-    }
-}
-,["void","BOOL"]), new objj_method(sel_getUid("_updateConstraintsAtWindowLevel"), function $CPWindow___updateConstraintsAtWindowLevel(self, _cmd)
-{
-    ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-    ((___r1 = self._contentView), ___r1 == null ? null : ___r1.isa.objj_msgSend1(___r1, "setAutolayoutEnabled:", YES));
-    return ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateConstraintsForSubtreeIfNeeded"));
     var ___r1;
 }
 ,["BOOL"]), new objj_method(sel_getUid("_suggestFrameSize:"), function $CPWindow___suggestFrameSize_(self, _cmd, newSize)
@@ -58627,7 +58620,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         values = objj_msgSend(objj_msgSend(CPArray, "alloc"), "initWithObjects:count:", [newSize.width, newSize.height], 2);
     self.isa.objj_msgSend0(self, "updateConstraintsIfNeeded");
     (engine == null ? null : engine.isa.objj_msgSend3(engine, "suggestValues:forVariables:withPriority:", values, variables, CPLayoutPriorityDragThatCanResizeWindow));
-    ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateEngineFrame"));
+    ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_updateGeometry"));
     var ___r1;
 }
 ,["void","CGSize"]), new objj_method(sel_getUid("_sizeToFitWindowViewSize:"), function $CPWindow___sizeToFitWindowViewSize_(self, _cmd, newSize)
@@ -58644,7 +58637,6 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     if (self._autolayoutEnabled !== enable)
     {
         self._autolayoutEnabled = enable;
-        self.isa.objj_msgSend0(self, "setNeedsLayout");
     }
 }
 ,["void","BOOL"]), new objj_method(sel_getUid("setNeedsLayout"), function $CPWindow__setNeedsLayout(self, _cmd)
@@ -58671,9 +58663,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         var engine = self.isa.objj_msgSend0(self, "_layoutEngine");
         (engine == null ? null : engine.isa.objj_msgSend0(engine, "stopEditing"));
         self.isa.objj_msgSend1(self, "_updateWindowStayConstraintsInEngine:", engine);
-        if (self.isa.objj_msgSend0(self, "updateConstraintsIfNeeded"))
-            (engine == null ? null : engine.isa.objj_msgSend0(engine, "solve"));
-        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "updateEngineFrame"));
+        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "layoutSubtreeIfNeeded"));
+        ((___r1 = self._windowView), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "_updateGeometry"));
         self.isa.objj_msgSend0(self, "_updateFrameFromCurrentWindowViewFrame");
         _CPDisplayServer.isa.objj_msgSend0(_CPDisplayServer, "unlock");
         ((___r1 = CPRunLoop.isa.objj_msgSend0(CPRunLoop, "mainRunLoop")), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "performSelectors"));
@@ -58701,15 +58692,31 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     }
     var ___r1;
 }
-,["void","id"])]);
+,["void","id"]), new objj_method(sel_getUid("_setSubviewsNeedUpdateConstraints"), function $CPWindow___setSubviewsNeedUpdateConstraints(self, _cmd)
+{
+    self._subviewsNeedUpdateConstraints = YES;
+}
+,["void"])]);
 }{
 var the_class = objj_getClass("CPWindow")
 if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPWindow\"");
-var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("engine:variableDidChange:withOwner:"), function $CPWindow__engine_variableDidChange_withOwner_(self, _cmd, anEngine, aVariable, anOwner)
+var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_getUid("engine:variableDidChange:inContainer:"), function $CPWindow__engine_variableDidChange_inContainer_(self, _cmd, anEngine, aVariable, anOwner)
 {
     (anOwner == null ? null : anOwner.isa.objj_msgSend1(anOwner, "_informContainerThatVariableDidChange:", aVariable));
 }
-,["void","id","Object","id"])]);
+,["void","id","Object","id"]), new objj_method(sel_getUid("engine:didChangeVariablesInContainers:"), function $CPWindow__engine_didChangeVariablesInContainers_(self, _cmd, anEngine, containers)
+{
+    (containers == null ? null : containers.isa.objj_msgSend1(containers, "enumerateObjectsUsingBlock:", function(aContainer)
+    {
+        ((___r1 = (aContainer == null ? null : aContainer.isa.objj_msgSend0(aContainer, "superview"))), ___r1 == null ? null : ___r1.isa.objj_msgSend0(___r1, "setNeedsLayout"));
+        var ___r1;
+    }));
+}
+,["void","id","CPSet"]), new objj_method(sel_getUid("engine:constraintDidChangeInContainer:"), function $CPWindow__engine_constraintDidChangeInContainer_(self, _cmd, anEngine, aContainer)
+{
+    (aContainer == null ? null : aContainer.isa.objj_msgSend0(aContainer, "_informSuperviewThatSubviewsNeedSolvingInEngine"));
+}
+,["void","id","id"])]);
 }_CPWindowFullPlatformWindowSessionMake = function(aWindowView, aContentRect, hasShadow, aLevel)
 {
     return {windowView: aWindowView, contentRect: aContentRect, hasShadow: hasShadow, level: aLevel};
