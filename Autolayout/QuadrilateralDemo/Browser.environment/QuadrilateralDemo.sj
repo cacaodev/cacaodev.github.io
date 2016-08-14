@@ -1,4 +1,4 @@
-@STATIC;1.0;p;15;AppController.jt;38442;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;16;CPMouseTracker.jt;38353;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("CPMouseTracker.j", YES);
+@STATIC;1.0;p;15;AppController.jt;43747;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;16;CPMouseTracker.jt;43658;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("CPMouseTracker.j", YES);
 {var the_class = objj_allocateClassPair(CPObject, "AppController"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("pNum", "CPInteger"), new objj_ivar("container", "ColorView")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLaunching:"), function $AppController__applicationDidFinishLaunching_(self, _cmd, aNotification)
@@ -155,7 +155,16 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     }
 }
 
-,["void","CPLayoutPoint"]), new objj_method(sel_getUid("drawRect:"), function $ColorView__drawRect_(self, _cmd, aRect)
+,["void","CPLayoutPoint"]), new objj_method(sel_getUid("drawString:inRect:"), function $ColorView__drawString_inRect_(self, _cmd, aString, aRect)
+{
+    var ctx = ((___r1 = (CPGraphicsContext.isa.method_msgSend["currentContext"] || _objj_forward)(CPGraphicsContext, "currentContext")), ___r1 == null ? null : (___r1.isa.method_msgSend["graphicsPort"] || _objj_forward)(___r1, "graphicsPort"));
+    ctx.font = ((___r1 = (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 20)), ___r1 == null ? null : (___r1.isa.method_msgSend["cssString"] || _objj_forward)(___r1, "cssString"));
+    var metrics = ctx.measureText(aString);
+    ctx.fillText(aString, CGRectGetMinX(aRect) + (CGRectGetWidth(aRect) - metrics.width) / 2, CGRectGetMinY(aRect) + (CGRectGetHeight(aRect) + 5) / 2);
+    var ___r1;
+}
+
+,["void","CPString","CGRect"]), new objj_method(sel_getUid("drawRect:"), function $ColorView__drawRect_(self, _cmd, aRect)
 {
     var ctx = ((___r1 = (CPGraphicsContext.isa.method_msgSend["currentContext"] || _objj_forward)(CPGraphicsContext, "currentContext")), ___r1 == null ? null : (___r1.isa.method_msgSend["graphicsPort"] || _objj_forward)(___r1, "graphicsPort"));
     ((___r1 = (CPColor.isa.method_msgSend["redColor"] || _objj_forward)(CPColor, "redColor")), ___r1 == null ? null : (___r1.isa.method_msgSend["set"] || _objj_forward)(___r1, "set"));
@@ -170,9 +179,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     (points == null ? null : (points.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(points, "enumerateObjectsUsingBlock:",     function(point, idx, stop)
     {
         var p = (point == null ? null : (point.isa.method_msgSend["valueInItem:"] || _objj_forward)(point, "valueInItem:", self));
-        var color = point == self.trackingPoint ? selected : normal;
-        (color == null ? null : (color.isa.method_msgSend["setFill"] || _objj_forward)(color, "setFill"));
-        ((___r1 = (CPBezierPath.isa.method_msgSend["bezierPathWithOvalInRect:"] || _objj_forward)(CPBezierPath, "bezierPathWithOvalInRect:", CGRectMake(p.x - 25, p.y - 25, 50, 50))), ___r1 == null ? null : (___r1.isa.method_msgSend["fill"] || _objj_forward)(___r1, "fill"));
         if (idx == 0)
         {
             (path == null ? null : (path.isa.method_msgSend["moveToPoint:"] || _objj_forward)(path, "moveToPoint:", p));
@@ -191,12 +197,22 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
         }        else if (idx == 7)
         {
             (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["closePath"] || _objj_forward)(rectanglePath, "closePath"));
-        }        var ___r1;
-    }));
+        }    }));
     (path == null ? null : (path.isa.method_msgSend["stroke"] || _objj_forward)(path, "stroke"));
     (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["stroke"] || _objj_forward)(rectanglePath, "stroke"));
     ((___r1 = (CPColor.isa.method_msgSend["colorWithWhite:alpha:"] || _objj_forward)(CPColor, "colorWithWhite:alpha:", 0.5, 0.2)), ___r1 == null ? null : (___r1.isa.method_msgSend["set"] || _objj_forward)(___r1, "set"));
     (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["fill"] || _objj_forward)(rectanglePath, "fill"));
+    (points == null ? null : (points.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(points, "enumerateObjectsUsingBlock:",     function(point, idx, stop)
+    {
+        var color = point == self.trackingPoint ? selected : normal;
+        (color == null ? null : (color.isa.method_msgSend["setFill"] || _objj_forward)(color, "setFill"));
+        var p = (point == null ? null : (point.isa.method_msgSend["valueInItem:"] || _objj_forward)(point, "valueInItem:", self));
+        var rect = CGRectMake(p.x - 25, p.y - 25, 50, 50);
+        ((___r1 = (CPBezierPath.isa.method_msgSend["bezierPathWithOvalInRect:"] || _objj_forward)(CPBezierPath, "bezierPathWithOvalInRect:", rect)), ___r1 == null ? null : (___r1.isa.method_msgSend["fill"] || _objj_forward)(___r1, "fill"));
+        ((___r1 = (CPColor.isa.method_msgSend["whiteColor"] || _objj_forward)(CPColor, "whiteColor")), ___r1 == null ? null : (___r1.isa.method_msgSend["setFill"] || _objj_forward)(___r1, "setFill"));
+        (self.isa.method_msgSend["drawString:inRect:"] || _objj_forward)(self, "drawString:inRect:", ROUND((self.isa.method_msgSend["priorityForLayoutPoint:"] || _objj_forward)(self, "priorityForLayoutPoint:", point)), rect);
+        var ___r1;
+    }));
     var ___r1;
 }
 
@@ -215,17 +231,20 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     var ___r1;
 }
 
-,["CPPopover"]), new objj_method(sel_getUid("setConstantFromSlider:"), function $ColorView__setConstantFromSlider_(self, _cmd, sender)
+,["CPPopover"]), new objj_method(sel_getUid("closePopover:"), function $ColorView__closePopover_(self, _cmd, sender)
 {
-    var currentLayoutPoint = ((___r1 = ((___r2 = self.popover), ___r2 == null ? null : (___r2.isa.method_msgSend["contentViewController"] || _objj_forward)(___r2, "contentViewController"))), ___r1 == null ? null : (___r1.isa.method_msgSend["layoutPoint"] || _objj_forward)(___r1, "layoutPoint"));
-    (self.isa.method_msgSend["setPriority:forLayoutPoint:"] || _objj_forward)(self, "setPriority:forLayoutPoint:", (sender == null ? null : (sender.isa.method_msgSend["intValue"] || _objj_forward)(sender, "intValue")), currentLayoutPoint);
-    ((___r1 = (self.isa.method_msgSend["popover"] || _objj_forward)(self, "popover")), ___r1 == null ? null : (___r1.isa.method_msgSend["close"] || _objj_forward)(___r1, "close"));
-    var ___r1, ___r2;
+    ((___r1 = self.popover), ___r1 == null ? null : (___r1.isa.method_msgSend["close"] || _objj_forward)(___r1, "close"));
+    var ___r1;
 }
 
 ,["void","id"]), new objj_method(sel_getUid("popoverDidClose:"), function $ColorView__popoverDidClose_(self, _cmd, aPopover)
 {
-    ((___r1 = (aPopover == null ? null : (aPopover.isa.method_msgSend["contentViewController"] || _objj_forward)(aPopover, "contentViewController"))), ___r1 == null ? null : (___r1.isa.method_msgSend["setLayoutPoint:"] || _objj_forward)(___r1, "setLayoutPoint:", nil));
+    var controller = ((___r1 = self.popover), ___r1 == null ? null : (___r1.isa.method_msgSend["contentViewController"] || _objj_forward)(___r1, "contentViewController")),
+        currentLayoutPoint = (controller == null ? null : (controller.isa.method_msgSend["layoutPoint"] || _objj_forward)(controller, "layoutPoint")),
+        priority = (controller == null ? null : (controller.isa.method_msgSend["priority"] || _objj_forward)(controller, "priority"));
+    CPLog.debug(_cmd + priority);
+    (self.isa.method_msgSend["setPriority:forLayoutPoint:"] || _objj_forward)(self, "setPriority:forLayoutPoint:", priority, currentLayoutPoint);
+    (controller == null ? null : (controller.isa.method_msgSend["setLayoutPoint:"] || _objj_forward)(controller, "setLayoutPoint:", nil));
     var ___r1;
 }
 
@@ -234,8 +253,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     var controller = (aPopover == null ? null : (aPopover.isa.method_msgSend["contentViewController"] || _objj_forward)(aPopover, "contentViewController")),
         currentLayoutPoint = (controller == null ? null : (controller.isa.method_msgSend["layoutPoint"] || _objj_forward)(controller, "layoutPoint")),
         priority = (self.isa.method_msgSend["priorityForLayoutPoint:"] || _objj_forward)(self, "priorityForLayoutPoint:", currentLayoutPoint);
-    ((___r1 = ((___r2 = (controller == null ? null : (controller.isa.method_msgSend["view"] || _objj_forward)(controller, "view"))), ___r2 == null ? null : (___r2.isa.method_msgSend["viewWithTag:"] || _objj_forward)(___r2, "viewWithTag:", 1000))), ___r1 == null ? null : (___r1.isa.method_msgSend["setFloatValue:"] || _objj_forward)(___r1, "setFloatValue:", priority));
-    var ___r1, ___r2;
+    (controller == null ? null : (controller.isa.method_msgSend["setPriority:"] || _objj_forward)(controller, "setPriority:", priority));
 }
 
 ,["void","CPPopover"]), new objj_method(sel_getUid("mouseDown:"), function $ColorView__mouseDown_(self, _cmd, theEvent)
@@ -265,11 +283,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     self.trackingPoint = (self.isa.method_msgSend["layoutPointAtLocation:"] || _objj_forward)(self, "layoutPointAtLocation:", (self.isa.method_msgSend["convertPointFromBase:"] || _objj_forward)(self, "convertPointFromBase:", locationInWindow));
     if (self.trackingPoint == nil)
         return NO;
-    var constraints = (self.isa.method_msgSend["stayConstraintsForLayoutPoint:"] || _objj_forward)(self, "stayConstraintsForLayoutPoint:", self.trackingPoint);
-    (constraints == null ? null : (constraints.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(constraints, "enumerateObjectsUsingBlock:",     function(aConstraint, idx, stop)
-    {
-        (aConstraint == null ? null : (aConstraint.isa.method_msgSend["setPriority:"] || _objj_forward)(aConstraint, "setPriority:", 1000));
-    }));
     self.currentLocation = locationInWindow;
     return YES;
 }
@@ -284,7 +297,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     (constraints == null ? null : (constraints.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(constraints, "enumerateObjectsUsingBlock:",     function(aConstraint, idx, stop)
     {
         var constant = (aConstraint == null ? null : (aConstraint.isa.method_msgSend["constant"] || _objj_forward)(aConstraint, "constant")) + (deltas == null ? null : (deltas.isa.method_msgSend["objectAtIndex:"] || _objj_forward)(deltas, "objectAtIndex:", idx));
-        (aConstraint == null ? null : (aConstraint.isa.method_msgSend["setConstant:"] || _objj_forward)(aConstraint, "setConstant:", constant));
+        (aConstraint == null ? null : (aConstraint.isa.method_msgSend["setConstant:priority:"] || _objj_forward)(aConstraint, "setConstant:priority:", constant, CPLayoutPriorityRequired));
     }));
     self.currentLocation = locationInWindow;
     ((___r1 = (self.isa.method_msgSend["window"] || _objj_forward)(self, "window")), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
@@ -324,7 +337,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
 }
 
 {var the_class = objj_allocateClassPair(CPViewController, "ContentViewController"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("layoutPoint", "CPlayoutPoint"), new objj_ivar("target", "id")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("layoutPoint", "CPlayoutPoint"), new objj_ivar("priority", "CPInteger"), new objj_ivar("target", "id")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("layoutPoint"), function $ContentViewController__layoutPoint(self, _cmd)
 {
     return self.layoutPoint;
@@ -335,7 +348,17 @@ class_addMethods(the_class, [new objj_method(sel_getUid("layoutPoint"), function
     self.layoutPoint = newValue;
 }
 
-,["void","CPlayoutPoint"]), new objj_method(sel_getUid("target"), function $ContentViewController__target(self, _cmd)
+,["void","CPlayoutPoint"]), new objj_method(sel_getUid("priority"), function $ContentViewController__priority(self, _cmd)
+{
+    return self.priority;
+}
+
+,["CPInteger"]), new objj_method(sel_getUid("setPriority:"), function $ContentViewController__setPriority_(self, _cmd, newValue)
+{
+    self.priority = newValue;
+}
+
+,["void","CPInteger"]), new objj_method(sel_getUid("target"), function $ContentViewController__target(self, _cmd)
 {
     return self.target;
 }
@@ -345,21 +368,76 @@ class_addMethods(the_class, [new objj_method(sel_getUid("layoutPoint"), function
     self.target = newValue;
 }
 
-,["void","id"]), new objj_method(sel_getUid("viewDidLoad"), function $ContentViewController__viewDidLoad(self, _cmd)
+,["void","id"]), new objj_method(sel_getUid("initWithCibName:owner:"), function $ContentViewController__initWithCibName_owner_(self, _cmd, aName, anOwner)
 {
-    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["setFrame:"] || _objj_forward)(___r1, "setFrame:", CGRectMake(0, 0, 200, 42)));
-    var slider = ((___r1 = (CPSlider.isa.method_msgSend["alloc"] || _objj_forward)(CPSlider, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(10, 10, 180, 22)));
-    (slider == null ? null : (slider.isa.method_msgSend["setTag:"] || _objj_forward)(slider, "setTag:", 1000));
-    (slider == null ? null : (slider.isa.method_msgSend["setContinuous:"] || _objj_forward)(slider, "setContinuous:", NO));
-    (slider == null ? null : (slider.isa.method_msgSend["setMaxValue:"] || _objj_forward)(slider, "setMaxValue:", 1000));
-    (slider == null ? null : (slider.isa.method_msgSend["setAction:"] || _objj_forward)(slider, "setAction:", sel_getUid("setConstantFromSlider:")));
-    (slider == null ? null : (slider.isa.method_msgSend["setTarget:"] || _objj_forward)(slider, "setTarget:", self.target));
-    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["addSubview:"] || _objj_forward)(___r1, "addSubview:", slider));
+    self = (objj_getClass("ContentViewController").super_class.method_dtable["initWithCibName:owner:"] || _objj_forward)(self, "initWithCibName:owner:", aName, anOwner);
+    self.priority = 0;
     CPLog.debug(_cmd);
+    return self;
+}
+
+,["id","id","id"]), new objj_method(sel_getUid("setPriority:"), function $ContentViewController__setPriority_(self, _cmd, p)
+{
+    if (self.priority !== p)
+    {
+        self.priority = p;
+        CPLog.debug(_cmd + self.priority);
+    }
+}
+
+,["void","CPInteger"]), new objj_method(sel_getUid("viewDidLoad"), function $ContentViewController__viewDidLoad(self, _cmd)
+{
+    CPLog.debug(_cmd);
+    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["setFrame:"] || _objj_forward)(___r1, "setFrame:", CGRectMake(0, 0, 280, 42)));
+    var slider = ((___r1 = (CPSlider.isa.method_msgSend["alloc"] || _objj_forward)(CPSlider, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(10, 10, 150, 22)));
+    (slider == null ? null : (slider.isa.method_msgSend["setContinuous:"] || _objj_forward)(slider, "setContinuous:", YES));
+    (slider == null ? null : (slider.isa.method_msgSend["setMaxValue:"] || _objj_forward)(slider, "setMaxValue:", 1000));
+    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["addSubview:"] || _objj_forward)(___r1, "addSubview:", slider));
+    var textField = ((___r1 = (CPTextField.isa.method_msgSend["alloc"] || _objj_forward)(CPTextField, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(170, 10, 40, 22)));
+    (textField == null ? null : (textField.isa.method_msgSend["setFont:"] || _objj_forward)(textField, "setFont:", (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 20)));
+    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["addSubview:"] || _objj_forward)(___r1, "addSubview:", textField));
+    var oc = ((___r1 = (CPObjectController.isa.method_msgSend["alloc"] || _objj_forward)(CPObjectController, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["init"] || _objj_forward)(___r1, "init"));
+    (oc == null ? null : (oc.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(oc, "bind:toObject:withKeyPath:options:", CPContentBinding, self, "self", nil));
+    (textField == null ? null : (textField.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(textField, "bind:toObject:withKeyPath:options:", CPValueBinding, oc, "selection.priority", (___r1 = (CPDictionary.isa.method_msgSend["alloc"] || _objj_forward)(CPDictionary, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:forKeys:"] || _objj_forward)(___r1, "initWithObjects:forKeys:", ["FloatToInt"], [CPValueTransformerNameBindingOption]))));
+    (slider == null ? null : (slider.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(slider, "bind:toObject:withKeyPath:options:", CPValueBinding, oc, "selection.priority", nil));
+    var ok = ((___r1 = (CPButton.isa.method_msgSend["alloc"] || _objj_forward)(CPButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(220, 7, 50, 28)));
+    (ok == null ? null : (ok.isa.method_msgSend["setTitle:"] || _objj_forward)(ok, "setTitle:", "OK"));
+    (ok == null ? null : (ok.isa.method_msgSend["setTarget:"] || _objj_forward)(ok, "setTarget:", self.target));
+    (ok == null ? null : (ok.isa.method_msgSend["setAction:"] || _objj_forward)(ok, "setAction:", sel_getUid("closePopover:")));
+    ((___r1 = (self.isa.method_msgSend["view"] || _objj_forward)(self, "view")), ___r1 == null ? null : (___r1.isa.method_msgSend["addSubview:"] || _objj_forward)(___r1, "addSubview:", ok));
     var ___r1;
 }
 
 ,["void"])]);
+class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function $ContentViewController__initialize(self, _cmd)
+{
+    var transformer = ((___r1 = (CPFloatToIntegerTransformer == null ? null : (CPFloatToIntegerTransformer.isa.method_msgSend["alloc"] || _objj_forward)(CPFloatToIntegerTransformer, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["init"] || _objj_forward)(___r1, "init"));
+    (CPValueTransformer.isa.method_msgSend["setValueTransformer:forName:"] || _objj_forward)(CPValueTransformer, "setValueTransformer:forName:", transformer, "FloatToInt");
+    var ___r1;
+}
+
+,["void"])]);
+}
+
+{var the_class = objj_allocateClassPair(CPValueTransformer, "CPFloatToIntegerTransformer"),
+meta_class = the_class.isa;objj_registerClassPair(the_class);
+class_addMethods(the_class, [new objj_method(sel_getUid("transformedValue:"), function $CPFloatToIntegerTransformer__transformedValue_(self, _cmd, aValue)
+{
+    return ROUND(aValue);
+}
+
+,["id","id"]), new objj_method(sel_getUid("reverseTransformedValue:"), function $CPFloatToIntegerTransformer__reverseTransformedValue_(self, _cmd, aValue)
+{
+    return aValue;
+}
+
+,["id","id"])]);
+class_addMethods(meta_class, [new objj_method(sel_getUid("allowsReverseTransformation"), function $CPFloatToIntegerTransformer__allowsReverseTransformation(self, _cmd)
+{
+    return YES;
+}
+
+,["BOOL"])]);
 }
 p;16;CPMouseTracker.jt;12549;@STATIC;1.0;t;12529;var startTracking = 1 << 1,
     continueTracking = 1 << 2,
