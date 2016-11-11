@@ -1,10 +1,10 @@
-@STATIC;1.0;p;15;AppController.jt;38464;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jt;38396;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);CPLogRegister(CPLogConsole);
+@STATIC;1.0;p;15;AppController.jt;41856;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jt;41788;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);CPLogRegister(CPLogConsole);
 
 {var the_class = objj_allocateClassPair(CPObject, "AppController"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("stackView", "StackView"), new objj_ivar("theWindow", "CPWindow"), new objj_ivar("priorities", "CPArray")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLaunching:"), function $AppController__applicationDidFinishLaunching_(self, _cmd, aNotification)
 {
-    self.theWindow = ((___r1 = (CPWindow.isa.method_msgSend["alloc"] || _objj_forward)(CPWindow, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithContentRect:styleMask:"] || _objj_forward)(___r1, "initWithContentRect:styleMask:", CGRectMake(50, 50, 1200, 400), CPResizableWindowMask | CPTitledWindowMask));
+    self.theWindow = ((___r1 = (CPWindow.isa.method_msgSend["alloc"] || _objj_forward)(CPWindow, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithContentRect:styleMask:"] || _objj_forward)(___r1, "initWithContentRect:styleMask:", CGRectMake(50, 50, 1400, 400), CPResizableWindowMask | CPTitledWindowMask));
     var contentView = ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["contentView"] || _objj_forward)(___r1, "contentView"));
     (contentView == null ? null : (contentView.isa.method_msgSend["setIdentifier:"] || _objj_forward)(contentView, "setIdentifier:", "ContentView"));
     (contentView == null ? null : (contentView.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(contentView, "setTranslatesAutoresizingMaskIntoConstraints:", YES));
@@ -45,30 +45,32 @@ class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLau
     (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", spaceLabel));
     var prioritiesController = (CPArrayController.isa.method_msgSend["new"] || _objj_forward)(CPArrayController, "new");
     (prioritiesController == null ? null : (prioritiesController.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(prioritiesController, "bind:toObject:withKeyPath:options:", "contentArray", self, "priorities", nil));
-    var combo = ((___r1 = (CPComboBox.isa.method_msgSend["alloc"] || _objj_forward)(CPComboBox, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(CGRectGetMaxX((slider == null ? null : (slider.isa.method_msgSend["frame"] || _objj_forward)(slider, "frame"))) + 10, 10, 100, 28)));
-    (combo == null ? null : (combo.isa.method_msgSend["setControlSize:"] || _objj_forward)(combo, "setControlSize:", CPSmallControlSize));
-    (combo == null ? null : (combo.isa.method_msgSend["setCompletes:"] || _objj_forward)(combo, "setCompletes:", NO));
-    (combo == null ? null : (combo.isa.method_msgSend["setHasVerticalScroller:"] || _objj_forward)(combo, "setHasVerticalScroller:", NO));
-    (combo == null ? null : (combo.isa.method_msgSend["setButtonBordered:"] || _objj_forward)(combo, "setButtonBordered:", NO));
-    (combo == null ? null : (combo.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(combo, "bind:toObject:withKeyPath:options:", "content", prioritiesController, "arrangedObjects", nil));
-    (combo == null ? null : (combo.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(combo, "bind:toObject:withKeyPath:options:", "contentValues", prioritiesController, "arrangedObjects.label", nil));
-    (combo == null ? null : (combo.isa.method_msgSend["bind:toObject:withKeyPath:options:"] || _objj_forward)(combo, "bind:toObject:withKeyPath:options:", "value", prioritiesController, "selection.value", nil));
-    (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", combo));
-    (combo == null ? null : (combo.isa.method_msgSend["setTarget:"] || _objj_forward)(combo, "setTarget:", self));
-    (combo == null ? null : (combo.isa.method_msgSend["setAction:"] || _objj_forward)(combo, "setAction:", sel_getUid("setHugging:")));
-    (combo == null ? null : (combo.isa.method_msgSend["setDelegate:"] || _objj_forward)(combo, "setDelegate:", self));
-    var alignPopup = ((___r1 = (CPPopUpButton.isa.method_msgSend["alloc"] || _objj_forward)(CPPopUpButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(CGRectGetMaxX((combo == null ? null : (combo.isa.method_msgSend["frame"] || _objj_forward)(combo, "frame"))) + 10, 10, 100, 32)));
+    var huggingPopup = ((___r1 = (CPPopUpButton.isa.method_msgSend["alloc"] || _objj_forward)(CPPopUpButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
+    (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(huggingPopup, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
+    (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["addItemsWithTitles:"] || _objj_forward)(huggingPopup, "addItemsWithTitles:", ["PriorityLow", "Priority500", "PriorityHigh", "PriorityRequired"]));
+    (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["setTarget:"] || _objj_forward)(huggingPopup, "setTarget:", self));
+    (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["setAction:"] || _objj_forward)(huggingPopup, "setAction:", sel_getUid("setHugging:")));
+    (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", huggingPopup));
+    ((___r1 = ((___r2 = (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["topAnchor"] || _objj_forward)(huggingPopup, "topAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    ((___r1 = ((___r2 = (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["leftAnchor"] || _objj_forward)(huggingPopup, "leftAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (slider == null ? null : (slider.isa.method_msgSend["rightAnchor"] || _objj_forward)(slider, "rightAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    var alignPopup = ((___r1 = (CPPopUpButton.isa.method_msgSend["alloc"] || _objj_forward)(CPPopUpButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
+    (alignPopup == null ? null : (alignPopup.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(alignPopup, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
     (alignPopup == null ? null : (alignPopup.isa.method_msgSend["addItemsWithTitles:"] || _objj_forward)(alignPopup, "addItemsWithTitles:", ["top", "centerY", "bottom"]));
     (alignPopup == null ? null : (alignPopup.isa.method_msgSend["selectItemAtIndex:"] || _objj_forward)(alignPopup, "selectItemAtIndex:", 1));
     (alignPopup == null ? null : (alignPopup.isa.method_msgSend["setTarget:"] || _objj_forward)(alignPopup, "setTarget:", self));
     (alignPopup == null ? null : (alignPopup.isa.method_msgSend["setAction:"] || _objj_forward)(alignPopup, "setAction:", sel_getUid("setAlignment:")));
     (alignPopup == null ? null : (alignPopup.isa.method_msgSend["setTag:"] || _objj_forward)(alignPopup, "setTag:", 2));
     (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", alignPopup));
-    var testButton = ((___r1 = (CPButton.isa.method_msgSend["alloc"] || _objj_forward)(CPButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(CGRectGetMaxX((alignPopup == null ? null : (alignPopup.isa.method_msgSend["frame"] || _objj_forward)(alignPopup, "frame"))) + 10, 10, 100, 32)));
+    ((___r1 = ((___r2 = (alignPopup == null ? null : (alignPopup.isa.method_msgSend["topAnchor"] || _objj_forward)(alignPopup, "topAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    ((___r1 = ((___r2 = (alignPopup == null ? null : (alignPopup.isa.method_msgSend["leftAnchor"] || _objj_forward)(alignPopup, "leftAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (huggingPopup == null ? null : (huggingPopup.isa.method_msgSend["rightAnchor"] || _objj_forward)(huggingPopup, "rightAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    var testButton = ((___r1 = (CPButton.isa.method_msgSend["alloc"] || _objj_forward)(CPButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
+    (testButton == null ? null : (testButton.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(testButton, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
     (testButton == null ? null : (testButton.isa.method_msgSend["setTitle:"] || _objj_forward)(testButton, "setTitle:", "Add View"));
     (testButton == null ? null : (testButton.isa.method_msgSend["setTarget:"] || _objj_forward)(testButton, "setTarget:", self));
     (testButton == null ? null : (testButton.isa.method_msgSend["setAction:"] || _objj_forward)(testButton, "setAction:", sel_getUid("test:")));
     (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", testButton));
+    ((___r1 = ((___r2 = (testButton == null ? null : (testButton.isa.method_msgSend["topAnchor"] || _objj_forward)(testButton, "topAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    ((___r1 = ((___r2 = (testButton == null ? null : (testButton.isa.method_msgSend["leftAnchor"] || _objj_forward)(testButton, "leftAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (alignPopup == null ? null : (alignPopup.isa.method_msgSend["rightAnchor"] || _objj_forward)(alignPopup, "rightAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
     var testButton2 = ((___r1 = (CPButton.isa.method_msgSend["alloc"] || _objj_forward)(CPButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
     (testButton2 == null ? null : (testButton2.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(testButton2, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
     (testButton2 == null ? null : (testButton2.isa.method_msgSend["setTitle:"] || _objj_forward)(testButton2, "setTitle:", "Remove Last View"));
@@ -78,6 +80,14 @@ class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLau
     ((___r1 = ((___r2 = (testButton2 == null ? null : (testButton2.isa.method_msgSend["topAnchor"] || _objj_forward)(testButton2, "topAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
     ((___r1 = ((___r2 = (testButton2 == null ? null : (testButton2.isa.method_msgSend["leftAnchor"] || _objj_forward)(testButton2, "leftAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (testButton == null ? null : (testButton.isa.method_msgSend["rightAnchor"] || _objj_forward)(testButton, "rightAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
     ((___r1 = ((___r2 = (testButton2 == null ? null : (testButton2.isa.method_msgSend["heightAnchor"] || _objj_forward)(testButton2, "heightAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:"] || _objj_forward)(___r2, "constraintEqualToAnchor:", (testButton == null ? null : (testButton.isa.method_msgSend["heightAnchor"] || _objj_forward)(testButton, "heightAnchor"))))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    var gravityPopup = ((___r1 = (CPPopUpButton.isa.method_msgSend["alloc"] || _objj_forward)(CPPopUpButton, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
+    (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(gravityPopup, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
+    (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["addItemsWithTitles:"] || _objj_forward)(gravityPopup, "addItemsWithTitles:", ["in gravity Leading", "in gravity Center", "in gravity Trailing"]));
+    (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["selectItemAtIndex:"] || _objj_forward)(gravityPopup, "selectItemAtIndex:", 0));
+    (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["setTag:"] || _objj_forward)(gravityPopup, "setTag:", 3));
+    (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", gravityPopup));
+    ((___r1 = ((___r2 = (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["topAnchor"] || _objj_forward)(gravityPopup, "topAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
+    ((___r1 = ((___r2 = (gravityPopup == null ? null : (gravityPopup.isa.method_msgSend["leftAnchor"] || _objj_forward)(gravityPopup, "leftAnchor"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r2, "constraintEqualToAnchor:constant:", (testButton2 == null ? null : (testButton2.isa.method_msgSend["rightAnchor"] || _objj_forward)(testButton2, "rightAnchor")), 10))), ___r1 == null ? null : (___r1.isa.method_msgSend["setActive:"] || _objj_forward)(___r1, "setActive:", YES));
     var views = (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["init"] || _objj_forward)(___r1, "init")),
         i = 1,
         p = 253;
@@ -86,7 +96,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLau
         var view = ((___r1 = (ColorView == null ? null : (ColorView.isa.method_msgSend["alloc"] || _objj_forward)(ColorView, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithInstrinsicSize:"] || _objj_forward)(___r1, "initWithInstrinsicSize:", CGSizeMake(50 * i, 200)));
         (view == null ? null : (view.isa.method_msgSend["setContentHuggingPriority:forOrientation:"] || _objj_forward)(view, "setContentHuggingPriority:forOrientation:", p - i, 0));
         (view == null ? null : (view.isa.method_msgSend["setContentHuggingPriority:forOrientation:"] || _objj_forward)(view, "setContentHuggingPriority:forOrientation:", p - i, 1));
-        (view == null ? null : (view.isa.method_msgSend["setIdentifier:"] || _objj_forward)(view, "setIdentifier:", "View" + i));
+        (view == null ? null : (view.isa.method_msgSend["setIdentifier:"] || _objj_forward)(view, "setIdentifier:", "View_" + CPStackViewGravityLeading + "_" + i));
         (views == null ? null : (views.isa.method_msgSend["addObject:"] || _objj_forward)(views, "addObject:", view));
     }
     self.stackView = (StackView == null ? null : (StackView.isa.method_msgSend["stackViewWithViews:"] || _objj_forward)(StackView, "stackViewWithViews:", views));
@@ -125,60 +135,41 @@ default:
     var ___r1;
 }
 
-,["void","id"]), new objj_method(sel_getUid("comboBoxWillDismiss:"), function $AppController__comboBoxWillDismiss_(self, _cmd, aNotification)
+,["void","id"]), new objj_method(sel_getUid("test2:"), function $AppController__test2_(self, _cmd, sender)
 {
-    var combo = (aNotification == null ? null : (aNotification.isa.method_msgSend["object"] || _objj_forward)(aNotification, "object"));
-    var idx = (combo == null ? null : (combo.isa.method_msgSend["indexOfSelectedItem"] || _objj_forward)(combo, "indexOfSelectedItem"));
-    if (idx !== CPNotFound)
+    var gravity = ((___r1 = ((___r2 = ((___r3 = self.theWindow), ___r3 == null ? null : (___r3.isa.method_msgSend["contentView"] || _objj_forward)(___r3, "contentView"))), ___r2 == null ? null : (___r2.isa.method_msgSend["viewWithTag:"] || _objj_forward)(___r2, "viewWithTag:", 3))), ___r1 == null ? null : (___r1.isa.method_msgSend["indexOfSelectedItem"] || _objj_forward)(___r1, "indexOfSelectedItem")) + 1;
+    var views = ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["viewsInGravity:"] || _objj_forward)(___r1, "viewsInGravity:", gravity));
+    var lastView = (views == null ? null : (views.isa.method_msgSend["lastObject"] || _objj_forward)(views, "lastObject"));
+    if (lastView !== nil)
     {
-        var value = ((___r1 = ((___r2 = self.priorities), ___r2 == null ? null : (___r2.isa.method_msgSend["objectAtIndex:"] || _objj_forward)(___r2, "objectAtIndex:", idx))), ___r1 == null ? null : (___r1.isa.method_msgSend["objectForKey:"] || _objj_forward)(___r1, "objectForKey:", "value"));
-        (combo == null ? null : (combo.isa.method_msgSend["setObjectValue:"] || _objj_forward)(combo, "setObjectValue:", value));
-        (self.isa.method_msgSend["setHugging:"] || _objj_forward)(self, "setHugging:", combo);
-        CPLog.debug(_cmd + " " + value);
+        ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["removeView:"] || _objj_forward)(___r1, "removeView:", lastView));
+        ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
+        ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
     }
-    var ___r1, ___r2;
-}
-
-,["void","CPNotification"]), new objj_method(sel_getUid("comboBoxSelectionDidChange:"), function $AppController__comboBoxSelectionDidChange_(self, _cmd, aNotification)
-{
-    var combo = (aNotification == null ? null : (aNotification.isa.method_msgSend["object"] || _objj_forward)(aNotification, "object"));
-    var idx = (combo == null ? null : (combo.isa.method_msgSend["indexOfSelectedItem"] || _objj_forward)(combo, "indexOfSelectedItem"));
-    if (idx !== CPNotFound)
-    {
-        var value = ((___r1 = ((___r2 = self.priorities), ___r2 == null ? null : (___r2.isa.method_msgSend["objectAtIndex:"] || _objj_forward)(___r2, "objectAtIndex:", idx))), ___r1 == null ? null : (___r1.isa.method_msgSend["objectForKey:"] || _objj_forward)(___r1, "objectForKey:", "value"));
-        (combo == null ? null : (combo.isa.method_msgSend["setObjectValue:"] || _objj_forward)(combo, "setObjectValue:", value));
-        CPLog.debug(_cmd + " " + value);
-    }
-    var ___r1, ___r2;
-}
-
-,["void","CPNotification"]), new objj_method(sel_getUid("test2:"), function $AppController__test2_(self, _cmd, sender)
-{
-    var as = ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["arrangedSubviews"] || _objj_forward)(___r1, "arrangedSubviews"));
-    var view = (as == null ? null : (as.isa.method_msgSend["objectAtIndex:"] || _objj_forward)(as, "objectAtIndex:", (as == null ? null : (as.isa.method_msgSend["count"] || _objj_forward)(as, "count")) - 1));
-    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["removeView:"] || _objj_forward)(___r1, "removeView:", view));
-    ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
-    var ___r1;
+    var ___r1, ___r2, ___r3;
 }
 
 ,["void","id"]), new objj_method(sel_getUid("test:"), function $AppController__test_(self, _cmd, sender)
 {
-    var n = ((___r1 = ((___r2 = self.stackView), ___r2 == null ? null : (___r2.isa.method_msgSend["arrangedSubviews"] || _objj_forward)(___r2, "arrangedSubviews"))), ___r1 == null ? null : (___r1.isa.method_msgSend["count"] || _objj_forward)(___r1, "count"));
+    var gravity = ((___r1 = ((___r2 = ((___r3 = self.theWindow), ___r3 == null ? null : (___r3.isa.method_msgSend["contentView"] || _objj_forward)(___r3, "contentView"))), ___r2 == null ? null : (___r2.isa.method_msgSend["viewWithTag:"] || _objj_forward)(___r2, "viewWithTag:", 3))), ___r1 == null ? null : (___r1.isa.method_msgSend["indexOfSelectedItem"] || _objj_forward)(___r1, "indexOfSelectedItem")) + 1;
+    var n = ((___r1 = ((___r2 = self.stackView), ___r2 == null ? null : (___r2.isa.method_msgSend["viewsInGravity:"] || _objj_forward)(___r2, "viewsInGravity:", gravity))), ___r1 == null ? null : (___r1.isa.method_msgSend["count"] || _objj_forward)(___r1, "count"));
     var view = ((___r1 = (ColorView == null ? null : (ColorView.isa.method_msgSend["alloc"] || _objj_forward)(ColorView, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithInstrinsicSize:"] || _objj_forward)(___r1, "initWithInstrinsicSize:", CGSizeMake(50 * (n + 1), 200)));
     (view == null ? null : (view.isa.method_msgSend["setOrientation:"] || _objj_forward)(view, "setOrientation:", ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["orientation"] || _objj_forward)(___r1, "orientation"))));
     (view == null ? null : (view.isa.method_msgSend["setContentHuggingPriority:forOrientation:"] || _objj_forward)(view, "setContentHuggingPriority:forOrientation:", 252 - n, 0));
     (view == null ? null : (view.isa.method_msgSend["setContentHuggingPriority:forOrientation:"] || _objj_forward)(view, "setContentHuggingPriority:forOrientation:", 252 - n, 1));
-    (view == null ? null : (view.isa.method_msgSend["setIdentifier:"] || _objj_forward)(view, "setIdentifier:", "View" + ((___r1 = ((___r2 = self.stackView), ___r2 == null ? null : (___r2.isa.method_msgSend["arrangedSubviews"] || _objj_forward)(___r2, "arrangedSubviews"))), ___r1 == null ? null : (___r1.isa.method_msgSend["count"] || _objj_forward)(___r1, "count"))));
-    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["addArrangedSubview:"] || _objj_forward)(___r1, "addArrangedSubview:", view));
+    (view == null ? null : (view.isa.method_msgSend["setIdentifier:"] || _objj_forward)(view, "setIdentifier:", "View_" + gravity + "_" + n));
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["addView:inGravity:"] || _objj_forward)(___r1, "addView:inGravity:", view, gravity));
     ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
-    var ___r1, ___r2;
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
+    var ___r1, ___r2, ___r3;
 }
 
 ,["void","id"]), new objj_method(sel_getUid("setHugging:"), function $AppController__setHugging_(self, _cmd, sender)
 {
-    var k = (sender == null ? null : (sender.isa.method_msgSend["objectValue"] || _objj_forward)(sender, "objectValue"));
-    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setHuggingPriority:forOrientation:"] || _objj_forward)(___r1, "setHuggingPriority:forOrientation:", k, ((___r2 = self.stackView), ___r2 == null ? null : (___r2.isa.method_msgSend["orientation"] || _objj_forward)(___r2, "orientation"))));
+    var p = ((sender == null ? null : (sender.isa.method_msgSend["indexOfSelectedItem"] || _objj_forward)(sender, "indexOfSelectedItem")) + 1) * 250;
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setHuggingPriority:forOrientation:"] || _objj_forward)(___r1, "setHuggingPriority:forOrientation:", p, ((___r2 = self.stackView), ___r2 == null ? null : (___r2.isa.method_msgSend["orientation"] || _objj_forward)(___r2, "orientation"))));
     ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
     var ___r1, ___r2;
 }
 
@@ -187,6 +178,7 @@ default:
     var d = (sender == null ? null : (sender.isa.method_msgSend["selectedSegment"] || _objj_forward)(sender, "selectedSegment"));
     ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setDistribution:"] || _objj_forward)(___r1, "setDistribution:", d));
     ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
     var ___r1;
 }
 
@@ -206,6 +198,7 @@ default:
     }));
     ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setOrientation:"] || _objj_forward)(___r1, "setOrientation:", o));
     ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
     var ___r1, ___r2;
 }
 
@@ -214,6 +207,7 @@ default:
     var k = (sender == null ? null : (sender.isa.method_msgSend["intValue"] || _objj_forward)(sender, "intValue"));
     ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setSpacing:"] || _objj_forward)(___r1, "setSpacing:", k));
     ((___r1 = self.theWindow), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
+    ((___r1 = self.stackView), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
     var ___r1;
 }
 
@@ -307,16 +301,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("intrinsicSize"), functi
 
 {var the_class = objj_allocateClassPair(CPStackView, "StackView"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
-class_addMethods(the_class, [new objj_method(sel_getUid("drawRect:"), function $StackView__drawRect_(self, _cmd, aRect)
-{
-    var ctx = ((___r1 = (CPGraphicsContext.isa.method_msgSend["currentContext"] || _objj_forward)(CPGraphicsContext, "currentContext")), ___r1 == null ? null : (___r1.isa.method_msgSend["graphicsPort"] || _objj_forward)(___r1, "graphicsPort"));
-    ((___r1 = (CPColor.isa.method_msgSend["blackColor"] || _objj_forward)(CPColor, "blackColor")), ___r1 == null ? null : (___r1.isa.method_msgSend["set"] || _objj_forward)(___r1, "set"));
-    CGContextSetLineWidth(ctx, 3);
-    CGContextStrokeRect(ctx, (self.isa.method_msgSend["bounds"] || _objj_forward)(self, "bounds"));
-    var ___r1;
-}
-
-,["void","CGRect"]), new objj_method(sel_getUid("mouseDown:"), function $StackView__mouseDown_(self, _cmd, anEvent)
+class_addMethods(the_class, [new objj_method(sel_getUid("mouseDown:"), function $StackView__mouseDown_(self, _cmd, anEvent)
 {
     CPLog.debug("StackView\n" + ((___r1 = (self.isa.method_msgSend["constraints"] || _objj_forward)(self, "constraints")), ___r1 == null ? null : (___r1.isa.method_msgSend["description"] || _objj_forward)(___r1, "description")));
     CPLog.debug("WindowView\ı" + ((___r1 = ((___r2 = ((___r3 = (self.isa.method_msgSend["window"] || _objj_forward)(self, "window")), ___r3 == null ? null : (___r3.isa.method_msgSend["_windowView"] || _objj_forward)(___r3, "_windowView"))), ___r2 == null ? null : (___r2.isa.method_msgSend["constraints"] || _objj_forward)(___r2, "constraints"))), ___r1 == null ? null : (___r1.isa.method_msgSend["description"] || _objj_forward)(___r1, "description")));
