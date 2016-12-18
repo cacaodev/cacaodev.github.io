@@ -1904,7 +1904,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 
 ,["void","CPCoder"])]);
 }
-p;9;CPCache.jt;14708;@STATIC;1.0;i;10;CPObject.ji;14;CPDictionary.ji;10;CPString.jt;14639;objj_executeFile("CPObject.j", YES);objj_executeFile("CPDictionary.j", YES);objj_executeFile("CPString.j", YES);{var the_protocol = objj_allocateProtocol("CPCacheDelegate");
+p;9;CPCache.jt;14707;@STATIC;1.0;i;10;CPObject.ji;14;CPDictionary.ji;10;CPString.jt;14638;objj_executeFile("CPObject.j", YES);objj_executeFile("CPDictionary.j", YES);objj_executeFile("CPString.j", YES);{var the_protocol = objj_allocateProtocol("CPCacheDelegate");
 var aProtocol = objj_getProtocol("CPObject");
 if (!aProtocol) throw new SyntaxError("*** Could not find definition for protocol \"CPCacheDelegate\"");
 protocol_addProtocol(the_protocol, aProtocol);
@@ -1912,7 +1912,7 @@ objj_registerProtocol(the_protocol);
 }var CPCacheDelegate_cache_willEvictObject_ = 1 << 1;
 
 {var the_class = objj_allocateClassPair(CPObject, "CPCache"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_items", "CPDictionary"), new objj_ivar("_currentPosition", "int"), new objj_ivar("_totalCostCache", "BOOL"), new objj_ivar("_implementedDelegateMethods", "unsigned"), new objj_ivar("_name", "CPString"), new objj_ivar("_countLimit", "int"), new objj_ivar("_totalCostLimit", "int"), new objj_ivar("_delegate", "id")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_items", "CPDictionary"), new objj_ivar("_currentPosition", "int"), new objj_ivar("_totalCostCache", "int"), new objj_ivar("_implementedDelegateMethods", "unsigned"), new objj_ivar("_name", "CPString"), new objj_ivar("_countLimit", "int"), new objj_ivar("_totalCostLimit", "int"), new objj_ivar("_delegate", "id")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("name"), function $CPCache__name(self, _cmd)
 {
     return self._name;
@@ -11742,7 +11742,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 
 ,["void","CPCoder"])]);
 }
-p;10;CPObject.jt;15896;@STATIC;1.0;i;20;_CPTypeDefinitions.jt;15851;objj_executeFile("_CPTypeDefinitions.j", YES);{var the_protocol = objj_allocateProtocol("CPObject");
+p;10;CPObject.jt;16241;@STATIC;1.0;i;20;_CPTypeDefinitions.jt;16196;objj_executeFile("_CPTypeDefinitions.j", YES);{var the_protocol = objj_allocateProtocol("CPObject");
 objj_registerProtocol(the_protocol);
 protocol_addMethodDescriptions(the_protocol, [new objj_method(sel_getUid("isEqual:"), Nil
 ,["BOOL","id"]), new objj_method(sel_getUid("hash"), Nil
@@ -11816,12 +11816,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPObj
 
 ,["BOOL","SEL"]), new objj_method(sel_getUid("implementsSelector:"), function $CPObject__implementsSelector_(self, _cmd, aSelector)
 {
-    var methods = class_copyMethodList((self.isa.method_msgSend["class"] || _objj_forward)(self, "class")),
-        count = methods.length;
-    while (count--)
-        if (method_getName(methods[count]) === aSelector)
-            return YES;
-    return NO;
+    return ((___r1 = (self.isa.method_msgSend["class"] || _objj_forward)(self, "class")), ___r1 == null ? null : (___r1.isa.method_msgSend["instancesImplementSelector:"] || _objj_forward)(___r1, "instancesImplementSelector:", aSelector));
+    var ___r1;
 }
 
 ,["BOOL","SEL"]), new objj_method(sel_getUid("conformsToProtocol:"), function $CPObject__conformsToProtocol_(self, _cmd, aProtocol)
@@ -12013,6 +12009,16 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("load"), function $CPOb
 ,["BOOL","Class"]), new objj_method(sel_getUid("instancesRespondToSelector:"), function $CPObject__instancesRespondToSelector_(self, _cmd, aSelector)
 {
     return !!class_getInstanceMethod(self, aSelector);
+}
+
+,["BOOL","SEL"]), new objj_method(sel_getUid("instancesImplementSelector:"), function $CPObject__instancesImplementSelector_(self, _cmd, aSelector)
+{
+    var methods = class_copyMethodList(self),
+        count = methods.length;
+    while (count--)
+        if (method_getName(methods[count]) === aSelector)
+            return YES;
+    return NO;
 }
 
 ,["BOOL","SEL"]), new objj_method(sel_getUid("conformsToProtocol:"), function $CPObject__conformsToProtocol_(self, _cmd, aProtocol)
