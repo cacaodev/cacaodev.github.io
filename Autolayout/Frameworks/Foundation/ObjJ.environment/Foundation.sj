@@ -286,7 +286,7 @@ CGAlignCoordinate = function(coord)
 {
     return FLOOR(coord);
 }
-p;27;_CPCollectionKVCOperators.jt;13037;@STATIC;1.0;i;10;CPObject.jt;13002;objj_executeFile("CPObject.j", YES);var _CPCollectionKVCOperatorSimpleRE = /^@(avg|count|m(ax|in)|sum|unionOfObjects|distinctUnionOfObjects|unionOfArrays|distinctUnionOfArrays|distinctUnionOfSets)(\.|$)/;
+p;27;_CPCollectionKVCOperators.jt;13050;@STATIC;1.0;i;10;CPObject.jt;13015;objj_executeFile("CPObject.j", YES);var _CPCollectionKVCOperatorSimpleRE = new RegExp("^@(avg|count|m(ax|in)|sum|unionOfObjects|distinctUnionOfObjects|unionOfArrays|distinctUnionOfArrays|distinctUnionOfSets)(\\.|$)");
 
 {var the_class = objj_allocateClassPair(CPObject, "_CPCollectionKVCOperator"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
@@ -2869,7 +2869,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("dataWithString:"), fun
 }
 CFData.prototype.isa = CPData;
 CFMutableData.prototype.isa = CPData;
-p;8;CPDate.jt;11364;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;13;CPException.jt;11296;objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPException.j", YES);var CPDateReferenceDate = new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0));
+p;8;CPDate.jt;11411;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;13;CPException.jt;11343;objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPException.j", YES);var CPDateReferenceDate = new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0));
 
 {var the_class = objj_allocateClassPair(CPObject, "CPDate"),
 meta_class = the_class.isa;objj_registerClassPair(the_class);
@@ -2907,7 +2907,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithTimeIntervalSin
 
 ,["id","CPTimeInterval","CPDate"]), new objj_method(sel_getUid("initWithString:"), function $CPDate__initWithString_(self, _cmd, description)
 {
-    var format = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}) ([-+])(\d{2})(\d{2})/,
+    var format = new RegExp("(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2}) ([-+])(\\d{2})(\\d{2})"),
         d = description.match(new RegExp(format));
     if (!d || d.length != 10)
         (CPException.isa.method_msgSend["raise:reason:"] || _objj_forward)(CPException, "raise:reason:", CPInvalidArgumentException, "initWithString: the string must be in YYYY-MM-DD HH:MM:SS ±HHMM format");
@@ -3073,7 +3073,7 @@ Date.parseISO8601 = function(date)
         struct,
         minutesOffset = 0;
     timestamp = Date.parse(date);
-    if (isNaN(timestamp) && (struct = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/.exec(date)))
+    if (isNaN(timestamp) && (struct = (new RegExp("^(\\d{4}|[+\\-]\\d{6})(?:-(\\d{2})(?:-(\\d{2}))?)?(?:T(\\d{2}):(\\d{2})(?::(\\d{2})(?:\\.(\\d{3}))?)?(?:(Z)|([+\\-])(\\d{2})(?::(\\d{2}))?)?)?$")).exec(date)))
     {
         for (var i = 0, k; k = numericKeys[i]; ++i)
             struct[k] = +struct[k] || 0;
@@ -3095,7 +3095,7 @@ _isNumberType = function(value)
     else
         return NO;
 }
-p;17;CPDateFormatter.jt;114851;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPString.ji;13;CPFormatter.ji;12;CPTimeZone.ji;10;CPLocale.jt;114740;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPFormatter.j", YES);objj_executeFile("CPTimeZone.j", YES);objj_executeFile("CPLocale.j", YES);{var the_typedef = objj_allocateTypeDef("CPDateFormatterStyle");
+p;17;CPDateFormatter.jt;114883;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPString.ji;13;CPFormatter.ji;12;CPTimeZone.ji;10;CPLocale.jt;114772;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPFormatter.j", YES);objj_executeFile("CPTimeZone.j", YES);objj_executeFile("CPLocale.j", YES);{var the_typedef = objj_allocateTypeDef("CPDateFormatterStyle");
 objj_registerTypeDef(the_typedef);
 }CPDateFormatterNoStyle = 0;
 CPDateFormatterShortStyle = 1;
@@ -4519,7 +4519,7 @@ default:
 
 ,["BOOL"]), new objj_method(sel_getUid("_secondsFromTimeZoneDefaultFormatString:"), function $CPDateFormatter___secondsFromTimeZoneDefaultFormatString_(self, _cmd, aTimeZoneFormatString)
 {
-    var format = /\w*([HPG-GMT])?([+-])(\d{1,2})([:])?(\d{2})\w*/,
+    var format = new RegExp("\\w*([HPG-GMT])?([+-])(\\d{1,2})([:])?(\\d{2})\\w*"),
         result = aTimeZoneFormatString.match(new RegExp(format)),
         seconds = 0;
     if (!result)
@@ -4544,7 +4544,7 @@ default:
     var character = (aToken == null ? null : (aToken.isa.method_msgSend["characterAtIndex:"] || _objj_forward)(aToken, "characterAtIndex:", 0)),
         length = (aToken == null ? null : (aToken.isa.method_msgSend["length"] || _objj_forward)(aToken, "length")),
         targetedArray,
-        format = /\w*([HPG-GMT])?([+-])(\d{1,2})([:])?(\d{2})\w*/,
+        format = new RegExp("\\w*([HPG-GMT])?([+-])(\\d{1,2})([:])?(\\d{2})\\w*"),
         result = aString.match(new RegExp(format));
     switch(character) {
         case "Q":
@@ -4735,7 +4735,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 
 ,["void","CPTimeZone"])]);
 }
-p;11;CPDecimal.jt;28744;@STATIC;1.0;i;9;CPArray.ji;10;CPNumber.jt;28696;objj_executeFile("CPArray.j", YES);objj_executeFile("CPNumber.j", YES);{var the_typedef = objj_allocateTypeDef("CPDecimal");
+p;11;CPDecimal.jt;28762;@STATIC;1.0;i;9;CPArray.ji;10;CPNumber.jt;28714;objj_executeFile("CPArray.j", YES);objj_executeFile("CPNumber.j", YES);{var the_typedef = objj_allocateTypeDef("CPDecimal");
 objj_registerTypeDef(the_typedef);
 }CPDecimalMaxDigits = 38;
 CPDecimalMaxExponent = 127;
@@ -4761,7 +4761,7 @@ CPDecimalMakeWithString = function(string, locale)
 {
     if (!string)
         return CPDecimalMakeNaN();
-    var matches = string.match(/^([+\-]?)((?:0|[0-9]\d*)?)(?:\.(\d*))?(?:[eE]([+\-]?)(\d+))?$/);
+    var matches = string.match(new RegExp("^([+\\-]?)((?:0|[0-9]\\d*)?)(?:\\.(\\d*))?(?:[eE]([+\\-]?)(\\d+))?$"));
     if (!matches)
         return CPDecimalMakeNaN();
     var ds = matches[1],
@@ -12717,7 +12717,7 @@ CPRangeFromString = function(aString)
     var comma = aString.indexOf(',');
     return {location: parseInt(aString.substr(1, comma - 1)), length: parseInt(aString.substring(comma + 1, aString.length))};
 }
-p;11;CPRunLoop.jt;16245;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPObject.ji;10;CPString.jt;16170;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);CPDefaultRunLoopMode = "CPDefaultRunLoopMode";
+p;11;CPRunLoop.jt;17366;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPObject.ji;10;CPString.jt;17291;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPObject.j", YES);objj_executeFile("CPString.j", YES);CPDefaultRunLoopMode = "CPDefaultRunLoopMode";
 _CPRunLoopPerformCompare = function(lhs, rhs)
 {
     return (rhs == null ? null : (rhs.isa.method_msgSend["order"] || _objj_forward)(rhs, "order")) - (lhs == null ? null : (lhs.isa.method_msgSend["order"] || _objj_forward)(lhs, "order"));
@@ -13044,6 +13044,45 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
 }
 
 ,["CPRunLoop"])]);
+}
+CFRunLoopObserver = function(activities, repeats, order, callout, context)
+{
+    this.activities = activities;
+    this.repeats = repeats;
+    this.order = order;
+    this.callout = callout;
+    this.context = context;
+    this.isvalid = true;
+}
+CFRunLoopObserverCreate = function(activities, repeats, order, callout, context)
+{
+    return new CFRunLoopObserver(activities, repeats, order, callout, context);
+}
+CFRunLoopAddObserver = function(runloop, observer, mode)
+{
+    var observers = runloop._observers;
+    if (!observers)
+        observers = runloop._observers = [];
+    if (observers.indexOf(observer) == -1)
+        observers.push(observer);
+}
+CFRunLoopObserverInvalidate = function(runloop, observer, mode)
+{
+    CFRunLoopRemoveObserver(runloop, observer, mode);
+}
+CFRunLoopRemoveObserver = function(runloop, observer, mode)
+{
+    var observers = runloop._observers;
+    if (observers)
+    {
+        var idx = observers.indexOf(observer);
+        if (idx !== -1)
+        {
+            observers.splice(idx, 1);
+            if (observers.length == 0)
+                runloop._observers = nil;
+        }
+    }
 }
 p;11;CPScanner.jt;13843;@STATIC;1.0;i;16;CPCharacterSet.ji;14;CPDictionary.ji;10;CPString.jt;13768;objj_executeFile("CPCharacterSet.j", YES);objj_executeFile("CPDictionary.j", YES);objj_executeFile("CPString.j", YES);
 {var the_class = objj_allocateClassPair(CPObject, "CPScanner"),
