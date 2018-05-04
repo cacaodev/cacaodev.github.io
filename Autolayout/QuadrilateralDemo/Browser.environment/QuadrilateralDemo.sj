@@ -1,7 +1,11 @@
-@STATIC;1.0;p;15;AppController.jt;42479;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;16;CPMouseTracker.jt;42390;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("CPMouseTracker.j", YES);var EDIT_PRIORITY = 1000;
+@STATIC;1.0;p;6;main.jt;292;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;15;AppController.jt;206;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppController.j", YES);main = function(args, namedArgs)
+{
+    CPApplicationMain(args, namedArgs);
+}
+p;15;AppController.jt;49887;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jI;27;AppKit/CPObjectController.ji;16;CPMouseTracker.jt;49766;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppKit/CPObjectController.j", NO);objj_executeFile("CPMouseTracker.j", YES);var EDIT_PRIORITY = 490;
 
 {var the_class = objj_allocateClassPair(CPObject, "AppController"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("pNum", "CPInteger")]);objj_registerClassPair(the_class);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("container", "CPView"), new objj_ivar("pNum", "CPInteger")]);objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLaunching:"), function $AppController__applicationDidFinishLaunching_(self, _cmd, aNotification)
 {
     var constraints = (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["init"] || _objj_forward)(___r1, "init"));
@@ -10,27 +14,32 @@ class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLau
         contentView = (theWindow == null ? null : (theWindow.isa.method_msgSend["contentView"] || _objj_forward)(theWindow, "contentView"));
     (contentView == null ? null : (contentView.isa.method_msgSend["setIdentifier:"] || _objj_forward)(contentView, "setIdentifier:", "contentView"));
     (contentView == null ? null : (contentView.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(contentView, "setTranslatesAutoresizingMaskIntoConstraints:", YES));
-    var container = ((___r1 = (ColorView == null ? null : (ColorView.isa.method_msgSend["alloc"] || _objj_forward)(ColorView, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
-    (container == null ? null : (container.isa.method_msgSend["setIdentifier:"] || _objj_forward)(container, "setIdentifier:", "container"));
-    (container == null ? null : (container.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(container, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
-    (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", container));
+    self.container = ((___r1 = (ColorView == null ? null : (ColorView.isa.method_msgSend["alloc"] || _objj_forward)(ColorView, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMakeZero()));
+    ((___r1 = self.container), ___r1 == null ? null : (___r1.isa.method_msgSend["setIdentifier:"] || _objj_forward)(___r1, "setIdentifier:", "container"));
+    ((___r1 = self.container), ___r1 == null ? null : (___r1.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(___r1, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
+    (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", self.container));
     var tf = ((___r1 = (CPTextField.isa.method_msgSend["alloc"] || _objj_forward)(CPTextField, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithFrame:"] || _objj_forward)(___r1, "initWithFrame:", CGRectMake(50, 10, 1200, 50)));
-    (tf == null ? null : (tf.isa.method_msgSend["setFont:"] || _objj_forward)(tf, "setFont:", (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 32)));
-    (tf == null ? null : (tf.isa.method_msgSend["setStringValue:"] || _objj_forward)(tf, "setStringValue:", "cmd-click on a point to edit the priority of its constrained coordinates."));
+    (tf == null ? null : (tf.isa.method_msgSend["setTranslatesAutoresizingMaskIntoConstraints:"] || _objj_forward)(tf, "setTranslatesAutoresizingMaskIntoConstraints:", NO));
+    (tf == null ? null : (tf.isa.method_msgSend["setFont:"] || _objj_forward)(tf, "setFont:", (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 16)));
+    (tf == null ? null : (tf.isa.method_msgSend["setTextColor:"] || _objj_forward)(tf, "setTextColor:", (CPColor.isa.method_msgSend["grayColor"] || _objj_forward)(CPColor, "grayColor")));
+    (tf == null ? null : (tf.isa.method_msgSend["setStringValue:"] || _objj_forward)(tf, "setStringValue:", "Right click on a point to edit the priority of its constrained coordinates."));
     (contentView == null ? null : (contentView.isa.method_msgSend["addSubview:"] || _objj_forward)(contentView, "addSubview:", tf));
-    var left = ((___r1 = (container == null ? null : (container.isa.method_msgSend["leftAnchor"] || _objj_forward)(container, "leftAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["leftAnchor"] || _objj_forward)(contentView, "leftAnchor")), 50)),
-        top = ((___r1 = (container == null ? null : (container.isa.method_msgSend["topAnchor"] || _objj_forward)(container, "topAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 100)),
-        right = ((___r1 = (container == null ? null : (container.isa.method_msgSend["rightAnchor"] || _objj_forward)(container, "rightAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["rightAnchor"] || _objj_forward)(contentView, "rightAnchor")), -50)),
-        bottom = ((___r1 = (container == null ? null : (container.isa.method_msgSend["bottomAnchor"] || _objj_forward)(container, "bottomAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["bottomAnchor"] || _objj_forward)(contentView, "bottomAnchor")), -50));
+    var tfCenter = ((___r1 = (tf == null ? null : (tf.isa.method_msgSend["centerXAnchor"] || _objj_forward)(tf, "centerXAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:"] || _objj_forward)(___r1, "constraintEqualToAnchor:", ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["centerXAnchor"] || _objj_forward)(___r2, "centerXAnchor")))),
+        tfBottom = ((___r1 = (tf == null ? null : (tf.isa.method_msgSend["topAnchor"] || _objj_forward)(tf, "topAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["bottomAnchor"] || _objj_forward)(___r2, "bottomAnchor")), 10));
+    (CPLayoutConstraint.isa.method_msgSend["activateConstraints:"] || _objj_forward)(CPLayoutConstraint, "activateConstraints:", (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:count:"] || _objj_forward)(___r1, "initWithObjects:count:", [tfCenter, tfBottom], 2)));
+    var left = ((___r1 = ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["leftAnchor"] || _objj_forward)(___r2, "leftAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["leftAnchor"] || _objj_forward)(contentView, "leftAnchor")), 50)),
+        top = ((___r1 = ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["topAnchor"] || _objj_forward)(___r2, "topAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["topAnchor"] || _objj_forward)(contentView, "topAnchor")), 50)),
+        right = ((___r1 = ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["rightAnchor"] || _objj_forward)(___r2, "rightAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["rightAnchor"] || _objj_forward)(contentView, "rightAnchor")), -50)),
+        bottom = ((___r1 = ((___r2 = self.container), ___r2 == null ? null : (___r2.isa.method_msgSend["bottomAnchor"] || _objj_forward)(___r2, "bottomAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintEqualToAnchor:constant:"] || _objj_forward)(___r1, "constraintEqualToAnchor:constant:", (contentView == null ? null : (contentView.isa.method_msgSend["bottomAnchor"] || _objj_forward)(contentView, "bottomAnchor")), -50));
     (CPLayoutConstraint.isa.method_msgSend["activateConstraints:"] || _objj_forward)(CPLayoutConstraint, "activateConstraints:", (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:count:"] || _objj_forward)(___r1, "initWithObjects:count:", [left, top, right, bottom], 4)));
-    var p1 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(100, 100), container, 900);
-    var p2 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(1100, 100), container, 910);
-    var p3 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(1100, 500), container, 920);
-    var p4 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(100, 500), container, 930);
-    var p5 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(600, 100), container, 500);
-    var p6 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(1100, 300), container, 500);
-    var p7 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(600, 500), container, 500);
-    var p8 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(100, 300), container, 500);
+    var p1 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(0, 0), self.container, 400);
+    var p2 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(2000, 0), self.container, 410);
+    var p3 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(2000, 1000), self.container, 420);
+    var p4 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMake(0, 1000), self.container, 430);
+    var p5 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMakeZero(), self.container, 250);
+    var p6 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMakeZero(), self.container, 250);
+    var p7 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMakeZero(), self.container, 250);
+    var p8 = (self.isa.method_msgSend["installLayoutPointAtLocation:inView:priority:"] || _objj_forward)(self, "installLayoutPointAtLocation:inView:priority:", CGPointMakeZero(), self.container, 250);
     var midConstraints1 = (p5 == null ? null : (p5.isa.method_msgSend["constraintsBetweenPoint:andPoint:"] || _objj_forward)(p5, "constraintsBetweenPoint:andPoint:", p1, p2));
     var midConstraints2 = (p6 == null ? null : (p6.isa.method_msgSend["constraintsBetweenPoint:andPoint:"] || _objj_forward)(p6, "constraintsBetweenPoint:andPoint:", p2, p3));
     var midConstraints3 = (p7 == null ? null : (p7.isa.method_msgSend["constraintsBetweenPoint:andPoint:"] || _objj_forward)(p7, "constraintsBetweenPoint:andPoint:", p3, p4));
@@ -39,19 +48,37 @@ class_addMethods(the_class, [new objj_method(sel_getUid("applicationDidFinishLau
     (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", midConstraints2));
     (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", midConstraints3));
     (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", midConstraints4));
+    var withinContainerConstraint1 = (p1 == null ? null : (p1.isa.method_msgSend["constraintsContainingWithinView:"] || _objj_forward)(p1, "constraintsContainingWithinView:", self.container));
+    var withinContainerConstraint2 = (p2 == null ? null : (p2.isa.method_msgSend["constraintsContainingWithinView:"] || _objj_forward)(p2, "constraintsContainingWithinView:", self.container));
+    var withinContainerConstraint3 = (p3 == null ? null : (p3.isa.method_msgSend["constraintsContainingWithinView:"] || _objj_forward)(p3, "constraintsContainingWithinView:", self.container));
+    var withinContainerConstraint4 = (p4 == null ? null : (p4.isa.method_msgSend["constraintsContainingWithinView:"] || _objj_forward)(p4, "constraintsContainingWithinView:", self.container));
+    (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", withinContainerConstraint1));
+    (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", withinContainerConstraint2));
+    (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", withinContainerConstraint3));
+    (constraints == null ? null : (constraints.isa.method_msgSend["addObjectsFromArray:"] || _objj_forward)(constraints, "addObjectsFromArray:", withinContainerConstraint4));
     (CPLayoutConstraint.isa.method_msgSend["activateConstraints:"] || _objj_forward)(CPLayoutConstraint, "activateConstraints:", constraints);
     (theWindow == null ? null : (theWindow.isa.method_msgSend["orderFront:"] || _objj_forward)(theWindow, "orderFront:", self));
+    var ___r1, ___r2;
+}
+
+,["void","CPNotification"]), new objj_method(sel_getUid("installLayoutPointAtLocation:inView:priority:"), function $AppController__installLayoutPointAtLocation_inView_priority_(self, _cmd, aLocation, aView, priority)
+{
+    var layoutPoint = ((___r1 = (LayoutPoint == null ? null : (LayoutPoint.isa.method_msgSend["alloc"] || _objj_forward)(LayoutPoint, "alloc"))), ___r1 == null ? null : (___r1.isa.method_msgSend["initAtLocation:priority:owner:"] || _objj_forward)(___r1, "initAtLocation:priority:owner:", aLocation, priority, aView));
+    (layoutPoint == null ? null : (layoutPoint.isa.method_msgSend["setDelegate:"] || _objj_forward)(layoutPoint, "setDelegate:", self));
+    ((___r1 = (aView == null ? null : (aView.isa.method_msgSend["layoutPoints"] || _objj_forward)(aView, "layoutPoints"))), ___r1 == null ? null : (___r1.isa.method_msgSend["addObject:"] || _objj_forward)(___r1, "addObject:", layoutPoint));
+    var stayConstraints = (layoutPoint == null ? null : (layoutPoint.isa.method_msgSend["constraints"] || _objj_forward)(layoutPoint, "constraints"));
+    (CPLayoutConstraint.isa.method_msgSend["activateConstraints:"] || _objj_forward)(CPLayoutConstraint, "activateConstraints:", stayConstraints);
+    return layoutPoint;
     var ___r1;
 }
 
-,["void","CPNotification"]), new objj_method(sel_getUid("installLayoutPointAtLocation:inView:priority:"), function $AppController__installLayoutPointAtLocation_inView_priority_(self, _cmd, loc, aView, priority)
+,["id","CPPoint","CPView","CPInteger"]), new objj_method(sel_getUid("engine:didChangeAnchor:"), function $AppController__engine_didChangeAnchor_(self, _cmd, anEngine, anAnchor)
 {
-    var layoutPoint = (aView == null ? null : (aView.isa.method_msgSend["createLayoutPointAtLocation:withPriority:"] || _objj_forward)(aView, "createLayoutPointAtLocation:withPriority:", loc, priority));
-    (CPLayoutConstraint.isa.method_msgSend["activateConstraints:"] || _objj_forward)(CPLayoutConstraint, "activateConstraints:", (layoutPoint == null ? null : (layoutPoint.isa.method_msgSend["constraints"] || _objj_forward)(layoutPoint, "constraints")));
-    return layoutPoint;
+    ((___r1 = self.container), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(___r1, "setNeedsDisplay:", YES));
+    var ___r1;
 }
 
-,["id","CPPoint","CPView","CPInteger"])]);
+,["void","CPLayoutConstraintEngine","CPLayoutAnchor"])]);
 }
 {
 var the_class = objj_getClass("CPLayoutPoint")
@@ -68,11 +95,13 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 
 ,["CPArray","id","id"]), new objj_method(sel_getUid("constraintsContainingWithinView:"), function $CPLayoutPoint__constraintsContainingWithinView_(self, _cmd, aView)
 {
-    var cst1 = ((___r1 = (self.isa.method_msgSend["xAxisAnchor"] || _objj_forward)(self, "xAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintGreaterThanOrEqualToConstant:"] || _objj_forward)(___r1, "constraintGreaterThanOrEqualToConstant:", 0));
-    var cst2 = ((___r1 = (self.isa.method_msgSend["yAxisAnchor"] || _objj_forward)(self, "yAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintGreaterThanOrEqualToConstant:"] || _objj_forward)(___r1, "constraintGreaterThanOrEqualToConstant:", 0));
-    var cst3 = ((___r1 = (self.isa.method_msgSend["xAxisAnchor"] || _objj_forward)(self, "xAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintLessThanOrEqualToAnchor:"] || _objj_forward)(___r1, "constraintLessThanOrEqualToAnchor:", (aView == null ? null : (aView.isa.method_msgSend["rightAnchor"] || _objj_forward)(aView, "rightAnchor"))));
-    var cst4 = ((___r1 = (self.isa.method_msgSend["yAxisAnchor"] || _objj_forward)(self, "yAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintLessThanOrEqualToAnchor:"] || _objj_forward)(___r1, "constraintLessThanOrEqualToAnchor:", (aView == null ? null : (aView.isa.method_msgSend["bottomAnchor"] || _objj_forward)(aView, "bottomAnchor"))));
-    return (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:count:"] || _objj_forward)(___r1, "initWithObjects:count:", [cst1, cst2], 2));
+    var cst1 = ((___r1 = (self.isa.method_msgSend["xAxisAnchor"] || _objj_forward)(self, "xAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintGreaterThanOrEqualToConstant:"] || _objj_forward)(___r1, "constraintGreaterThanOrEqualToConstant:", 25));
+    var cst2 = ((___r1 = (self.isa.method_msgSend["yAxisAnchor"] || _objj_forward)(self, "yAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintGreaterThanOrEqualToConstant:"] || _objj_forward)(___r1, "constraintGreaterThanOrEqualToConstant:", 25));
+    var maxXAnchor = ((___r1 = (aView == null ? null : (aView.isa.method_msgSend["widthAnchor"] || _objj_forward)(aView, "widthAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["anchorByAddingConstant:"] || _objj_forward)(___r1, "anchorByAddingConstant:", -25));
+    var cst3 = ((___r1 = (self.isa.method_msgSend["xAxisAnchor"] || _objj_forward)(self, "xAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintLessThanOrEqualToAnchor:"] || _objj_forward)(___r1, "constraintLessThanOrEqualToAnchor:", maxXAnchor));
+    var maxYAnchor = ((___r1 = (aView == null ? null : (aView.isa.method_msgSend["heightAnchor"] || _objj_forward)(aView, "heightAnchor"))), ___r1 == null ? null : (___r1.isa.method_msgSend["anchorByAddingConstant:"] || _objj_forward)(___r1, "anchorByAddingConstant:", -25));
+    var cst4 = ((___r1 = (self.isa.method_msgSend["yAxisAnchor"] || _objj_forward)(self, "yAxisAnchor")), ___r1 == null ? null : (___r1.isa.method_msgSend["constraintLessThanOrEqualToAnchor:"] || _objj_forward)(___r1, "constraintLessThanOrEqualToAnchor:", maxYAnchor));
+    return (___r1 = (CPArray.isa.method_msgSend["alloc"] || _objj_forward)(CPArray, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:count:"] || _objj_forward)(___r1, "initWithObjects:count:", [cst1, cst2, cst3, cst4], 4));
     var ___r1;
 }
 
@@ -174,7 +203,12 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
 
 {var the_class = objj_allocateClassPair(CPView, "ColorView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("fillColor", "CPColor"), new objj_ivar("layoutPoints", "CPArray"), new objj_ivar("mouseTracker", "CPMouseTracker"), new objj_ivar("trackingPoint", "CPLayoutPoint"), new objj_ivar("currentLocation", "CGPoint"), new objj_ivar("popover", "CPPopover")]);objj_registerClassPair(the_class);
-class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), function $ColorView__initWithFrame_(self, _cmd, aFrame)
+class_addMethods(the_class, [new objj_method(sel_getUid("layoutPoints"), function $ColorView__layoutPoints(self, _cmd)
+{
+    return self.layoutPoints;
+}
+
+,["CPArray"]), new objj_method(sel_getUid("initWithFrame:"), function $ColorView__initWithFrame_(self, _cmd, aFrame)
 {
     self = (objj_getClass("ColorView").super_class.method_dtable["initWithFrame:"] || _objj_forward)(self, "initWithFrame:", aFrame);
     self.fillColor = (CPColor.isa.method_msgSend["randomColor"] || _objj_forward)(CPColor, "randomColor");
@@ -187,34 +221,51 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     var ___r1;
 }
 
-,["id","CGRect"]), new objj_method(sel_getUid("createLayoutPointAtLocation:withPriority:"), function $ColorView__createLayoutPointAtLocation_withPriority_(self, _cmd, aLocation, priority)
-{
-    var point = ((___r1 = (LayoutPoint.isa.method_msgSend["alloc"] || _objj_forward)(LayoutPoint, "alloc")), ___r1 == null ? null : (___r1.isa.method_msgSend["initAtLocation:priority:owner:"] || _objj_forward)(___r1, "initAtLocation:priority:owner:", aLocation, priority, self));
-    ((___r1 = self.layoutPoints), ___r1 == null ? null : (___r1.isa.method_msgSend["addObject:"] || _objj_forward)(___r1, "addObject:", point));
-    return point;
-    var ___r1;
-}
-
-,["LayoutPoint","CGPoint","CPInteger"]), new objj_method(sel_getUid("drawString:inRect:"), function $ColorView__drawString_inRect_(self, _cmd, aString, aRect)
+,["id","CGRect"]), new objj_method(sel_getUid("drawString:inRect:"), function $ColorView__drawString_inRect_(self, _cmd, aString, aRect)
 {
     var ctx = ((___r1 = (CPGraphicsContext.isa.method_msgSend["currentContext"] || _objj_forward)(CPGraphicsContext, "currentContext")), ___r1 == null ? null : (___r1.isa.method_msgSend["graphicsPort"] || _objj_forward)(___r1, "graphicsPort"));
-    ctx.font = ((___r1 = (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 20)), ___r1 == null ? null : (___r1.isa.method_msgSend["cssString"] || _objj_forward)(___r1, "cssString"));
+    CGContextSelectFont(ctx, (CPFont.isa.method_msgSend["boldSystemFontOfSize:"] || _objj_forward)(CPFont, "boldSystemFontOfSize:", 20));
     var metrics = ctx.measureText(aString);
-    ctx.fillText(aString, CGRectGetMinX(aRect) + (CGRectGetWidth(aRect) - metrics.width) / 2, CGRectGetMaxY(aRect) - (CGRectGetHeight(aRect) - 10) / 2);
+    CGContextShowTextAtPoint(ctx, CGRectGetMinX(aRect) + (CGRectGetWidth(aRect) - metrics.width) / 2, CGRectGetMaxY(aRect) - CGRectGetHeight(aRect) / 2, aString);
     var ___r1;
 }
 
-,["void","CPString","CGRect"]), new objj_method(sel_getUid("drawRect:"), function $ColorView__drawRect_(self, _cmd, aRect)
+,["void","CPString","CGRect"]), new objj_method(sel_getUid("drawGridInRect:context:"), function $ColorView__drawGridInRect_context_(self, _cmd, aRect, aContext)
+{
+    var x = 0;
+    var y = 0;
+    var maxY = CGRectGetHeight(aRect);
+    var maxX = CGRectGetWidth(aRect);
+    var p = (CPBezierPath.isa.method_msgSend["bezierPath"] || _objj_forward)(CPBezierPath, "bezierPath");
+    while (x < maxX)
+    {
+        (p == null ? null : (p.isa.method_msgSend["moveToPoint:"] || _objj_forward)(p, "moveToPoint:", CGPointMake(x, 0)));
+        (p == null ? null : (p.isa.method_msgSend["lineToPoint:"] || _objj_forward)(p, "lineToPoint:", CGPointMake(x, maxY)));
+        x += 100;
+    }
+    while (y < maxY)
+    {
+        (p == null ? null : (p.isa.method_msgSend["moveToPoint:"] || _objj_forward)(p, "moveToPoint:", CGPointMake(0, y)));
+        (p == null ? null : (p.isa.method_msgSend["lineToPoint:"] || _objj_forward)(p, "lineToPoint:", CGPointMake(maxX, y)));
+        y += 100;
+    }
+    ((___r1 = (CPColor.isa.method_msgSend["grayColor"] || _objj_forward)(CPColor, "grayColor")), ___r1 == null ? null : (___r1.isa.method_msgSend["setStroke"] || _objj_forward)(___r1, "setStroke"));
+    (p == null ? null : (p.isa.method_msgSend["stroke"] || _objj_forward)(p, "stroke"));
+    var ___r1;
+}
+
+,["void","CGRect","CGContext"]), new objj_method(sel_getUid("drawRect:"), function $ColorView__drawRect_(self, _cmd, aRect)
 {
     var ctx = ((___r1 = (CPGraphicsContext.isa.method_msgSend["currentContext"] || _objj_forward)(CPGraphicsContext, "currentContext")), ___r1 == null ? null : (___r1.isa.method_msgSend["graphicsPort"] || _objj_forward)(___r1, "graphicsPort"));
     ((___r1 = self.fillColor), ___r1 == null ? null : (___r1.isa.method_msgSend["set"] || _objj_forward)(___r1, "set"));
     CGContextFillRect(ctx, (self.isa.method_msgSend["bounds"] || _objj_forward)(self, "bounds"));
+    (self.isa.method_msgSend["drawGridInRect:context:"] || _objj_forward)(self, "drawGridInRect:context:", (self.isa.method_msgSend["bounds"] || _objj_forward)(self, "bounds"), ctx);
     var normal = (CPColor.isa.method_msgSend["blackColor"] || _objj_forward)(CPColor, "blackColor"),
         selected = (CPColor.isa.method_msgSend["blueColor"] || _objj_forward)(CPColor, "blueColor");
-    (normal == null ? null : (normal.isa.method_msgSend["setStroke"] || _objj_forward)(normal, "setStroke"));
     var path = (CPBezierPath.isa.method_msgSend["bezierPath"] || _objj_forward)(CPBezierPath, "bezierPath");
     var rectanglePath = (CPBezierPath.isa.method_msgSend["bezierPath"] || _objj_forward)(CPBezierPath, "bezierPath");
     (path == null ? null : (path.isa.method_msgSend["setLineWidth:"] || _objj_forward)(path, "setLineWidth:", 3));
+    (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["setLineWidth:"] || _objj_forward)(rectanglePath, "setLineWidth:", 2));
     ((___r1 = self.layoutPoints), ___r1 == null ? null : (___r1.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(___r1, "enumerateObjectsUsingBlock:",     function(point, idx, stop)
     {
         var p = (point == null ? null : (point.isa.method_msgSend["location"] || _objj_forward)(point, "location"));
@@ -237,18 +288,20 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
         {
             (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["closePath"] || _objj_forward)(rectanglePath, "closePath"));
         }    }));
-    (path == null ? null : (path.isa.method_msgSend["stroke"] || _objj_forward)(path, "stroke"));
-    (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["stroke"] || _objj_forward)(rectanglePath, "stroke"));
-    ((___r1 = (CPColor.isa.method_msgSend["colorWithWhite:alpha:"] || _objj_forward)(CPColor, "colorWithWhite:alpha:", 0.5, 0.2)), ___r1 == null ? null : (___r1.isa.method_msgSend["set"] || _objj_forward)(___r1, "set"));
+    (normal == null ? null : (normal.isa.method_msgSend["setStroke"] || _objj_forward)(normal, "setStroke"));
+    ((___r1 = (CPColor.isa.method_msgSend["colorWithWhite:alpha:"] || _objj_forward)(CPColor, "colorWithWhite:alpha:", 0.5, 0.2)), ___r1 == null ? null : (___r1.isa.method_msgSend["setFill"] || _objj_forward)(___r1, "setFill"));
     (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["fill"] || _objj_forward)(rectanglePath, "fill"));
+    (rectanglePath == null ? null : (rectanglePath.isa.method_msgSend["stroke"] || _objj_forward)(rectanglePath, "stroke"));
+    (path == null ? null : (path.isa.method_msgSend["stroke"] || _objj_forward)(path, "stroke"));
     ((___r1 = self.layoutPoints), ___r1 == null ? null : (___r1.isa.method_msgSend["enumerateObjectsUsingBlock:"] || _objj_forward)(___r1, "enumerateObjectsUsingBlock:",     function(point, idx, stop)
     {
         var isSelected = point == self.trackingPoint;
         var color = isSelected ? selected : normal;
-        (color == null ? null : (color.isa.method_msgSend["setFill"] || _objj_forward)(color, "setFill"));
         var p = (point == null ? null : (point.isa.method_msgSend["location"] || _objj_forward)(point, "location"));
         var rect = CGRectMake(p.x - 25, p.y - 25, 50, 50);
-        ((___r1 = (CPBezierPath.isa.method_msgSend["bezierPathWithOvalInRect:"] || _objj_forward)(CPBezierPath, "bezierPathWithOvalInRect:", rect)), ___r1 == null ? null : (___r1.isa.method_msgSend["fill"] || _objj_forward)(___r1, "fill"));
+        var ovalPath = (CPBezierPath.isa.method_msgSend["bezierPathWithOvalInRect:"] || _objj_forward)(CPBezierPath, "bezierPathWithOvalInRect:", rect);
+        (color == null ? null : (color.isa.method_msgSend["setFill"] || _objj_forward)(color, "setFill"));
+        (ovalPath == null ? null : (ovalPath.isa.method_msgSend["fill"] || _objj_forward)(ovalPath, "fill"));
         var priority = isSelected ? EDIT_PRIORITY : (point == null ? null : (point.isa.method_msgSend["initialPriority"] || _objj_forward)(point, "initialPriority"));
         ((___r1 = (CPColor.isa.method_msgSend["whiteColor"] || _objj_forward)(CPColor, "whiteColor")), ___r1 == null ? null : (___r1.isa.method_msgSend["setFill"] || _objj_forward)(___r1, "setFill"));
         (self.isa.method_msgSend["drawString:inRect:"] || _objj_forward)(self, "drawString:inRect:", ROUND(priority), rect);
@@ -286,6 +339,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     (currentLayoutPoint == null ? null : (currentLayoutPoint.isa.method_msgSend["setInitialPriority:"] || _objj_forward)(currentLayoutPoint, "setInitialPriority:", priority));
     (controller == null ? null : (controller.isa.method_msgSend["setLayoutPoint:"] || _objj_forward)(controller, "setLayoutPoint:", nil));
     (self.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(self, "setNeedsDisplay:", YES);
+    ((___r1 = (CPRunLoop.isa.method_msgSend["currentRunLoop"] || _objj_forward)(CPRunLoop, "currentRunLoop")), ___r1 == null ? null : (___r1.isa.method_msgSend["performSelectors"] || _objj_forward)(___r1, "performSelectors"));
     var ___r1;
 }
 
@@ -297,19 +351,36 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     (controller == null ? null : (controller.isa.method_msgSend["setPriority:"] || _objj_forward)(controller, "setPriority:", priority));
 }
 
-,["void","CPPopover"]), new objj_method(sel_getUid("mouseDown:"), function $ColorView__mouseDown_(self, _cmd, theEvent)
+,["void","CPPopover"]), new objj_method(sel_getUid("rightMouseDown:"), function $ColorView__rightMouseDown_(self, _cmd, theEvent)
+{
+    if ((theEvent == null ? null : (theEvent.isa.method_msgSend["type"] || _objj_forward)(theEvent, "type")) !== CPRightMouseDown)
+        return;
+    var clickedPoint = (self.isa.method_msgSend["layoutPointAtLocation:"] || _objj_forward)(self, "layoutPointAtLocation:", (self.isa.method_msgSend["convertPointFromBase:"] || _objj_forward)(self, "convertPointFromBase:", (theEvent == null ? null : (theEvent.isa.method_msgSend["locationInWindow"] || _objj_forward)(theEvent, "locationInWindow"))));
+    if (clickedPoint)
+    {
+        ((___r1 = ((___r2 = (self.isa.method_msgSend["popover"] || _objj_forward)(self, "popover")), ___r2 == null ? null : (___r2.isa.method_msgSend["contentViewController"] || _objj_forward)(___r2, "contentViewController"))), ___r1 == null ? null : (___r1.isa.method_msgSend["setLayoutPoint:"] || _objj_forward)(___r1, "setLayoutPoint:", clickedPoint));
+        var p = (clickedPoint == null ? null : (clickedPoint.isa.method_msgSend["location"] || _objj_forward)(clickedPoint, "location"));
+        ((___r1 = (self.isa.method_msgSend["popover"] || _objj_forward)(self, "popover")), ___r1 == null ? null : (___r1.isa.method_msgSend["showRelativeToRect:ofView:preferredEdge:"] || _objj_forward)(___r1, "showRelativeToRect:ofView:preferredEdge:", CGRectMake(p.x - 25, p.y - 25, 50, 50), self, 1));
+    }
+    var ___r1, ___r2;
+}
+
+,["void","CPEvent"]), new objj_method(sel_getUid("mouseDown:"), function $ColorView__mouseDown_(self, _cmd, theEvent)
 {
     if ((theEvent == null ? null : (theEvent.isa.method_msgSend["type"] || _objj_forward)(theEvent, "type")) !== CPLeftMouseDown)
         return;
-    if ((theEvent == null ? null : (theEvent.isa.method_msgSend["modifierFlags"] || _objj_forward)(theEvent, "modifierFlags")) & CPCommandKeyMask)
+    if ((theEvent == null ? null : (theEvent.isa.method_msgSend["modifierFlags"] || _objj_forward)(theEvent, "modifierFlags")) & CPControlKeyMask)
     {
-        var clickedPoint = (self.isa.method_msgSend["layoutPointAtLocation:"] || _objj_forward)(self, "layoutPointAtLocation:", (self.isa.method_msgSend["convertPointFromBase:"] || _objj_forward)(self, "convertPointFromBase:", (theEvent == null ? null : (theEvent.isa.method_msgSend["locationInWindow"] || _objj_forward)(theEvent, "locationInWindow"))));
-        if (clickedPoint)
+        (self.isa.method_msgSend["rightMouseDown:"] || _objj_forward)(self, "rightMouseDown:", theEvent);
+    }
+    else if ((theEvent == null ? null : (theEvent.isa.method_msgSend["modifierFlags"] || _objj_forward)(theEvent, "modifierFlags")) & CPCommandKeyMask)
+    {
+        CPLog.debug("ContentView\n" + ((___r1 = ((___r2 = (self.isa.method_msgSend["superview"] || _objj_forward)(self, "superview")), ___r2 == null ? null : (___r2.isa.method_msgSend["constraints"] || _objj_forward)(___r2, "constraints"))), ___r1 == null ? null : (___r1.isa.method_msgSend["description"] || _objj_forward)(___r1, "description")));
+        CPLog.debug("\n\nContainer\n" + ((___r1 = (self.isa.method_msgSend["constraints"] || _objj_forward)(self, "constraints")), ___r1 == null ? null : (___r1.isa.method_msgSend["description"] || _objj_forward)(___r1, "description")));
+        CPLog.debug("\n\nContainer\n" + ((___r1 = ((___r2 = (self.isa.method_msgSend["constraints"] || _objj_forward)(self, "constraints")), ___r2 == null ? null : (___r2.isa.method_msgSend["arrayByApplyingBlock:"] || _objj_forward)(___r2, "arrayByApplyingBlock:",         function(cst)
         {
-            ((___r1 = ((___r2 = (self.isa.method_msgSend["popover"] || _objj_forward)(self, "popover")), ___r2 == null ? null : (___r2.isa.method_msgSend["contentViewController"] || _objj_forward)(___r2, "contentViewController"))), ___r1 == null ? null : (___r1.isa.method_msgSend["setLayoutPoint:"] || _objj_forward)(___r1, "setLayoutPoint:", clickedPoint));
-            var p = (clickedPoint == null ? null : (clickedPoint.isa.method_msgSend["location"] || _objj_forward)(clickedPoint, "location"));
-            ((___r1 = (self.isa.method_msgSend["popover"] || _objj_forward)(self, "popover")), ___r1 == null ? null : (___r1.isa.method_msgSend["showRelativeToRect:ofView:preferredEdge:"] || _objj_forward)(___r1, "showRelativeToRect:ofView:preferredEdge:", CGRectMake(p.x - 25, p.y - 25, 50, 50), self, 1));
-        }
+            return (cst == null ? null : (cst.isa.method_msgSend["_engineConstraints"] || _objj_forward)(cst, "_engineConstraints")).toString();
+        }))), ___r1 == null ? null : (___r1.isa.method_msgSend["componentsJoinedByString:"] || _objj_forward)(___r1, "componentsJoinedByString:", "\n")));
     }
     else
     {
@@ -324,7 +395,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     self.trackingPoint = (self.isa.method_msgSend["layoutPointAtLocation:"] || _objj_forward)(self, "layoutPointAtLocation:", (self.isa.method_msgSend["convertPointFromBase:"] || _objj_forward)(self, "convertPointFromBase:", locationInWindow));
     if (self.trackingPoint == nil)
         return NO;
-    ((___r1 = self.trackingPoint), ___r1 == null ? null : (___r1.isa.method_msgSend["setPriority:"] || _objj_forward)(___r1, "setPriority:", CPLayoutPriorityRequired));
+    ((___r1 = self.trackingPoint), ___r1 == null ? null : (___r1.isa.method_msgSend["setPriority:"] || _objj_forward)(___r1, "setPriority:", EDIT_PRIORITY));
     self.currentLocation = locationInWindow;
     return YES;
     var ___r1;
@@ -339,7 +410,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:"), funct
     ((___r1 = self.trackingPoint), ___r1 == null ? null : (___r1.isa.method_msgSend["moveByOffset:"] || _objj_forward)(___r1, "moveByOffset:", moveOffset));
     self.currentLocation = locationInWindow;
     ((___r1 = (self.isa.method_msgSend["window"] || _objj_forward)(self, "window")), ___r1 == null ? null : (___r1.isa.method_msgSend["setNeedsLayout"] || _objj_forward)(___r1, "setNeedsLayout"));
-    (self.isa.method_msgSend["setNeedsDisplay:"] || _objj_forward)(self, "setNeedsDisplay:", YES);
     return YES;
     var ___r1;
 }
@@ -482,7 +552,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("allowsReverseTransform
 
 ,["BOOL"])]);
 }
-p;16;CPMouseTracker.jt;12526;@STATIC;1.0;t;12506;var startTracking = 1 << 1,
+p;16;CPMouseTracker.jt;12673;@STATIC;1.0;t;12653;var startTracking = 1 << 1,
     continueTracking = 1 << 2,
     stopTracking = 1 << 3,
     constrainPoint = 1 << 4,
@@ -600,7 +670,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initialPoint"), functio
     return self;
 }
 
-,["id"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
+,["id"]), new objj_method(sel_getUid("isTracking"), function $CPMouseTracker__isTracking(self, _cmd)
+{
+    return self._currentEvent !== nil;
+}
+
+,["BOOL"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
 {
     self._delay = aDelay;
     self._interval = anInterval;
@@ -722,8 +797,3 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initialPoint"), functio
 
 ,["CGPoint","CGPoint","CPEvent"])]);
 }
-p;6;main.jt;292;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;15;AppController.jt;206;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppController.j", YES);main = function(args, namedArgs)
-{
-    CPApplicationMain(args, namedArgs);
-}
-e;
