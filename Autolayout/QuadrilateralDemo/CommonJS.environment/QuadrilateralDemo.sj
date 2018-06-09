@@ -548,7 +548,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("allowsReverseTransform
 
 ,["BOOL"])]);
 }
-p;16;CPMouseTracker.jt;12673;@STATIC;1.0;t;12653;var startTracking = 1 << 1,
+p;16;CPMouseTracker.jt;12526;@STATIC;1.0;t;12506;var startTracking = 1 << 1,
     continueTracking = 1 << 2,
     stopTracking = 1 << 3,
     constrainPoint = 1 << 4,
@@ -666,12 +666,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initialPoint"), functio
     return self;
 }
 
-,["id"]), new objj_method(sel_getUid("isTracking"), function $CPMouseTracker__isTracking(self, _cmd)
-{
-    return self._currentEvent !== nil;
-}
-
-,["BOOL"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
+,["id"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
 {
     self._delay = aDelay;
     self._interval = anInterval;

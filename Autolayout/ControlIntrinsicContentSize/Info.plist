@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Main cib file base name</key>
-	<string>MainMenu.cib</string>
-	<key>CPBundleName</key>
-	<string>ControlIntrinsicContentSize</string>
-    <key>CPBundleVersion</key>
-    <string>1.0</string>
-    <key>CPHumanReadableCopyright</key>
-    <string>Copyright © 2014, Your Company All rights reserved.</string>
-</dict>
-</plist>
+280NPLIST;1.0;D;K;23;Main cib file base nameS;12;MainMenu.cibK;12;CPBundleNameS;27;ControlIntrinsicContentSizeK;15;CPBundleVersionS;3;1.0K;24;CPHumanReadableCopyrightS;51;Copyright © 2014, Your Company All rights reserved.K;29;CPBundleInfoDictionaryVersiond;1;6K;18;CPBundleIdentifierS;43;com.yourcompany.ControlIntrinsicContentSizeK;19;CPBundlePackageTypeS;4;APPLK;20;CPBundleEnvironmentsA;S;7;BrowserS;8;CommonJSE;K;18;CPBundleExecutableS;30;ControlIntrinsicContentSize.sjK;36;CPBundleEnvironmentsWithImageSpritesA;E;K;17;CPApplicationSizeD;K;10;executabled;7;7735606K;4;datad;6;475948K;5;mhtmld;6;596755E;E;

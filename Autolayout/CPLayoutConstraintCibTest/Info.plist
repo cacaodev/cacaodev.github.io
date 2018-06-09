@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Main cib file base name</key>
-	<string>MainMenu.cib</string>
-	<key>CPApplicationDelegateClass</key>
-	<string>AppController</string>
-	<key>CPBundleName</key>
-	<string>CPLayoutConstraintCibTest</string>
-	<key>CPPrincipalClass</key>
-	<string>CPApplication</string>
-</dict>
-</plist>
+280NPLIST;1.0;D;K;23;Main cib file base nameS;12;MainMenu.cibK;26;CPApplicationDelegateClassS;13;AppControllerK;12;CPBundleNameS;25;CPLayoutConstraintCibTestK;16;CPPrincipalClassS;13;CPApplicationK;29;CPBundleInfoDictionaryVersiond;1;6K;18;CPBundleIdentifierS;41;com.yourcompany.CPLayoutConstraintCibTestK;15;CPBundleVersionS;3;1.0K;19;CPBundlePackageTypeS;4;APPLK;20;CPBundleEnvironmentsA;S;7;BrowserS;8;CommonJSE;K;18;CPBundleExecutableS;28;CPLayoutConstraintCibTest.sjK;36;CPBundleEnvironmentsWithImageSpritesA;S;7;BrowserE;E;

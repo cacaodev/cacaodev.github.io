@@ -1,8 +1,4 @@
-@STATIC;1.0;p;6;main.jt;292;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;15;AppController.jt;206;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppController.j", YES);main = function(args, namedArgs)
-{
-    CPApplicationMain(args, namedArgs);
-}
-p;15;AppController.jt;49887;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jI;27;AppKit/CPObjectController.ji;16;CPMouseTracker.jt;49766;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppKit/CPObjectController.j", NO);objj_executeFile("CPMouseTracker.j", YES);var EDIT_PRIORITY = 490;
+@STATIC;1.0;p;15;AppController.jt;49887;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jI;27;AppKit/CPObjectController.ji;16;CPMouseTracker.jt;49766;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppKit/CPObjectController.j", NO);objj_executeFile("CPMouseTracker.j", YES);var EDIT_PRIORITY = 490;
 
 {var the_class = objj_allocateClassPair(CPObject, "AppController"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("container", "CPView"), new objj_ivar("pNum", "CPInteger")]);objj_registerClassPair(the_class);
@@ -552,7 +548,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("allowsReverseTransform
 
 ,["BOOL"])]);
 }
-p;16;CPMouseTracker.jt;12673;@STATIC;1.0;t;12653;var startTracking = 1 << 1,
+p;16;CPMouseTracker.jt;12526;@STATIC;1.0;t;12506;var startTracking = 1 << 1,
     continueTracking = 1 << 2,
     stopTracking = 1 << 3,
     constrainPoint = 1 << 4,
@@ -670,12 +666,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initialPoint"), functio
     return self;
 }
 
-,["id"]), new objj_method(sel_getUid("isTracking"), function $CPMouseTracker__isTracking(self, _cmd)
-{
-    return self._currentEvent !== nil;
-}
-
-,["BOOL"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
+,["id"]), new objj_method(sel_getUid("setPeriodicDelay:interval:"), function $CPMouseTracker__setPeriodicDelay_interval_(self, _cmd, aDelay, anInterval)
 {
     self._delay = aDelay;
     self._interval = anInterval;
@@ -797,3 +788,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initialPoint"), functio
 
 ,["CGPoint","CGPoint","CPEvent"])]);
 }
+p;6;main.jt;292;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.ji;15;AppController.jt;206;objj_executeFile("Foundation/Foundation.j", NO);objj_executeFile("AppKit/AppKit.j", NO);objj_executeFile("AppController.j", YES);main = function(args, namedArgs)
+{
+    CPApplicationMain(args, namedArgs);
+}
+e;

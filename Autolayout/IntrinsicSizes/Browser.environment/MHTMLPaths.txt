@@ -1,1 +1,0 @@
-@STATIC;1.0;u;21;Resources/Bonjour.png61;mhtml:Browser.environment/MHTMLData.txt!Resources/Bonjour.png
