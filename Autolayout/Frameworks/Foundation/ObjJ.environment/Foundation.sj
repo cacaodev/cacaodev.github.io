@@ -3092,7 +3092,7 @@ _isNumberType = function(value)
     else
         return NO;
 }
-p;17;CPDateFormatter.jt;114883;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPString.ji;13;CPFormatter.ji;12;CPTimeZone.ji;10;CPLocale.jt;114772;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPFormatter.j", YES);objj_executeFile("CPTimeZone.j", YES);objj_executeFile("CPLocale.j", YES);{var the_typedef = objj_allocateTypeDef("CPDateFormatterStyle");
+p;17;CPDateFormatter.jt;115322;@STATIC;1.0;i;9;CPArray.ji;8;CPDate.ji;10;CPString.ji;13;CPFormatter.ji;12;CPTimeZone.ji;10;CPLocale.jt;115211;objj_executeFile("CPArray.j", YES);objj_executeFile("CPDate.j", YES);objj_executeFile("CPString.j", YES);objj_executeFile("CPFormatter.j", YES);objj_executeFile("CPTimeZone.j", YES);objj_executeFile("CPLocale.j", YES);{var the_typedef = objj_allocateTypeDef("CPDateFormatterStyle");
 objj_registerTypeDef(the_typedef);
 }CPDateFormatterNoStyle = 0;
 CPDateFormatterShortStyle = 1;
@@ -3107,6 +3107,7 @@ CPDateFormatterBehavior10_4 = 1040;
 var defaultDateFormatterBehavior = CPDateFormatterBehavior10_4,
     relativeDateFormating,
     patternStringTokens;
+var _separatorsCharacterSet = nil;
 
 {var the_class = objj_allocateClassPair(CPFormatter, "CPDateFormatter"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_allowNaturalLanguage", "BOOL"), new objj_ivar("_doesRelativeDateFormatting", "BOOL"), new objj_ivar("_defaultDate", "CPDate"), new objj_ivar("_twoDigitStartDate", "CPDate"), new objj_ivar("_formatterBehavior", "CPDateFormatterBehavior"), new objj_ivar("_dateStyle", "CPDateFormatterStyle"), new objj_ivar("_timeStyle", "CPDateFormatterStyle"), new objj_ivar("_locale", "CPLocale"), new objj_ivar("_AMSymbol", "CPString"), new objj_ivar("_dateFormat", "CPString"), new objj_ivar("_PMSymbol", "CPString"), new objj_ivar("_timeZone", "CPTimeZone"), new objj_ivar("_symbols", "CPDictionary")]);objj_registerClassPair(the_class);
@@ -3544,7 +3545,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("allowNaturalLanguage"),
             if ((self.isa.method_msgSend["_isAmericanFormat"] || _objj_forward)(self, "_isAmericanFormat"))
                 format = "M/d/yy";
             else
-                format = "dd/MM/yy";
+            {
+                if (((___r1 = self._locale), ___r1 == null ? null : (___r1.isa.method_msgSend["objectForKey:"] || _objj_forward)(___r1, "objectForKey:", CPLocaleLanguageCode)) === 'de')
+                    format = "dd.MM.yy";
+                else
+                    format = "dd/MM/yy";
+            }
             break;
         case CPDateFormatterMediumStyle:
             if ((self.isa.method_msgSend["_isAmericanFormat"] || _objj_forward)(self, "_isAmericanFormat"))
@@ -3673,7 +3679,7 @@ default:
             }
             continue;
         }
-        if ((character == null ? null : (character.isa.method_msgSend["isEqualToString:"] || _objj_forward)(character, "isEqualToString:", ",")) || (character == null ? null : (character.isa.method_msgSend["isEqualToString:"] || _objj_forward)(character, "isEqualToString:", ":")) || (character == null ? null : (character.isa.method_msgSend["isEqualToString:"] || _objj_forward)(character, "isEqualToString:", "/")) || (character == null ? null : (character.isa.method_msgSend["isEqualToString:"] || _objj_forward)(character, "isEqualToString:", "-")) || (character == null ? null : (character.isa.method_msgSend["isEqualToString:"] || _objj_forward)(character, "isEqualToString:", " ")))
+        if (((___r1 = (CPDateFormatter.isa.method_msgSend["_separatorsCharacterSet"] || _objj_forward)(CPDateFormatter, "_separatorsCharacterSet")), ___r1 == null ? null : (___r1.isa.method_msgSend["characterIsMember:"] || _objj_forward)(___r1, "characterIsMember:", character)))
         {
             result += (self.isa.method_msgSend["_stringFromToken:date:"] || _objj_forward)(self, "_stringFromToken:date:", currentToken, aDate);
             result += character;
@@ -4647,7 +4653,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
 {
     if (self !== (CPDateFormatter.isa.method_msgSend["class"] || _objj_forward)(CPDateFormatter, "class"))
         return;
-    relativeDateFormating = (___r1 = (CPDictionary.isa.method_msgSend["alloc"] || _objj_forward)(CPDictionary, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:forKeys:"] || _objj_forward)(___r1, "initWithObjects:forKeys:", [["demain", 1, "apr" + String.fromCharCode(233) + "s-demain", 2, "apr" + String.fromCharCode(233) + "s-apr" + String.fromCharCode(233) + "s-demain", 3, "hier", -1, "avant-hier", -2, "avant-avant-hier", -3], ["tomorrow", 1, "yesterday", -1], [], []], ["fr", "en", "de", "es"]));
+    relativeDateFormating = (___r1 = (CPDictionary.isa.method_msgSend["alloc"] || _objj_forward)(CPDictionary, "alloc"), ___r1 == null ? null : (___r1.isa.method_msgSend["initWithObjects:forKeys:"] || _objj_forward)(___r1, "initWithObjects:forKeys:", [["demain", 1, "apr" + String.fromCharCode(233) + "s-demain", 2, "apr" + String.fromCharCode(233) + "s-apr" + String.fromCharCode(233) + "s-demain", 3, "hier", -1, "avant-hier", -2, "avant-avant-hier", -3], ["tomorrow", 1, "yesterday", -1], ["morgen", 1, "gestern", -1, String.fromCharCode(129) + "bermorgen", 2, "vorgestern", -2], []], ["fr", "en", "de", "es"]));
     patternStringTokens = ["QQQ", "qqq", "QQQQ", "qqqq", "MMM", "MMMM", "LLL", "LLLL", "E", "EE", "EEE", "eee", "eeee", "eeeee", "a", "z", "zz", "zzz", "zzzz", "Z", "ZZ", "ZZZ", "ZZZZ", "ZZZZZ", "v", "vv", "vvv", "vvvv", "V", "VV", "VVV", "VVVV"];
     var ___r1;
 }
@@ -4676,7 +4682,14 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("initialize"), function
     defaultDateFormatterBehavior = behavior;
 }
 
-,["void","CPDateFormatterBehavior"])]);
+,["void","CPDateFormatterBehavior"]), new objj_method(sel_getUid("_separatorsCharacterSet"), function $CPDateFormatter___separatorsCharacterSet(self, _cmd)
+{
+    if (_separatorsCharacterSet == nil)
+        _separatorsCharacterSet = (CPCharacterSet == null ? null : (CPCharacterSet.isa.method_msgSend["characterSetWithCharactersInString:"] || _objj_forward)(CPCharacterSet, "characterSetWithCharactersInString:", " ,:/-."));
+    return _separatorsCharacterSet;
+}
+
+,["CPCharacterSet"])]);
 }
 var CPDateFormatterDateStyleKey = "CPDateFormatterDateStyle",
     CPDateFormatterTimeStyleKey = "CPDateFormatterTimeStyleKey",
