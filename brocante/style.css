@@ -197,7 +197,7 @@ input {
     display: none;
 }
 
-@media all and (min-width:480px) and (max-width: 2000px) {
+@media all and (min-width:801px) and (max-width: 2000px) {
     #tabsbar {
         position: relative;
         margin: auto;
@@ -231,7 +231,7 @@ input {
     }
 }
 
-@media all and (min-width:0px) and (max-width: 480px) {
+@media all and (min-width:0px) and (max-width: 800px) {
     #tabsbar, #description-emplacements, #selection-emplacements {
         display:none;
     }
