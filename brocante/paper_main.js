@@ -1,6 +1,7 @@
-var SQUARE_SIZE = 71;
-var ANGLE_FREEZING_LENGTH = 40;
+
 var NUM_START = 1001;
+var SQUARE_SIZE = 71;
+var ZOOM_FACTOR = 1.1;
 
 var USER_SELECTED = 'orange';
 var USER_DESELECTED = 'green';
@@ -21,48 +22,57 @@ var square_num = NUM_START;
 var selectedGroup = null;
 var emplacementsVendus = [];
 
+var tool = new paper.Tool();
+tool.activate();
+
 tool.onMouseDown = function(e) {
     var hit = project.hitTest(e.point);
+
+    if (!hit || !hit.item)
+        return;
+
+    var item = hit.item;
     draggingShouldStart = false;
 
     console.log("onMouseDown Project " + hit);
     if (editMode == false) {
-        if (hit && hit.item) {
-            var item = hit.item,
-                cls = item.className;
+            var cls = item.className;
 
-            if (cls == 'PointText')
-                toogleSelection(item.parent);
+            if (cls == 'PointText') {
+                var shape = getShapeForText(item);
+                if (shape)
+                    toogleSelection(shape);
+            }
             else if (cls == 'Shape')
                 toogleSelection(item);
-        }
-    } else if (hit && hit.item) {
-        var item = hit.item;
+    } else  {
 
         if (item.className == "Shape" || item.className == "PointText") {
-            var parent = hit.item.parent;
+            var parent = item.parent;
             console.log("select group " + parent);
             if (parent.className == 'Group') {
                 selectGroup(parent);
                 shouldMoveGroupOnDrag = true;
             }
-        } else if (hit.item.className == "Raster") {
+        }
+    }
+
+    if (item.className == "Raster") {
+
+        if (editMode == true) {
             if (e.modifiers.alt) {
                 draggingShouldStart = true;
                 drawSquaresOnMouseUp = true;
             }
+            else {
+                selectGroup(null);
+            }
         }
-    }
-
-    if (hit && hit.item && hit.item.className == "Raster") {
-
-        if (editMode == true)
-            selectGroup(null);
 
         shouldMoveMap = true;
     }
 
-    return true;
+    return draggingShouldStart || shouldMoveGroupOnDrag || shouldMoveMap;
 }
 
 tool.onMouseDrag = function(event) {
@@ -111,7 +121,7 @@ tool.onKeyDown = function(e) {
     var key = e.key;
 
     if (key == 'e') {
-        window.globals._setEditMode(!editMode);
+        window.setEditMode(!editMode);
         return;
     }
 
@@ -119,7 +129,7 @@ tool.onKeyDown = function(e) {
         return;
 
     if (key == 'n') {
-        var response = prompt("Please enter a Number", square_num);
+        var response = prompt("Réinitialiser la nmérotation à partir de:", square_num);
 
         if (response && !isNaN(response)) {
             square_num = parseInt(response);
@@ -153,7 +163,8 @@ var selectThisGroup = function(aGroup, shouldSelect) {
     var items = aGroup.getItems({ class: Shape });
 
     items.forEach(function(item) {
-        item.strokeColor = shouldSelect ? 'red' : 'black';
+        item.strokeColor = shouldSelect ? 'blue' : 'black';
+        item.strokeWidth = shouldSelect ? 3 : 1;
     });
 
     aGroup.data.selected = shouldSelect;
@@ -181,7 +192,6 @@ var drawSquares = function(from, to) {
 };
 
 var enableShape = function(aShape, shouldEnable) {
-    console.log("Numero " + aShape.data.numero + " enable=" + shouldEnable);
     aShape.data.enabled = shouldEnable;
     updateColorState(aShape);
 };
@@ -331,7 +341,7 @@ var updateColorState = function(item) {
 };
 
 var changeZoom = function(oldZoom, delta) {
-    var factor = 1.05;
+    var factor = ZOOM_FACTOR;
     if (delta < 0)
         return oldZoom * factor;
 
@@ -343,6 +353,42 @@ var changeZoom = function(oldZoom, delta) {
 
 var isEmplacementVendu = function(numero) {
     return (emplacementsVendus.indexOf(numero) !== -1);
+};
+
+var projectDidLoad = function() {
+    view.zoom = 0.25;
+    project.getItems({class:Shape}).forEach(function(item) { initShape(item) });
+    //project.activeLayer.emit('mousedown', {type:'mousedown', target:project.activeLayer, point:new Point(10,10)});
+};
+
+var initShape = function(aShape) {
+
+        aShape.onMouseEnter = function(e) {
+            console.log(e);
+            window.setCursor("pointer");
+        };
+
+        aShape.onMouseLeave = function(e) {
+            console.log(e);
+            window.setCursor("move");
+        }
+
+        aShape.locked = true;
+};
+
+var getShapeForText = function(textItem) {
+    var shapes = textItem.parent.getItems({class:Shape, match:function(shape){
+        return shape.data.index == textItem.data.index;
+    }});
+
+    if (shapes.length == 1)
+        return shapes[0];
+
+    return null;
+};
+
+var lockGroups = function(flag) {
+    project.getItems({class:Shape}).forEach(function(shape) { shape.locked = flag});
 };
 
 window.globals = {
@@ -375,6 +421,7 @@ window.globals = {
             var shouldEnable = !isEmplacementVendu(item.data.numero);
             enableShape(item, shouldEnable);
         });
+        lockGroups(false);
     },
     selection: function() {
         return selectedShapes();
@@ -388,6 +435,7 @@ window.globals = {
     importJSON: function(json_string) {
         project.clear();
         project.importJSON(json_string);
-        view.zoom = 0.25;
-    }
+        projectDidLoad();
+    },
+    lock: lockGroups
 };

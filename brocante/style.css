@@ -1,7 +1,6 @@
-
 #container {
     margin: 5px;
-    border: solid 1px red;
+    border: solid 0px red;
     overflow: hidden;
 }
 
