@@ -34,19 +34,18 @@ tool.onMouseDown = function(e) {
     var item = hit.item;
     draggingShouldStart = false;
 
-    console.log("onMouseDown Project " + hit);
+    //console.log("onMouseDown Project " + hit);
     if (editMode == false) {
             var cls = item.className;
 
             if (cls == 'PointText') {
-                var shape = getShapeForText(item);
+                var shape = getHomologOfType(item, Shape);
                 if (shape)
                     toogleSelection(shape);
             }
             else if (cls == 'Shape')
                 toogleSelection(item);
     } else  {
-
         if (item.className == "Shape" || item.className == "PointText") {
             var parent = item.parent;
             console.log("select group " + parent);
@@ -87,13 +86,13 @@ tool.onMouseDrag = function(event) {
     } else if (shouldMoveMap) {
         project.activeLayer.position += event.delta;
     } else if (shouldMoveGroupOnDrag) {
-        console.log("dragging group");
+        //console.log("dragging group");
         selectedGroup.position += event.delta;
     }
 };
 
 tool.onMouseUp = function(event) {
-    console.log("onMouseUp Project");
+    //console.log("onMouseUp Project");
     if (editMode == false)
         return;
 
@@ -118,6 +117,7 @@ tool.onMouseUp = function(event) {
 tool.onKeyDown = function(e) {
 
     console.log(e.key);
+
     var key = e.key;
 
     if (key == 'e') {
@@ -127,6 +127,14 @@ tool.onKeyDown = function(e) {
 
     if (editMode == false)
         return;
+
+    if (e.modifiers.meta && key == 's') {
+        e.preventDefault();
+        e.stopPropagation();
+
+        window.downloadProject();
+        return;
+    }
 
     if (key == 'n') {
         var response = prompt("Réinitialiser la nmérotation à partir de:", square_num);
@@ -200,40 +208,6 @@ var toogleSelection = function(aShape) {
     selectShape(aShape, !aShape.data.selected);
 };
 
-var promptForRenumbering = function(rect, text) {
-    console.log('promptForRenumbering rect' + rect.data.numero);
-    if (editMode == false)
-        return false;
-
-    if (rect.data.index !== 0)
-        return false;
-
-    var response = prompt("Please enter a Number", text.content);
-
-    if (response == null || isNaN(response))
-        return false;
-
-    var start_num = parseInt(response);
-    var parent = rect.parent;
-    var siblings = parent.getItems({ class: Shape });
-
-    for (var k = 0; k < siblings.length; k++) {
-        var item = siblings[k];
-        var new_numero = start_num + item.data.index;
-
-        console.log(" " + item.data.numero + ' ' + rect.children);
-
-        var textItemsWithSameIndex = parent.getItems({ class: PointText, data: { index: item.data.index } });
-
-        item.data.numero = new_numero;
-        textItemsWithSameIndex[0].content = new_numero;
-    }
-
-    square_num = start_num + siblings.length;
-
-    return true;
-};
-
 var square = function(from, angle, groupIndex, globalIndex) {
     var rect = new Shape.Rectangle({
         center: from + { length: (groupIndex * SQUARE_SIZE + SQUARE_SIZE / 2), angle: angle },
@@ -247,7 +221,7 @@ var square = function(from, angle, groupIndex, globalIndex) {
 
     //rect.bringToFront();
 
-    var text = new PointText(rect.center);
+    var text = new PointText(rect.position);
     text.size = [SQUARE_SIZE, SQUARE_SIZE];
     text.justification = 'center';
     text.fillColor = 'black';
@@ -259,11 +233,7 @@ var square = function(from, angle, groupIndex, globalIndex) {
     text.data = { index: groupIndex, selected: false };
 
     rect.addChild(text);
-/*
-    text.select = rect.select;
-    text.toogleSelection = rect.toogleSelection;
-    text.promptForRenumbering = rect.promptForRenumbering;
-*/
+
     text.hitTest = function(e) {
         return rect.hitTest(e);
     }
@@ -340,66 +310,96 @@ var updateColorState = function(item) {
     item.fillColor = color;
 };
 
-var changeZoom = function(oldZoom, delta) {
+var getZoomLevel = function(oldZoom, delta) {
     var factor = ZOOM_FACTOR;
-    if (delta < 0)
+    if (delta > 0)
         return oldZoom * factor;
 
-    if (delta > 0)
+    if (delta < 0)
         return oldZoom / factor;
 
     return oldZoom;
 };
 
 var isEmplacementVendu = function(numero) {
-    return (emplacementsVendus.indexOf(numero) !== -1);
+    var result = emplacementsVendus.indexOf(numero) !== -1;
+    // console.log(numero + " est vendu =" + result);
+    return result;
 };
 
 var projectDidLoad = function() {
     view.zoom = 0.25;
-    project.getItems({class:Shape}).forEach(function(item) { initShape(item) });
+    emplacements().forEach(function(item) { initShape(item) });
+    project.getItems({class:PointText}).forEach(function(item) { initText(item) });
     //project.activeLayer.emit('mousedown', {type:'mousedown', target:project.activeLayer, point:new Point(10,10)});
 };
 
-var initShape = function(aShape) {
-
-        aShape.onMouseEnter = function(e) {
-            console.log(e);
-            window.setCursor("pointer");
-        };
-
-        aShape.onMouseLeave = function(e) {
-            console.log(e);
-            window.setCursor("move");
-        }
-
-        aShape.locked = true;
+var initText = function(item) {
+    var shape = getHomologOfType(item, Shape);
+    item.position = shape.position;
 };
 
-var getShapeForText = function(textItem) {
-    var shapes = textItem.parent.getItems({class:Shape, match:function(shape){
-        return shape.data.index == textItem.data.index;
+var initShape = function(item) {
+    updateMouseOver(item);
+
+    item.data.selected = false;
+    item.data.enabled = false;
+    item.fillColor = 'lightgray';
+    item.locked = true;
+};
+
+var updateMouseOver = function(item) {
+    var text = getHomologOfType(item, PointText);
+
+    if (editMode == false) {
+        item.onMouseEnter = function(e) {
+            window.setCursor(item.data.enabled ? "pointer" : "not-allowed");
+        };
+
+        item.onMouseLeave = function(e) {
+            window.setCursor("move");
+        };
+
+        text.onMouseEnter = function(e) {
+            window.setCursor(item.data.enabled ? "pointer" : "not-allowed");
+        };
+    }
+    else {
+        item.onMouseEnter = null;
+        item.onMouseLeave = null;
+        text.onMouseEnter = null;
+    }
+}
+
+var getHomologOfType = function(item, className) {
+    var targets = item.parent.getItems({class:className, match:function(child){
+        return child.data.index == item.data.index;
     }});
 
-    if (shapes.length == 1)
-        return shapes[0];
+    if (targets.length == 1)
+        return targets[0];
 
     return null;
 };
 
 var lockGroups = function(flag) {
-    project.getItems({class:Shape}).forEach(function(shape) { shape.locked = flag});
+    emplacements().forEach(function(shape) { shape.locked = flag });
 };
 
 window.globals = {
     _setEditMode: function(mode) {
         editMode = mode;
+
         if (editMode == false)
             selectGroup(null);
 
         emplacements().forEach(function(item) {
             updateColorState(item);
+            updateMouseOver(item);
         });
+
+        if (editmode)
+            window.setCursor("default");
 
         console.log("Edit Mode is " + (editMode ? "ON" : "OFF"));
     },
@@ -410,24 +410,24 @@ window.globals = {
     setEmplacementsVendus: function(selectedNumeros) {
         emplacementsVendus = selectedNumeros;
 
-        var items = project.getItems({
-            class: Shape,
-            match: function(item) {
-                return item.data.type == "emplacement";
-            }
-        });
+        var items = emplacements();
         console.log("Numéros dejà vendus:" + emplacementsVendus);
         items.forEach(function(item) {
             var shouldEnable = !isEmplacementVendu(item.data.numero);
             enableShape(item, shouldEnable);
+            updateMouseOver(item);
         });
+
         lockGroups(false);
     },
     selection: function() {
         return selectedShapes();
     },
-    mouseScrollBy: function(event) {
-        view.zoom = changeZoom(view.zoom, event.deltaY);
+    zoomBy: function(deltaY) {
+        view.zoom = getZoomLevel(view.zoom, deltaY);
+    },
+    setZoom: function(zoomLevel) {
+        view.zoom = zoomLevel;
     },
     exportJSON: function() {
         return project.exportJSON();

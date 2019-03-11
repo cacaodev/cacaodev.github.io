@@ -1,63 +1,70 @@
+#logos {
+    position:relative;
+    display:inline;
+    background-color: red;
+    left:0px;
+    height:50px;
+    width:100%;
+}
+
+#logos > img {
+    height:50px;
+}
+
+#logos > #logo_carrefour {
+    position: relative;
+    float: left;
+    left: 10px;
+}
+
+#logos > #logo_fmdc {
+    position: relative;
+    float: right;
+}
+
 #container {
     margin: 5px;
     border: solid 0px red;
     overflow: hidden;
 }
 
-#ajouter {
-    height: 100%;
-    font-size: 24px;
-    position: relative;
-    margin-right: 0px;
-    border: solid 1px white;
-    border-radius: 10px;
-    background-color: rgb(66, 95, 170);
-    font-weight: normal;
-    color: white;
-    padding-left: 15px;
-    padding-right: 15px;
-    top: 0px;
-    text-transform: capitalize;
+#canvas {
+    opacity:0;
+}
+
+#suivant_wrapper {
+    display:inline;
+    width:100%;
+    top:200px;
+    background-color: red;
 }
 
 #suivant {
-    height: 100%;
+    height: 42px;
+    margin-top:20px;
+    margin-right:8%;
+    float:right;
     font-size: 24px;
-    position: relative;
-    float: right;
-    margin-right: 0px;
     border: solid 1px white;
     border-radius: 10px;
     background-color: rgb(66, 95, 170);
     font-weight: normal;
     color: white;
+    text-transform: capitalize;
     padding-left: 15px;
     padding-right: 15px;
-    top: 0px;
-    text-transform: capitalize;
 }
 
 #secteur, #emplacements-disponibles {
     font-size: 24px;
 }
 
-#nom, #prenom, #adresse, #email, #vehicule, #telephone {
-    font-size: 18px;
-}
-
-#nom, #adresse, #email, #vehicule {
-    left: 100px;
-}
-
-#adresse {
-    display: inline;
-    width: 400px;
-}
-
-#form {
-    margin-bottom: 10px;
-    border: solid 2px black;
+#infos_exposant {
+    position: relative;
+    top: 40px;
     padding: 10px;
+    width: 100%;
+    height: 100%;
 }
 
 #paiement {
@@ -71,14 +78,15 @@
 .paypal-box {
     top: 20px;
     position: relative;
-    margin: 0 auto;
+    display:block;
     padding: 20px;
-    width: 400px;
     height: 150px;
-    border: solid 3px;
-    border-radius: 10px;
-    border-color: rgb(71, 76, 94);
-    background-color: rgb(241, 221, 207, 0.5);
+}
+
+#paypal_button {
+    position:relative;
+    left:45%;
+    top:45%;
 }
 
 .header {
@@ -97,12 +105,12 @@
 
 .footer {
     margin: 0 auto;
-    width: 500px;
+    margin-top:20px;
+    width: 400px;
     padding: 20px;
-    font-size: 12px;
+    font-size: 16px;
     text-align: center;
-    color: white;
-    font-style: italic;
+    color: black;
 }
 
 td {
@@ -119,6 +127,7 @@ table {
 }
 
 .acheter {
+    margin-top:20px;
     position: relative;
     margin: 0 auto;
     width: 200px;
@@ -145,13 +154,20 @@ button:focus {
 
 #item-choix_emplacements, #item-infos_exposant, #item-paiement {
     border: none;
-    width: 32%;
     height: 100%;
     padding: 0px;
     margin: 0px;
     display: inline;
     font-size: 24px;
     font-weight: bold;
+}
+
+#item-choix_emplacements, #item-infos_exposant {
+    width: 33%;
+}
+
+#item-paiement {
+    width: 33.2%;
 }
 
 .active {
@@ -173,21 +189,6 @@ button:focus {
     background-color: transparent;
 }
 
-label {
-    font-weight: bold;
-    font-family: menlo;
-    font-size: 18px;
-    white-space: pre;
-}
-
-input {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 15px;
-    font-family: menlo;
-    font-size: 18px;
-}
-
 #editmode {
     background-color: gray;
 }
@@ -196,10 +197,21 @@ input {
     display: none;
 }
 
+#mentions {
+    background-color: white;
+    opacity: 0.9;
+    border-top: solid thin black;
+    border-bottom: solid thin black;
+    position:absolute;
+    bottom: 1px;
+    width:100%;
+    text-align: center;
+}
 @media all and (min-width:801px) and (max-width: 2000px) {
     #tabsbar {
         position: relative;
-        margin: auto;
+        margin-top: 10px;
+        margin: 10 auto;
         width: 80%;
         height: 50px;
         border-radius: 8px;
@@ -212,21 +224,45 @@ input {
     }
 
     #description-emplacements {
-        position: relative;
-        height: 20px;
-        left: 40%;
+        width:500px;
         border: solid 3px rgb(66, 95, 170);
         border-radius: 10px;
-        margin: 0px;
         text-align: center;
-        display: inline;
-        padding: 10px;
+        margin: 0 auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        vertical-align: middle;
     }
 
-    #selection-emplacements {
-        border: solid thin green;
-        margin-top: 50px;
-        height: 32px;
+    .bandeau {
+        height:40px;
+        line-height:40px;
+        border-top:solid thin black;
+        border-bottom:solid thin black;
+        margin:20px auto;
+    }
+
+    .bandeau_infos, .bandeau_warning {
+        text-align: left;
+        vertical-align: middle;
+        font-size:16px;
+        font-weight:bold;
+        line-height: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+        display: inline-block;
+        background-color: transparent;
+    }
+
+    .bandeau_infos {
+        border:solid thin black
+        color:black;
+    }
+
+    .bandeau_warning {
+        color:red;
     }
 }
 
