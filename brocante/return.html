@@ -8,15 +8,17 @@
         var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoS7HYII5GsPzI5GWsF_Nd7ZnUVKjjIaU4T2XA08trT9YjSAQ/exec";
 
         function onLoad() {
-            var xhr = new XMLHttpRequest();
-
             // On souhaite juste récupérer le contenu du fichier, la méthode GET suffit amplement :
-            var validation = window.location.search.match(/validation=(\w+)/)[1];
-            var script_url = GOOGLE_SCRIPT_URL + window.location.search;
+            var params = window.location.search;
+            if (/validation=(OUI|ANNULE)/.test(params) == false || /uuid=/.test(params) == false)
+                return;
+
+            var validation_result = params.match(/validation=(OUI|ANNULE)/)[1];
+            var script_url = GOOGLE_SCRIPT_URL + params;
+
+            var xhr = new XMLHttpRequest();
             xhr.open('GET', script_url);
-
             xhr.addEventListener('readystatechange', function() { // On gère ici une requête asynchrone
-
                 if (xhr.readyState === XMLHttpRequest.DONE) { // Si le fichier est chargé sans erreur
                     if (xhr.status === 200) {
                         var responseText = xhr.responseText;
@@ -24,14 +26,14 @@
 
                         if (json.result == "error")
                             displayError(json.error);
-                        else if (validation == "OUI")
+                        else if (validation_result == "OUI")
                             displayPaymentOK();
-                        else if (validation == "ANNULE")
+                        else if (validation_result == "ANNULE")
                             displayPaymentCancelled();
                         else
-                            displayError("Unknown command " + validation);
+                            displayError("Unknown command " + validation_result);
                     } else {
-                        displayError("Un probleme est survenu Error " + xhr.status);
+                        displayError("Un probleme est survenu. Erreur http " + xhr.status);
                     }
                 }
             });
