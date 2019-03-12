@@ -18,8 +18,8 @@
     <script src="https://apis.google.com/js/api.js"></script>
     <script type="text/javascript" src="js-form-validator.js"></script>
     <script type="text/javascript" language="javascript">
-        // var HOST_URL = "https://www.lesamisducarrefour.org";
-        var HOST_URL = "http://trac.uk.to:8000";
+        var HOST_URL = "https://www.lesamisducarrefour.org";
+        //var HOST_URL = "http://trac.uk.to:8000";
         var GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE = "https://script.google.com/macros/s/AKfycbyoS7HYII5GsPzI5GWsF_Nd7ZnUVKjjIaU4T2XA08trT9YjSAQ/exec";
         var GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE = "https://script.google.com/macros/s/AKfycbxwqe4IjmI4PZlv03yEMrzlJ6Sr7pNYgdh5Odi1JmZTI_TThy69/exec";
 
@@ -322,7 +322,7 @@
                 if (id_transaction !== null)
                     query += "&uuid=" + id_transaction;
 
-                sendRequest((GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE + "?" + query), function(data, err) {
+                sendRequest((GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE + "?creation=1&" + query), function(data, err) {
                     if (err !== null) {
                         console.log(`Network Error:${err}`);
                     } else {
@@ -337,8 +337,8 @@
                             form.elements.os1.value = json.row;
                             form.elements.quantity.value = emplacements_choisis.length * 2;
                             form.elements.amount.value = prix_metre;
-                            form.elements.return.value = HOST_URL + "/return.html?validation=OUI&uuid=" + id_transaction;
-                            form.elements.cancel_return.value = HOST_URL + "/return.html?validation=ANNULE&uuid=" + id_transaction;
+                            form.elements.return.value = HOST_URL + "/_functions/paypal/validation?uuid=" + id_transaction;
+                            form.elements.cancel_return.value = HOST_URL + "/_functions/paypal/annulation?uuid=" + id_transaction;
                         } else if (json.result == "error") {
                             console.log(`Script Error:${json.error.message}`);
                         }
