@@ -169,7 +169,7 @@
                 }
             });
 
-            sendRequest((GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE + "?emplacements=1"), function(data, err) {
+            sendRequest((GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE + "?getemplacements=1"), function(data, err) {
                 var json = (err == null) ? JSON.parse(data) : {"result":"error", "error":err};
 
                 if (json.result == "success") {
