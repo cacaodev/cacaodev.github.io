@@ -1,65 +1,14 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" dir="ltr" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <title>Merci !</title>
-    <script language="javascript">
-        var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoS7HYII5GsPzI5GWsF_Nd7ZnUVKjjIaU4T2XA08trT9YjSAQ/exec";
 
-        function onLoad() {
-            // On souhaite juste récupérer le contenu du fichier, la méthode GET suffit amplement :
-            var params = window.location.search;
-            if (/validation=(OUI|ANNULE)/.test(params) == false || /uuid=/.test(params) == false)
-                return;
+<meta charset="utf-8" />
 
-            var validation_result = params.match(/validation=(OUI|ANNULE)/)[1];
-            var script_url = GOOGLE_SCRIPT_URL + params;
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', script_url);
-            xhr.addEventListener('readystatechange', function() { // On gère ici une requête asynchrone
-                if (xhr.readyState === XMLHttpRequest.DONE) { // Si le fichier est chargé sans erreur
-                    if (xhr.status === 200) {
-                        var responseText = xhr.responseText;
-                        var json = JSON.parse(responseText);
-
-                        if (json.result == "error")
-                            displayError(json.error);
-                        else if (validation_result == "OUI")
-                            displayPaymentOK();
-                        else if (validation_result == "ANNULE")
-                            displayPaymentCancelled();
-                        else
-                            displayError("Unknown command " + validation_result);
-                    } else {
-                        displayError("Un probleme est survenu. Erreur http " + xhr.status);
-                    }
-                }
-            });
-
-            xhr.send(null); // La requête est prête, on envoie tout !
-        }
-
-        function displayPaymentOK() {
-            console.log("Display payment OK");
-            document.getElementById("validation").style.display = "block";
-        }
-
-        function displayPaymentCancelled() {
-            console.log("Display payment cancelled");
-            document.getElementById("annulation").style.display = "block";
-        }
-
-        function displayError(err) {
-            console.warn(err);
-        }
-    </script>
-
+<title>Merci !</title>
     <style>
         #validation,
         #annulation {
-            display: none;
             position: relative;
             margin: 0 auto;
             top: 200px;
@@ -69,22 +18,29 @@
             padding: 20px;
             font-size: 18px;
         }
-
         #annulation {
             text-align: center;
         }
-    </style>
-</head>
+        
+        .active {
+            display:block;
+        }
+        .inactive {
+            display:none;
+        }
 
-<body onload="onLoad();">
-    <div id="validation">
-        <p style="text-align:center;">Merci pour votre paiement.<br />
+    </style></head>
+
+<body>
+
+<div id="validation" class="active">
+
+<p style="text-align: center;">Merci pour votre paiement.<br />
             Vous recevrez un email de Paypal confirmant votre paiement et un autre confirmant votre inscription.</p>
     </div>
-    <div id="annulation">
+
+<div id="annulation" class="active">
         Aucune réservation n'a été prise en compte.<br /><br />
         Vous pouvez réserver à nouveau sur notre site <a href="https://lesamisducarrefour.org/reservation">lesamisducarrefour.org/reservation</a>
     </div>
-</body>
-
-</html>
+</body></html>

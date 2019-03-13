@@ -165,7 +165,7 @@
                 } else {
                     console.warn(json.error);
                     setDescription("");
-                    setWarning(true, "Une erreur est survenue lors du chargement. Veuillez ré-essayer plus tard.")
+                    setWarning(true, "Une erreur est survenue lors du chargement. Veuillez ré-essayer plus tard.");
                 }
             });
 
@@ -183,7 +183,7 @@
                 } else {
                     console.warn(json.error);
                     setDescription("");
-                    setWarning(true, "Une erreur est survenue lors du chargement. Veuillez ré-essayer plus tard.")
+                    setWarning(true, "Une erreur est survenue lors du chargement. Veuillez ré-essayer plus tard.");
                 }
             });
         }
@@ -310,7 +310,7 @@
                         secteurs.push(s);
                 }
 
-                var prix_metre = (params['Code Postal'] == '75019') ? 15 : 20;
+                var prix_metre = (params['Code Postal'] == '75019') ? 0.15 : 0.20;
 
                 params["Emplacements"] = emplacements_choisis.join("-");
                 params["Secteurs"] = secteurs.join("-");
