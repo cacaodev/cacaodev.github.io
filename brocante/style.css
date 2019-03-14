@@ -136,6 +136,41 @@ button:focus, input[type="submit"]:focus {
     text-align: center;
 }
 
+#tabsbar {
+    position: relative;
+    margin-top: 10px;
+    margin: 10 auto;
+    width: 80%;
+    height: 50px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    padding: 0px;
+    background-color: none;
+    overflow: hidden;
+}
+
+#description-emplacements {
+    width: 500px;
+    border: solid 3px rgb(66, 95, 170);
+    border-radius: 10px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+#panier {
+    vertical-align: middle;
+    position: absolute;
+    float: right;
+    right: 5px;
+}
+
 .disabled {
     background-color: lightgray;
 }
@@ -224,7 +259,7 @@ button:focus, input[type="submit"]:focus {
 }
 
 .bandeau_infos_right {
-    border: solid thin black;
+    !important background-color: lightblue;
     color:black;
 }
 
@@ -232,44 +267,12 @@ button:focus, input[type="submit"]:focus {
     color: darkred;
 }
 
-#tabsbar {
-    position: relative;
-    margin-top: 10px;
-    margin: 10 auto;
-    width: 80%;
-    height: 50px;
-    border-radius: 8px;
-    border-width: 2px;
-    border-color: black;
-    border-style: solid;
-    padding: 0px;
-    background-color: none;
-    overflow: hidden;
-}
-
-#description-emplacements {
-    width: 500px;
-    border: solid 3px rgb(66, 95, 170);
-    border-radius: 10px;
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    vertical-align: middle;
-}
-
-#panier {
-    vertical-align: middle;
-    position: absolute;
-    float: right;
-    right: 5px;
-}
-
-
 @media all and (min-width:0px) and (max-width: 800px) {
-    #tabsbar, #description-emplacements, #selection-emplacements {
+    div {
         display: none;
+    }
+
+    #container {
+        !important display:block;
     }
 }

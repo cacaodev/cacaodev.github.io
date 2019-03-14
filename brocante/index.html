@@ -342,7 +342,7 @@
                 params["Payé"] = "EN ATTENTE";
 
                 var esc = encodeURIComponent;
-                var query = Object.keys(params).map(k => `${esc(k)}=${esc(params[k])}`).join('&');
+                var query = Object.keys(params).map(function(k){ return esc(k) + "=" + esc(params[k]); }).join('&');
 
                 if (id_transaction !== null)
                     query += "&uuid=" + id_transaction;
