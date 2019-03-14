@@ -1,23 +1,28 @@
+
+button:focus, input[type="submit"]:focus {
+    outline: none;
+}
+
 #logos {
-    position:relative;
-    display:inline;
+    position: relative;
+    display: inline;
     background-color: red;
-    left:0px;
-    height:50px;
-    width:100%;
+    left: 0px;
+    height: 50px;
+    width: 100%;
 }
 
-#logos > img {
-    height:50px;
+#logos>img {
+    height: 50px;
 }
 
-#logos > #logo_carrefour {
+#logos>#logo_carrefour {
     position: relative;
     float: left;
     left: 10px;
 }
 
-#logos > #logo_fmdc {
+#logos>#logo_fmdc {
     position: relative;
     float: right;
 }
@@ -29,25 +34,24 @@
 }
 
 #canvas {
-    opacity:0;
+    opacity: 0;
 }
 
 #suivant_wrapper {
-    display:inline;
-    width:100%;
-    top:200px;
+    display: inline;
+    width: 100%;
+    top: 200px;
     background-color: red;
 }
 
 #suivant {
     height: 42px;
-    margin-top:20px;
-    margin-right:8%;
-    float:right;
+    margin-top: 20px;
+    margin-right: 8%;
+    float: right;
     font-size: 24px;
     border: solid 1px white;
     border-radius: 10px;
-    background-color: rgb(66, 95, 170);
     font-weight: normal;
     color: white;
     text-transform: capitalize;
@@ -75,63 +79,10 @@
     height: 100%;
 }
 
-.paypal-box {
-    top: 20px;
-    position: relative;
-    display:block;
-    padding: 20px;
-    height: 150px;
-}
-
 #paypal_button {
-    position:relative;
-    left:45%;
-    top:45%;
-}
-
-.header {
-    white-space: pre-line;
-    margin: 0 auto;
-    width: 800px;
-    padding: 20px;
-    font-size: 20px;
-    font-family: menlo;
-    text-align: center;
-    color: black;
-    border-color: gray;
-    border-width: 1px;
-    border-style: solid;
-}
-
-.footer {
-    margin: 0 auto;
-    margin-top:20px;
-    width: 400px;
-    padding: 20px;
-    font-size: 16px;
-    text-align: center;
-    color: black;
-}
-
-td {
-    height: 30px;
-}
-
-td.label {
-    text-align: right;
-    color: black;
-}
-
-table {
-    font-size: 20px;
-}
-
-.acheter {
-    margin-top:20px;
     position: relative;
-    margin: 0 auto;
-    width: 200px;
-    padding-top: 20px;
+    left: 45%;
+    top: 45%;
 }
 
 #tabsbar {
@@ -146,10 +97,6 @@ table {
     padding: 0px;
     background-color: none;
     overflow: hidden;
-}
-
-button:focus {
-    outline: none;
 }
 
 #item-choix_emplacements, #item-infos_exposant, #item-paiement {
@@ -168,6 +115,73 @@ button:focus {
 
 #item-paiement {
     width: 33%;
+}
+
+#editmode {
+    background-color: gray;
+}
+
+#editmode, #update, #download {
+    display: none;
+}
+
+#mentions {
+    background-color: white;
+    opacity: 0.9;
+    border-top: solid thin black;
+    border-bottom: solid thin black;
+    position: absolute;
+    bottom: 1px;
+    width: 100%;
+    text-align: center;
+}
+
+.disabled {
+    background-color: lightgray;
+}
+
+.enabled {
+    background-color: rgb(66, 95, 170);
+}
+
+.paypal-box {
+    top: 20px;
+    position: relative;
+    display: block;
+    padding: 20px;
+    height: 150px;
+}
+
+.header {
+    white-space: pre-line;
+    margin: 0 auto;
+    width: 800px;
+    padding: 20px;
+    font-size: 20px;
+    font-family: menlo;
+    text-align: center;
+    color: black;
+    border-color: gray;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.footer {
+    margin: 0 auto;
+    margin-top: 20px;
+    width: 400px;
+    padding: 20px;
+    font-size: 16px;
+    text-align: center;
+    color: black;
+}
+
+.acheter {
+    margin-top: 20px;
+    position: relative;
+    margin: 0 auto;
+    width: 200px;
+    padding-top: 20px;
 }
 
 .active {
@@ -189,85 +203,73 @@ button:focus {
     background-color: transparent;
 }
 
-#editmode {
-    background-color: gray;
-}
-
-#editmode, #update, #download {
-    display: none;
-}
-
-#mentions {
-    background-color: white;
-    opacity: 0.9;
+.bandeau {
+    height: 40px;
+    line-height: 40px;
     border-top: solid thin black;
     border-bottom: solid thin black;
-    position:absolute;
-    bottom: 1px;
-    width:100%;
+    margin: 20px auto;
+}
+
+.bandeau_infos, .bandeau_warning, .bandeau_infos_right {
+    text-align: left;
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    background-color: transparent;
+}
+
+.bandeau_infos_right {
+    border: solid thin black;
+    color:black;
+}
+
+.bandeau_warning {
+    color: darkred;
+}
+
+#tabsbar {
+    position: relative;
+    margin-top: 10px;
+    margin: 10 auto;
+    width: 80%;
+    height: 50px;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    padding: 0px;
+    background-color: none;
+    overflow: hidden;
+}
+
+#description-emplacements {
+    width: 500px;
+    border: solid 3px rgb(66, 95, 170);
+    border-radius: 10px;
     text-align: center;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
 }
-@media all and (min-width:801px) and (max-width: 2000px) {
-    #tabsbar {
-        position: relative;
-        margin-top: 10px;
-        margin: 10 auto;
-        width: 80%;
-        height: 50px;
-        border-radius: 8px;
-        border-width: 2px;
-        border-color: black;
-        border-style: solid;
-        padding: 0px;
-        background-color: none;
-        overflow: hidden;
-    }
 
-    #description-emplacements {
-        width:500px;
-        border: solid 3px rgb(66, 95, 170);
-        border-radius: 10px;
-        text-align: center;
-        margin: 0 auto;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
-        vertical-align: middle;
-    }
-
-    .bandeau {
-        height:40px;
-        line-height:40px;
-        border-top:solid thin black;
-        border-bottom:solid thin black;
-        margin:20px auto;
-    }
-
-    .bandeau_infos, .bandeau_warning {
-        text-align: left;
-        vertical-align: middle;
-        font-size:16px;
-        font-weight:bold;
-        line-height: 40px;
-        padding-left: 10px;
-        padding-right: 10px;
-        display: inline-block;
-        background-color: transparent;
-    }
-
-    .bandeau_infos {
-        border:solid thin black
-        color:black;
-    }
-
-    .bandeau_warning {
-        color:red;
-    }
+#panier {
+    vertical-align: middle;
+    position: absolute;
+    float: right;
+    right: 5px;
 }
+
 
 @media all and (min-width:0px) and (max-width: 800px) {
     #tabsbar, #description-emplacements, #selection-emplacements {
-        display:none;
+        display: none;
     }
 }
