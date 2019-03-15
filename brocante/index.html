@@ -228,14 +228,16 @@
 
             setPanier("Total: " + metrage * TARIF_NORMAL + "€ (" + metrage * TARIF_REDUIT + "€ pour résidents)");
 
-            updateButtonState();
+            updatetabItemsState();
         }
 
-        function updateButtonState() {
+        function updatetabItemsState() {
             var tab_items = ['choix_emplacements', 'infos_exposant', 'paiement'];
-            var tabID = tab_items[selectedTabItemIndex + 1];
-            var souldSelect = shouldSelectTabItem(tabID);
-            document.getElementById('suivant').className = souldSelect ? "enabled" : "disabled";
+            var nextTabID = tab_items[selectedTabItemIndex + 1];
+            var shouldSelect = shouldSelectTabItem(nextTabID);
+            var el = document.getElementById('suivant');
+console.log('updatetabItemsState ' + shouldSelect);
+            enable(el, shouldSelect);
         }
 
         function setPanier(text) {
@@ -271,9 +273,10 @@
             formvalidator = null;
         }
 
-        function clickNextTabItem(button) {
+        function clickNextTabItem() {
             var tab_items = ['choix_emplacements', 'infos_exposant', 'paiement'];
             var tabID = tab_items[selectedTabItemIndex + 1];
+            console.log("clickNextTabItem " + (selectedTabItemIndex + 1));
             didClickTabItem(tabID);
         }
 
@@ -290,7 +293,7 @@
                     return false;
                 }
             }
-
+console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + emplacements_choisis);
             if (tabItemValue !== 'choix_emplacements' && emplacements_choisis.length == 0)
                 return false;
 
@@ -315,7 +318,7 @@
         }
 
         function tabItemDidAppear(tabItemValue) {
-            updateButtonState();
+            updatetabItemsState();
 
             if (tabItemValue == "paiement") {
 
@@ -395,7 +398,19 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
             updateTabItemsVisibility(tabItemValue);
             tabItemDidAppear(tabItemValue);
 
-            document.getElementById("suivant").style.display = (selectedTabItemIndex < 2) ? "block" : "none";
+            var el = document.getElementById('suivant');
+            enable(el, selectedTabItemIndex < 2);
+        }
+
+        function enable(el, flag) {
+            var cl = el.classList;
+
+            if (flag)  {
+                cl.replace('disabled', 'enabled');
+            }
+            else {
+                cl.replace('enabled', 'disabled');
+            }
         }
 
         function downloadProject() {
@@ -456,31 +471,33 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
 <body onload="handleClientLoad()">
     <!-- <pre id="content" style="white-space: pre-wrap;"></pre> -->
 
-    <div id="logos">
-        <img id="logo_carrefour" src="LOGO_CARREFOUR_IMAGE.png" alt="">
+    <div id="logos" class="desktop">
+        <img id="logo_carrefour" class="desktop" src="LOGO_CARREFOUR_IMAGE.png" alt="">
+        <span id="event_desc" class="desktop">Vide-grenier Avenue de Laumière<br/>7 Avril 2019</span>
     </div>
-    <div id="tabsbar">
+
+    <div id="tabsbar" class="desktop">
         <button type="button" id="item-choix_emplacements" class="selected" value="choix_emplacements" onclick="didClickTabItem(this.value)">① Emplacements</button>
         <button type="button" id="item-infos_exposant" class="deselected" value="infos_exposant" onclick="didClickTabItem(this.value)">⓶ Informations</button>
         <button type="button" id="item-paiement" value="paiement" class="deselected" onclick="didClickTabItem(this.value)">⓷ Paiement</button>
     </div>
 
-    <div id="suivant_wrapper">
-        <button id="suivant" class="disabled" value="0" type="button" onclick="clickNextTabItem(this)">Valider</button>
+    <div id="suivant_wrapper" class="disabled desktop">
+        <button id="suivant" class="disabled desktop" value="0" type="button" onclick="clickNextTabItem()">Valider</button>
     </div>
 
     <div class="active" id="choix_emplacements">
-        <div id="description-emplacements">Aucun emplacement sélectionné</div>
-        <div id="bandeau-description" class="bandeau">
+        <div id="description-emplacements" class="desktop">Aucun emplacement sélectionné</div>
+        <div id="bandeau-description" class="bandeau desktop">
             <button id="editmode" type="button" onclick="toogleEditMode(this)" value="1">EditMode</button>
             <button id="update" type="button" onclick="updateEmplacementsVendus()">Update</button>
             <button id="download" type="button" onclick="downloadProject()">Download</button>
 
-            <div id="selection-emplacements" class="bandeau_infos">
+            <div id="selection-emplacements" class="bandeau_infos desktop">
                 Veuillez sélectionner un ou des emplacements libres en vert. Vous pouvez zoomer et déplacer le plan.
             </div>
-            <div id="emplacements-warning" class="bandeau_warning"></div>
-            <div id="panier" class="bandeau_infos_right"></div>
+            <div id="emplacements-warning" class="bandeau_warning desktop"></div>
+            <div id="panier" class="bandeau_infos_right desktop"></div>
         </div>
 
         <div id="container">
@@ -490,8 +507,8 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
                 <div></div>
                 <div></div>
             </div>
-            <div id="controls">
-                <div class="btn-group-vertical" role="group" aria-label="..." id="float-button-group">
+            <div id="controls" class="desktop">
+                <div class="btn-group-vertical desktop" role="group" aria-label="..." id="float-button-group">
                     <button onclick="zoomBy(10)" type="button" class="btn btn-default" id="zoom-in">🔍<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button>
                     <button onclick="zoomBy(-10)" type="button" class="btn btn-default" id="zoom-out">🔍<span class="glyphicon glyphicon-zoom-out" aria-hidden="true"></span></button>
                     <button type="button" class="btn btn-default" id="reset">🌐<span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span></button>
@@ -503,18 +520,18 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
         </div>
     </div>
 
-    <div class="inactive" id="infos_exposant">
+    <div class="inactive desktop" id="infos_exposant">
         <div id="instructions_exposants" class="bandeau">
             <div id="instructions" class="bandeau_warning">Important: le jour du vide-grenier, merci de venir avec une photocopie de la pièce d'identité de la personne inscrite (recto-verso).</div>
         </div>
 
         <form id="infos" name="infos" onsubmit="">
-            <input onchange="updateButtonState();" type="text" id="nom" name="Nom" data-rule="required|lastname" placeholder="Nom" autocomplete="family-name" />
-            <input onchange="updateButtonState();" type="text" id="prenom" name="Prénom" data-rule="required|name" placeholder="Prénom" autocomplete="given-name" />
-            <input onchange="updateButtonState();" type="text" id="adresse" name="Adresse" data-rule="required" placeholder="Adresse" autocomplete="street-address" />
-            <input onchange="updateButtonState();" type="text" id="codepostal" name="Code Postal" data-rule="required|minlength-5|maxlenght-5" placeholder="Code Postal" autocomplete="postal-code" />
-            <input onchange="updateButtonState();" type="text" id="email" name="Email" data-rule="required|email" placeholder="Email" autocomplete="email" />
-            <input onchange="updateButtonState();" type="text" id="telephone" name="Téléphone" data-rule="required|phone" placeholder="Téléphone" autocomplete="tel" />
+            <input onchange="updatetabItemsState();" type="text" id="nom" name="Nom" data-rule="required|lastname" placeholder="Nom" autocomplete="family-name" />
+            <input onchange="updatetabItemsState();" type="text" id="prenom" name="Prénom" data-rule="required|name" placeholder="Prénom" autocomplete="given-name" />
+            <input onchange="updatetabItemsState();" type="text" id="adresse" name="Adresse" data-rule="required" placeholder="Adresse" autocomplete="street-address" />
+            <input onchange="updatetabItemsState();" type="text" id="codepostal" name="Code Postal" data-rule="required|minlength-5|maxlenght-5" placeholder="Code Postal" autocomplete="postal-code" />
+            <input onchange="updatetabItemsState();" type="text" id="email" name="Email" data-rule="required|email" placeholder="Email" autocomplete="email" />
+            <input onchange="updatetabItemsState();" type="text" id="telephone" name="Téléphone" data-rule="required|phone" placeholder="Téléphone" autocomplete="tel" />
             <label>Véhicule:</label>
             <input type="radio" id="voiture" name="Véhicule" value="voiture" />
             <label for="voiture">Voiture</label>
@@ -529,7 +546,7 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
         <!-- Append the validator JS script -->
     </div>
 
-    <div class="inactive" id="paiement">
+    <div class="inactive desktop" id="paiement">
         <div class="header" id="paypal_header">
         </div>
         <div class="paypal-box">
@@ -574,7 +591,7 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
         </div>
     </div>
 
-    <div id="mentions">
+    <div id="mentions" class="desktop">
         Association Les Amis du Carrefour des Solidarités - 145 rue de Crimée 75019 - ☎︎ 01 53 72 00 80 📱 06 63 75 69 05 📧 brocante-laumiere@orange.fr
     </div>
 

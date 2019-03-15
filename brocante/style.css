@@ -1,25 +1,36 @@
-
 button:focus, input[type="submit"]:focus {
     outline: none;
 }
 
 #logos {
-    position: relative;
-    display: inline;
-    background-color: red;
-    left: 0px;
-    height: 50px;
-    width: 100%;
+    position: absolute;
+    display: block;
+    top: 60px;
+    left: 10px;
+    height: 80px;
+    width: 120px;
+    border: solid thin black;
+    border-radius: 4px;
 }
 
-#logos>img {
-    height: 50px;
+#event_desc {
+    text-align: center;
+    width: 100%;
+    display: block;
+    bottom: 5px;
+    position: absolute;
+    z-index: 1;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 #logos>#logo_carrefour {
-    position: relative;
-    float: left;
-    left: 10px;
+    position: absolute;
+    margin-left: 40px;
+    margin-right: 40px;
+    width: 40px;
+    z-index: 0;
+    opacity: 0.8;
 }
 
 #logos>#logo_fmdc {
@@ -47,7 +58,7 @@ button:focus, input[type="submit"]:focus {
 #suivant {
     height: 42px;
     margin-top: 20px;
-    margin-right: 8%;
+    margin-right: 5px;
     float: right;
     font-size: 24px;
     border: solid 1px white;
@@ -259,20 +270,24 @@ button:focus, input[type="submit"]:focus {
 }
 
 .bandeau_infos_right {
-    !important background-color: lightblue;
-    color:black;
+     !important background-color: lightblue;
+    color: black;
 }
 
 .bandeau_warning {
     color: darkred;
 }
 
-@media all and (min-width:0px) and (max-width: 800px) {
-    div {
-        display: none;
+@media (max-width: 640px) {
+    .desktop {
+        display:none;
     }
 
-    #container {
-        !important display:block;
+    span.desktop {
+        display:none;
+    }
+
+    img.desktop {
+        display:none;
     }
 }
