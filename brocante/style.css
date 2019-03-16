@@ -3,25 +3,23 @@ button:focus, input[type="submit"]:focus {
 }
 
 #logos {
-    position: absolute;
     display: block;
-    top: 60px;
-    left: 10px;
-    height: 80px;
-    width: 120px;
-    border: solid thin black;
-    border-radius: 4px;
+    width:100%;
+    height:15px;
+    margin:0px;
+    padding:0px;
 }
 
 #event_desc {
     text-align: center;
+    padding:0px;
     width: 100%;
+    height:15px;
+    margin:2px;
     display: block;
-    bottom: 5px;
-    position: absolute;
-    z-index: 1;
-    font-size: 11px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight:bold;
+    font-variant: small-caps;
 }
 
 #logos>#logo_carrefour {
@@ -289,5 +287,17 @@ button:focus, input[type="submit"]:focus {
 
     img.desktop {
         display:none;
+    }
+
+    #container {
+        margin: 0px;
+        overflow: hidden;
+        width:100%;
+        height: 100%;
+    }
+
+    #canvas {
+        width:100%;
+        height: 100%;
     }
 }

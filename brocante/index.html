@@ -235,8 +235,8 @@
             var tab_items = ['choix_emplacements', 'infos_exposant', 'paiement'];
             var nextTabID = tab_items[selectedTabItemIndex + 1];
             var shouldSelect = shouldSelectTabItem(nextTabID);
+
             var el = document.getElementById('suivant');
-console.log('updatetabItemsState ' + shouldSelect);
             enable(el, shouldSelect);
         }
 
@@ -397,9 +397,6 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
 
             updateTabItemsVisibility(tabItemValue);
             tabItemDidAppear(tabItemValue);
-
-            var el = document.getElementById('suivant');
-            enable(el, selectedTabItemIndex < 2);
         }
 
         function enable(el, flag) {
@@ -411,6 +408,8 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
             else {
                 cl.replace('enabled', 'disabled');
             }
+
+            console.log(el.id + " =" + el.className);
         }
 
         function downloadProject() {
@@ -471,10 +470,9 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
 <body onload="handleClientLoad()">
     <!-- <pre id="content" style="white-space: pre-wrap;"></pre> -->
 
-    <div id="logos" class="desktop">
-        <img id="logo_carrefour" class="desktop" src="LOGO_CARREFOUR_IMAGE.png" alt="">
-        <span id="event_desc" class="desktop">Vide-grenier Avenue de Laumière<br/>7 Avril 2019</span>
-    </div>
+        <div id="logos" class="desktop">
+            <span id="event_desc" class="desktop">Vide-grenier Avenue de Laumière le 7 Avril 2019</span>
+        </div>
 
     <div id="tabsbar" class="desktop">
         <button type="button" id="item-choix_emplacements" class="selected" value="choix_emplacements" onclick="didClickTabItem(this.value)">① Emplacements</button>
