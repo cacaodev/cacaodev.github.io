@@ -220,15 +220,24 @@
             console.log("Selection " + selection);
             emplacements_choisis = selection;
             var metrage = emplacements_choisis.length * 2;
-            var text = String.format("<b>Nombre d'emplacements</b>: {0} <b>Longueur</b>: {1}m <b>Numéros</b>: {2}", emplacements_choisis.length, metrage, emplacements_choisis.join(", "));
+            var text;
+            if (metrage > 0)
+                text = String.format("<b>{1}</b> mètre{4} soit <b>{0}</b> emplacement{3} avec le{3} numéro{3}: <b>{2}</b>", emplacements_choisis.length, metrage, emplacements_choisis.join(", "), s(emplacements_choisis.length), s(metrage));
+            else
+                text = "Aucun emplacement sélectionné";
+
             setDescription(text);
 
             var contigus = isContigu(emplacements_choisis);
+            setInstructions(contigus ? "Veuillez sélectionner un ou des emplacements libres en vert. Vous pouvez zoomer et déplacer le plan." : "");
             setWarning(!contigus, "⚠️ Les emplacements ne sont pas contigus");
-
-            setPanier("Total: " + metrage * TARIF_NORMAL + "€ (" + metrage * TARIF_REDUIT + "€ pour résidents)");
+            setPanier(metrage == 0 ? "" : "Total: " + metrage * TARIF_NORMAL + "€ (" + metrage * TARIF_REDUIT + "€ pour résidents)");
 
             updatetabItemsState();
+        }
+
+        function s(n) {
+            return (n > 1) ? "s" : "";
         }
 
         function updatetabItemsState() {
@@ -248,6 +257,9 @@
             document.getElementById("description-emplacements").innerHTML = text;
         }
 
+        function setInstructions(text) {
+            document.getElementById("emplacements-instructions").innerHTML = text;
+        }
         function setWarning(onOff, text) {
             document.getElementById('emplacements-warning').innerHTML = onOff ? text : "";
             document.getElementById('bandeau-description').style.backgroundColor = onOff ? "lightyellow" : "white";
@@ -376,10 +388,10 @@ console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + em
                 var template =
                     "\
 Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
-<b>   Nombre d'emplacements</b>: {0}\n\
-<b>Numeros des emplacements</b>: {1}\n\
-<b>                    Secteur{3}: {2}\n\
-<b>                    Prix</b>: {4} €";
+   Nombre d'emplacements: <b>{0}</b>\n\
+Numeros des emplacements: <b>{1}</b>\n\
+              Secteur{3}: <b>{2}</b>\n\
+                    Prix: <b>{4} €</b>";
 
                 var el = document.getElementById("paypal_header");
                 var text = String.format(template, emplacements_choisis.length, emplacements_choisis, secteurs, (secteurs.length > 1) ? "s" : "", emplacements_choisis.length * 2 * prix_metre);
@@ -471,7 +483,7 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
     <!-- <pre id="content" style="white-space: pre-wrap;"></pre> -->
 
         <div id="logos" class="desktop">
-            <span id="event_desc" class="desktop">Vide-grenier Avenue de Laumière le 7 Avril 2019</span>
+            <span id="event_desc" class="desktop">VIDE-GRENIER AVENUE DE LAUMIÈRE LE 7 AVRIL 2019</span>
         </div>
 
     <div id="tabsbar" class="desktop">
@@ -491,7 +503,7 @@ Vide-grenier Laumière du Dimanche 07 Avril 2019.\n\n\
             <button id="update" type="button" onclick="updateEmplacementsVendus()">Update</button>
             <button id="download" type="button" onclick="downloadProject()">Download</button>
 
-            <div id="selection-emplacements" class="bandeau_infos desktop">
+            <div id="emplacements-instructions" class="bandeau_infos desktop">
                 Veuillez sélectionner un ou des emplacements libres en vert. Vous pouvez zoomer et déplacer le plan.
             </div>
             <div id="emplacements-warning" class="bandeau_warning desktop"></div>
