@@ -84,7 +84,7 @@ tool.onMouseDrag = function(event) {
 
         current_line.removeOnDrag();
     } else if (shouldMoveMap) {
-        project.activeLayer.position += event.delta;
+        globals.moveBy(event.delta);
     } else if (shouldMoveGroupOnDrag) {
         //console.log("dragging group");
         selectedGroup.position += event.delta;
@@ -425,6 +425,9 @@ window.globals = {
     },
     zoomBy: function(deltaY) {
         view.zoom = getZoomLevel(view.zoom, deltaY);
+    },
+    moveBy: function(delta) {
+        project.activeLayer.position += delta;
     },
     setZoom: function(zoomLevel) {
         view.zoom = zoomLevel;

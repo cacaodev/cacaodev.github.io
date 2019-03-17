@@ -104,6 +104,29 @@
             return false;
         }
 
+        function touchMove(e) {
+            // cross-browser wheel delta
+            var e = window.event || e; // old IE support
+            e.preventDefault();
+
+            moveBy(e.delta);
+            return false;
+        }
+
+        function touchStart(e) {
+            cosnole.log(e);
+            return false;
+        }
+
+        function touchEnd(e) {
+            cosnole.log(e);
+            return false;
+        }
+
+        function moveBy(delta) {
+            globals.moveBy(delta);
+        }
+
         function zoomBy(delta) {
             globals.zoomBy(delta);
         }
@@ -141,6 +164,9 @@
 
         function handleClientLoad() {
             addWheelListener(document, MouseWheelHandler, false);
+            document.body.addEventListener('touchstart', touchStart, false);
+            document.body.addEventListener('touchmove', touchMove, false);
+            document.body.addEventListener('touchend', touchEnd, false);
 
             loadProject(function() {
                 setEditMode(false);
