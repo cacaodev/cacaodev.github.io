@@ -428,3 +428,9 @@ button, input[type="submit"] {
         background: #ddd;
     }
 }
+
+@media only screen and (min-width: 0px) and (max-width: 540px) and (orientation: landscape) {
+  #container {
+    transform: rotate(90deg);
+  }
+}
