@@ -423,6 +423,9 @@ window.globals = {
     selection: function() {
         return selectedShapes();
     },
+    zoomLevel: function() {
+        return view.zoom;
+    },
     zoomBy: function(deltaY) {
         view.zoom = getZoomLevel(view.zoom, deltaY);
     },
