@@ -436,7 +436,7 @@ button, input[type="submit"] {
 
   #map-zoomer {
 
-      height: 10px !important;
+      display: none !important;
 
   }
 }
