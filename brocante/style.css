@@ -433,4 +433,10 @@ button, input[type="submit"] {
   #container {
     transform: rotate(90deg);
   }
+
+  #map-zoomer {
+
+      height: 10px !important;
+
+  }
 }
