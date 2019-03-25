@@ -466,7 +466,7 @@ button, input[type="submit"] {
         background-color: green;
     }
 
-    #controls {
+    #controls, #map-zoomer {
         display: none;
     }
 }

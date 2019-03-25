@@ -103,7 +103,7 @@
             zoomBy(-e.deltaY);
 
             document.getElementById("map-zoomer").value = globals.zoomLevel();
-            
+
             return false;
         }
 
@@ -384,6 +384,7 @@ console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + em
                 params["Emplacements"] = emplacements_choisis.join("-");
                 params["Secteurs"] = secteurs.join("-");
                 params["Payé"] = "EN ATTENTE";
+                params["Total"] = emplacements_choisis.length * 2 * prix_metre;
 
                 var esc = encodeURIComponent;
                 var query = Object.keys(params).map(function(k){ return esc(k) + "=" + esc(params[k]); }).join('&');
