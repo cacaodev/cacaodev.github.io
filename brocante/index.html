@@ -22,6 +22,7 @@
         //var HOST_URL = "http://trac.uk.to:8000";
         var GOOGLE_SCRIPT_URL_RESERVATIONS_EN_LIGNE = "https://script.google.com/macros/s/AKfycbyoS7HYII5GsPzI5GWsF_Nd7ZnUVKjjIaU4T2XA08trT9YjSAQ/exec";
         var GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE = "https://script.google.com/macros/s/AKfycbxwqe4IjmI4PZlv03yEMrzlJ6Sr7pNYgdh5Odi1JmZTI_TThy69/exec";
+        var GOOGLE_SCRIPT_URL_RESERVATIONS_TELEPHONE = "https://script.google.com/macros/s/AKfycbzsjMtLQjD9-GXwpgIkhXprSptcq2cs44bl7ZXYh_BQUOTa6dxp/exec";
         var TARIF_NORMAL = 20;
         var TARIF_REDUIT = 15;
         var selectedTabItemIndex = -1;
@@ -218,6 +219,27 @@
 
                 if (json.result == "success") {
                     console.log("Emplacements vendus en ligne:" + json.emplacements.length);
+                    emplacements_vendus = emplacements_vendus.concat(json.emplacements);
+                    updateEmplacementsVendus();
+                    requestsCount--;
+                    if (requestsCount == 0) {
+                        didReceiveAllEmplacementsvendus();
+                    }
+                } else {
+                    console.warn(json.error);
+                    setDescription("");
+                    setWarning(true, "Une erreur est survenue lors du chargement. Veuillez ré-essayer plus tard.");
+                }
+            });
+
+            sendRequest((GOOGLE_SCRIPT_URL_RESERVATIONS_TELEPHONE + "?getemplacements=1"), function(data, err) {
+                var json = (err == null) ? JSON.parse(data) : {
+                    "result": "error",
+                    "error": err
+                };
+
+                if (json.result == "success") {
+                    console.log("Emplacements reserves par telephone:" + json.emplacements.length);
                     emplacements_vendus = emplacements_vendus.concat(json.emplacements);
                     updateEmplacementsVendus();
                     requestsCount--;
