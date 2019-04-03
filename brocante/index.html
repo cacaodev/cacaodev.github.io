@@ -166,6 +166,7 @@
         // }
 
         function handleClientLoad() {
+
             addWheelListener(document, MouseWheelHandler, false);
             document.body.addEventListener('touchstart', touchStart, false);
             document.body.addEventListener('touchmove', touchMove, false);
@@ -289,6 +290,7 @@
         function setInstructions(text) {
             document.getElementById("emplacements-instructions").innerHTML = text;
         }
+
         function setWarning(onOff, text) {
             document.getElementById('emplacements-warning').innerHTML = onOff ? text : "";
             document.getElementById('bandeau-description').style.backgroundColor = onOff ? "lightyellow" : "white";
@@ -334,7 +336,7 @@
                     return false;
                 }
             }
-console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + emplacements_choisis);
+            console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + emplacements_choisis);
             if (tabItemValue !== 'choix_emplacements' && emplacements_choisis.length == 0)
                 return false;
 
@@ -387,7 +389,9 @@ console.log('shouldSelectTabItem' + tabItemValue + " emplacements_choisis " + em
                 params["Total"] = emplacements_choisis.length * 2 * prix_metre;
 
                 var esc = encodeURIComponent;
-                var query = Object.keys(params).map(function(k){ return esc(k) + "=" + esc(params[k]); }).join('&');
+                var query = Object.keys(params).map(function(k) {
+                    return esc(k) + "=" + esc(params[k]);
+                }).join('&');
 
                 if (id_transaction !== null)
                     query += "&uuid=" + id_transaction;
@@ -444,10 +448,9 @@ Numeros des emplacements: <b>{1}</b>\n\
         function enable(el, flag) {
             var cl = el.classList;
 
-            if (flag)  {
+            if (flag) {
                 cl.replace('disabled', 'enabled');
-            }
-            else {
+            } else {
                 cl.replace('enabled', 'disabled');
             }
 
@@ -511,7 +514,6 @@ Numeros des emplacements: <b>{1}</b>\n\
 
 <body onload="handleClientLoad()">
     <!-- <pre id="content" style="white-space: pre-wrap;"></pre> -->
-
     <div id="logos" class="desktop">
         <span id="event_desc" class="desktop">VIDE-GRENIER AVENUE DE LAUMIÈRE LE 7 AVRIL 2019</span>
     </div>
@@ -536,7 +538,7 @@ Numeros des emplacements: <b>{1}</b>\n\
             <div id="emplacements-instructions" class="bandeau_infos desktop">
                 Veuillez sélectionner un ou des emplacements libres en vert. Vous pouvez zoomer et déplacer le plan.
             </div>
-            <div id="emplacements-warning" class="bandeau_warning desktop"></div>
+            <div id="emplacements-warning" class="bandeau_warning desktop">Merci de ne pas stationner en double file après 8H</div>
             <div id="panier" class="bandeau_infos_right desktop"></div>
         </div>
 
