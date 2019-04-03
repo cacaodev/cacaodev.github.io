@@ -167,8 +167,10 @@
 
         function handleClientLoad() {
 
-            if (location.search.indexOf("force") == -1 && new Date() < new Date("Wed Apr 03 2019 17:00:00 GMT+0200")) {
-                document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture Mercredi 03 Avril à 17H. Merci</p>");
+            var d = new Date("Tue Apr 04 2019 17:00:00 GMT+0200");
+
+            if (location.search.indexOf("force") == -1 && (new Date() < d)) {
+                document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture " + d.toLocaleDateString() + " à " d.toLocaleTimeString() + ". Merci</p>");
                 return;
             }
 
