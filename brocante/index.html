@@ -167,7 +167,7 @@
 
         function handleClientLoad() {
 
-            var hour = (new Date()).getHours());
+            var hour = (new Date()).getHours();
 
             if (location.search.indexOf("force") == -1 && hour >=7 && hour <= 14) {
                 document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture " + d.toLocaleDateString() + " à " + d.toLocaleTimeString() + ". Merci</p>");
