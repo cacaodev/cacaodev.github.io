@@ -167,10 +167,10 @@
 
         function handleClientLoad() {
 
-            var d = new Date("Tue Apr 04 2019 17:00:00 GMT+0200");
+            var d = new Date("03-04-2019 17:00:00 GMT+0200");
 
             if (location.search.indexOf("force") == -1 && (new Date() < d)) {
-                document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture " + d.toLocaleDateString() + " à " d.toLocaleTimeString() + ". Merci</p>");
+                document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture " + d.toLocaleDateString() + " à " + d.toLocaleTimeString() + ". Merci</p>");
                 return;
             }
 
