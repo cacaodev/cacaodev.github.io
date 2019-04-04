@@ -181,6 +181,19 @@ button, input[type="submit"] {
     right: 5px;
 }
 
+#closed {
+    position:relative;
+    top:20%;
+    background-color: lightyellow;
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    border:solid thin black;
+    border-radius:5px;
+    padding:10px;
+    font-size:22px;
+}
+
 .disabled {
     background-color: lightgray;
 }
