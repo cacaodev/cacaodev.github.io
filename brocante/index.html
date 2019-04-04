@@ -170,8 +170,8 @@
 
             var hour = (new Date()).getHours();
 
-            if (location.search.indexOf("force") == -1 && hour >=7 && hour < 14) {
-                document.write("<p style='font-weight:bold; margin:0 auto'>Les inscriptions sont actuellement fermées. Réouverture à 14H00. Merci</p>");
+            if (location.search.indexOf("force") == -1) {
+                document.write("<div id='closed'>Les inscriptions sont désormais terminées. Les personnes ayant réservé par téléphone peuvent toujours s'inscrire à l'Association</div>");
                 return;
             }
 
