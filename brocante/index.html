@@ -198,7 +198,7 @@
 
                 if (json.result == "success") {
                     console.log("Emplacements vendus sur place:" + json.emplacements.length);
-                    emplacements_vendus = emplacements_vendus.concat(json.emplacements);
+                    emplacements_vendus = emplacements_vendus.concat(json.content);
                     updateEmplacementsVendus();
                     requestsCount--;
                     if (requestsCount == 0) {
