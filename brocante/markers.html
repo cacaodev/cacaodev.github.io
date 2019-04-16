@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Brocante Laumière | Domiciles des exposants</title>
+    <!-- <link rel="stylesheet" href="grapick.min.css">
+    <script type="text/javascript" src="grapick.min.js"></script> -->
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            right: 60px;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid lightgray;
+            text-align: center;
+            font-family: 'Roboto', 'sans-serif';
+            line-height: 30px;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="floating-panel">
+        <!-- <input type="range" id="opacity" oninput="changeOption(this)" step="0.1" value="0" min="0" max="1" /> -->
+        <progress id="progress" max="100" value="0">0%</progress>
+    </div>
+    <div id="map"></div>
+    <script>
+        // This example requires the Visualization library. Include the libraries=visualization
+        // parameter when you first load the API. For example:
+        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+        var GOOGLE_MAPS_GEOCODING_DELAY = 800;
+        var MAX_ADRESSES = 200;
+        var GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE = "https://script.google.com/macros/s/AKfycbxwqe4IjmI4PZlv03yEMrzlJ6Sr7pNYgdh5Odi1JmZTI_TThy69/exec";
+
+        var map;
+        var geocoder;
+
+        function codeAddress(address, n, t) {
+            return new Promise(async (res, rej) => {
+                await wait(GOOGLE_MAPS_GEOCODING_DELAY * n);
+                console.log(`geocoding ${address}`);
+                geocoder.geocode({
+                    'address': address
+                }, function(results, status) {
+                    if (status == 'OK') {
+                        var loc = results[0].geometry.location;
+                        console.log(`geocoded ${address} => ${loc.toString()}`);
+                        document.getElementById('progress').value = (n + 1) / t * 100;
+                        if (n == 0) map.setCenter(loc);
+                        res(loc);
+                    } else {
+                        console.info(`Geocode was not successful for '${address}' with the following reason: ${status}`);
+                        res(null);
+                    }
+                });
+            });
+        }
+
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: {
+                    lat: 48.864716,
+                    lng: 2.349014
+                },
+                mapTypeId: 'terrain'
+            });
+
+            google.maps.event.addListener(map, 'zoom_changed', function() {});
+
+            // Create an array of alphabetical characters used to label the markers.
+            var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            fetch(`${GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE}?field=Adresse`)
+                .then(resp => resp.json())
+                .then(json => {
+                    return json.content.filter(s => s.length > 0);
+                })
+                .then(adresses => getPoints(adresses))
+                .then(locations => {
+                    var valid_locations = locations.filter(loc => loc !== null);
+                    console.log(`Got ${valid_locations.length} locations`);
+                    var icon = {
+                        path: "M-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0",
+                        fillColor: 'blue',
+                        fillOpacity: .6,
+                        anchor: new google.maps.Point(0, 0),
+                        strokeWeight: 0,
+                        scale: 1
+                    };
+
+                    var markers = valid_locations.map(function(location, i) {
+                        return new google.maps.Marker({
+                            position: location,
+                            icon: icon,
+                            animation: google.maps.Animation.DROP
+                        });
+                    });
+
+                    // Add a marker clusterer to manage the markers.
+                    var markerCluster = new MarkerClusterer(map, markers, {
+                        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                        scale:10
+                    });
+                })
+                .catch(err => console.warn(err));
+        }
+
+        async function wait(delay) {
+            return new Promise((res, rej) => {
+                setTimeout(res, delay, null);
+            });
+        }
+
+        function delayedPromise(promise, delay) {
+            return new Promise(async (res, rej) => {
+                await wait(delay);
+                res(promise.resolve);
+            });
+        }
+
+        function getPoints(adresses) {
+            var cropped_adresses = adresses.slice(0, MAX_ADRESSES);
+            var length = cropped_adresses.length;
+            var promises = cropped_adresses.map((addr, n) => {
+                return codeAddress(addr, n, length);
+            });
+
+            return Promise.all(promises);
+        }
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0lFrXyYHURFmjADSTZWJyM_T2wGz1v8&callback=initMap">
+    </script>
+</body>
+
+</html>
