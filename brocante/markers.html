@@ -49,7 +49,7 @@
         // parameter when you first load the API. For example:
         // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
 
-        var GOOGLE_MAPS_GEOCODING_DELAY = 800;
+        var GOOGLE_MAPS_GEOCODING_DELAY = 1000;
         var MAX_ADRESSES = 200;
         var GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE = "https://script.google.com/macros/s/AKfycbxwqe4IjmI4PZlv03yEMrzlJ6Sr7pNYgdh5Odi1JmZTI_TThy69/exec";
 
@@ -59,18 +59,19 @@
         function codeAddress(address, n, t) {
             return new Promise(async (res, rej) => {
                 await wait(GOOGLE_MAPS_GEOCODING_DELAY * n);
-                console.log(`geocoding ${address}`);
+                //console.log(`geocoding ${address}`);
                 geocoder.geocode({
                     'address': address
                 }, function(results, status) {
                     if (status == 'OK') {
                         var loc = results[0].geometry.location;
-                        console.log(`geocoded ${address} => ${loc.toString()}`);
-                        document.getElementById('progress').value = (n + 1) / t * 100;
+                        //console.log(`geocoded ${address} => ${loc.toString()}`);
+                        if (typeof n !== 'undefined') document.getElementById('progress').value = (n + 1) / t * 100;
                         if (n == 0) map.setCenter(loc);
                         res(loc);
                     } else {
-                        console.info(`Geocode was not successful for '${address}' with the following reason: ${status}`);
+                        console.warn(`Geocode was not successful for '${address}'\nwith the following reason: ${status}`);
+                        if (status == 'OVER_QUERY_LIMIT') setTimeout(codeAddress, 2000, address);
                         res(null);
                     }
                 });
@@ -92,7 +93,6 @@
             google.maps.event.addListener(map, 'zoom_changed', function() {});
 
             // Create an array of alphabetical characters used to label the markers.
-            var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
             fetch(`${GOOGLE_SCRIPT_URL_INSCRIPTIONS_SUR_PLACE}?field=Adresse`)
                 .then(resp => resp.json())
@@ -105,10 +105,10 @@
                     console.log(`Got ${valid_locations.length} locations`);
                     var icon = {
                         path: "M-10,0a10,10 0 1,0 20,0a10,10 0 1,0 -20,0",
-                        fillColor: 'blue',
+                        fillColor: 'rgba(59,135,253,1)',
                         fillOpacity: .6,
                         anchor: new google.maps.Point(0, 0),
-                        strokeWeight: 0,
+                        strokeWeight: 1,
                         scale: 1
                     };
 
@@ -123,7 +123,7 @@
                     // Add a marker clusterer to manage the markers.
                     var markerCluster = new MarkerClusterer(map, markers, {
                         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-                        scale:10
+                        scale:1
                     });
                 })
                 .catch(err => console.warn(err));
