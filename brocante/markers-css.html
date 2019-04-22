@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Example code adapted from goo.gl/uEx309 -->
+    <title>PanoMarker</title>
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 100%;
+  }
+  /* Optional: Makes the sample page fill the window. */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #floating-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+  }
+
+        .scene {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #CCC;
+            margin: 80px;
+            perspective: 500px;
+        }
+
+        #box {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: scale(1) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skewX(0deg) skewY(0deg);
+            /* transition: transform 1s; */
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        .box__face {
+            position: absolute;
+            border: 2px solid black;
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+
+        .box__face--front,
+        .box__face--back {
+            width: 100%;
+            height: 100%;
+            line-height: 200px;
+        }
+
+        .box__face--right,
+        .box__face--left {
+            width: 33.33%;
+            height: 100%;
+            left: 33.33%;
+            line-height: 200px;
+        }
+
+        .box__face--top,
+        .box__face--bottom {
+            width: 100%;
+            height: 50%;
+            top: 25%;
+            line-height: 100px;
+        }
+
+        .box__face--front {
+            background: hsla(0, 100%, 50%, 0.7);
+        }
+
+        .box__face--right {
+            background: hsla(60, 100%, 50%, 0.7);
+        }
+
+        .box__face--back {
+            background: hsla(120, 100%, 50%, 0.7);
+        }
+
+        .box__face--left {
+            background: hsla(180, 100%, 50%, 0.7);
+        }
+
+        .box__face--top {
+            background: hsla(240, 100%, 50%, 0.7);
+        }
+
+        .box__face--bottom {
+            background: hsla(300, 100%, 50%, 0.7);
+        }
+
+        .box__face--front {
+            transform: rotateY(0deg) translateZ(50px);
+        }
+
+        .box__face--back {
+            transform: rotateY(180deg) translateZ(50px);
+        }
+
+        .box__face--right {
+            transform: rotateY(90deg) translateZ(150px);
+        }
+
+        .box__face--left {
+            transform: rotateY(-90deg) translateZ(150px);
+        }
+
+        .box__face--top {
+            transform: rotateX(90deg) translateZ(100px);
+        }
+
+        .box__face--bottom {
+            transform: rotateX(-90deg) translateZ(100px);
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBF0lFrXyYHURFmjADSTZWJyM_T2wGz1v8"></script>
+    <script src="panomarker.js"></script>
+
+    <script>
+        var marker = null;
+        var scale = 1,
+            translateZ = 0,
+            skewX = 0,
+            skewY = 0,
+            rotateX = 0,
+            rotateY = 0,
+            rotateZ = 0;
+
+        var pov = {heading:320, pitch:0};
+
+        PanoMarker.prototype.newHTMLElement = function() {
+            var el = document.createElement('div');
+            el.innerHTML =
+                '<div id="box">\
+        <div class="box__face box__face--front">front</div>\
+        <div class="box__face box__face--back">back</div>\
+        <div class="box__face box__face--right">right</div>\
+        <div class="box__face box__face--left">left</div>\
+        <div class="box__face box__face--top">top</div>\
+        <div class="box__face box__face--bottom">bottom</div>\
+        </div>';
+
+            return el;
+        };
+
+        function initMap() {
+            var avenueLaumiere = {
+                lat: 48.8842463,
+                lng: 2.3800818
+            };
+
+            var container = document.getElementById('map');
+
+            var map = new google.maps.Map(container, {
+                center: avenueLaumiere,
+                zoom: 18,
+                streetViewControl: false
+            });
+
+            var panorama = new google.maps.StreetViewPanorama(container, {
+                position: avenueLaumiere,
+                pov:pov,
+                zoom:0,
+                visible:true,
+                panControl: true
+            });
+
+            marker = new PanoMarker({
+                pano: panorama,
+                container: container,
+                className: "scene",
+                id: "scene",
+                position:pov,
+                anchor: new google.maps.Point(150, 200),
+                size: new google.maps.Size(300,200),
+            });
+
+            marker.povChanged = function(currentPov) {
+                rotateY += (currentPov.heading - pov.heading);
+                rotateX += (currentPov.pitch - pov.pitch);
+
+                pov.heading = currentPov.heading;
+                pov.pitch = currentPov.pitch;
+                updateBoxStyle();
+
+                document.getElementById('position').innerHTML = `Heading:${Math.round(pov.heading,2)} Pitch:${Math.round(pov.pitch,2)}`;
+            };
+
+            marker.zoomChanged = function(currentZoom) {
+                scale = (currentZoom + 1) / 2;
+                updateBoxStyle();
+                updateInputValues();
+            };
+        }
+
+    function valueChange(el) {
+        switch (el.id) {
+            case 'pitch':
+                var pos = marker.getPosition();
+                pos.pitch = el.value;
+                marker.setPosition(pos);
+                pov = pos;
+                break;
+            case 'heading':
+            var pos = marker.getPosition();
+            pos.heading = el.value;
+            marker.setPosition(pos);
+            pov = pos;
+                break;
+            case 'rotateX':
+                rotateX = el.value;
+                updateBoxStyle();
+                break;
+            case 'rotateY':
+                rotateY = el.value;
+                updateBoxStyle();
+                break;
+            case 'rotateZ':
+                rotateZ = el.value;
+                updateBoxStyle();
+                break;
+            case 'scale':
+                scale = el.value;
+                updateBoxStyle();
+                break;
+            case 'skewX':
+                skewX = el.value;
+                updateBoxStyle();
+                break;
+            case 'skewY':
+                skewY = el.value;
+                updateBoxStyle();
+                break;
+            default:
+        }
+    }
+
+    function updateBoxStyle () {
+        var transform = `scale3d(${scale},${scale},${scale}) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) skewX(${skewX}deg) skewY(${skewY}deg)`;
+        document.getElementById('box').style.transform = transform;
+    }
+
+    function updateInputValues() {
+        document.getElementById('scale').value = scale;
+    }
+    </script>
+</head>
+
+<body onload="initMap();">
+    <div id="floating-panel">
+        <label id="position"></label><br>
+        <input id="pitch" type="range" min="-60" max="60" value="0" oninput="valueChange(this)" />
+        <input id="heading" type="range" min="-180" max="180" value="0" oninput="valueChange(this)" />
+        <br><label>Scale:</label>
+        <input id="scale" type="range" min="0" max="2" value="1" step="any" oninput="valueChange(this)" />
+        <br><label>Rotation:</label>
+        <input id="rotateX" type="range" min="-90" max="90" value="0" oninput="valueChange(this)" />
+        <input id="rotateY" type="range" min="-90" max="90" value="0" oninput="valueChange(this)" />
+        <input id="rotateZ" type="range" min="-90" max="90" value="0" oninput="valueChange(this)" />
+        <br><label>Skew:</label>
+        <input id="skewX" type="range" min="-30" max="30" value="0" oninput="valueChange(this)" />
+        <input id="skewY" type="range" min="-30" max="30" value="0" oninput="valueChange(this)" />
+    </div>
+
+    <div id="map"></div>
+</body>
+
+</html>
