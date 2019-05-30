@@ -173,7 +173,7 @@
         }
 
         var wsc = new WebSocketClient();
-        wsc.open('ws://' + 'coco.local' + ':81/');
+        wsc.open('wss://' + 'coco.local' + ':81/');
 
         wsc.onopen = function(e) {
             console.log('WebSocketClient connected:', e);
