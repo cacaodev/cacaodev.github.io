@@ -210,11 +210,14 @@
             };
 
             getWSSHostname('http://node-tracker.herokuapp.com/store?get=ip', function(hostname, error) {
-                if (error == null) {
-                    console.log('connecting to ws://' + hostname);
-                    var wsc = new WebSocketClient();
-                    wsc.open('ws://' + hostname + ':' + WS_PORT + '/');
+                if (error !== null) {
+                    console.warn(error);
+                    return;
                 }
+
+                console.log('connecting to ws://' + hostname);
+                var wsc = new WebSocketClient();
+                wsc.open('ws://' + hostname + ':' + WS_PORT + '/');
 
                 wsc.onopen = function(e) {
                     console.log('WebSocketClient connected: ' + e);
