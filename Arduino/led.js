@@ -92,7 +92,7 @@ var sendMessage = function(value) {
     if (value == current_message)
         return;
 
-    console.log('send sendMessage ' + value);
+    //console.log('send sendMessage ' + value);
     var req = new XMLHttpRequest();
 
     req.onreadystatechange = function(event) {
@@ -102,7 +102,7 @@ var sendMessage = function(value) {
             } else if (this.status === 250) {
                 document.write(this.responseText);
             } else {
-                console.log('Erreur: ' + this.status);
+                console.warn('Erreur: ' + this.status);
                 colorDidChange(100, 'AAAAAA');
             }
         }
@@ -125,7 +125,7 @@ var stopTimer = function() {
 }
 
 var nextMessage = function(msg) {
-    console.log('nextMessage ' + msg);
+    //console.log('nextMessage ' + msg);
     next_message = msg;
 }
 
