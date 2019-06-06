@@ -110,7 +110,7 @@ var colorDidChange = function(connection_id, color) {
         persistent.style.backgroundColor = '#' + color;
 }
 
-function onLoad() {
+var onLoad = function() {
     var colorWheel = generateColorWheel(600);
     // //Add color wheel canvas to document
     document.body.appendChild(colorWheel);
