@@ -49,6 +49,7 @@
         var dragging = false;
         var connected = false;
         var sendMessage;
+        var persistent;
         /**
          * degreesToRadians
          *
@@ -274,9 +275,8 @@
         }
 
         function colorDidChange(connection_id, color) {
-            var persistent = document.getElementById('persistent');
             if (dragging)
-                persistent.style.backgroundColor = color;
+                persistent.style.backgroundColor = '#' + color;
 
             var b = document.getElementById('connection_' + connection_id);
 
@@ -403,6 +403,7 @@
             document.body.appendChild(colorWheel);
             //Add ouput field
             //var p = document.body.appendChild(document.createElement('p'));
+            persistent = document.getElementById('persistent');
 
             /**
              * colorWheelMouse
@@ -454,7 +455,6 @@
                 e.preventDefault();
                 dragging = false;
 
-                var persistent = document.getElementById('persistent');
                 if (persistent.value == '0') {
                     sendMessage('C000000');
                 } else {
