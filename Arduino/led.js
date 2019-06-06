@@ -106,7 +106,9 @@ var sendMessage = function(value) {
 };
 
 var colorDidChange = function(connection_id, color) {
-    if (dragging)
+    if (!dragging && persistent.value == '0')
+        persistent.style.backgroundColor = '#FFFFFF';
+    else
         persistent.style.backgroundColor = '#' + color;
 }
 
@@ -156,7 +158,7 @@ colorWheel.addEventListener('touchend', function(e) {
     dragging = false;
 
     if (persistent.value == '0') {
-        sendMessage('C101010');
+        sendMessage('C000000');
     } else {
         sendMessage('S');
     }
