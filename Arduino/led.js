@@ -156,7 +156,7 @@ colorWheel.addEventListener('touchend', function(e) {
     dragging = false;
 
     if (persistent.value == '0') {
-        sendMessage('C000000');
+        sendMessage('C101010');
     } else {
         sendMessage('S');
     }
