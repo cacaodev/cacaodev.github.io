@@ -109,7 +109,7 @@ var sendMessage = function(value) {
 
 var startTimer = function() {
     if (timer_id == null)
-        timer_id = window.setInterval(sendMessage, 50, current_color);
+        timer_id = window.setInterval(sendMessage, 50, next_message);
 }
 
 var stopTimer = function() {
