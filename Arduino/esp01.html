@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en' dir='ltr'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>LED DE COCO</title>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+        }
+        .enabled {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        body {
+            margin: 10px;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .rounded,
+        .connection {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: 10px;
+            right: 0px;
+            margin: 10px;
+            padding:0px;
+            border-radius: 25px;
+            background-color: white;
+            border: thin solid lightgray;
+            font-size: 20;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .on {
+            border: thick solid black;
+        }
+
+        .off {
+            border: thin solid lightgray;
+        }
+
+        .live {
+            border: thick solid orange;
+        }
+    </style>
+
+</head>
+<body>
+    <button id='persistent' class='rounded on' value='1' onclick='togglePersistent(this);'></button>
+    <script src='http://cacaodev.github.io/Arduino/led.js'></script>
+</body>
+
+</html>
