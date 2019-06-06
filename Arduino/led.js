@@ -110,58 +110,56 @@ var colorDidChange = function(connection_id, color) {
         persistent.style.backgroundColor = '#' + color;
 }
 
-var onLoad = function() {
-    var colorWheel = generateColorWheel(600);
-    // //Add color wheel canvas to document
-    document.body.appendChild(colorWheel);
-    // //Add ouput field
-    var p = document.body.appendChild(document.createElement('p'));
-    persistent = document.getElementById('persistent');
+var colorWheel = generateColorWheel(600);
+// //Add color wheel canvas to document
+document.body.appendChild(colorWheel);
+// //Add ouput field
+var p = document.body.appendChild(document.createElement('p'));
+persistent = document.getElementById('persistent');
 
-    var componentToHex = function(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? '0' + hex : hex;
-    }
-
-    var rgbToHex = function(r, g, b) {
-        return componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-
-    var colorWheelEvent = function(evt, modifier) {
-        var ctx = colorWheel.getContext('2d');
-        var data = ctx.getImageData(evt.touches[0].clientX, evt.touches[0].clientY, 1, 1);
-        p.innerHTML = 'R=' + data.data[0] + 'V=' + data.data[1] + 'B=' + data.data[2];
-        var hexcolor = rgbToHex(data.data[0], data.data[1], data.data[2]);
-        sendMessage(modifier + hexcolor);
-    }
-
-    //Bind mouse event
-    colorWheel.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        if (!dragging) return;
-        colorWheelEvent(e, 'C');
-    }, {
-        passive: false
-    });
-
-    colorWheel.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        dragging = true;
-        colorWheelEvent(e, 'C');
-    }, {
-        passive: false
-    });
-
-    colorWheel.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        dragging = false;
-
-        if (persistent.value == '0') {
-            sendMessage('C000000');
-        } else {
-            sendMessage('S');
-        }
-    }, {
-        passive: false
-    });
+var componentToHex = function(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? '0' + hex : hex;
 }
+
+var rgbToHex = function(r, g, b) {
+    return componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+var colorWheelEvent = function(evt, modifier) {
+    var ctx = colorWheel.getContext('2d');
+    var data = ctx.getImageData(evt.touches[0].clientX, evt.touches[0].clientY, 1, 1);
+    p.innerHTML = 'R=' + data.data[0] + 'V=' + data.data[1] + 'B=' + data.data[2];
+    var hexcolor = rgbToHex(data.data[0], data.data[1], data.data[2]);
+    sendMessage(modifier + hexcolor);
+}
+
+//Bind mouse event
+colorWheel.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (!dragging) return;
+    colorWheelEvent(e, 'C');
+}, {
+    passive: false
+});
+
+colorWheel.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    dragging = true;
+    colorWheelEvent(e, 'C');
+}, {
+    passive: false
+});
+
+colorWheel.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    dragging = false;
+
+    if (persistent.value == '0') {
+        sendMessage('C000000');
+    } else {
+        sendMessage('S');
+    }
+}, {
+    passive: false
+});
