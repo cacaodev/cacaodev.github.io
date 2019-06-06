@@ -1,5 +1,7 @@
 var dragging = false;
 var persistent;
+var timer_id = null;
+var next_message = "000000";
 
 function degreesToRadians(degrees) {
     return degrees * (Math.PI / 180);
@@ -105,6 +107,20 @@ var sendMessage = function(value) {
     req.send(null);
 };
 
+var startTimer = function() {
+    if (timer_id == null)
+        timer_id = window.setInterval(sendMessage, 50, current_color);
+}
+
+var stopTimer = function() {
+    window.clearInterval(timer_id);
+    timer_id = null;
+}
+
+var nextMessage = function(msg) {
+    next_message = msg;
+}
+
 var colorDidChange = function(connection_id, color) {
     if (!dragging && persistent.value == '0')
         persistent.style.backgroundColor = '#FFFFFF';
@@ -133,10 +149,19 @@ var colorWheelEvent = function(evt, modifier) {
     var data = ctx.getImageData(evt.touches[0].clientX, evt.touches[0].clientY, 1, 1);
     p.innerHTML = 'R=' + data.data[0] + 'V=' + data.data[1] + 'B=' + data.data[2];
     var hexcolor = rgbToHex(data.data[0], data.data[1], data.data[2]);
-    sendMessage(modifier + hexcolor);
+    nextMessage(modifier + hexcolor);
 }
 
 //Bind mouse event
+colorWheel.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    dragging = true;
+    startTimer();
+    colorWheelEvent(e, 'C');
+}, {
+    passive: false
+});
+
 colorWheel.addEventListener('touchmove', function(e) {
     e.preventDefault();
     if (!dragging) return;
@@ -145,16 +170,9 @@ colorWheel.addEventListener('touchmove', function(e) {
     passive: false
 });
 
-colorWheel.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    dragging = true;
-    colorWheelEvent(e, 'C');
-}, {
-    passive: false
-});
-
 colorWheel.addEventListener('touchend', function(e) {
     e.preventDefault();
+    stopTimer();
     dragging = false;
 
     if (persistent.value == '0') {
