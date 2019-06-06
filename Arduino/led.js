@@ -108,7 +108,7 @@ var sendMessage = function(value) {
         }
     };
 
-    req.open('GET', 'http://' + '192.168.0.10' + '/color?c=' + value, true);
+    req.open('GET', 'http://' + location.hostname + '/color?c=' + value, true);
     req.send(null);
 };
 
