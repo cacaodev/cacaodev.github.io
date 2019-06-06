@@ -1,6 +1,7 @@
 var dragging = false;
 var persistent;
 var timer_id = null;
+var current_message = null;
 var next_message = "000000";
 
 function degreesToRadians(degrees) {
@@ -88,6 +89,10 @@ function togglePersistent(button) {
 }
 
 var sendMessage = function(value) {
+    if (value == current_message)
+        return;
+
+    console.log('send sendMessage ' + value);
     var req = new XMLHttpRequest();
 
     req.onreadystatechange = function(event) {
@@ -109,7 +114,9 @@ var sendMessage = function(value) {
 
 var startTimer = function() {
     if (timer_id == null)
-        timer_id = window.setInterval(sendMessage, 50, next_message);
+        timer_id = window.setInterval(function() {
+            sendMessage(next_message);
+        }, 100);
 }
 
 var stopTimer = function() {
@@ -118,6 +125,7 @@ var stopTimer = function() {
 }
 
 var nextMessage = function(msg) {
+    console.log('nextMessage ' + msg);
     next_message = msg;
 }
 
@@ -126,6 +134,8 @@ var colorDidChange = function(connection_id, color) {
         persistent.style.backgroundColor = '#FFFFFF';
     else
         persistent.style.backgroundColor = '#' + color;
+
+    current_message = color;
 }
 
 var colorWheel = generateColorWheel(600);
