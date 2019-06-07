@@ -50,11 +50,13 @@ button:focus {
     left:570px;
 }
 
+#container {
+    text-align: center;
+    margin-top:40%;
+}
+
 #loading{
     color:white;
     font-size:64px;
-    position:absolute;
-    display:inline;
-    top:40%;
-    left:25%;
+    display:inline-block;
 }
