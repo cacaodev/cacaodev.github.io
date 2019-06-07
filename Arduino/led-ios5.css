@@ -1,0 +1,57 @@
+html,
+body {
+    overflow: hidden;
+}
+
+body {
+    margin: 10px;
+    background-color: black;
+    height:100%;
+    width:100%;
+}
+
+.enabled {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+button:focus {
+    outline: none;
+}
+
+.rounded,
+.connection {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    left: 768px;
+    margin: 10px;
+    padding:0px;
+    border-radius: 25px;
+    background-color: white;
+    border: thin solid lightgray;
+    font-size: 20;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.on {
+    border: thick solid black;
+}
+
+.off {
+    border: thin solid lightgray;
+}
+
+.live {
+    border: thick solid orange;
+}
+
+#loading{
+    color:white;
+    font-size:64px;
+    position:absolute;
+    display:inline;
+    top:40%;
+    left:35%;
+}

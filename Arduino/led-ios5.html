@@ -1,68 +1,22 @@
 <!DOCTYPE html>
 <html lang='en' dir='ltr'>
-<meta name="viewport" content="width=768, height=1024, initial-scale=1.2, maximum-scale=2">
-<meta http-equiv="Cache-Control" content="public, max-age=31536000">
+<meta name='viewport' content='width=768, height=1024, initial-scale=1.2, maximum-scale=2'>
+<meta http-equiv='Cache-Control' content='public, max-age=31536000'>
 <head>
     <meta charset='utf-8'>
     <title>LED DE COCO</title>
-    <style>
-        html,
-        body {
-            overflow: hidden;
-        }
-        .enabled {
-            background-color: rgba(255, 255, 255, 1);
-        }
-
-        body {
-            margin: 10px;
-        }
-
-        button:focus {
-            outline: none;
-        }
-
-        .rounded,
-        .connection {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            top: 10px;
-            left: 768px;
-            margin: 10px;
-            padding:0px;
-            border-radius: 25px;
-            background-color: white;
-            border: thin solid lightgray;
-            font-size: 20;
-            font-weight: bold;
-            font-family: monospace;
-        }
-
-        .on {
-            border: thick solid black;
-        }
-
-        .off {
-            border: thin solid lightgray;
-        }
-
-        .live {
-            border: thick solid orange;
-        }
-    </style>
-    <script id='myScript'></script>
+    <link rel='stylesheet' type='text/css' href='http://cacaodev.github.io/Arduino/led-ios5.css'/>
+    <script id='myScript' async defer></script>
 </head>
 
 <body>
-    <button id='persistent' class='rounded on' value='1' onclick='togglePersistent(this);'></button>
+    <div id='loading'>Chargement ...</div>
     <script type='text/javascript'>
-        let resourcePath = 'http://cacaodev.github.io/Arduino/led.js';
+        var resourcePath = 'http://cacaodev.github.io/Arduino/led-ios5.js';
         if (location.search.indexOf('reload') !== -1)
             resourcePath += '?v=' + Date.now();
 
         document.getElementById('myScript').src = resourcePath;
     </script>
 </body>
-
 </html>

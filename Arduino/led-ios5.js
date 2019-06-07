@@ -8,10 +8,17 @@ var SERVER_PORT = '80';
 
 var colorWheel = generateColorWheel(600);
 // //Add color wheel canvas to document
+document.body.removeChild(document.getElementById('loading'));
+document.body.style.backgroundColor = '#FFFFFF';
 document.body.appendChild(colorWheel);
 // //Add ouput field
-var p = document.body.appendChild(document.createElement('p'));
-persistent = document.getElementById('persistent');
+//var p = document.body.appendChild(document.createElement('p'));
+persistent = document.createElement('button');
+persistent.id = 'persistent';
+persistent.className = 'rounded on';
+persistent.value = '1';
+persistent.onclick = 'togglePersistent(this);';
+document.body.appendChild(persistent);
 
 function degreesToRadians(degrees) {
     return degrees * (Math.PI / 180);
@@ -157,9 +164,10 @@ var rgbToHex = function(r, g, b) {
 }
 
 var colorWheelEvent = function(evt, modifier) {
-    var ctx = colorWheel.getContext('2d');
-    var data = ctx.getImageData(evt.touches[0].clientX, evt.touches[0].clientY, 1, 1);
-    p.innerHTML = 'R=' + data.data[0] + 'V=' + data.data[1] + 'B=' + data.data[2];
+    var ctx = colorWheel.getContext('2d'),
+        touch = evt.touches[0];
+    var data = ctx.getImageData(touch.clientX, touch.clientY, 1, 1);
+    //p.innerHTML = 'R=' + data.data[0] + ' V=' + data.data[1] + ' B=' + data.data[2];
     var hexcolor = rgbToHex(data.data[0], data.data[1], data.data[2]);
     nextMessage(modifier + hexcolor);
 }
