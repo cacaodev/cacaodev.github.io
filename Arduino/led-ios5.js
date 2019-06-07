@@ -17,7 +17,9 @@ persistent = document.createElement('button');
 persistent.id = 'persistent';
 persistent.className = 'rounded on';
 persistent.value = '1';
-persistent.onclick = 'togglePersistent(this);';
+persistent.addEventListener('click', function(e) {
+    togglePersistent(persistent);
+});
 document.body.appendChild(persistent);
 
 function degreesToRadians(degrees) {
