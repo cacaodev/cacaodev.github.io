@@ -8,7 +8,7 @@ var SERVER_PORT = '80';
 
 var colorWheel = generateColorWheel(600);
 // //Add color wheel canvas to document
-document.body.removeChild(document.getElementById('loading'));
+document.body.removeChild(document.getElementById('container'));
 document.body.style.backgroundColor = '#FFFFFF';
 document.body.appendChild(colorWheel);
 // //Add ouput field
