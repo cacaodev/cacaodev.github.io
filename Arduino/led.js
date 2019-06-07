@@ -1,8 +1,17 @@
+
 var dragging = false;
 var persistent;
 var timer_id = null;
 var current_message = null;
 var next_message = "000000";
+var SERVER_PORT = '80';
+
+var colorWheel = generateColorWheel(600);
+// //Add color wheel canvas to document
+document.body.appendChild(colorWheel);
+// //Add ouput field
+var p = document.body.appendChild(document.createElement('p'));
+persistent = document.getElementById('persistent');
 
 function degreesToRadians(degrees) {
     return degrees * (Math.PI / 180);
@@ -137,13 +146,6 @@ var colorDidChange = function(connection_id, color) {
 
     current_message = color;
 }
-
-var colorWheel = generateColorWheel(600);
-// //Add color wheel canvas to document
-document.body.appendChild(colorWheel);
-// //Add ouput field
-var p = document.body.appendChild(document.createElement('p'));
-persistent = document.getElementById('persistent');
 
 var componentToHex = function(c) {
     var hex = c.toString(16);

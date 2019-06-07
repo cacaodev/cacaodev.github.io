@@ -3,6 +3,7 @@
 
 <head>
     <meta charset='utf-8'>
+    <meta http-equiv="Cache-Control" content="public, max-age=31536000">
     <style type='text/css'>
         .enabled {
             background-color: rgba(255, 255, 255, 1);
@@ -417,11 +418,11 @@
                 var ctx = colorWheel.getContext('2d');
 
                 if (touchDevice) {
-                    x = evt.touches[0].clientX,
-                        y = evt.touches[0].clientY;
+                    x = evt.touches[0].clientX;
+                    y = evt.touches[0].clientY;
                 } else {
-                    x = evt.offsetX,
-                        y = evt.offsetY;
+                    x = evt.offsetX;
+                    y = evt.offsetY;
                 }
 
                 data = ctx.getImageData(x, y, 1, 1);
