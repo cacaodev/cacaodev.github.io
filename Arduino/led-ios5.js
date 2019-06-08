@@ -5,7 +5,7 @@ var timer_id = null;
 var current_message = null;
 var next_message = "000000";
 var SERVER_PORT = '80';
-var HTTP_REQUEST_INTERVAL = 80;
+var HTTP_REQUEST_INTERVAL = 120;
 
 var colorWheel = generateColorWheel(600);
 // //Add color wheel canvas to document
