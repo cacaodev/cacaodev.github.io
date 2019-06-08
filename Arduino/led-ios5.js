@@ -5,6 +5,7 @@ var timer_id = null;
 var current_message = null;
 var next_message = "000000";
 var SERVER_PORT = '80';
+var HTTP_REQUEST_INTERVAL = 80;
 
 var colorWheel = generateColorWheel(600);
 // //Add color wheel canvas to document
@@ -128,13 +129,14 @@ var sendMessage = function(value) {
 
     req.open('GET', 'http://' + location.hostname + '/color?c=' + value, true);
     req.send(null);
+    current_message = value;
 };
 
 var startTimer = function() {
     if (timer_id == null)
         timer_id = window.setInterval(function() {
             sendMessage(next_message);
-        }, 100);
+        }, HTTP_REQUEST_INTERVAL);
 }
 
 var stopTimer = function() {
@@ -152,8 +154,6 @@ var colorDidChange = function(connection_id, color) {
         persistent.style.backgroundColor = '#FFFFFF';
     else
         persistent.style.backgroundColor = '#' + color;
-
-    current_message = color;
 }
 
 var componentToHex = function(c) {
@@ -198,9 +198,9 @@ colorWheel.addEventListener('touchend', function(e) {
     dragging = false;
 
     if (persistent.value == '0') {
-        sendMessage('C000000');
+        nextMessage('C000000');
     } else {
-        sendMessage('S');
+        nextMessage('S');
     }
 }, {
     passive: false
