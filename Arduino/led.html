@@ -276,10 +276,19 @@
         }
 
         function colorDidChange(connection_id, color) {
+            console.log('color change ' + color);
+
             if (dragging)
                 persistent.style.backgroundColor = '#' + color;
 
+            if (persistent.value == '0') persistent.style.backgroundColor = 'white';
+
             var b = document.getElementById('connection_' + connection_id);
+
+            if (b == null) {
+                console.warn('Unkwown connection id ' + connection_id);
+                return;
+            }
 
             var current_timeout = b._timeout;
             if (typeof current_timeout !== 'undefined' && current_timeout !== null) {
@@ -291,11 +300,8 @@
             b._timeout = window.setTimeout(function() {
                 b.classList.toggle('live', false);
                 window.clearTimeout(b._timeout);
-                if (persistent.value == '0') persistent.style.backgroundColor = 'white';
                 b._timeout = null;
-            }, 1000);
-
-            console.log('color change ' + color);
+            }, 500);
         }
 
         function layoutConnections(connections) {
