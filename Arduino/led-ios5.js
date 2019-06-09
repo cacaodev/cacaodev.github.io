@@ -1,10 +1,8 @@
-
 var dragging = false;
 var persistent;
 var timer_id = null;
 var current_message = null;
-var next_message = "000000";
-var SERVER_PORT = '80';
+var next_message = "C000000";
 var HTTP_REQUEST_INTERVAL = 120;
 
 var colorWheel = generateColorWheel(600);
@@ -133,10 +131,14 @@ var sendMessage = function(value) {
 };
 
 var startTimer = function() {
-    if (timer_id == null)
+    if (timer_id == null) {
+        var param = getParam('interval');
+        var interval = param ? parseInt(param) : HTTP_REQUEST_INTERVAL;
+
         timer_id = window.setInterval(function() {
             sendMessage(next_message);
-        }, HTTP_REQUEST_INTERVAL);
+        }, interval);
+    }
 }
 
 var stopTimer = function() {
@@ -172,6 +174,25 @@ var colorWheelEvent = function(evt, modifier) {
     //p.innerHTML = 'R=' + data.data[0] + ' V=' + data.data[1] + ' B=' + data.data[2];
     var hexcolor = rgbToHex(data.data[0], data.data[1], data.data[2]);
     nextMessage(modifier + hexcolor);
+}
+
+var getParam = function(param) {
+    var result = {};
+    var search = location.search;
+
+    if (search.length <= 1)
+        return;
+
+    var arr = search.substring(1).split('&');
+    for (var i = 0; i < arr.length; i++) {
+        var e = arr[i].split('='),
+            p = e[0];
+
+        if (p == param)
+            return (e.length < 2) ? "" : e[1];
+    }
+
+    return null;
 }
 
 //Bind mouse event
