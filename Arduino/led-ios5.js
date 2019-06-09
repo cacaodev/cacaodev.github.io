@@ -219,9 +219,9 @@ colorWheel.addEventListener('touchend', function(e) {
     dragging = false;
 
     if (persistent.value == '0') {
-        nextMessage('C000000');
+        sendMessage('C000000');
     } else {
-        nextMessage('S');
+        sendMessage('S');
     }
 }, {
     passive: false
