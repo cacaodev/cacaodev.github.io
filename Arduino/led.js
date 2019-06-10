@@ -218,9 +218,10 @@ function getWSSHostname(url, callback) {
     }
 
     var req = new XMLHttpRequest();
-    req.setRequestHeader("Access-Control-Allow-Origin", "*");
     req.onreadystatechange = function(event) {
-        if (this.readyState === XMLHttpRequest.DONE) {
+        if (this.readyState === XMLHttpRequest.OPENED) {
+            req.setRequestHeader("Access-Control-Allow-Origin", "*");
+        } else if (this.readyState === XMLHttpRequest.DONE) {
             if (this.status === 200) {
                 callback(JSON.parse(this.responseText).value, null);
             } else {
