@@ -207,7 +207,7 @@ getWSSHostname('http://node-tracker.herokuapp.com/store?get=ip', function(hostna
 function getWSSHostname(url, callback) {
     var wsshost = null;
 
-    if (location.hostname.indexOf('192.168.0.' !== -1))
+    if (location.hostname.indexOf('192.168.0.') !== -1)
         wsshost = location.hostname;
     else
         wsshost = new URLSearchParams(location.search).get('wss');
