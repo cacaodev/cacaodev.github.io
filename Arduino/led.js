@@ -202,12 +202,14 @@ getWSSHostname('http://node-tracker.herokuapp.com/store?get=ip', function(hostna
     sendMessage = function(m) {
         wsc.send(m);
     };
+
+    loadPage();
 });
 
 function getWSSHostname(url, callback) {
     var wsshost = null;
 
-    if (location.hostname.indexOf('192.168.0.') !== -1)
+    if (location.hostname.indexOf('192.168') !== -1)
         wsshost = location.hostname;
     else
         wsshost = new URLSearchParams(location.search).get('wss');
@@ -363,7 +365,7 @@ function isLocalIP(client, server) {
 
 //TEST
 //Get color wheel canvas
-function onLoad() {
+function loadPage() {
     var colorWheel = generateColorWheel(Math.min(document.body.clientWidth, 800));
     //Add color wheel canvas to document
     document.body.appendChild(colorWheel);
@@ -430,5 +432,3 @@ function onLoad() {
         passive: false
     });
 }
-
-onLoad();
