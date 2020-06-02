@@ -1,104 +1,133 @@
 {
+    "minBonnesReponses" : 3,
     "questions": [
         {
-            "id": 91,
+            "id": 101,
             "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
+                "Un legume",
+                "Un fruit",
+                "Un objet"
             ],
-            "prompt": "91 QUESTION QUESTION QUESTION",
+            "prompt": "Une pomme est:",
+            "validation": 2
+        },
+        {
+            "id": 102,
+            "answers": [
+                "Toronto",
+                "Ottawa",
+                "Monreal"
+            ],
+            "prompt": "La capitale du Canada est:",
+            "validation": 2
+        },
+        {
+            "id": 103,
+            "answers": [
+                "six",
+                "neuf",
+                "douze"
+            ],
+            "prompt": "Trois fois trois egale",
+            "validation": 2
+        },
+        {
+            "id": 104,
+            "answers": [
+                "deux",
+                "quatre",
+                "trois"
+            ],
+            "prompt": "Combien sont les trois petits cochons ?",
+            "validation": 3
+        },
+        {
+            "id": 105,
+            "answers": [
+                "deux",
+                "trois",
+                "quatre"
+            ],
+            "prompt": "Combien sont les 3 mousquetaires ?",
+            "validation": 3
+        },
+        {
+            "id": 106,
+            "answers": [
+                "Elle croit",
+                "Elle croasse",
+                "Elle craint"
+            ],
+            "prompt": "Que fait la grenouille ?",
+            "validation": 2
+        },
+        {
+            "id": 107,
+            "answers": [
+                "trois",
+                "sept moins quatre",
+                "Racine de quatre"
+            ],
+            "prompt": "Combien font deux ?",
+            "validation": 3
+        },
+        {
+            "id": 108,
+            "answers": [
+                "T'as l'heure ?",
+                "C'est quel heure ?",
+                "Quelle heure est-il ?"
+            ],
+            "prompt": "Quelle est la question ?",
+            "validation": 3
+        },
+        {
+            "id": 109,
+            "answers": [
+                "ETAIT",
+                "ETE",
+                "ETAIS"
+            ],
+            "prompt": "Il ... une fois",
             "validation": 1
         },
         {
-            "id": 92,
+            "id": 110,
             "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
+                "Herve",
+                "Herge",
+                "Air G"
             ],
-            "prompt": "92 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 93,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "93 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 94,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "94 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 95,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "95 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 96,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "96 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 97,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "97 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 98,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "98 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 99,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "99 QUESTION QUESTION QUESTION",
-            "validation": 1
-        },
-        {
-            "id": 910,
-            "answers": [
-                "REPONSE 1",
-                "REPONSE 2",
-                "REPONSE 3"
-            ],
-            "prompt": "910 QUESTION QUESTION QUESTION",
-            "validation": 1
+            "prompt": "Qui dessine Tintin ?",
+            "validation": 2
         }
+    ],
+    "prompts": [
+      {
+        "identifier": "failed",
+        "prompt": "MAUVAISE REPONSE ... ON RECOMMENCE",
+        "action": 1,
+        "duration": 2000,
+        "position": 0
+      },
+      {
+        "identifier": "ouverture",
+        "prompt": "     BRAVO !!!                             OUVERTURE DE LA          BOITE",
+        "action": 2,
+        "position": 1
+      },
+      {
+        "identifier": "intro",
+        "prompt": "POUR OUVRIR CETTE BOITE REPOND A CES  3 QUESTIONS. Appuie sur le bouton 1 pour continuer.",
+        "action": 0,
+        "position": 0
+      },
+      {
+        "identifier": "bravo",
+        "prompt": "                        BONNE REPONSE",
+        "action": 1,
+        "duration": 2000,
+        "position": 1
+      }
     ]
 }
