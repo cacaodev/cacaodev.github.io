@@ -44,9 +44,9 @@
         {
             "id": 205,
             "answers": [
-                "Le cormoran"
+                "Le cormoran",
                 "La pie",
-                "Le merle",
+                "Le merle"
             ],
             "prompt": "Un oiseau du bord de mer",
             "validation": 1
