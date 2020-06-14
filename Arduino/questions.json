@@ -2,104 +2,114 @@
     "minBonnesReponses" : 3,
     "questions": [
         {
-            "id": 101,
+            "id": 201,
             "answers": [
-                "Un legume",
-                "Un fruit",
-                "Un objet"
+                "Une comete",
+                "Un asteroide",
+                "Un fossile"
             ],
-            "prompt": "Une pomme est:",
+            "prompt": "Une voiture rouge a ete ecrasee par:",
             "validation": 2
         },
         {
-            "id": 102,
+            "id": 202,
             "answers": [
-                "Toronto",
-                "Ottawa",
-                "Monreal"
+                "Patatras",
+                "Parmentier",
+                "Dauphine"
             ],
-            "prompt": "La capitale du Canada est:",
+            "prompt": "Qui a apporte la pomme de terre",
             "validation": 2
         },
         {
-            "id": 103,
+            "id": 203,
             "answers": [
-                "six",
-                "neuf",
-                "douze"
+                "Vert",
+                "Noir",
+                "Jaune"
             ],
-            "prompt": "Trois fois trois egale",
-            "validation": 2
-        },
-        {
-            "id": 104,
-            "answers": [
-                "deux",
-                "quatre",
-                "trois"
-            ],
-            "prompt": "Combien sont les trois petits cochons ?",
+            "prompt": "Quelle est la couleur des boites à lettres",
             "validation": 3
         },
         {
-            "id": 105,
+            "id": 204,
             "answers": [
-                "deux",
-                "trois",
-                "quatre"
+                "Amerique",
+                "Europe",
+                "Asie"
             ],
-            "prompt": "Combien sont les 3 mousquetaires ?",
+            "prompt": "Dans quel continent est la Chine ?",
             "validation": 3
         },
         {
-            "id": 106,
+            "id": 205,
             "answers": [
-                "Elle croit",
-                "Elle croasse",
-                "Elle craint"
+                "Le cormoran"
+                "La pie",
+                "Le merle",
             ],
-            "prompt": "Que fait la grenouille ?",
-            "validation": 2
-        },
-        {
-            "id": 107,
-            "answers": [
-                "trois",
-                "sept moins quatre",
-                "Racine de quatre"
-            ],
-            "prompt": "Combien font deux ?",
-            "validation": 3
-        },
-        {
-            "id": 108,
-            "answers": [
-                "T'as l'heure ?",
-                "C'est quel heure ?",
-                "Quelle heure est-il ?"
-            ],
-            "prompt": "Quelle est la question ?",
-            "validation": 3
-        },
-        {
-            "id": 109,
-            "answers": [
-                "ETAIT",
-                "ETE",
-                "ETAIS"
-            ],
-            "prompt": "Il ... une fois",
+            "prompt": "Un oiseau du bord de mer",
             "validation": 1
         },
         {
-            "id": 110,
+            "id": 206,
             "answers": [
-                "Herve",
-                "Herge",
-                "Air G"
+                "La contrebasse",
+                "Le violoncelle",
+                "Le violon"
             ],
-            "prompt": "Qui dessine Tintin ?",
+            "prompt": "L'instrument le plus aigu est",
+            "validation": 3
+        },
+        {
+            "id": 207,
+            "answers": [
+                "Le cavalier",
+                "Le fou",
+                "La tour"
+            ],
+            "prompt": "Aux echecs qui marche en diagonale ?",
             "validation": 2
+        },
+        {
+            "id": 208,
+            "answers": [
+                "Six",
+                "Onze",
+                "Dix"
+            ],
+            "prompt": "Combien de joueurs dans une equipe de foot ?",
+            "validation": 2
+        },
+        {
+            "id": 209,
+            "answers": [
+                "212",
+                "49",
+                "542"
+            ],
+            "prompt": "Age du grand schtroumf",
+            "validation": 3
+        },
+        {
+            "id": 210,
+            "answers": [
+                "37.5 °C",
+                "100 °C",
+                "80°C"
+            ],
+            "prompt": "L'eau bout à",
+            "validation": 2
+        },
+               {
+            "id": 212,
+            "answers": [
+                "Un fauteuil",
+                "Un pouf",
+                "Un gueridon"
+            ],
+            "prompt": "Qu'est-ce qui a deux bras ?",
+            "validation": 1
         }
     ],
     "prompts": [
