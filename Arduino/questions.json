@@ -238,6 +238,27 @@
             "action": 1,
             "duration": 2000,
             "position": 1
+        },
+        {
+            "identifier": "wifi_connect",
+            "prompt": "CONNEXION AU WIFI ...",
+            "action": 1,
+            "duration": 2000,
+            "position": 1
+        },
+        {
+            "identifier": "update_ok",
+            "prompt": "MISE A JOUR OK",
+            "action": 1,
+            "duration": 10000,
+            "position": 1
+        },
+        {
+            "identifier": "wifi_error",
+            "prompt": "ERREUR CONNEXION",
+            "action": 1,
+            "duration": 10000,
+            "position": 1
         }
     ]
 }
