@@ -128,7 +128,7 @@
                 "Noir",
                 "Jaune"
             ],
-            "prompt": "Quelle est la couleur des boites à lettres",
+            "prompt": "Quelle est la couleur des boites aux lettres",
             "validation": 3
         },
         {
@@ -194,11 +194,11 @@
         {
             "id": 210,
             "answers": [
-                "37.5 °C",
-                "100 °C",
-                "80°C"
+                "37.5 degres",
+                "100 degres",
+                "80 degres"
             ],
-            "prompt": "L'eau bout à",
+            "prompt": "L'eau bout a",
             "validation": 2
         },
         {
