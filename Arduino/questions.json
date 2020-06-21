@@ -211,54 +211,5 @@
             "prompt": "Qu'est-ce qui a deux bras ?",
             "validation": 1
         }
-    ],
-    "prompts": [
-        {
-            "identifier": "failed",
-            "prompt": "MAUVAISE REPONSE ... ON RECOMMENCE",
-            "action": 1,
-            "duration": 2000,
-            "position": 0
-        },
-        {
-            "identifier": "ouverture",
-            "prompt": "     BRAVO !!!                             OUVERTURE DE LA          BOITE",
-            "action": 2,
-            "position": 1
-        },
-        {
-            "identifier": "intro",
-            "prompt": "POUR OUVRIR CETTE BOITE REPOND A CES  3 QUESTIONS. Appuie sur le bouton 1 pour continuer.",
-            "action": 0,
-            "position": 0
-        },
-        {
-            "identifier": "bravo",
-            "prompt": "                        BONNE REPONSE",
-            "action": 1,
-            "duration": 2000,
-            "position": 1
-        },
-        {
-            "identifier": "wifi_connect",
-            "prompt": "CONNEXION AU WIFI ...",
-            "action": 1,
-            "duration": 2000,
-            "position": 1
-        },
-        {
-            "identifier": "update_ok",
-            "prompt": "MISE A JOUR OK",
-            "action": 1,
-            "duration": 10000,
-            "position": 1
-        },
-        {
-            "identifier": "wifi_error",
-            "prompt": "ERREUR CONNEXION",
-            "action": 1,
-            "duration": 10000,
-            "position": 1
-        }
     ]
 }
