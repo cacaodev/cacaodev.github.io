@@ -10,16 +10,16 @@
         connect_btn.addEventListener('click', async () => { await watchBLE(); /*await updateConnectButtonVisibility(connect_btn);*/ });
         //await updateConnectButtonVisibility(connect_btn);
 
-        let btn = document.getElementById("RGB_LED");
-        btn.addEventListener('click', async () => {
-          btn.value = 1 - Number(btn.value);
-          await writeValue("RGB_LED", btn.value);
-        });
-
-        let btn2 = document.getElementById("RING");
-        btn2.addEventListener('click', async () => {
-          btn2.value = 1 - Number(btn2.value);
-          await writeValue("RING", btn2.value);
+        Object.entries(UUID_MAP).forEach(([name, uuid], i) => {
+          let btn = document.createElement("button");
+          btn.id = uuid;
+          btn.value = "0";
+          btn.innerHTML = name;
+          btn.addEventListener("click", async () => {
+            btn.value = 1 - Number(btn.value);
+            await writeValue(uuid, btn.value);
+          });
+          document.getElementById("container").appendChild(btn);
         });
       });
 
@@ -29,17 +29,13 @@
       }
 
     </script>
-    <style media="screen">
-      .connected {
-          visibility: hidden;
-      }
-    </style>
+    <link rel="stylesheet" href="./style.css">
     <title></title>
   </head>
   <body>
-    <button type="button" name="button" id="connect">CONNECT</button>
-    <button type="button" name="button" id="RGB_LED" value="0">RGB</button>
-    <button type="button" name="button" id="RING" value="0">RING</button>
+    <div class="container" id="container">
+      <button type="button" name="connect" id="connect">CONNECT</button>
+    </div>
 
   </body>
 </html>

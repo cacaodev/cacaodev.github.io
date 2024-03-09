@@ -2,7 +2,8 @@
   const SERVICE_UUID       = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
   const UUID_MAP = {
     RGB_LED : "beb5483e-36e1-4688-b7f5-ea07361b26a8",
-    RING : "beb5483e-36e1-4688-b7f5-ea07361b26a4"
+    RING : "beb5483e-36e1-4688-b7f5-ea07361b26a4",
+    PIR : "beb5483e-36e1-4688-b7f5-ea07361b26a1"
   };
 
 function connect(bluetoothDevice, clbk) {
@@ -90,10 +91,7 @@ async function watchBLE() {
   return device;
 }
 
-async function writeValue(id, value) {
-
-  let uuid = UUID_MAP[id];
-
+async function writeValue(uuid, value) {
   try {
     console.log('Getting Bluetooth Device...');
     let device = await pairedDevice("MyESP32");
@@ -112,12 +110,12 @@ async function writeValue(id, value) {
 }
 
 async function writeCharacteristicValue(device, uuid, value)  {
-console.log('Getting Service...');
-const service = await device.gatt.getPrimaryService(SERVICE_UUID);
+  console.log('Getting Service...');
+  const service = await device.gatt.getPrimaryService(SERVICE_UUID);
 
-console.log('Getting Characteristic...');
-const characteristic = await service.getCharacteristic(uuid);
+  console.log('Getting Characteristic...');
+  const characteristic = await service.getCharacteristic(uuid);
 
-console.log('Setting Characteristic value...');
-await characteristic.writeValue(new TextEncoder().encode(value).buffer);
+  console.log('Setting Characteristic value...');
+  await characteristic.writeValue(new TextEncoder().encode(value).buffer);
 }
