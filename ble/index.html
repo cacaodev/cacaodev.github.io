@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="./BLE.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', async () => {
+        console.log("DOMContentLoaded");
+        let connect_btn = document.getElementById("connect");
+        connect_btn.addEventListener('click', async () => { await watchBLE(); /*await updateConnectButtonVisibility(connect_btn);*/ });
+        //await updateConnectButtonVisibility(connect_btn);
+
+        let btn = document.getElementById("RGB_LED");
+        btn.addEventListener('click', async () => {
+          btn.value = 1 - Number(btn.value);
+          await writeValue("RGB_LED", btn.value);
+        });
+
+        let btn2 = document.getElementById("RING");
+        btn2.addEventListener('click', async () => {
+          btn2.value = 1 - Number(btn2.value);
+          await writeValue("RING", btn2.value);
+        });
+      });
+
+      async function updateConnectButtonVisibility(btn) {
+        let device = await pairedDevice("MyESP32");
+        btn.classList.toggle("connected", !!device);
+      }
+
+    </script>
+    <style media="screen">
+      .connected {
+          visibility: hidden;
+      }
+    </style>
+    <title></title>
+  </head>
+  <body>
+    <button type="button" name="button" id="connect">CONNECT</button>
+    <button type="button" name="button" id="RGB_LED" value="0">RGB</button>
+    <button type="button" name="button" id="RING" value="0">RING</button>
+
+  </body>
+</html>
