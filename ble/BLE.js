@@ -75,18 +75,13 @@ async function pairedDevice(name) {
   return devices.find(dd => dd.name == name);
 }
 
-async function watchBLE() {
+async function requestDevice() {
 
-  let device;
-
-  try {
     console.log('Requesting Bluetooth Device...');
-    device = await navigator.bluetooth.requestDevice({filters: [{services: [SERVICE_UUID]}]});
+    let device = await navigator.bluetooth.requestDevice({filters: [{services: [SERVICE_UUID]}]});
+    if (!device) throw 'No device selected';
     device.watchAdvertisements();
     device.addEventListener('advertisementreceived', interpretIBeacon);
-  } catch(error) {
-    console.log('Argh! ' + error);
-  }
 
   return device;
 }
@@ -96,7 +91,8 @@ async function writeValue(uuid, value) {
     console.log('Getting Bluetooth Device...');
     let device = await pairedDevice("MyESP32");
 
-    if (!device) {console.log('No paired device'); device = await watchBLE();  }
+    if (!device) {console.log('No paired device'); device = await requestDevice();  }
+    
     if (!device.gatt.connected) {
       console.log('device server not connected');
       device.addEventListener('gattserverdisconnected', onDisconnected);

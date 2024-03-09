@@ -2,12 +2,13 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="./BLE.js" charset="utf-8"></script>
     <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', async () => {
         console.log("DOMContentLoaded");
         let connect_btn = document.getElementById("connect");
-        connect_btn.addEventListener('click', async () => { await watchBLE(); /*await updateConnectButtonVisibility(connect_btn);*/ });
+        connect_btn.addEventListener('click', async () => { await requestDevice(); /*await updateConnectButtonVisibility(connect_btn);*/ });
         //await updateConnectButtonVisibility(connect_btn);
 
         Object.entries(UUID_MAP).forEach(([name, uuid], i) => {
