@@ -1,9 +1,10 @@
 
-  const SERVICE_UUID       = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+  const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
   const UUID_MAP = {
-    RGB_LED : "beb5483e-36e1-4688-b7f5-ea07361b26a8",
-    RING : "beb5483e-36e1-4688-b7f5-ea07361b26a4",
-    PIR : "beb5483e-36e1-4688-b7f5-ea07361b26a1"
+    RGB_LED: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
+    PIR_ENABLE: "beb5483e-36e1-4688-b7f5-ea07361b26a2",
+    MANUAL_ALARM: "beb5483e-36e1-4688-b7f5-ea07361b26a3",
+    ENABLE_NOTIFICATIONS: "beb5483e-36e1-4688-b7f5-ea07361b26a6"
   };
 
 function connect(bluetoothDevice, clbk) {
@@ -78,7 +79,7 @@ async function pairedDevice(name) {
 async function requestDevice() {
 
     console.log('Requesting Bluetooth Device...');
-    let device = await navigator.bluetooth.requestDevice({filters: [{services: [SERVICE_UUID]}]});
+    let device = await navigator.bluetooth.requestDevice({ filters: [{name:"LOLIN_S3_MINI"}, {services: [SERVICE_UUID]}]});
     if (!device) throw 'No device selected';
     device.watchAdvertisements();
     device.addEventListener('advertisementreceived', interpretIBeacon);
@@ -92,7 +93,7 @@ async function writeValue(uuid, value) {
     let device = await pairedDevice("MyESP32");
 
     if (!device) {console.log('No paired device'); device = await requestDevice();  }
-    
+
     if (!device.gatt.connected) {
       console.log('device server not connected');
       device.addEventListener('gattserverdisconnected', onDisconnected);
