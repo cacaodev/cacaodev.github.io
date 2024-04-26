@@ -4,32 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="./BLE.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', async () => {
-        console.log("DOMContentLoaded");
-        let connect_btn = document.getElementById("connect");
-        connect_btn.addEventListener('click', async () => { await requestDevice(); /*await updateConnectButtonVisibility(connect_btn);*/ });
-        //await updateConnectButtonVisibility(connect_btn);
-
-        Object.entries(UUID_MAP).forEach(([name, uuid], i) => {
-          let btn = document.createElement("button");
-          btn.id = uuid;
-          btn.value = "0";
-          btn.innerHTML = name;
-          btn.addEventListener("click", async () => {
-            btn.value = 1 - Number(btn.value);
-            await writeValue(uuid, btn.value);
-          });
-          document.getElementById("container").appendChild(btn);
-        });
-      });
-
-      async function updateConnectButtonVisibility(btn) {
-        let device = await pairedDevice("MyESP32");
-        btn.classList.toggle("connected", !!device);
-      }
-
-    </script>
     <link rel="stylesheet" href="./style.css">
     <title></title>
   </head>
