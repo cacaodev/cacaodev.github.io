@@ -6,6 +6,8 @@ const UUID_MAP = {
     ENABLE_NOTIFICATIONS: "beb5483e-36e1-4688-b7f5-ea07361b26a6"
 };
 const DEVICE_NAME = "LOLIN_S3_MINI";
+const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a7";
+const GATT_CONNECT_TIMEOUT = 20000;
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOMContentLoaded");
@@ -33,18 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+let Timeout = (timeout, value) => new Promise((resolve, reject) => window.setTimeout(resolve, timeout, value));
 
 async function connectToBluetoothDevice(device) {
     if (device.gatt.connected) {
-      console.log('device server allready connected');
-      return true;
+        console.log('device server allready connected');
+        return true;
     }
 
     const abortController = new AbortController();
-
-    let timeout = new Promise(function(resolve, reject) {
-      window.setTimeout(resolve, 10000, false);
-    });
 
     let connect = new Promise(function(resolve, reject) {
         const abortController = new AbortController();
@@ -57,7 +56,6 @@ async function connectToBluetoothDevice(device) {
             device.gatt.connect()
                 .then(() => {
                     console.log('> Bluetooth device "' + device.name + ' connected.');
-                    device.addEventListener('gattserverdisconnected', onDisconnected);
                     resolve(true);
                 })
                 .catch(error => {
@@ -77,7 +75,7 @@ async function connectToBluetoothDevice(device) {
             });
     });
 
-    return Promise.race([connect, timeout]);
+    return Promise.race([connect, Timeout(GATT_CONNECT_TIMEOUT, false)]);
 }
 
 async function updateConnectButtonVisibility(btn) {
@@ -161,12 +159,13 @@ async function requestDevice(name) {
     let device = await navigator.bluetooth.requestDevice({
         filters: [{
             name: name,
-            services: [SERVICE_UUID]
+            optionalServices: [SERVICE_UUID]
         }]
     });
 
-    //device.watchAdvertisements();
-    //device.addEventListener('advertisementreceived', interpretIBeacon);
+    device.addEventListener('gattserverdisconnected', onDisconnected);
+    // device.addEventListener('advertisementreceived', interpretIBeacon);
+    // device.watchAdvertisements();
 
     return device;
 }
@@ -180,17 +179,45 @@ async function writeValue(uuid, value) {
             console.log('No paired device');
             device = await requestDevice(DEVICE_NAME);
         } else {
-          console.log('Device is already paired');
+            console.log('Device is already paired');
         }
 
         let connected = await connectToBluetoothDevice(device);
 
-        if (connected) await writeCharacteristicValue(device, uuid, value);
+        if (connected) {
+          console.log('Getting Service...');
+          const service = await device.gatt.getPrimaryService(SERVICE_UUID);
+
+          console.log('Getting Characteristic...');
+          const characteristic = await service.getCharacteristic(uuid);
+
+          console.log('Setting Characteristic value...');
+          await characteristic.writeValue(new TextEncoder().encode(value).buffer);
+
+          if (uuid == UUID_MAP.ENABLE_NOTIFICATIONS) {
+              const enabled = new TextDecoder().decode(await characteristic.readValue());
+              console.log(typeof enabled, `'${enabled}'`);
+              const notif = await service.getCharacteristic(NOTIFICATION_UUID);
+              if (enabled == '1') {
+                  console.log(notif.properties);
+                  await notif.startNotifications();
+                  notif.addEventListener('characteristicvaluechanged', handleNotification);
+              } else {
+                  console.log('removing listener characteristicvaluechanged');
+                  await notif.stopNotifications();
+              }
+          }
+        }
         else console.log('Could not connect to gatt server');
 
     } catch (error) {
         alert('Argh! ' + error);
     }
+}
+
+let handleNotification = (event) => {
+    const notif = event.target.value;
+    console.warn(notif);
 }
 
 async function writeCharacteristicValue(device, uuid, value) {
@@ -202,4 +229,18 @@ async function writeCharacteristicValue(device, uuid, value) {
 
     console.log('Setting Characteristic value...');
     await characteristic.writeValue(new TextEncoder().encode(value).buffer);
+
+    if (uuid == UUID_MAP.ENABLE_NOTIFICATIONS) {
+        const enabled = new TextDecoder().decode(await characteristic.readValue());
+        console.log(typeof enabled, `'${enabled}'`);
+        const myCharacteristic = await service.getCharacteristic(NOTIFICATION_UUID);
+        if (enabled == '1') {
+            console.log('adding listener characteristicvaluechanged');
+            alert("?");
+            await myCharacteristic.startNotifications();
+        } else {
+            console.log('removing listener characteristicvaluechanged');
+            await myCharacteristic.stopNotifications();
+        }
+    }
 }
