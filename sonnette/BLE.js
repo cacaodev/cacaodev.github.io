@@ -372,13 +372,9 @@ let handleDetectionNotification = () => {
     alert('detection !!!');
 }
 
-let notif = null;
-
 async function startAlertNotifications(device) {
-  if (!notif) {
-    const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
-    notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
-  }
+  const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
+  let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
 
   await notif.startNotifications();
   notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
