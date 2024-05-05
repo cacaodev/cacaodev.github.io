@@ -10,8 +10,27 @@ div#container {
     padding: 2em;
 }
 
-#container>button {font-size: xx-large;padding: 1em;margin: 1em 0 1em 0;border-radius: 0.5em;font-weight: bolder;}
+#container>button {}
 
-#container>button[value="1"] {
+#container>.push[value="0"] {
+    background-color: #EEEEEE;
+}
+
+#container>.push[value="1"] {
     background-color: lightblue;
+}
+
+div.range{
+  display: flex;
+  flex-direction: column;
+}
+
+#connect, button.push, div.range, label.readonly {
+  padding: 1em;
+  margin: 1em 0 1em 0;
+  border-style: solid;
+  border-color: gray;
+  border-radius: 0.5em;
+  font-weight: bolder;
+  font-size: xx-large;
 }
