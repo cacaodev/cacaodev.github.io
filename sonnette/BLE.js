@@ -405,7 +405,7 @@ async function writeValue(uuid, value) {
             const characteristic = await service.getCharacteristic(uuid);
 
             console.log('Setting Characteristic value...');
-            await characteristic.writeValue(new Int8Array([value]).buffer);
+            await characteristic.writeValue(new Int16Array([value]).buffer);
 
             // if (uuid == UUID_MAP.ENABLE_NOTIFICATIONS) {
             //     console.log(typeof value, `'${value}'`);
