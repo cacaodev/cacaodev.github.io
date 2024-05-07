@@ -1,23 +1,41 @@
-.connected {
-    visibility: hidden;
-}
-
 
 div#container {
     display: flex;
     flex-direction: column;
     /* font-size: x-large; */
     padding: 2em;
+    align-items: normal;
+    /* justify-content: center; */
+    /* justify-items: center; */
+    width: -webkit-fill-available;
 }
 
-#container>button {}
+#container:not(.connected) {
+  /* justify-content:center; */
+  /* align-items: center; */
+  /* flex-grow: 10; */
+  /* height: 100vh; */
+}
 
-#container>.push[value="0"] {
+#container.connected {
+  display:flex;
+}
+
+#container:not(.connected) > *:not(#connect), #container.connected > #connect {
+  display:none;
+}
+
+.push[value="0"] {
     background-color: #EEEEEE;
 }
 
-#container>.push[value="1"] {
+.push[value="1"], .pressed[value="1"][data-continuous="1"] {
     background-color: lightblue;
+}
+
+.pressed[value="1"][data-continuous="0"] {
+    animation-name: MomentaryChange;
+    animation-duration:0.6s;
 }
 
 div.range{
@@ -25,7 +43,7 @@ div.range{
   flex-direction: column;
 }
 
-#connect, button.push, div.range, label.readonly {
+#connect, button.push, button.pressed, div.range, label.readonly {
   padding: 1em;
   margin: 1em 0 1em 0;
   border-style: solid;
@@ -33,4 +51,25 @@ div.range{
   border-radius: 0.5em;
   font-weight: bolder;
   font-size: xx-large;
+  /* flex-grow: 22; */
+  /* width: 100%; */
+}
+
+@keyframes MomentaryChange {
+  0% {background-color: #EEEEEE;}
+  50% {background-color: lightblue;}
+  100% {background-color: #EEEEEE;}
+}
+
+
+body {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+label#VERSION::before {
+    content: "VERSION ";
 }

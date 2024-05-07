@@ -3,111 +3,168 @@ const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914a";
 const ALERT_SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const UUID_MAP = [{
         type: "push",
-        label: "RGB_LED",
+        id: "RGB_LED",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
-        attr : {value:0}
+        attr: {
+            value: 0,
+            name: "rgb_led"
+        }
     },
     {
         type: "push",
-        label: "PIR_ENABLE",
+        id: "PIR_ENABLE",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a2",
-        attr : {value:0}
+        attr: {
+            value: 0,
+            name: "pir_enable"
+        }
 
     },
     {
-      type: "push",
-        label: "DRING_ENABLE",
+        type: "push",
+        id: "DRING_ENABLE",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a7",
-        attr : {value:0}
+        attr: {
+            value: 0,
+            name: "dring_enable"
+        }
 
     },
     {
-        type: "push",
-        label: "MANUAL_ALARM",
+        type: "pressed",
+        id: "MANUAL_ALARM",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a3",
-        attr : {value:0}
-
+        attr: {
+            value: 0,
+            name: "manual_alarm"
+        }
     },
     {
         type: "push",
-        label: "ENABLE_NOTIFICATIONS",
+        id: "ENABLE_NOTIFICATIONS",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a6",
-        attr : {value:0}
+        attr: {
+            value: 0,
+            name: "enable_notifications"
+        }
 
     }, {
         type: "range",
-        label: "MISE EN VEILLE",
+        id: "SLEEP_AFTER_MINUTES",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a9",
         attr: {
             type: "range",
-            name: "sleep_after_minutes",
+            name: "Mise en Veille",
             min: "1",
             max: "255",
             step: "1",
             value: "1"
         }
-      },{
-          type: "push",
-          label: "CONTINUOUS",
-          uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b2",
-          attr : {value:0}
+    }, {
+        type: "push",
+        id: "CONTINUOUS",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b2",
+        attr: {
+            value: 0,
+            name: "continuous",
+        }
 
-      }, {
-          type: "range",
-          label: "DISCRETE COUNT",
-          uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b3",
-          attr: {
-              type: "range",
-              name: "discrete_count",
-              min: "1",
-              max: "10",
-              step: "1",
-              value: "1"
-          }
-        }, {
+    }, {
+        type: "range",
+        id: "DISCRETE_COUNT",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b3",
+        attr: {
             type: "range",
-            label: "DISCRETE INTERVAL",
-            uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b4",
-            attr: {
-                type: "range",
-                name: "discrete_interval",
-                min: "50",
-                max: "10000",
-                step: "200",
-                value: "1000"
-            }
-          }, {
-          type: "text",
-          label: "VERSION",
-          uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b1",
-          attr: {
-          }
-      }
+            name: "discrete_count",
+            min: "1",
+            max: "10",
+            step: "1",
+            value: "1"
+        }
+    }, {
+        type: "range",
+        id: "DISCRETE_INTERVAL",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b4",
+        attr: {
+            type: "range",
+            name: "discrete_interval",
+            min: "50",
+            max: "10000",
+            step: "200",
+            value: "1000"
+        }
+    }, {
+        type: "text",
+        id: "VERSION",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b1",
+        attr: {
+            name: "version"
+        }
+    }
 ];
 
 const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const GATT_CONNECT_TIMEOUT = 10000;
 
-let createPushButton = (label, uuid, attr) => {
+let createPushOnPushOffButton = (id, uuid, attr) => {
     let el = document.createElement("button");
     el.classList.add("push");
-    el.id = uuid;
-    el.innerHTML = label;
+    el.id = id;
+    el.innerHTML = attr.name;
 
     if (attr) Object.assign(el, attr);
 
     el.addEventListener("click", async () => {
         let new_value = 1 - Number(el.value);
         let ok = await writeValue(uuid, new_value);
-        if (ok) el.value = new_value;
+        if (ok) {
+            el.value = new_value;
+            if (id == "CONTINUOUS") {
+                document.querySelector("button#MANUAL_ALARM").dataset.continuous = new_value;
+            }
+        }
     });
 
     return el;
 };
 
-let createTimerInput = (label, uuid, attr) => {
+let createPushPressedButton = (id, uuid, attr) => {
+    let el = document.createElement("button");
+    el.classList.add("pressed");
+    el.id = id;
+    el.innerHTML = attr.name;
+
+    if (attr) Object.assign(el, attr);
+
+    el.addEventListener("mousedown", async () => {
+        //let isContinuous = Number(el.dataset.continuous);
+        el.value = 1;
+
+        let ok = await writeValue(uuid, 1);
+        if (!ok) {
+            el.value = 0;
+        }
+    });
+
+    el.addEventListener("mouseup", async () => {
+        let isContinuous = Number(el.dataset.continuous);
+
+        if (isContinuous) {
+            let ok = await writeValue(uuid, 0);
+            if (ok) {
+                el.value = 0;
+            }
+        } else {
+            el.value = 0;
+        }
+    });
+
+    return el;
+};
+
+let createTimerInput = (id, uuid, attr) => {
     let el = document.createElement("input");
-    el.id = uuid;
+    el.id = id;
     el.type = "time";
     if (attr) Object.assign(el, attr);
 
@@ -120,9 +177,9 @@ let createTimerInput = (label, uuid, attr) => {
     return el;
 };
 
-let createRangeInput = (label, uuid, attr) => {
+let createRangeInput = (id, uuid, attr) => {
     let el = document.createElement("input");
-    el.id = uuid;
+    el.id = id;
     el.type = "range";
     if (attr) Object.assign(el, attr);
     el.dataset.value = "1";
@@ -137,7 +194,7 @@ let createRangeInput = (label, uuid, attr) => {
     let div = document.createElement("div");
     div.classList.add("range");
     let labelEl = document.createElement("label");
-    labelEl.innerText = label;
+    labelEl.innerText = attr.name;
     labelEl.setAttribute("for", uuid);
 
     div.appendChild(labelEl);
@@ -146,44 +203,80 @@ let createRangeInput = (label, uuid, attr) => {
     return div;
 };
 
-let createLabel = (label, uuid, attr) => {
+let createLabel = (id, uuid, attr) => {
     let el = document.createElement("label");
-    el.id = uuid;
+    el.id = id;
     el.classList.add("readonly");
     if (attr) Object.assign(el, attr);
-    el.innerText = label;
+    el.innerText = attr.name;
 
     return el;
 };
 
 const INPUTS = {
-  "push" : createPushButton,
-  "timer" :  createTimerInput,
-  "range" : createRangeInput,
-  "text" : createLabel
+    "push": createPushOnPushOffButton,
+    "pressed": createPushPressedButton,
+    "timer": createTimerInput,
+    "range": createRangeInput,
+    "text": createLabel
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+let updateUIFromDevice = (buffer) => {
+    let FLAGS_NAMES = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
+    let hex_string = new TextDecoder().decode(buffer);
+    console.log(hex_string);
+    let groups = hex_string.match(/(?<flags>[0-9A-Z]{2})(?<VERSION>[0-9A-Z]{2})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{2})(?<DISCRETE_INTERVAL>[0-9A-Z]{4})/).groups;
+    let flags = groups.flags.toString(2).padStart(4, 0).split("").reverse().reduce((p, n, i) => ({
+        ...p,
+        [FLAGS_NAMES[i]]: Number(!!n)
+    }), {});
+    delete groups.flags;
+    groups = {
+        ...flags,
+        ...groups
+    };
+
+    Object.entries(groups).forEach(([id, hex_value]) => {
+        let value = parseInt(hex_value, 16);
+        let el = document.querySelector(`#${id}`);
+        let {
+            type
+        } = UUID_MAP.find(m => m.id == id);
+
+        if (type == 'text') el.innerText = value;
+        else el.value = value;
+
+        if (id == "CONTINUOUS") document.querySelector("#MANUAL_ALARM").dataset.continuous = value;
+    });
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOMContentLoaded");
+
     let connect_btn = document.getElementById("connect");
     connect_btn.addEventListener('click', async () => {
-        try {
-            await requestDevice(DEVICE_NAME); /*await updateConnectButtonVisibility(connect_btn);*/
-            console.log("Requested device");
-        } catch (e) {
-            console.warn(e);
+        let device = await pairedDevice(DEVICE_NAME);
+        if (!device) {
+            try {
+                device = await requestDevice(DEVICE_NAME);
+                console.log("Requested device");
+            } catch (e) {
+                console.warn(e);
+            }
         }
+
+        let connected = await connectToBluetoothDevice(device);
+        document.querySelector("#container").classList.toggle("connected", connected);
     });
-    //await updateConnectButtonVisibility(connect_btn);
 
     UUID_MAP.forEach(({
         type,
-        label,
+        id,
         uuid,
         attr
     }) => {
-      let elmt = INPUTS[type](label, uuid, attr);
-      document.getElementById("container").appendChild(elmt);
+        let elmt = INPUTS[type](id, uuid, attr);
+        document.getElementById("container").appendChild(elmt);
     });
 });
 
@@ -202,6 +295,12 @@ async function connectToBluetoothDevice(device) {
 
         device.addEventListener('advertisementreceived', (event) => {
             console.log('> Received advertisement from "' + device.name + '"...');
+            let buffer = event.serviceData.get(SERVICE_UUID);
+            try {
+                updateUIFromDevice(buffer);
+            } catch (e) {
+                console.warn(e);
+            }
             // Stop watching advertisements to conserve battery life.
             abortController.abort();
             console.log('Connecting to GATT Server from "' + device.name + '"...');
@@ -211,7 +310,7 @@ async function connectToBluetoothDevice(device) {
                     return onConnected(device);
                 })
                 .then(() => {
-                  resolve(true);
+                    resolve(true);
                 })
                 .catch(error => {
                     console.log('Argh! ' + error);
@@ -234,29 +333,20 @@ async function connectToBluetoothDevice(device) {
 }
 
 async function onConnected(device) {
-  await startAlertNotifications(device);
-
-  try {
-    await getVersion(device);
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
-async function getVersion(device) {
-  const service = await device.gatt.getPrimaryService(SERVICE_UUID);
-
-  console.log('Getting Version...');
-  const uuid = UUID_MAP.find(m => m.label == 'VERSION').uuid;
-  const characteristic = await service.getCharacteristic(uuid);
-  const value = (await characteristic.readValue()).getUint8(0);
-  console.log('Version is ' + value);
-  document.querySelector(`#${uuid}`).innerText = `VERSION ${value}`;
+    await startAlertNotifications(device);
 }
 
 async function updateConnectButtonVisibility(btn) {
     let device = await pairedDevice(DEVICE_NAME);
     btn.classList.toggle("connected", !!device);
+}
+
+async function onDisconnected() {
+    console.log('> Bluetooth Device disconnected');
+    let device = await pairedDevice(DEVICE_NAME);
+    if (device) {
+        let connected = await connectToBluetoothDevice(device);
+    }
 }
 /*
 function connect(bluetoothDevice, clbk) {
@@ -274,14 +364,6 @@ function connect(bluetoothDevice, clbk) {
         });
 }
 */
-async function onDisconnected() {
-    console.log('> Bluetooth Device disconnected');
-    let device = await pairedDevice(DEVICE_NAME);
-    if (device) {
-      let connected = await connectToBluetoothDevice(device);
-    }
-}
-
 /* Utils */
 
 // This function keeps calling "toTry" until promise resolves or has
@@ -307,23 +389,26 @@ function time(text) {
 
 function interpretIBeacon(event) {
     console.log(event);
-    //   var rssi = event.rssi;
-    //   var appleData = event.manufacturerData.get(0x004C);
-    //
-    //   if (appleData.byteLength != 23 ||
-    //     appleData.getUint16(0, false) !== 0x0215) {
-    //   console.log({isBeacon: false});
-    //     }
-    //     var uuidArray = new Uint8Array(appleData.buffer, 2, 16);
-    //     var major = appleData.getUint16(18, false);
-    //     var minor = appleData.getUint16(20, false);
-    //     var txPowerAt1m = -appleData.getInt8(22);
-    //     console.log({
-    //       isBeacon: true,
-    //       uuidArray,
-    //       major,
-    //       minor,
-    //       pathLossVs1m: txPowerAt1m - rssi});
+    var rssi = event.rssi;
+    var appleData = event.manufacturerData.get(0x004C);
+
+    if (appleData.byteLength != 23 ||
+        appleData.getUint16(0, false) !== 0x0215) {
+        console.log({
+            isBeacon: false
+        });
+    }
+    var uuidArray = new Uint8Array(appleData.buffer, 2, 16);
+    var major = appleData.getUint16(18, false);
+    var minor = appleData.getUint16(20, false);
+    var txPowerAt1m = -appleData.getInt8(22);
+    console.log({
+        isBeacon: true,
+        uuidArray,
+        major,
+        minor,
+        pathLossVs1m: txPowerAt1m - rssi
+    });
 }
 
 async function pairedDevice(name) {
@@ -335,17 +420,16 @@ async function requestDevice(name) {
 
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices:true,
         optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        // filters: [{
-        //     services: [SERVICE_UUID /*, ALERT_SERVICE_UUID*/ ]
-        // }]
+        filters: [{
+            name: DEVICE_NAME
+        }]
     });
 
     device.addEventListener('gattserverdisconnected', onDisconnected);
 
-    // device.addEventListener('advertisementreceived', interpretIBeacon);
-    // device.watchAdvertisements();
+    //device.addEventListener('advertisementreceived', interpretIBeacon);
+    //device.watchAdvertisements();
 
     return device;
 }
@@ -354,18 +438,21 @@ function HandleAlertNotification(event) {
     const value = event.target.value.getUint8(0);
     console.warn('Got status value ' + value);
     switch (value) {
-      case 0: deviceDeepSleep();
-        break;
-      case 1:
-        break;
-      case 2: handleDetectionNotification();
-        break;
-      default:
+        case 0:
+            deviceDeepSleep();
+            break;
+        case 1:
+            break;
+        case 2:
+            handleDetectionNotification();
+            break;
+        default:
     }
 }
 
-function deviceDeepSleep() {
-  console.log('device is into deep sleep ...');
+let deviceDeepSleep = () => {
+    console.log('device is into deep sleep ...');
+    alert('En veille 😴');
 }
 
 let handleDetectionNotification = () => {
@@ -373,12 +460,12 @@ let handleDetectionNotification = () => {
 }
 
 async function startAlertNotifications(device) {
-  const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
-  let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
+    const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
+    let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
 
-  await notif.startNotifications();
-  notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
-  console.log('Added event listener characteristicvaluechanged for ' + NOTIFICATION_UUID);
+    await notif.startNotifications();
+    notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
+    console.log('Added event listener characteristicvaluechanged for ' + NOTIFICATION_UUID);
 }
 
 async function writeValue(uuid, value) {
