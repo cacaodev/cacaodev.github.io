@@ -289,7 +289,7 @@ async function requestDevice(name) {
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
         optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        requestAllDevices:true,
+        acceptAllDevices:true,
         // filters: [{
         //     name: DEVICE_NAME
         // }]
