@@ -224,17 +224,14 @@ const INPUTS = {
 let updateUIFromDevice = (buffer) => {
     let FLAGS_NAMES = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
     let hex_string = new TextDecoder().decode(buffer);
-    console.log(hex_string);
     let groups = hex_string.match(/(?<flags>[0-9A-Z]{2})(?<VERSION>[0-9A-Z]{2})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{2})(?<DISCRETE_INTERVAL>[0-9A-Z]{4})/).groups;
-    let flags = groups.flags.toString(2).padStart(4, 0).split("").reverse().reduce((p, n, i) => ({
-        ...p,
-        [FLAGS_NAMES[i]]: Number(!!n)
-    }), {});
+    let flags_value = parseInt(groups.flags, 16);
+    let flags = FLAGS_NAMES.forEach((flag, i) => {
+      groups[flag] = Number(Boolean(flags_value & (1 << i)));
+    });
+
     delete groups.flags;
-    groups = {
-        ...flags,
-        ...groups
-    };
+    console.log(flags_value, groups);
 
     Object.entries(groups).forEach(([id, hex_value]) => {
         let value = parseInt(hex_value, 16);
