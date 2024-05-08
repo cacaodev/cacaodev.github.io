@@ -290,11 +290,11 @@ async function requestDevice(name) {
 
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
-        optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        acceptAllDevices:true,
-        // filters: [{
-        //     name: name
-        // }]
+        services: [SERVICE_UUID, ALERT_SERVICE_UUID],
+        acceptAllDevices:false,
+        filters: [{
+            namePrefix: "SONNETTE"
+        }]
     });
 
     device.addEventListener('gattserverdisconnected', onDisconnected);
