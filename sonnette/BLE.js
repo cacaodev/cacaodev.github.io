@@ -1,4 +1,4 @@
-const DEVICE_NAME = "SONNETTE";
+const DEVICE_NAME = "SONNETTE LOLIN";
 const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914a";
 const ALERT_SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const UUID_MAP = [{
@@ -136,7 +136,7 @@ let createPushPressedButton = (id, uuid, attr) => {
 
     if (attr) Object.assign(el, attr);
 
-    el.addEventListener("mousedown", async () => {
+    el.addEventListener("pointerdown", async () => {
         //let isContinuous = Number(el.dataset.continuous);
         el.value = 1;
 
@@ -146,7 +146,7 @@ let createPushPressedButton = (id, uuid, attr) => {
         }
     });
 
-    el.addEventListener("mouseup", async () => {
+    el.addEventListener("pointerup", async () => {
         let isContinuous = Number(el.dataset.continuous);
 
         if (isContinuous) {
@@ -255,11 +255,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         let device = await pairedDevice(DEVICE_NAME);
         if (!device) {
             try {
-                device = await requestDevice(DEVICE_NAME);
                 console.log("Requested device");
+                device = await requestDevice(DEVICE_NAME);
             } catch (e) {
                 console.warn(e);
             }
+        } else {
+          console.log("device paired");
         }
 
         let connected = await connectToBluetoothDevice(device);
@@ -291,7 +293,7 @@ async function requestDevice(name) {
         optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
         acceptAllDevices:true,
         // filters: [{
-        //     name: DEVICE_NAME
+        //     name: name
         // }]
     });
 
@@ -346,7 +348,7 @@ async function connectToBluetoothDevice(device) {
                 signal: abortController.signal
             })
             .catch(error => {
-                console.log('Argh! ' + error);
+                reject(error);
             });
     });
 

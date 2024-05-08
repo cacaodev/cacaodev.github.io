@@ -51,6 +51,7 @@ div.range{
   border-radius: 0.5em;
   font-weight: bolder;
   font-size: xx-large;
+  user-select: none;
   /* flex-grow: 22; */
   /* width: 100%; */
 }
