@@ -279,6 +279,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTimeout(resolve, timeout, result));
 
+async function pairedDevice(name) {
+    let devices = await navigator.bluetooth.getDevices();
+    return devices.find(dd => dd.name == name);
+}
+
+async function requestDevice(name) {
+
+    console.log('Requesting Bluetooth Device...');
+    let device = await navigator.bluetooth.requestDevice({
+        optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
+        requestAllDevices:true,
+        // filters: [{
+        //     name: DEVICE_NAME
+        // }]
+    });
+
+    device.addEventListener('gattserverdisconnected', onDisconnected);
+
+    //device.addEventListener('advertisementreceived', interpretIBeacon);
+    //device.watchAdvertisements();
+
+    return device;
+}
+
 async function connectToBluetoothDevice(device) {
     if (device.gatt.connected) {
         console.log('device server allready connected');
@@ -406,29 +430,6 @@ function interpretIBeacon(event) {
         minor,
         pathLossVs1m: txPowerAt1m - rssi
     });
-}
-
-async function pairedDevice(name) {
-    let devices = await navigator.bluetooth.getDevices();
-    return devices.find(dd => dd.name == name);
-}
-
-async function requestDevice(name) {
-
-    console.log('Requesting Bluetooth Device...');
-    let device = await navigator.bluetooth.requestDevice({
-        optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        filters: [{
-            name: DEVICE_NAME
-        }]
-    });
-
-    device.addEventListener('gattserverdisconnected', onDisconnected);
-
-    //device.addEventListener('advertisementreceived', interpretIBeacon);
-    //device.watchAdvertisements();
-
-    return device;
 }
 
 function HandleAlertNotification(event) {
