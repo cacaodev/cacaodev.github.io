@@ -1,4 +1,4 @@
-const DEVICE_NAME = "SONNETTE LOLIN";
+const DEVICE_NAME = "SONNETTE";
 const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914a";
 const ALERT_SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const UUID_MAP = [{
@@ -267,11 +267,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           console.log("device paired");
         }
 
-        try {
-          let connected = await connectToBluetoothDevice(device);
-          document.querySelector("#container").classList.toggle("connected", connected);
-        } catch (e) {
-           console.warn(e);
+        if (device) {
+          try {
+            let connected = await connectToBluetoothDevice(device);
+            document.querySelector("#container").classList.toggle("connected", connected);
+          } catch (e) {
+             console.warn(e);
+          }
         }
     });
 
@@ -290,23 +292,21 @@ let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTi
 
 async function pairedDevice(name) {
     let devices = await navigator.bluetooth.getDevices();
-    return devices.find(dd => dd.name == name);
+    return devices.find(dd => dd.name.startsWith(name));
 }
 
 async function requestDevice(name) {
 
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
+        allowAllDevices: false,
         optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        //allowAllDevices: true,
         filters: [{
             namePrefix: "SONNETTE",
             //services: [SERVICE_UUID],
             serviceData:[{service:SERVICE_UUID}]
         }]
     });
-
-    device.addEventListener('gattserverdisconnected', onDisconnected);
 
     //device.addEventListener('advertisementreceived', interpretIBeacon);
     //device.watchAdvertisements();
@@ -366,6 +366,7 @@ async function connectToBluetoothDevice(device) {
 }
 
 async function onConnected(device) {
+    device.addEventListener('gattserverdisconnected', onDisconnected);
     await startAlertNotifications(device);
 }
 
