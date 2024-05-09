@@ -292,7 +292,7 @@ void setup() {
   createCharacteristic(pService, PASSWORD, (uint8_t *)ssid.c_str(), clbk);
 
   notif = alertService->createCharacteristic(NOTIFICATION,
-                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_INDICATE);
+                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
   BLE2902 *desc = new BLE2902();
   notif->addDescriptor(desc);
 

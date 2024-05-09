@@ -21,7 +21,7 @@ div#container {
   display:flex;
 }
 
-#container:not(.connected) > *:not(#connect), #container.connected > #connect {
+#container:not(.connected) > *:not(.front), #container.connected > .front {
   display:none;
 }
 

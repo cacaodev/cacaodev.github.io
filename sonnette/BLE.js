@@ -231,11 +231,11 @@ let updateUIFromDevice = (buffer) => {
     let groups = matches.groups;
     let flags_value = parseInt(groups.flags, 16);
     let flags = FLAGS_IDENTIFIERS.forEach((flag, i) => {
-      groups[flag] = Number(Boolean(flags_value & (1 << i)));
+        groups[flag] = Number(Boolean(flags_value & (1 << i)));
     });
 
     delete groups.flags;
-console.log(groups);
+    console.log(groups);
     Object.entries(groups).forEach(([id, hex_value]) => {
         let value = parseInt(hex_value, 16);
         let el = document.querySelector(`#${id}`);
@@ -264,21 +264,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.warn(e);
             }
         } else {
-          console.log("device paired");
+            console.log("device paired");
         }
 
         if (device) {
-          try {
-            let connected = await connectToBluetoothDevice(device);
-            if (connected) {
-               document.querySelector("#container").classList.add("connected");
+            try {
+                let connected = await connectToBluetoothDevice(device);
+                if (connected) {
+                    document.querySelector("#container").classList.add("connected");
+                } else {
+                    console.log('Could not connect to gatt server');
+                }
+            } catch (e) {
+                console.warn(e);
             }
-            else {
-               console.log('Could not connect to gatt server');
-           }
-          } catch (e) {
-             console.warn(e);
-          }
         }
     });
 
@@ -302,16 +301,27 @@ async function pairedDevice(name) {
 
 async function requestDevice(name) {
 
-    console.log('Requesting Bluetooth Device...');
-    let device = await navigator.bluetooth.requestDevice({
-        allowAllDevices: false,
+    let acceptAllDevices = !!document.querySelector("#acceptAllDevices:checked");
+    let options;
+
+    if (!acceptAllDevices) options = {
         optionalServices: [ALERT_SERVICE_UUID],
         filters: [{
             namePrefix: "SONNETTE",
             services: [SERVICE_UUID],
-            serviceData:[{service:SERVICE_UUID}]
+            serviceData: [{
+                service: SERVICE_UUID
+            }]
         }]
-    });
+    };
+    else
+        options = {
+            acceptAllDevices: true,
+            optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID]
+        };
+
+    console.log('Requesting Bluetooth Device...', options);
+    let device = await navigator.bluetooth.requestDevice(options);
 
     //device.addEventListener('advertisementreceived', interpretIBeacon);
     //device.watchAdvertisements();
