@@ -103,6 +103,7 @@ const UUID_MAP = [{
     }
 ];
 
+const FLAGS_IDENTIFIERS = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
 const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const GATT_CONNECT_TIMEOUT = 10000;
 
@@ -222,16 +223,18 @@ const INPUTS = {
 };
 
 let updateUIFromDevice = (buffer) => {
-    let FLAGS_NAMES = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
     let hex_string = new TextDecoder().decode(buffer);
-    let groups = hex_string.match(/(?<flags>[0-9A-Z]{2})(?<VERSION>[0-9A-Z]{2})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{2})(?<DISCRETE_INTERVAL>[0-9A-Z]{4})/).groups;
+    let regexp = new RegExp("^(?<flags>[0-9A-Z]{2})(?<VERSION>[0-9A-Z]{2})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{2})(?<DISCRETE_INTERVAL>[0-9A-Z]{4})$");
+    console.log(`Received service data adv: '${hex_string}'`);
+    let matches = hex_string.match(regexp);
+    if (matches == null || matches.groups == null) throw `No matches for hex string '${hex_string}' with regular expression '${regexp}'`;
+    let groups = matches.groups;
     let flags_value = parseInt(groups.flags, 16);
-    let flags = FLAGS_NAMES.forEach((flag, i) => {
+    let flags = FLAGS_IDENTIFIERS.forEach((flag, i) => {
       groups[flag] = Number(Boolean(flags_value & (1 << i)));
     });
 
     delete groups.flags;
-    console.log(flags_value, groups);
 
     Object.entries(groups).forEach(([id, hex_value]) => {
         let value = parseInt(hex_value, 16);
@@ -264,8 +267,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           console.log("device paired");
         }
 
-        let connected = await connectToBluetoothDevice(device);
-        document.querySelector("#container").classList.toggle("connected", connected);
+        try {
+          let connected = await connectToBluetoothDevice(device);
+          document.querySelector("#container").classList.toggle("connected", connected);
+        } catch (e) {
+           console.warn(e);
+        }
     });
 
     UUID_MAP.forEach(({
@@ -290,10 +297,12 @@ async function requestDevice(name) {
 
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
-        services: [SERVICE_UUID, ALERT_SERVICE_UUID],
-        acceptAllDevices:false,
+        optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
+        //allowAllDevices: true,
         filters: [{
-            namePrefix: "SONNETTE"
+            namePrefix: "SONNETTE",
+            //services: [SERVICE_UUID],
+            serviceData:[{service:SERVICE_UUID}]
         }]
     });
 
@@ -317,15 +326,16 @@ async function connectToBluetoothDevice(device) {
         const abortController = new AbortController();
 
         device.addEventListener('advertisementreceived', (event) => {
-            console.log('> Received advertisement from "' + device.name + '"...');
+            console.log('> Received advertisement from "' + device.name + '"...', event);
             let buffer = event.serviceData.get(SERVICE_UUID);
             try {
                 updateUIFromDevice(buffer);
+                abortController.abort();
             } catch (e) {
                 console.warn(e);
             }
             // Stop watching advertisements to conserve battery life.
-            abortController.abort();
+
             console.log('Connecting to GATT Server from "' + device.name + '"...');
             device.gatt.connect()
                 .then(() => {
