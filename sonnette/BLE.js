@@ -235,7 +235,7 @@ let updateUIFromDevice = (buffer) => {
     });
 
     delete groups.flags;
-
+console.log(groups);
     Object.entries(groups).forEach(([id, hex_value]) => {
         let value = parseInt(hex_value, 16);
         let el = document.querySelector(`#${id}`);
@@ -270,7 +270,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (device) {
           try {
             let connected = await connectToBluetoothDevice(device);
-            document.querySelector("#container").classList.toggle("connected", connected);
+            if (connected) {
+               document.querySelector("#container").classList.add("connected");
+            }
+            else {
+               console.log('Could not connect to gatt server');
+           }
           } catch (e) {
              console.warn(e);
           }
@@ -300,10 +305,10 @@ async function requestDevice(name) {
     console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice({
         allowAllDevices: false,
-        optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID],
+        optionalServices: [ALERT_SERVICE_UUID],
         filters: [{
             namePrefix: "SONNETTE",
-            //services: [SERVICE_UUID],
+            services: [SERVICE_UUID],
             serviceData:[{service:SERVICE_UUID}]
         }]
     });
