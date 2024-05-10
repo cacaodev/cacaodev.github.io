@@ -45,6 +45,7 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define BATT_LEVEL "beb5483e-36e1-4688-b7f5-ea07361b26b6"
 
 #ifdef ARDUINO_XIAO_ESP32C3
+// 64 E8 33 85 D1 BE
 #define DEVICE_NAME "SONNETTE XIAO"
 #define ADC_IN_PIN D1
 #define ENABLE_PIR_PIN D3
@@ -73,8 +74,9 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ADVERTISING_MIN_INTERVAL 0x0020
 #define ADVERTISING_MAX_INTERVAL 0x0640
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
+#define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
 
-#define DEBUG_ESP_PORT
+//#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -93,8 +95,10 @@ uint8_t sleep_after_minutes;
 bool manual_alarm_continuous;
 uint8_t manual_alarm_discrete_count;
 uint8_t manual_alarm_discrete_interval;
+uint16_t battery_level_old = 0;
 
 BLECharacteristic *notif = NULL;
+BLECharacteristic *battery = NULL;
 BLEServer *pServer = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
@@ -293,20 +297,25 @@ void setup() {
   createCharacteristic(pService, PASSWORD, (uint8_t *)ssid.c_str(), clbk);
 
   notif = alertService->createCharacteristic(NOTIFICATION,
-                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
+                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
   BLE2902 *desc = new BLE2902();
   notif->addDescriptor(desc);
+
+  battery = alertService->createCharacteristic(NOTIFICATION,
+                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+  BLE2902 *desc2 = new BLE2902();
+  battery->addDescriptor(desc2);
 
   pService->start();
   alertService->start();
 
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(SERVICE_UUID);
-  pAdvertising->addServiceUUID(SERVICE_ALERT_UUID);
-  pAdvertising->setScanResponse(false);
+  //pAdvertising->addServiceUUID(SERVICE_UUID);
+  //pAdvertising->addServiceUUID(SERVICE_ALERT_UUID);
+  pAdvertising->setScanResponse(true);
 
-  // pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-  // pAdvertising->setMinPreferred(0x12);
+  pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
+  pAdvertising->setMinPreferred(0x12);
   // Minimum advertising interval for undirected and low duty cycle directed advertising.
   // Range: 0x0020 to 0x4000 Default: N = 0x0800 (1.28 second) Time = N * 0.625 msec Time Range: 20 ms to 10.24 sec
   pAdvertising->setMinInterval(ADVERTISING_MIN_INTERVAL);
@@ -338,8 +347,8 @@ void setup() {
 
 void setAdvertisementData() {
   char data[11];
-  uint16_t batt_level = analogRead(ADC_IN_PIN);
-  DEBUG_PRINTF("batt_level=%u", batt_level);
+  uint16_t batt_level = analogRead(ADC_IN_PIN); // 0-4095
+  DEBUG_PRINTF("batt_level=%u\n", batt_level);
   uint8_t flags = enable_pir | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
   snprintf(data, 11, "%01X%01X%02X%01X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, max(manual_alarm_discrete_count, (uint8_t)15), manual_alarm_discrete_interval, batt_level);
 
@@ -351,17 +360,33 @@ void setAdvertisementData() {
   pAdvertising->setAdvertisementData(advert);
 }
 
-void notifyStatus(uint8_t value) {
+void notifyDetection(uint8_t value) {
   notif->setValue((uint8_t *)&value, 1);
   notif->notify();
 }
 
+void notifyBatteryLevel(uint16_t batt_level) {
+  DEBUG_PRINTLN("Notify battery level change");
+  battery->setValue((uint8_t *)&batt_level, 2);
+  battery->notify();
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
+  static unsigned long timer = 0;
+  if (millis() - timer > BATTERY_NOTIFICATION_PERIODIC_DELAY) {
+    uint16_t batt_level = round(analogRead(ADC_IN_PIN) / 10) * 10;
+    if (batt_level != battery_level_old) {
+      notifyBatteryLevel(batt_level);
+      battery_level_old = batt_level;
+    }
+
+    timer = millis();
+  }
 
   if (deviceConnected && enable_notifications && INT_STATE == true) {
     DEBUG_PRINTLN("interrupt !!");
-    notifyStatus(2);
+    notifyDetection(2);
 
     INT_STATE = false;
   }
@@ -424,7 +449,7 @@ void loop() {
 
 void go_to_sleep() {
 
-  notifyStatus(0);
+  notifyDetection(0);
   detachInterrupt(digitalPinToInterrupt(PIR_INPUT_PIN));
 
 #ifdef ARDUINO_LOLIN_C3_PICO

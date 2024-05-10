@@ -85,7 +85,7 @@ const UUID_MAP = [{
             type: "range",
             name: "discrete_count",
             min: "1",
-            max: "7",
+            max: Math.pow(2, 4) - 1,
             step: "1",
             value: "1"
         }
@@ -113,6 +113,8 @@ const UUID_MAP = [{
 
 const FLAGS_IDENTIFIERS = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
 const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+const BATTERY_LEVEL_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c33191b6";
+
 const GATT_CONNECT_TIMEOUT = 10000;
 
 let createPushOnPushOffButton = (id, uuid, attr) => {
@@ -278,9 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (device) {
             try {
                 let connected = await connectToBluetoothDevice(device);
-                if (connected) {
-                    document.querySelector("#container").classList.add("connected");
-                } else {
+                if (!connected) {
                     console.log('Could not connect to gatt server');
                 }
             } catch (e) {
@@ -353,7 +353,6 @@ async function connectToBluetoothDevice(device) {
             let buffer = event.serviceData.get(SERVICE_UUID);
             try {
                 updateUIFromDevice(buffer);
-                abortController.abort();
             } catch (e) {
                 console.warn(e);
             }
@@ -362,10 +361,10 @@ async function connectToBluetoothDevice(device) {
             console.log('Connecting to GATT Server from "' + device.name + '"...');
             device.gatt.connect()
                 .then(() => {
-                    console.log('> Bluetooth device "' + device.name + '" connected.');
                     return onConnected(device);
                 })
                 .then(() => {
+                    abortController.abort();
                     resolve(true);
                 })
                 .catch(error => {
@@ -389,8 +388,13 @@ async function connectToBluetoothDevice(device) {
 }
 
 async function onConnected(device) {
+    console.log('> Bluetooth device "' + device.name + '" connected.');
+
     device.addEventListener('gattserverdisconnected', onDisconnected);
-    await startAlertNotifications(device);
+    let container = document.querySelector("#container")
+    container.classList.add("connected");
+    container.classList.remove("sleeping");
+    await startNotifications(device);
 }
 
 async function updateConnectButtonVisibility(btn) {
@@ -484,22 +488,32 @@ function HandleAlertNotification(event) {
     }
 }
 
+function HandleBatteryNotification (event) {
+  const value = event.target.value.getUint16(0);
+  document.querySelector("#BATT_LEVEL").innerText = value;
+}
+
 let deviceDeepSleep = () => {
     console.log('device is into deep sleep ...');
-    alert('En veille 😴');
+    document.querySelector("#container").classList.add("sleeping");
 }
 
 let handleDetectionNotification = () => {
     alert('detection !!!');
 }
 
-async function startAlertNotifications(device) {
+async function startNotifications(device) {
     const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
-    let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
 
+    let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
     await notif.startNotifications();
     notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
-    console.log('Added event listener characteristicvaluechanged for ' + NOTIFICATION_UUID);
+
+    let batt = await alert_service.getCharacteristic(BATTERY_LEVEL_UUID);
+    await batt.startNotifications();
+    batt.addEventListener('characteristicvaluechanged', HandleBatteryNotification);
+
+    console.log('Added event listener characteristicvaluechanged for ', NOTIFICATION_UUID, BATTERY_LEVEL_UUID);
 }
 
 async function writeValue(uuid, value) {

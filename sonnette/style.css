@@ -25,6 +25,11 @@ div#container {
   display:none;
 }
 
+#container.sleeping {
+  background-color:gray;
+  pointer-events:none;
+}
+
 .push[value="0"] {
     background-color: #EEEEEE;
 }
