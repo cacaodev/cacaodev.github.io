@@ -42,20 +42,23 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #ifdef ENABLE_WIFI_UPDATES
 #define FIRMWARE_UPDATE "beb5483e-36e1-4688-b7f5-ea07361b26b5"
 #endif
+#define BATT_LEVEL "beb5483e-36e1-4688-b7f5-ea07361b26b6"
 
 #ifdef ARDUINO_XIAO_ESP32C3
 #define DEVICE_NAME "SONNETTE XIAO"
+#define ADC_IN_PIN D1
 #define ENABLE_PIR_PIN D3
-#define PIR_INPUT_PIN D4
-#define PIR_TX_PIN D5
-#define PIR_RX_PIN D6
-#define DEFAULT_WAKEUP_PIN D7
+#define PIR_INPUT_PIN D5
+#define PIR_TX_PIN D6
+#define PIR_RX_PIN D7
+#define DEFAULT_WAKEUP_PIN D0
 #define MANUAL_ALARM_PIN D8
-#define ENABLE_DRING_PIN D9
+#define ENABLE_DRING_PIN D10
 #endif
 
 #ifdef ARDUINO_LOLIN_C3_PICO
 #define DEVICE_NAME "SONNETTE LOLIN"
+#define ADC_IN_PIN 1
 #define DEFAULT_WAKEUP_PIN 4
 #define PIR_INPUT_PIN 5
 #define MANUAL_ALARM_PIN 6
@@ -89,7 +92,7 @@ bool enable_dring;
 uint8_t sleep_after_minutes;
 bool manual_alarm_continuous;
 uint8_t manual_alarm_discrete_count;
-uint16_t manual_alarm_discrete_interval;
+uint8_t manual_alarm_discrete_interval;
 
 BLECharacteristic *notif = NULL;
 BLEServer *pServer = NULL;
@@ -109,7 +112,7 @@ struct {
   uint8_t counter = 1;
   uint8_t iteration = 0;
   unsigned long timer = 0;
-  unsigned short delay = 200;
+  uint16_t delay = 200;
 } BlinkMode;
 
 class MyCallbacks : public BLECharacteristicCallbacks {
@@ -148,6 +151,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         enable_notifications = value;
       } else if (uuid == SLEEP_AFTER_MINUTES) {
         sleep_after_minutes = value;
+        preferences.putUChar("sleep_after", sleep_after_minutes);
       } else if (uuid == SSID) {
         preferences.putString("ssid", (const char *)data);
       } else if (uuid == PASSWORD) {
@@ -158,11 +162,8 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         manual_alarm_discrete_count = value;
         BlinkMode.counter = value;
       } else if (uuid == MANUAL_ALARM_DISCRETE_INTERVAL) {
-        uint16_t ui16;
-        memcpy(&ui16, data, 2);
-        DEBUG_PRINTF("Wrote charasterisctic UUID:%s uint16_t value:%u\n", uuid.c_str(), ui16);
-        BlinkMode.delay = ui16;
-        manual_alarm_discrete_interval = ui16;
+        BlinkMode.delay = value * 100;
+        manual_alarm_discrete_interval = value;
 #ifdef ENABLE_WIFI_UPDATES
       } else if (uuid == FIRMWARE_UPDATE) {
         startUpdate();
@@ -256,11 +257,11 @@ void setup() {
   sleep_after_minutes = preferences.getUChar("sleep_after", 5);
   manual_alarm_continuous = preferences.getBool("continuous", true);
   manual_alarm_discrete_count = preferences.getUChar("discrete_count", 1);
-  manual_alarm_discrete_interval = preferences.getUShort("discrete_delay", 200);
+  manual_alarm_discrete_interval = preferences.getUShort("discrete_delay", 10);
   String ssid = preferences.getString("ssid", "");
   String password = preferences.getString("password", "");
   BlinkMode.counter = manual_alarm_discrete_count;
-  BlinkMode.delay = manual_alarm_discrete_interval;
+  BlinkMode.delay = manual_alarm_discrete_interval * 100;
 
   digitalWrite(ENABLE_PIR_PIN, !enable_pir);
   digitalWrite(ENABLE_DRING_PIN, !enable_dring);
@@ -286,7 +287,7 @@ void setup() {
   createCharacteristic(pService, FIRMWARE_VERSION, FIRMWARE_VERSION_NUMBER, clbk);
   createCharacteristic(pService, MANUAL_ALARM_CONTINUOUS, (uint8_t)manual_alarm_continuous, clbk);
   createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, manual_alarm_discrete_count, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t *)&manual_alarm_discrete_interval, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t)manual_alarm_discrete_interval, clbk);
 
   createCharacteristic(pService, SSID, (uint8_t *)ssid.c_str(), clbk);
   createCharacteristic(pService, PASSWORD, (uint8_t *)ssid.c_str(), clbk);
@@ -336,12 +337,16 @@ void setup() {
 }
 
 void setAdvertisementData() {
-  char data[13];
+  char data[11];
+  uint16_t batt_level = analogRead(ADC_IN_PIN);
+  DEBUG_PRINTF("batt_level=%u", batt_level);
   uint8_t flags = enable_pir | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
-  snprintf(data, 13, "%02X%02X%02X%02X%04X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, manual_alarm_discrete_count, manual_alarm_discrete_interval);
+  snprintf(data, 11, "%01X%01X%02X%01X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, max(manual_alarm_discrete_count, (uint8_t)15), manual_alarm_discrete_interval, batt_level);
 
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
   advert.setServiceData(BLEUUID(SERVICE_UUID), data);
+  advert.setName("SONNETTE");
+  //advert.setCompleteServices(BLEUUID(SERVICE_UUID));
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
   pAdvertising->setAdvertisementData(advert);
 }
@@ -375,12 +380,11 @@ void loop() {
 
   unsigned long use_duration = abs((signed long)(millis() - last_activity));
   unsigned long max_duration = (unsigned long)(sleep_after_minutes * 60UL * 1000UL);
-#ifdef ARDUINO_LOLIN_C3_PICO
   if (use_duration > max_duration) {
     DEBUG_PRINTF("Go to sleep after %u minutes of inactivity. use_duration:%u max:%u\n", sleep_after_minutes, use_duration, max_duration);
     go_to_sleep();
   }
-#endif
+
   if (BlinkMode.state == 1) {
     digitalWrite(MANUAL_ALARM_PIN, HIGH);
 #ifdef ARDUINO_LOLIN_C3_PICO
@@ -435,7 +439,7 @@ void go_to_sleep() {
   preferences.putUChar("sleep_after", sleep_after_minutes);
   preferences.putBool("continuous", manual_alarm_continuous);
   preferences.putUChar("discrete_count", manual_alarm_discrete_count);
-  preferences.putUShort("discrete_delay", manual_alarm_discrete_interval);
+  preferences.putUChar("discrete_delay", manual_alarm_discrete_interval);
   preferences.end();
 
   gpio_deep_sleep_hold_en();
@@ -446,9 +450,11 @@ void go_to_sleep() {
     .pin_bit_mask = BIT(DEFAULT_WAKEUP_PIN),
     .mode = GPIO_MODE_INPUT,
   };
+
   ESP_ERROR_CHECK(gpio_config(&config));
   ESP_ERROR_CHECK(esp_deep_sleep_enable_gpio_wakeup(BIT(DEFAULT_WAKEUP_PIN), DEFAULT_WAKEUP_LEVEL));
   DEBUG_PRINTF("Enabling GPIO wakeup on pin GPIO%u\n", DEFAULT_WAKEUP_PIN);
+
   //esp_sleep_enable_timer_wakeup(1000000ULL * 60ULL * 60ULL * 12ULL);
   esp_deep_sleep_start();
 }

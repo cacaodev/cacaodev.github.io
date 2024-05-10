@@ -74,3 +74,7 @@ body {
 label#VERSION::before {
     content: "VERSION ";
 }
+
+#BATT_LEVEL::before {
+  content:"Batterie: ";
+}

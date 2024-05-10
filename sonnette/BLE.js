@@ -2,6 +2,14 @@ const DEVICE_NAME = "SONNETTE";
 const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914a";
 const ALERT_SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const UUID_MAP = [{
+        type: "text",
+        id: "BATT_LEVEL",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b6",
+        attr: {
+            value: 0,
+            name: "batt_level"
+        }
+    },{
         type: "push",
         id: "RGB_LED",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
@@ -56,7 +64,7 @@ const UUID_MAP = [{
             type: "range",
             name: "Mise en Veille",
             min: "1",
-            max: "255",
+            max: Math.pow(2, 8) - 1,
             step: "1",
             value: "1"
         }
@@ -77,7 +85,7 @@ const UUID_MAP = [{
             type: "range",
             name: "discrete_count",
             min: "1",
-            max: "10",
+            max: "7",
             step: "1",
             value: "1"
         }
@@ -88,10 +96,10 @@ const UUID_MAP = [{
         attr: {
             type: "range",
             name: "discrete_interval",
-            min: "50",
-            max: "10000",
-            step: "200",
-            value: "1000"
+            min: "1",
+            max: Math.pow(2, 8) - 1,
+            step: "1",
+            value: "4"
         }
     }, {
         type: "text",
@@ -224,7 +232,7 @@ const INPUTS = {
 
 let updateUIFromDevice = (buffer) => {
     let hex_string = new TextDecoder().decode(buffer);
-    let regexp = new RegExp("^(?<flags>[0-9A-Z]{2})(?<VERSION>[0-9A-Z]{2})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{2})(?<DISCRETE_INTERVAL>[0-9A-Z]{4})$");
+    let regexp = new RegExp("^(?<flags>[0-9A-Z]{1})(?<VERSION>[0-9A-Z]{1})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{1})(?<DISCRETE_INTERVAL>[0-9A-Z]{2})(?<BATT_LEVEL>[0-9A-Z]{3})$");
     console.log(`Received service data adv: '${hex_string}'`);
     let matches = hex_string.match(regexp);
     if (matches == null || matches.groups == null) throw `No matches for hex string '${hex_string}' with regular expression '${regexp}'`;
