@@ -83,3 +83,21 @@ label#VERSION::before {
 #BATT_LEVEL::before {
   content:"Batterie: ";
 }
+
+
+input#acceptAllDevices {
+    align-self: flex-start;
+    /* border: solid black thin; */
+    /* background-color: blue; */
+    /* display: block; */
+    scale: 2;
+}
+
+input#acceptAllDevices::before {
+    content: "Montrer tous les appareils";
+    display: block;
+    width: max-content;
+    margin-left: 1.2em;
+    font-size: small;
+    /* background-color: red; */
+}
