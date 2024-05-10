@@ -9,7 +9,7 @@ const UUID_MAP = [{
             value: 0,
             name: "batt_level"
         }
-    },{
+    }, {
         type: "push",
         id: "RGB_LED",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
@@ -298,6 +298,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         let elmt = INPUTS[type](id, uuid, attr);
         document.getElementById("container").appendChild(elmt);
     });
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register(new URL('sw.js', import.meta.url), {
+            scope: '/'
+        }).then(
+            (registration) => {
+                console.warn('Service worker registration succeeded:', registration);
+            },
+            /*catch*/
+            (error) => {
+                console.warn('Service worker registration failed:', error);
+            }
+        )
+    } else {
+        console.warn('Service workers are not supported.')
+    }
 });
 
 let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTimeout(resolve, timeout, result));
@@ -488,9 +504,9 @@ function HandleAlertNotification(event) {
     }
 }
 
-function HandleBatteryNotification (event) {
-  const value = event.target.value.getUint16(0);
-  document.querySelector("#BATT_LEVEL").innerText = value;
+function HandleBatteryNotification(event) {
+    const value = event.target.value.getUint16(0);
+    document.querySelector("#BATT_LEVEL").innerText = value;
 }
 
 let deviceDeepSleep = () => {
@@ -499,7 +515,23 @@ let deviceDeepSleep = () => {
 }
 
 let handleDetectionNotification = () => {
-    alert('detection !!!');
+  showClientNotification("Détection de mouvement !!", {
+            body: `distance: ?M`,
+            tag:"ld2410",
+            icon:"/detection.png",
+            vibrate: [500, 1000, 500, 1000, 500]
+          });
+}
+
+let showClientNotification = (title, options) => {
+    Notification.requestPermission((result) => {
+        if (result === "granted") {
+            navigator.serviceWorker.ready.then((registration) => {
+                console.warn('serviceWorker', registration);
+                registration.showNotification(title, options);
+            });
+        }
+    });
 }
 
 async function startNotifications(device) {
