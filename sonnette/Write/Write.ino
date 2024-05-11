@@ -28,11 +28,11 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 
 #define RGB_LED "beb5483e-36e1-4688-b7f5-ea07361b26a1"
 #define ENABLE_PIR "beb5483e-36e1-4688-b7f5-ea07361b26a2"
-#define ENABLE_DRING "beb5483e-36e1-4688-b7f5-ea07361b26a7"
 #define MANUAL_ALARM "beb5483e-36e1-4688-b7f5-ea07361b26a3"
 #define SSID "beb5483e-36e1-4688-b7f5-ea07361b26a4"
 #define PASSWORD "beb5483e-36e1-4688-b7f5-ea07361b26a5"
 #define ENABLE_NOTIFICATIONS "beb5483e-36e1-4688-b7f5-ea07361b26a6"
+#define ENABLE_DRING "beb5483e-36e1-4688-b7f5-ea07361b26a7"
 #define NOTIFICATION "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define SLEEP_AFTER_MINUTES "beb5483e-36e1-4688-b7f5-ea07361b26a9"
 #define FIRMWARE_VERSION "beb5483e-36e1-4688-b7f5-ea07361b26b1"
@@ -76,7 +76,7 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
 
-//#define DEBUG_ESP_PORT
+#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -110,11 +110,12 @@ Preferences preferences;
 BLEAdvertisementData advert;
 
 void setAdvertisementData();
+void dring(uint8_t value);
 
 struct {
   uint8_t state = 0;
   uint8_t counter = 1;
-  uint8_t iteration = 0;
+  mutable uint8_t iteration = 0;
   unsigned long timer = 0;
   uint16_t delay = 200;
 } BlinkMode;
@@ -136,12 +137,8 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         neopixelWrite(RGB_BUILTIN, value ? RGB_BRIGHTNESS : 0, 0, 0);
 #endif
       } else if (uuid == MANUAL_ALARM) {
-        bool continuous = preferences.getBool("continuous", true);
-        if (continuous) {
-          digitalWrite(MANUAL_ALARM_PIN, value);
-#ifdef ARDUINO_LOLIN_C3_PICO
-          neopixelWrite(RGB_BUILTIN, value * RGB_BRIGHTNESS, value * RGB_BRIGHTNESS, 0);
-#endif
+        if (manual_alarm_continuous) {
+          dring(value);
         } else if (value == 1) {
           BlinkMode.state = 1;
         }
@@ -150,7 +147,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         digitalWrite(ENABLE_PIR_PIN, !enable_pir);
       } else if (uuid == ENABLE_DRING) {
         enable_dring = value;
-        digitalWrite(ENABLE_DRING_PIN, !enable_dring);
+        digitalWrite(ENABLE_DRING_PIN, enable_dring);
       } else if (uuid == ENABLE_NOTIFICATIONS) {
         enable_notifications = value;
       } else if (uuid == SLEEP_AFTER_MINUTES) {
@@ -268,7 +265,7 @@ void setup() {
   BlinkMode.delay = manual_alarm_discrete_interval * 100;
 
   digitalWrite(ENABLE_PIR_PIN, !enable_pir);
-  digitalWrite(ENABLE_DRING_PIN, !enable_dring);
+  digitalWrite(ENABLE_DRING_PIN, enable_dring);
   digitalWrite(MANUAL_ALARM_PIN, HIGH);
   delay(DICRETE_ON_DURATION);
   digitalWrite(MANUAL_ALARM_PIN, LOW);
@@ -411,18 +408,14 @@ void loop() {
   }
 
   if (BlinkMode.state == 1) {
-    digitalWrite(MANUAL_ALARM_PIN, HIGH);
-#ifdef ARDUINO_LOLIN_C3_PICO
-    neopixelWrite(RGB_BUILTIN, RGB_BRIGHTNESS, RGB_BRIGHTNESS, 0);
-#endif
+    dring(HIGH);
+
     BlinkMode.timer = millis();
     BlinkMode.state = 2;
   } else if (BlinkMode.state == 2) {
     if (millis() - BlinkMode.timer > DICRETE_ON_DURATION) {
-      digitalWrite(MANUAL_ALARM_PIN, LOW);
-#ifdef ARDUINO_LOLIN_C3_PICO
-      neopixelWrite(RGB_BUILTIN, 0, 0, 0);
-#endif
+      dring(LOW);
+
       BlinkMode.iteration = BlinkMode.iteration + 1;
       BlinkMode.timer = millis();
       BlinkMode.state = 3;
@@ -484,6 +477,12 @@ void go_to_sleep() {
   esp_deep_sleep_start();
 }
 
+void dring(uint8_t value) {
+  digitalWrite(MANUAL_ALARM_PIN, value);
+#ifdef ARDUINO_LOLIN_C3_PICO
+    neopixelWrite(RGB_BUILTIN, value * RGB_BRIGHTNESS, 0, value * RGB_BRIGHTNESS);
+#endif
+}
 void print_wakeup_reason() {
   esp_sleep_wakeup_cause_t wakeup_reason;
 
@@ -498,6 +497,7 @@ void print_wakeup_reason() {
     default: DEBUG_PRINTF("Wakeup was not caused by deep sleep: %u\n", wakeup_reason); break;
   }
 }
+
 #ifdef ENABLE_WIFI_UPDATES
 void startUpdate() {
   setup_wifi();

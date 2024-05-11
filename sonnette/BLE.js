@@ -26,26 +26,6 @@ const UUID_MAP = [{
             value: 0,
             name: "pir_enable"
         }
-
-    },
-    {
-        type: "push",
-        id: "DRING_ENABLE",
-        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a7",
-        attr: {
-            value: 0,
-            name: "dring_enable"
-        }
-
-    },
-    {
-        type: "pressed",
-        id: "MANUAL_ALARM",
-        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a3",
-        attr: {
-            value: 0,
-            name: "manual_alarm"
-        }
     },
     {
         type: "push",
@@ -56,17 +36,23 @@ const UUID_MAP = [{
             name: "enable_notifications"
         }
 
-    }, {
-        type: "range",
-        id: "SLEEP_AFTER_MINUTES",
-        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a9",
+    },
+    {
+        type: "push",
+        id: "DRING_ENABLE",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a7",
         attr: {
-            type: "range",
-            name: "Mise en Veille",
-            min: "1",
-            max: Math.pow(2, 8) - 1,
-            step: "1",
-            value: "1"
+            value: 0,
+            name: "dring_enable"
+        }
+    },
+    {
+        type: "pressed",
+        id: "MANUAL_ALARM",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a3",
+        attr: {
+            value: 0,
+            name: "manual_alarm"
         }
     }, {
         type: "push",
@@ -100,6 +86,18 @@ const UUID_MAP = [{
             max: Math.pow(2, 8) - 1,
             step: "1",
             value: "4"
+        }
+    }, {
+        type: "range",
+        id: "SLEEP_AFTER_MINUTES",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a9",
+        attr: {
+            type: "range",
+            name: "Mise en Veille",
+            min: "1",
+            max: Math.pow(2, 8) - 1,
+            step: "1",
+            value: "1"
         }
     }, {
         type: "text",
@@ -515,13 +513,13 @@ let deviceDeepSleep = () => {
 }
 
 let handleDetectionNotification = () => {
-  alert("detection !!!");
-  // showClientNotification("Détection de mouvement !!", {
-  //           body: `distance: ?M`,
-  //           tag:"ld2410",
-  //           icon:"/detection.png",
-  //           vibrate: [500, 1000, 500, 1000, 500]
-  //         });
+    alert("detection !!!");
+    // showClientNotification("Détection de mouvement !!", {
+    //           body: `distance: ?M`,
+    //           tag:"ld2410",
+    //           icon:"/detection.png",
+    //           vibrate: [500, 1000, 500, 1000, 500]
+    //         });
 }
 
 let showClientNotification = (title, options) => {
