@@ -76,7 +76,7 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
 
-#define DEBUG_ESP_PORT
+//#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -111,6 +111,7 @@ BLEAdvertisementData advert;
 
 void setAdvertisementData();
 void dring(uint8_t value);
+void abortDring();
 
 struct {
   uint8_t state = 0;
@@ -148,6 +149,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == ENABLE_DRING) {
         enable_dring = value;
         digitalWrite(ENABLE_DRING_PIN, enable_dring);
+        if (enable_dring == 0) abortDring();
       } else if (uuid == ENABLE_NOTIFICATIONS) {
         enable_notifications = value;
       } else if (uuid == SLEEP_AFTER_MINUTES) {
@@ -159,6 +161,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         preferences.putString("password", (const char *)data);
       } else if (uuid == MANUAL_ALARM_CONTINUOUS) {
         manual_alarm_continuous = value;
+        if (manual_alarm_continuous == 1) abortDring();
       } else if (uuid == MANUAL_ALARM_DISCRETE_COUNT) {
         manual_alarm_discrete_count = value;
         BlinkMode.counter = value;
@@ -438,6 +441,14 @@ void loop() {
     esp32FOTA.handle();
   }
 #endif
+}
+
+void abortDring() {
+  if (BlinkMode.state != 0) {
+    BlinkMode.state = 0;
+    BlinkMode.iteration = 0;
+    dring(LOW);
+  }
 }
 
 void go_to_sleep() {
