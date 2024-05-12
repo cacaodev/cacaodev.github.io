@@ -297,21 +297,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById("container").appendChild(elmt);
     });
 
-    // if ('serviceWorker' in navigator) {
-    //     navigator.serviceWorker.register(new URL('sw.js', import.meta.url), {
-    //         scope: '/'
-    //     }).then(
-    //         (registration) => {
-    //             console.warn('Service worker registration succeeded:', registration);
-    //         },
-    //         /*catch*/
-    //         (error) => {
-    //             console.warn('Service worker registration failed:', error);
-    //         }
-    //     )
-    // } else {
-    //     console.warn('Service workers are not supported.')
-    // }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register(new URL('sw.js', import.meta.url), {
+            scope: '/'
+        }).then(
+            (registration) => {
+                console.warn('Service worker registration succeeded:', registration);
+            },
+            /*catch*/
+            (error) => {
+                console.warn('Service worker registration failed:', error);
+            }
+        )
+    } else {
+        console.warn('Service workers are not supported.')
+    }
 });
 
 let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTimeout(resolve, timeout, result));
@@ -513,13 +513,12 @@ let deviceDeepSleep = () => {
 }
 
 let handleDetectionNotification = () => {
-    alert("detection !!!");
-    // showClientNotification("Détection de mouvement !!", {
-    //           body: `distance: ?M`,
-    //           tag:"ld2410",
-    //           icon:"/detection.png",
-    //           vibrate: [500, 1000, 500, 1000, 500]
-    //         });
+    showClientNotification("Détection de mouvement !!", {
+              body: `distance: ?M`,
+              tag:"ld2410",
+              icon:"./detection.png",
+              vibrate: [500, 1000, 500, 1000, 500]
+            });
 }
 
 let showClientNotification = (title, options) => {

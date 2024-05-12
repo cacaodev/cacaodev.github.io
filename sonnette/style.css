@@ -8,6 +8,7 @@ div#container {
     /* justify-content: center; */
     /* justify-items: center; */
     width: -webkit-fill-available;
+    height: max-content;
 }
 
 #container:not(.connected) {

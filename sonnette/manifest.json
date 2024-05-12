@@ -1,0 +1,16 @@
+{
+    "start_url": "/sonnette/",
+    "name": "Sonnette",
+    "short_name": "Sonnette",
+    "description": "Application pour faire marcher la sonnette bluetooth",
+    "author": "Tonton Martin",
+    "icons": [{
+        "src": "/sonnette/icon.svg",
+        "sizes": "48x48",
+        "type": "image/svg"
+    }],
+    "orientation": "portrait",
+    "display": "fullscreen",
+    "theme_color": "#B12A34",
+    "background_color": "#15202A"
+}
