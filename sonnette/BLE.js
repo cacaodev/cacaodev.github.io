@@ -114,6 +114,20 @@ const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const BATTERY_LEVEL_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c33191b6";
 
 const GATT_CONNECT_TIMEOUT = 10000;
+const FILTER_OPTIONS = {
+    optionalServices: [ALERT_SERVICE_UUID],
+    filters: [{
+        namePrefix: "SONNETTE",
+        services: [SERVICE_UUID],
+        serviceData: [{
+            service: SERVICE_UUID
+        }]
+    }]
+};
+const REQUEST_ALL_OPTIONS = {
+    acceptAllDevices: true,
+    optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID]
+};
 
 let createPushOnPushOffButton = (id, uuid, attr) => {
     let el = document.createElement("button");
@@ -260,15 +274,23 @@ let updateUIFromDevice = (buffer) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOMContentLoaded");
+    let container = document.querySelector("#container");
+    if (!navigator.bluetooth.getDevices) {
+        container.classList.add("needs_experimental_flags");
+    }
 
     let connect_btn = document.getElementById("connect");
+
+    let device = await pairedDevice(DEVICE_NAME);
+    if (device) container.classList.add("paired");
+
     connect_btn.addEventListener('click', async () => {
-        let device = await pairedDevice(DEVICE_NAME);
         if (!device) {
             try {
                 console.log("Requested device");
                 device = await requestDevice(DEVICE_NAME);
             } catch (e) {
+                device = null;
                 console.warn(e);
             }
         } else {
@@ -317,6 +339,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTimeout(resolve, timeout, result));
 
 async function pairedDevice(name) {
+    if (!navigator.bluetooth.getDevices) {
+      console.warn("Enable experimental flags about://flags#");
+      return null;
+    }
+
     let devices = await navigator.bluetooth.getDevices();
     return devices.find(dd => dd.name.startsWith(name));
 }
@@ -324,25 +351,9 @@ async function pairedDevice(name) {
 async function requestDevice(name) {
 
     let acceptAllDevices = !!document.querySelector("#acceptAllDevices:checked");
-    let options;
+    let options = acceptAllDevices ? REQUEST_ALL_OPTIONS : FILTER_OPTIONS;
 
-    if (!acceptAllDevices) options = {
-        optionalServices: [ALERT_SERVICE_UUID],
-        filters: [{
-            namePrefix: "SONNETTE",
-            services: [SERVICE_UUID],
-            serviceData: [{
-                service: SERVICE_UUID
-            }]
-        }]
-    };
-    else
-        options = {
-            acceptAllDevices: true,
-            optionalServices: [SERVICE_UUID, ALERT_SERVICE_UUID]
-        };
-
-    console.log('Requesting Bluetooth Device...', options);
+    console.log('Requesting Bluetooth Device...');
     let device = await navigator.bluetooth.requestDevice(options);
 
     //device.addEventListener('advertisementreceived', interpretIBeacon);
@@ -405,22 +416,23 @@ async function onConnected(device) {
     console.log('> Bluetooth device "' + device.name + '" connected.');
 
     device.addEventListener('gattserverdisconnected', onDisconnected);
-    let container = document.querySelector("#container")
+    let container = document.querySelector("#container");
     container.classList.add("connected");
     container.classList.remove("sleeping");
     await startNotifications(device);
 }
 
-async function updateConnectButtonVisibility(btn) {
-    let device = await pairedDevice(DEVICE_NAME);
-    btn.classList.toggle("connected", !!device);
-}
-
 async function onDisconnected() {
     console.log('> Bluetooth Device disconnected');
+    let container = document.querySelector("#container");
+    container.classList.remove("connected");
+
     let device = await pairedDevice(DEVICE_NAME);
     if (device) {
         let connected = await connectToBluetoothDevice(device);
+        if (!connected) {
+          console.warn("Could not reconnect to the bluetooth device");
+        }
     }
 }
 /*
@@ -513,20 +525,20 @@ let deviceDeepSleep = () => {
 }
 
 let handleDetectionNotification = () => {
-    showClientNotification("Détection de mouvement !!", {
-              body: `distance: ?M`,
-              tag:"ld2410",
-              icon:"./detection.png",
-              vibrate: [500, 1000, 500, 1000, 500]
-            });
-}
-
-let showClientNotification = (title, options) => {
     Notification.requestPermission((result) => {
         if (result === "granted") {
             navigator.serviceWorker.ready.then((registration) => {
                 console.warn('serviceWorker', registration);
-                registration.showNotification(title, options);
+                try {
+                  registration.showNotification("Détection de mouvement !!", {
+                            body: `distance: ?M`,
+                            tag:"ld2410",
+                            //icon:"./detection.png",
+                            vibrate: [500, 1000, 500, 1000, 500]
+                          });
+                } catch (e) {
+                  alert(e);
+                }
             });
         }
     });
