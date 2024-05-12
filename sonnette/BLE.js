@@ -275,8 +275,21 @@ let updateUIFromDevice = (buffer) => {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOMContentLoaded");
     let container = document.querySelector("#container");
-    if (!navigator.bluetooth.getDevices) {
-        container.classList.add("needs_experimental_flags");
+
+    if (!navigator.bluetooth) {
+        container.classList.add("bluetooth_not_supported");
+        return;
+    } else {
+      let available = await navigator.bluetooth.getAvailability();
+      if (!available) {
+          container.classList.add("bluetooth_not_available");
+          return;
+      }
+
+      if (!navigator.bluetooth.getDevices) {
+          if (navigator.userAgent.indexOf("Chrome"))
+            container.classList.add("chrome_getdevices_not_supported");
+      }
     }
 
     let connect_btn = document.getElementById("connect");
@@ -548,12 +561,16 @@ async function startNotifications(device) {
     const alert_service = await device.gatt.getPrimaryService(ALERT_SERVICE_UUID);
 
     let notif = await alert_service.getCharacteristic(NOTIFICATION_UUID);
-    await notif.startNotifications();
-    notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
+    if (notif.startNotifications) {
+        await notif.startNotifications();
+        notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
+    }
 
     let batt = await alert_service.getCharacteristic(BATTERY_LEVEL_UUID);
-    await batt.startNotifications();
-    batt.addEventListener('characteristicvaluechanged', HandleBatteryNotification);
+    if (batt.startNotifications) {
+        await batt.startNotifications();
+        batt.addEventListener('characteristicvaluechanged', HandleBatteryNotification);
+    }
 
     console.log('Added event listener characteristicvaluechanged for ', NOTIFICATION_UUID, BATTERY_LEVEL_UUID);
 }

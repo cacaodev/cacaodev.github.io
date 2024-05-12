@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="./BLE.js" type="module"></script>
     <link rel="stylesheet" href="./style.css">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.webmanifest">
     <title></title>
   </head>
   <body>
     <div class="container" id="container">
+      <div class="warning">
+        Not supported. Please enable bluetooth experimental flags <a href="chrome://flags#experimental-bluetooth">Open Chrome flags tab</a>
+      </div>
       <button class="front" type="button" name="connect" id="connect">CONNECT</button>
       <input class="front" type="checkbox" name="acceptAllDevices" id="acceptAllDevices" value="0"/>
     </div>

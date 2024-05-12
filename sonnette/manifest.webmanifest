@@ -2,10 +2,10 @@
     "start_url": "/sonnette/",
     "name": "Sonnette",
     "short_name": "Sonnette",
-    "description": "Application pour faire marcher la sonnette bluetooth",
+    "description": "Sonnette",
     "author": "Tonton Martin",
     "icons": [{
-        "src": "/sonnette/icon.svg",
+        "src": "/sonnette/bell.svg",
         "sizes": "48x48",
         "type": "image/svg"
     }],
