@@ -13,6 +13,9 @@
 #include <BLE2902.h>
 #include <Preferences.h>
 #include "driver/gpio.h"
+#include "WiFi.h"
+
+//#define ENABLE_WIFI_UPDATES
 
 #ifdef ENABLE_WIFI_UPDATES
 #include <esp32FOTA.hpp>
@@ -29,11 +32,10 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define RGB_LED "beb5483e-36e1-4688-b7f5-ea07361b26a1"
 #define ENABLE_PIR "beb5483e-36e1-4688-b7f5-ea07361b26a2"
 #define MANUAL_ALARM "beb5483e-36e1-4688-b7f5-ea07361b26a3"
-#define SSID "beb5483e-36e1-4688-b7f5-ea07361b26a4"
+#define WIFI_SSID "beb5483e-36e1-4688-b7f5-ea07361b26a4"
 #define PASSWORD "beb5483e-36e1-4688-b7f5-ea07361b26a5"
 #define ENABLE_NOTIFICATIONS "beb5483e-36e1-4688-b7f5-ea07361b26a6"
 #define ENABLE_DRING "beb5483e-36e1-4688-b7f5-ea07361b26a7"
-#define NOTIFICATION "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define SLEEP_AFTER_MINUTES "beb5483e-36e1-4688-b7f5-ea07361b26a9"
 #define FIRMWARE_VERSION "beb5483e-36e1-4688-b7f5-ea07361b26b1"
 #define MANUAL_ALARM_CONTINUOUS "beb5483e-36e1-4688-b7f5-ea07361b26b2"
@@ -42,7 +44,9 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #ifdef ENABLE_WIFI_UPDATES
 #define FIRMWARE_UPDATE "beb5483e-36e1-4688-b7f5-ea07361b26b5"
 #endif
-#define BATT_LEVEL "beb5483e-36e1-4688-b7f5-ea07361b26b6"
+#define START_WIFI_SCAN "beb5483e-36e1-4688-b7f5-ea07361b26b7"
+
+#define NOTIFICATION "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 #ifdef ARDUINO_XIAO_ESP32C3
 // 64 E8 33 85 D1 BE
@@ -72,11 +76,11 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define DICRETE_ON_DURATION 500
 #define MANIFEST_URL "http://cacaodev.github.com/sonnette/manifest.json"
 #define ADVERTISING_MIN_INTERVAL 0x0020
-#define ADVERTISING_MAX_INTERVAL 0x0640
+#define ADVERTISING_MAX_INTERVAL 0x0320
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
 
-//#define DEBUG_ESP_PORT
+#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -98,13 +102,15 @@ uint8_t manual_alarm_discrete_interval;
 uint16_t battery_level_old = 0;
 
 BLECharacteristic *notif = NULL;
-BLECharacteristic *battery = NULL;
+// BLECharacteristic *battery = NULL;
+// BLECharacteristic *networks = NULL;
 BLEServer *pServer = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 bool INT_STATE = false;
 unsigned long last_activity;
 bool handle_update = false;
+bool wifi_scan_started = false;
 
 Preferences preferences;
 BLEAdvertisementData advert;
@@ -112,6 +118,7 @@ BLEAdvertisementData advert;
 void setAdvertisementData();
 void dring(uint8_t value);
 void abortDring();
+void startWifiScan();
 
 struct {
   uint8_t state = 0;
@@ -155,9 +162,12 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == SLEEP_AFTER_MINUTES) {
         sleep_after_minutes = value;
         preferences.putUChar("sleep_after", sleep_after_minutes);
-      } else if (uuid == SSID) {
-        preferences.putString("ssid", (const char *)data);
+      } else if (uuid == WIFI_SSID) {
+        const char *ssid = WiFi.SSID(value).c_str();
+        DEBUG_PRINTF("ssid:%u '%s'\n", value, ssid);
+        preferences.putString("ssid", ssid);
       } else if (uuid == PASSWORD) {
+        DEBUG_PRINTF("pwd:%u '%s'\n", data);
         preferences.putString("password", (const char *)data);
       } else if (uuid == MANUAL_ALARM_CONTINUOUS) {
         manual_alarm_continuous = value;
@@ -172,6 +182,8 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == FIRMWARE_UPDATE) {
         startUpdate();
 #endif
+      } else if (uuid == START_WIFI_SCAN) {
+        startWifiScan();
       }
 
       setAdvertisementData();
@@ -292,8 +304,8 @@ void setup() {
   createCharacteristic(pService, MANUAL_ALARM_CONTINUOUS, (uint8_t)manual_alarm_continuous, clbk);
   createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, manual_alarm_discrete_count, clbk);
   createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t)manual_alarm_discrete_interval, clbk);
-
-  createCharacteristic(pService, SSID, (uint8_t *)ssid.c_str(), clbk);
+  createCharacteristic(pService, START_WIFI_SCAN, (uint8_t)0, clbk);
+  createCharacteristic(pService, WIFI_SSID, (uint8_t *)ssid.c_str(), clbk);
   createCharacteristic(pService, PASSWORD, (uint8_t *)ssid.c_str(), clbk);
 
   notif = alertService->createCharacteristic(NOTIFICATION,
@@ -301,10 +313,15 @@ void setup() {
   BLE2902 *desc = new BLE2902();
   notif->addDescriptor(desc);
 
-  battery = alertService->createCharacteristic(NOTIFICATION,
-                                             BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
-  BLE2902 *desc2 = new BLE2902();
-  battery->addDescriptor(desc2);
+  // battery = alertService->createCharacteristic(BATT_LEVEL,
+  //                                              BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+  // BLE2902 *desc2 = new BLE2902();
+  // battery->addDescriptor(desc2);
+
+  // networks = alertService->createCharacteristic(NETWORKS,
+  //                                               BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+  // BLE2902 *desc3 = new BLE2902();
+  // networks->addDescriptor(desc3);
 
   pService->start();
   alertService->start();
@@ -326,8 +343,6 @@ void setup() {
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
   setAdvertisementData();
 
-  BLEDevice::startAdvertising();
-
 #ifdef ARDUINO_LOLIN_C3_PICO
   neopixelWrite(RGB_BUILTIN, RGB_BRIGHTNESS, RGB_BRIGHTNESS, RGB_BRIGHTNESS);
   delay(1000);
@@ -347,7 +362,7 @@ void setup() {
 
 void setAdvertisementData() {
   char data[11];
-  uint16_t batt_level = analogRead(ADC_IN_PIN); // 0-4095
+  uint16_t batt_level = analogRead(ADC_IN_PIN);  // 0-4095
   DEBUG_PRINTF("batt_level=%u\n", batt_level);
   uint8_t flags = enable_pir | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
   snprintf(data, 11, "%01X%01X%02X%01X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, max(manual_alarm_discrete_count, (uint8_t)15), manual_alarm_discrete_interval, batt_level);
@@ -358,17 +373,77 @@ void setAdvertisementData() {
   //advert.setCompleteServices(BLEUUID(SERVICE_UUID));
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
   pAdvertising->setAdvertisementData(advert);
+  BLEDevice::startAdvertising();
 }
 
-void notifyDetection(uint8_t value) {
-  notif->setValue((uint8_t *)&value, 1);
+void notifyDetection() {
+  uint8_t result[1] = { 0 };
+  notif->setValue(result, 1);
+  notif->notify();
+}
+
+void notifyDeepSleep() {
+  uint8_t result[1] = { 1 };
+  notif->setValue(result, 1);
   notif->notify();
 }
 
 void notifyBatteryLevel(uint16_t batt_level) {
-  DEBUG_PRINTLN("Notify battery level change");
-  battery->setValue((uint8_t *)&batt_level, 2);
-  battery->notify();
+  DEBUG_PRINTF("Notify battery level change %u\n", batt_level);
+  uint8_t mode = 2;
+  uint8_t result[3];
+  memcpy(result, (uint8_t *)&mode, 1);
+  memcpy(result + 1, (uint8_t *)&batt_level, 2);
+  notif->setValue(result, 3);
+  notif->notify();
+}
+
+void notifyNetworksScan(int16_t networksFound) {
+  char result[512];
+  int16_t position = 0;
+  uint8_t n = 0;
+  uint8_t mode = 3;
+  uint8_t *modePtr = &mode;
+
+  DEBUG_PRINTF("Found %u networks\n", networksFound);
+
+  memcpy(result, modePtr, 1);
+  position++;
+
+  uint8_t sortedAccessPoints[networksFound];
+  sortWifiAccessPoints(networksFound, sortedAccessPoints);
+
+  while (position < 512 && n < networksFound && n < 8) {
+    const char *ssid = WiFi.SSID(sortedAccessPoints[n]).c_str();
+    uint8_t len = strlen(ssid);
+
+    if (len > 0UL) {
+      DEBUG_PRINTF("Found network %u ssid size:%u '%s'\n", n, len, ssid);
+
+      uint8_t mask = min((uint8_t)(n << 5), (uint8_t)7) | min(len, (uint8_t)31);
+      uint8_t *maskPtr = &mask;
+
+      memcpy(result + position, maskPtr, 1);
+      memcpy(result + position + 1, ssid, 20);
+
+      position += 21;
+    }
+
+    n++;
+  }
+
+  notif->setValue((uint8_t *)result, position);
+  notif->notify();
+}
+
+void sortWifiAccessPoints(uint8_t n, uint8_t a[]) {
+  for (uint8_t i = 0; i < n; ++i) {
+    int8_t k;
+    for (k = i - 1; (k >= 0) && (WiFi.RSSI(i) > WiFi.RSSI(a[k])); k--) {
+      a[k + 1] = a[k];
+    }
+    a[k + 1] = i;
+  }
 }
 
 void loop() {
@@ -386,7 +461,7 @@ void loop() {
 
   if (deviceConnected && enable_notifications && INT_STATE == true) {
     DEBUG_PRINTLN("interrupt !!");
-    notifyDetection(2);
+    notifyDetection();
 
     INT_STATE = false;
   }
@@ -436,6 +511,18 @@ void loop() {
     }
   }
 
+  if (wifi_scan_started) {
+    int16_t WiFiScanStatus = WiFi.scanComplete();
+    if (WiFiScanStatus < 0) {  // it is busy scanning or got an error
+      if (WiFiScanStatus == WIFI_SCAN_FAILED) {
+        DEBUG_PRINTLN("WiFi Scan has failed. Starting again.");
+      }
+      // other option is status WIFI_SCAN_RUNNING - just wait.
+    } else {  // Found Zero or more Wireless Networks
+      notifyNetworksScan(WiFiScanStatus);
+      wifi_scan_started = false;
+    }
+  }
 #ifdef ENABLE_WIFI_UPDATES
   if (handle_update) {
     esp32FOTA.handle();
@@ -453,7 +540,7 @@ void abortDring() {
 
 void go_to_sleep() {
 
-  notifyDetection(0);
+  notifyDeepSleep();
   detachInterrupt(digitalPinToInterrupt(PIR_INPUT_PIN));
 
 #ifdef ARDUINO_LOLIN_C3_PICO
@@ -491,7 +578,7 @@ void go_to_sleep() {
 void dring(uint8_t value) {
   digitalWrite(MANUAL_ALARM_PIN, value);
 #ifdef ARDUINO_LOLIN_C3_PICO
-    neopixelWrite(RGB_BUILTIN, value * RGB_BRIGHTNESS, 0, value * RGB_BRIGHTNESS);
+  neopixelWrite(RGB_BUILTIN, value * RGB_BRIGHTNESS, 0, value * RGB_BRIGHTNESS);
 #endif
 }
 void print_wakeup_reason() {
@@ -507,6 +594,11 @@ void print_wakeup_reason() {
     case ESP_SLEEP_WAKEUP_ULP: DEBUG_PRINTLN("Wakeup caused by ULP program"); break;
     default: DEBUG_PRINTF("Wakeup was not caused by deep sleep: %u\n", wakeup_reason); break;
   }
+}
+
+void startWifiScan() {
+  WiFi.scanNetworks(true);
+  wifi_scan_started = true;
 }
 
 #ifdef ENABLE_WIFI_UPDATES
@@ -528,4 +620,5 @@ void setup_wifi() {
   }
 }
 #endif
+
 #endif

@@ -18,6 +18,22 @@ div#container {
   /* height: 100vh; */
 }
 
+.warning {
+  display:none;
+}
+
+#container:not(.wifi) > .wifi {
+  display: none;
+}
+
+#container.wifi > *:not(.wifi) {
+  display: none;
+}
+
+#container.chrome_getdevices_not_supported > .warning {
+  display: block;
+}
+
 #container.connected {
   display:flex;
 }
@@ -101,4 +117,18 @@ input#acceptAllDevices::before {
     margin-left: 1.2em;
     font-size: small;
     /* background-color: red; */
+}
+
+select#SELECT_SSID {
+    font-size: 96px;
+    flex-grow: 0;
+    display: block;
+    margin-top: 1em;
+}
+
+input#PASSWORD {
+    font-size: 96px;
+    flex-grow: 0;
+    display: block;
+    margin-top: 1em;
 }

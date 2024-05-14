@@ -2,7 +2,16 @@ const DEVICE_NAME = "SONNETTE";
 const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914a";
 const ALERT_SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const UUID_MAP = [{
-        type: "text",
+        type: "push",
+        id: "BACK",
+        attr: {
+            value: 0,
+            name: "back",
+            after_class_remove: "wifi",
+            class:"wifi"
+        }
+    }, {
+        type: "label",
         id: "BATT_LEVEL",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b6",
         attr: {
@@ -100,11 +109,46 @@ const UUID_MAP = [{
             value: "1"
         }
     }, {
-        type: "text",
+        type: "label",
         id: "VERSION",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b1",
         attr: {
             name: "version"
+        }
+    }, {
+        type: "push",
+        id: "START_WIFI_SCAN",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b7",
+        attr: {
+            value: 0,
+            name: "wifi_scan",
+            after_class_add: "wifi"
+        }
+    }, {
+        type: "select",
+        id: "SELECT_SSID",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a4",
+        attr: {
+            value: 0,
+            name: "ssid",
+            class: "wifi"
+        }
+    }, {
+        type: "text",
+        id: "PASSWORD",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a5",
+        attr: {
+            value: "",
+            name: "password",
+            class: "wifi"
+        }
+    }, , {
+        type: "ok",
+        id: "SEND_WIFI_CREDENTIALS",
+        attr: {
+            value: 0,
+            name: "credentials",
+            class: "wifi"
         }
     }
 ];
@@ -112,7 +156,7 @@ const UUID_MAP = [{
 const FLAGS_IDENTIFIERS = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
 const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const BATTERY_LEVEL_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c33191b6";
-
+const NETWORKS_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26b8";
 const GATT_CONNECT_TIMEOUT = 10000;
 const FILTER_OPTIONS = {
     optionalServices: [ALERT_SERVICE_UUID],
@@ -134,17 +178,21 @@ let createPushOnPushOffButton = (id, uuid, attr) => {
     el.classList.add("push");
     el.id = id;
     el.innerHTML = attr.name;
+    if (attr.class) el.classList.add(attr.class);
 
     if (attr) Object.assign(el, attr);
 
     el.addEventListener("click", async () => {
         let new_value = 1 - Number(el.value);
-        let ok = await writeValue(uuid, new_value);
+        let ok = !uuid || await writeValue(uuid, new_value);
         if (ok) {
             el.value = new_value;
             if (id == "CONTINUOUS") {
                 document.querySelector("button#MANUAL_ALARM").dataset.continuous = new_value;
             }
+
+            if (attr.after_class_add) document.querySelector("#container").classList.add(attr.after_class_add);
+            if (attr.after_class_remove) document.querySelector("#container").classList.remove(attr.after_class_remove);
         }
     });
 
@@ -236,12 +284,55 @@ let createLabel = (id, uuid, attr) => {
     return el;
 };
 
+let createSelect = (id, uuid, attr) => {
+    let el = document.createElement("select");
+    el.id = id;
+    if (attr) Object.assign(el, attr);
+    el.dataset.value = "";
+    if (attr.class) el.classList.add(attr.class);
+
+    return el;
+};
+
+let createInputText = (id, uuid, attr) => {
+    let el = document.createElement("input");
+    el.id = id;
+    el.type = "text";
+    if (attr) Object.assign(el, attr);
+    if (attr.class) el.classList.add(attr.class);
+
+    return el;
+};
+
+let createWifiCredentialsValidator = (id, uuid, attr) => {
+    let el = document.createElement("button");
+    el.id = id;
+    el.classList.add("push");
+    el.innerText = "OK";
+    if (attr.class) el.classList.add(attr.class);
+
+    el.addEventListener('click', async (event) => {
+        let ssid_el = document.querySelector("#SELECT_SSID");
+        let pwd_el = document.querySelector("#PASSWORD");
+        let ssid = UUID_MAP.find(m => m.id == "SELECT_SSID").uuid;
+        let pwd = UUID_MAP.find(m => m.id == "PASSWORD").uuid;
+
+        await writeValue(ssid, Number(ssid_el.value));
+        await writeBuffer(pwd, new TextEncoder().encode(pwd_el.value));
+    });
+
+    return el;
+};
+
 const INPUTS = {
     "push": createPushOnPushOffButton,
     "pressed": createPushPressedButton,
     "timer": createTimerInput,
     "range": createRangeInput,
-    "text": createLabel
+    "label": createLabel,
+    "select": createSelect,
+    "text": createInputText,
+    "ok": createWifiCredentialsValidator
 };
 
 let updateUIFromDevice = (buffer) => {
@@ -265,7 +356,7 @@ let updateUIFromDevice = (buffer) => {
             type
         } = UUID_MAP.find(m => m.id == id);
 
-        if (type == 'text') el.innerText = value;
+        if (type == 'label') el.innerText = value;
         else el.value = value;
 
         if (id == "CONTINUOUS") document.querySelector("#MANUAL_ALARM").dataset.continuous = value;
@@ -280,16 +371,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.classList.add("bluetooth_not_supported");
         return;
     } else {
-      let available = await navigator.bluetooth.getAvailability();
-      if (!available) {
-          container.classList.add("bluetooth_not_available");
-          return;
-      }
+        let available = await navigator.bluetooth.getAvailability();
+        if (!available) {
+            container.classList.add("bluetooth_not_available");
+            return;
+        }
 
-      if (!navigator.bluetooth.getDevices) {
-          if (navigator.userAgent.indexOf("Chrome"))
-            container.classList.add("chrome_getdevices_not_supported");
-      }
+        if (!navigator.bluetooth.getDevices) {
+            if (navigator.userAgent.indexOf("Chrome"))
+                container.classList.add("chrome_getdevices_not_supported");
+        }
     }
 
     let connect_btn = document.getElementById("connect");
@@ -353,8 +444,8 @@ let Timeout = (timeout, result) => new Promise((resolve, reject) => window.setTi
 
 async function pairedDevice(name) {
     if (!navigator.bluetooth.getDevices) {
-      console.warn("Enable experimental flags about://flags#");
-      return null;
+        console.warn("Enable experimental flags about://flags#");
+        return null;
     }
 
     let devices = await navigator.bluetooth.getDevices();
@@ -384,7 +475,7 @@ async function connectToBluetoothDevice(device) {
     const abortController = new AbortController();
 
     let connect = new Promise(function(resolve, reject) {
-        const abortController = new AbortController();
+        //const abortController = new AbortController();
 
         device.addEventListener('advertisementreceived', (event) => {
             console.log('> Received advertisement from "' + device.name + '"...', event);
@@ -402,7 +493,7 @@ async function connectToBluetoothDevice(device) {
                     return onConnected(device);
                 })
                 .then(() => {
-                    abortController.abort();
+                    //abortController.abort();
                     resolve(true);
                 })
                 .catch(error => {
@@ -415,7 +506,7 @@ async function connectToBluetoothDevice(device) {
 
         console.log('Watching advertisements from "' + device.name + '"...');
         device.watchAdvertisements({
-                signal: abortController.signal
+                //signal: abortController.signal
             })
             .catch(error => {
                 reject(error);
@@ -444,7 +535,7 @@ async function onDisconnected() {
     if (device) {
         let connected = await connectToBluetoothDevice(device);
         if (!connected) {
-          console.warn("Could not reconnect to the bluetooth device");
+            console.warn("Could not reconnect to the bluetooth device");
         }
     }
 }
@@ -512,27 +603,54 @@ function interpretIBeacon(event) {
 }
 
 function HandleAlertNotification(event) {
-    const value = event.target.value.getUint8(0);
-    console.warn('Got status value ' + value);
-    switch (value) {
+    const dataView = event.target.value;
+    const mode = dataView.getUint8(0);
+    const raw_buffer = dataView.buffer;
+    let buffer = raw_buffer.slice(1, raw_buffer.byteLength);
+
+    console.warn('Got notification mode ', mode, new TextDecoder().decode(dataView));
+    switch (mode) {
         case 0:
-            deviceDeepSleep();
+            handleDetectionNotification();
             break;
         case 1:
+            HandleDeepSleepNotification();
             break;
         case 2:
-            handleDetectionNotification();
+            HandleBatteryNotification(buffer);
+            break;
+        case 3:
+            HandleNetworksNotification(dataView);
             break;
         default:
     }
 }
 
-function HandleBatteryNotification(event) {
-    const value = event.target.value.getUint16(0);
+function HandleBatteryNotification(buffer) {
+    const value = new Uint16Array(buffer).at(0);
     document.querySelector("#BATT_LEVEL").innerText = value;
 }
 
-let deviceDeepSleep = () => {
+function HandleNetworksNotification(dataView) {
+    let buffer = dataView.buffer;
+    let select = document.querySelector("#SELECT_SSID");
+    let position = 1;
+    while (position < dataView.buffer.byteLength) {
+        let mask = dataView.getUint8(position);
+        let wifiNetworkNumber = mask >> 5;
+        let len = mask & ~(1 << 7 | 1 << 6 | 1 << 5);
+        let str_buffer = buffer.slice(position + 1, position + 1 + len);
+        let ssid = new TextDecoder().decode(str_buffer);
+        position += 21;
+        console.log(ssid, wifiNetworkNumber);
+        let opt = document.createElement("option");
+        opt.value = wifiNetworkNumber;
+        opt.innerText = ssid;
+        select.appendChild(opt);
+    }
+}
+
+let HandleDeepSleepNotification = () => {
     console.log('device is into deep sleep ...');
     document.querySelector("#container").classList.add("sleeping");
 }
@@ -543,14 +661,14 @@ let handleDetectionNotification = () => {
             navigator.serviceWorker.ready.then((registration) => {
                 console.warn('serviceWorker', registration);
                 try {
-                  registration.showNotification("Détection de mouvement !!", {
-                            body: `distance: ?M`,
-                            tag:"ld2410",
-                            //icon:"./detection.png",
-                            vibrate: [500, 1000, 500, 1000, 500]
-                          });
+                    registration.showNotification("Détection de mouvement !!", {
+                        body: `distance: ?M`,
+                        tag: "ld2410",
+                        //icon:"./detection.png",
+                        vibrate: [500, 1000, 500, 1000, 500]
+                    });
                 } catch (e) {
-                  alert(e);
+                    alert(e);
                 }
             });
         }
@@ -564,18 +682,30 @@ async function startNotifications(device) {
     if (notif.startNotifications) {
         await notif.startNotifications();
         notif.addEventListener('characteristicvaluechanged', HandleAlertNotification);
+        console.log('Added event listener characteristicvaluechanged for ', NOTIFICATION_UUID);
     }
-
-    let batt = await alert_service.getCharacteristic(BATTERY_LEVEL_UUID);
-    if (batt.startNotifications) {
-        await batt.startNotifications();
-        batt.addEventListener('characteristicvaluechanged', HandleBatteryNotification);
-    }
-
-    console.log('Added event listener characteristicvaluechanged for ', NOTIFICATION_UUID, BATTERY_LEVEL_UUID);
+    //
+    // let batt = await alert_service.getCharacteristic(BATTERY_LEVEL_UUID);
+    // if (batt.startNotifications) {
+    //     await batt.startNotifications();
+    //     batt.addEventListener('characteristicvaluechanged', HandleBatteryNotification);
+    //     console.log('Added event listener characteristicvaluechanged for ', BATTERY_LEVEL_UUID);
+    // }
+    //
+    // let networks = await alert_service.getCharacteristic(NETWORKS_UUID);
+    // if (networks.startNotifications) {
+    //     await networks.startNotifications();
+    //     networks.addEventListener('characteristicvaluechanged', HandleNetworksNotification);
+    //     console.log('Added event listener characteristicvaluechanged for ', NETWORKS_UUID);
+    // }
 }
 
 async function writeValue(uuid, value) {
+    let buffer = new Uint8Array([value]).buffer;
+    return await writeBuffer(uuid, buffer);
+}
+
+async function writeBuffer(uuid, buffer) {
     let success = false;
 
     try {
@@ -599,7 +729,7 @@ async function writeValue(uuid, value) {
             const characteristic = await service.getCharacteristic(uuid);
 
             console.log('Setting Characteristic value...');
-            await characteristic.writeValue(new Int16Array([value]).buffer);
+            await characteristic.writeValue(buffer);
 
             // if (uuid == UUID_MAP.ENABLE_NOTIFICATIONS) {
             //     console.log(typeof value, `'${value}'`);
