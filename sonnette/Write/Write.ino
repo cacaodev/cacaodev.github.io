@@ -13,11 +13,11 @@
 #include <BLE2902.h>
 #include <Preferences.h>
 #include "driver/gpio.h"
-#include "WiFi.h"
 
 //#define ENABLE_WIFI_UPDATES
 
 #ifdef ENABLE_WIFI_UPDATES
+#include "WiFi.h"
 #include <esp32FOTA.hpp>
 esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #endif
@@ -32,8 +32,8 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define RGB_LED "beb5483e-36e1-4688-b7f5-ea07361b26a1"
 #define ENABLE_PIR "beb5483e-36e1-4688-b7f5-ea07361b26a2"
 #define MANUAL_ALARM "beb5483e-36e1-4688-b7f5-ea07361b26a3"
-#define WIFI_SSID "beb5483e-36e1-4688-b7f5-ea07361b26a4"
-#define PASSWORD "beb5483e-36e1-4688-b7f5-ea07361b26a5"
+#define WIFI_PARAMS "beb5483e-36e1-4688-b7f5-ea07361b26a4"
+//#define PASSWORD "beb5483e-36e1-4688-b7f5-ea07361b26a5"
 #define ENABLE_NOTIFICATIONS "beb5483e-36e1-4688-b7f5-ea07361b26a6"
 #define ENABLE_DRING "beb5483e-36e1-4688-b7f5-ea07361b26a7"
 #define SLEEP_AFTER_MINUTES "beb5483e-36e1-4688-b7f5-ea07361b26a9"
@@ -79,8 +79,9 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ADVERTISING_MAX_INTERVAL 0x0320
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
+#define WIFI_TIMEOUT 30000
 
-#define DEBUG_ESP_PORT
+//#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -92,6 +93,22 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define DEBUG_PRINTF(x...)
 #endif
 
+enum Connection { IDLE = 0,
+                  CONNECT,
+                  CONNECTING,
+                  CONNECTED,
+                  FAILED,
+                  TIMEOUT, SCAN_STARTED, SCAN_FAILED, SCAN_SUCCESS };
+
+struct {
+  uint8_t state = 0;
+  uint8_t counter = 1;
+  mutable uint8_t iteration = 0;
+  unsigned long timer = 0;
+  uint16_t delay = 200;
+} BlinkMode;
+
+Connection wifi_connection_status = IDLE;
 bool enable_notifications;
 bool enable_pir;
 bool enable_dring;
@@ -110,7 +127,6 @@ bool oldDeviceConnected = false;
 bool INT_STATE = false;
 unsigned long last_activity;
 bool handle_update = false;
-bool wifi_scan_started = false;
 
 Preferences preferences;
 BLEAdvertisementData advert;
@@ -118,15 +134,6 @@ BLEAdvertisementData advert;
 void setAdvertisementData();
 void dring(uint8_t value);
 void abortDring();
-void startWifiScan();
-
-struct {
-  uint8_t state = 0;
-  uint8_t counter = 1;
-  mutable uint8_t iteration = 0;
-  unsigned long timer = 0;
-  uint16_t delay = 200;
-} BlinkMode;
 
 class MyCallbacks : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *pCharacteristic) {
@@ -148,6 +155,7 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         if (manual_alarm_continuous) {
           dring(value);
         } else if (value == 1) {
+          BlinkMode.iteration = 0;
           BlinkMode.state = 1;
         }
       } else if (uuid == ENABLE_PIR) {
@@ -162,13 +170,22 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == SLEEP_AFTER_MINUTES) {
         sleep_after_minutes = value;
         preferences.putUChar("sleep_after", sleep_after_minutes);
-      } else if (uuid == WIFI_SSID) {
-        const char *ssid = WiFi.SSID(value).c_str();
-        DEBUG_PRINTF("ssid:%u '%s'\n", value, ssid);
+#ifdef ENABLE_WIFI_UPDATES
+      } else if (uuid == WIFI_PARAMS) {
+
+        uint8_t net = value >> 5;
+        uint8_t len = value & ~(224);
+        char password[len];
+        memcpy(password, data + 1, len);
+        const char *ssid = WiFi.SSID(net).c_str();
+
+        DEBUG_PRINTF("ssid:'%s' password:'%s'\n", ssid, password);
+
         preferences.putString("ssid", ssid);
-      } else if (uuid == PASSWORD) {
-        DEBUG_PRINTF("pwd:%u '%s'\n", data);
-        preferences.putString("password", (const char *)data);
+        preferences.putString("password", password);
+
+        wifi_connection_status = CONNECT;
+#endif
       } else if (uuid == MANUAL_ALARM_CONTINUOUS) {
         manual_alarm_continuous = value;
         if (manual_alarm_continuous == 1) abortDring();
@@ -181,9 +198,10 @@ class MyCallbacks : public BLECharacteristicCallbacks {
 #ifdef ENABLE_WIFI_UPDATES
       } else if (uuid == FIRMWARE_UPDATE) {
         startUpdate();
-#endif
+
       } else if (uuid == START_WIFI_SCAN) {
         startWifiScan();
+#endif
       }
 
       setAdvertisementData();
@@ -305,8 +323,7 @@ void setup() {
   createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, manual_alarm_discrete_count, clbk);
   createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t)manual_alarm_discrete_interval, clbk);
   createCharacteristic(pService, START_WIFI_SCAN, (uint8_t)0, clbk);
-  createCharacteristic(pService, WIFI_SSID, (uint8_t *)ssid.c_str(), clbk);
-  createCharacteristic(pService, PASSWORD, (uint8_t *)ssid.c_str(), clbk);
+  createCharacteristic(pService, WIFI_PARAMS, (uint8_t)0, clbk);
 
   notif = alertService->createCharacteristic(NOTIFICATION,
                                              BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
@@ -398,7 +415,8 @@ void notifyBatteryLevel(uint16_t batt_level) {
   notif->notify();
 }
 
-void notifyNetworksScan(int16_t networksFound) {
+#ifdef ENABLE_WIFI_UPDATES
+void notifyNetworksScanResult(int16_t networksFound) {
   char result[512];
   int16_t position = 0;
   uint8_t n = 0;
@@ -415,24 +433,30 @@ void notifyNetworksScan(int16_t networksFound) {
 
   while (position < 512 && n < networksFound && n < 8) {
     const char *ssid = WiFi.SSID(sortedAccessPoints[n]).c_str();
-    uint8_t len = strlen(ssid);
+    uint16_t len = min(strlen(ssid), 31U);
 
-    if (len > 0UL) {
+    if (len > 0U) {
       DEBUG_PRINTF("Found network %u ssid size:%u '%s'\n", n, len, ssid);
 
-      uint8_t mask = min((uint8_t)(n << 5), (uint8_t)7) | min(len, (uint8_t)31);
+      uint8_t mask = (n << 5) | len;
       uint8_t *maskPtr = &mask;
 
       memcpy(result + position, maskPtr, 1);
-      memcpy(result + position + 1, ssid, 20);
+      memcpy(result + position + 1, ssid, len);
 
-      position += 21;
+      position += len + 1;
     }
 
     n++;
   }
 
   notif->setValue((uint8_t *)result, position);
+  notif->notify();
+}
+
+void notifyWifiConnectionStatus() {
+  uint8_t result[2] = { 4, (uint8_t)wifi_connection_status };
+  notif->setValue(result, 2);
   notif->notify();
 }
 
@@ -445,10 +469,13 @@ void sortWifiAccessPoints(uint8_t n, uint8_t a[]) {
     a[k + 1] = i;
   }
 }
+#endif
 
 void loop() {
   // put your main code here, to run repeatedly:
   static unsigned long timer = 0;
+  static unsigned long wifi_timer = 0;
+
   if (millis() - timer > BATTERY_NOTIFICATION_PERIODIC_DELAY) {
     uint16_t batt_level = round(analogRead(ADC_IN_PIN) / 10) * 10;
     if (batt_level != battery_level_old) {
@@ -510,19 +537,45 @@ void loop() {
       }
     }
   }
-
-  if (wifi_scan_started) {
+#ifdef ENABLE_WIFI_UPDATES
+  if (wifi_connection_status == SCAN_STARTED) {
     int16_t WiFiScanStatus = WiFi.scanComplete();
     if (WiFiScanStatus < 0) {  // it is busy scanning or got an error
       if (WiFiScanStatus == WIFI_SCAN_FAILED) {
         DEBUG_PRINTLN("WiFi Scan has failed. Starting again.");
+        wifi_connection_status = SCAN_FAILED;
+        notifyWifiConnectionStatus();
       }
       // other option is status WIFI_SCAN_RUNNING - just wait.
     } else {  // Found Zero or more Wireless Networks
-      notifyNetworksScan(WiFiScanStatus);
-      wifi_scan_started = false;
+      wifi_connection_status = SCAN_SUCCESS;
+      // notifyNetworksScanResult(WiFiScanStatus);
     }
   }
+
+  if (wifi_connection_status == CONNECT) {
+    wifi_timer = millis();
+
+    String ssid = preferences.getString("ssid", "");
+    String password = preferences.getString("password", "");
+    WiFi.begin(ssid, password);
+    wifi_connection_status = CONNECTING;
+    notifyWifiConnectionStatus();
+  } else if (wifi_connection_status == CONNECTING) {
+    if (WiFi.status() != WL_CONNECTED) {
+      DEBUG_PRINTF(".");
+      delay(500);
+
+      if ((millis() - wifi_timer) > WIFI_TIMEOUT) {
+        wifi_connection_status = TIMEOUT;
+        notifyWifiConnectionStatus();
+      }
+    } else {
+      wifi_connection_status = CONNECTED;
+      notifyWifiConnectionStatus();
+    }
+  }
+#endif
 #ifdef ENABLE_WIFI_UPDATES
   if (handle_update) {
     esp32FOTA.handle();
@@ -595,11 +648,12 @@ void print_wakeup_reason() {
     default: DEBUG_PRINTF("Wakeup was not caused by deep sleep: %u\n", wakeup_reason); break;
   }
 }
-
+#ifdef ENABLE_WIFI_UPDATES
 void startWifiScan() {
   WiFi.scanNetworks(true);
-  wifi_scan_started = true;
+  wifi_connection_status = SCAN_STARTED;
 }
+#endif
 
 #ifdef ENABLE_WIFI_UPDATES
 void startUpdate() {
@@ -607,17 +661,6 @@ void startUpdate() {
   esp32FOTA.setManifestURL(MANIFEST_URL);
   // esp32FOTA.useDeviceId( true ); // optionally append the device ID to the HTTP query
   handle_update = true;
-}
-
-void setup_wifi() {
-  delay(10);
-  String ssid = preferences.getString("ssid", "");
-  String password = preferences.getString("password", "");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    DEBUG_PRINTF(".");
-  }
 }
 #endif
 
