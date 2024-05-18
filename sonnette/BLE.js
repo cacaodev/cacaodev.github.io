@@ -44,7 +44,6 @@ const UUID_MAP = [{
             value: 0,
             name: "enable_notifications"
         }
-
     },
     {
         type: "switch",
@@ -702,6 +701,11 @@ function HandleNetworksScanNotification(buffer) {
 let HandleNetworkConnectionStatusNotification = (buffer) => {
     const value = new Uint8Array(buffer).at(0);
     console.log("Wifi connection is " + value);
+    // 0: wifi connected
+    // 1: wifi connected to internet
+    // 2: wifi onDisconnected
+    // 3: wifi timeout
+    // 4: wifi scan failed
 };
 
 let HandleDeepSleepNotification = () => {
