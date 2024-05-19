@@ -14,7 +14,6 @@
 #include <Preferences.h>
 #include "driver/gpio.h"
 
-#define DEBUG_ESP_PORT
 //#define ENABLE_WIFI_UPDATES
 #define ENABLE_WIFI
 
@@ -60,16 +59,6 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
 
-#ifdef DEBUG_ESP_PORT
-#define DEBUG_PRINTLN(x) Serial.println(x)
-#define DEBUG_PRINT(x) Serial.print(x)
-#define DEBUG_PRINTF(x...) Serial.printf(x)
-#else
-#define DEBUG_PRINTLN(x)
-#define DEBUG_PRINT(x)
-#define DEBUG_PRINTF(x...)
-#endif
-
 #ifdef ARDUINO_XIAO_ESP32C3
 // 64 E8 33 85 D1 BE
 #define DEVICE_NAME "SONNETTE XIAO"
@@ -84,6 +73,7 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #endif
 
 #ifdef ARDUINO_LOLIN_C3_PICO
+#define DEBUG_ESP_PORT
 #define DEVICE_NAME "SONNETTE LOLIN"
 #define ADC_IN_PIN 1
 #define DEFAULT_WAKEUP_PIN 4
@@ -92,6 +82,16 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define RGB_BUILTIN 7
 #define ENABLE_PIR_PIN 8
 #define ENABLE_DRING_PIN 10
+#endif
+
+#ifdef DEBUG_ESP_PORT
+#define DEBUG_PRINTLN(x) Serial.println(x)
+#define DEBUG_PRINT(x) Serial.print(x)
+#define DEBUG_PRINTF(x...) Serial.printf(x)
+#else
+#define DEBUG_PRINTLN(x)
+#define DEBUG_PRINT(x)
+#define DEBUG_PRINTF(x...)
 #endif
 
 struct {

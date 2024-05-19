@@ -532,10 +532,10 @@ async function connectToBluetoothDevice(device) {
         return true;
     }
 
-    const abortController = new AbortController();
-
     let connect = new Promise(function(resolve, reject) {
         const abortController = new AbortController();
+
+        document.querySelector('#container').classList.add('connecting');
 
         device.addEventListener('advertisementreceived', (event) => {
             console.log('> Received advertisement from "' + device.name + '"...', event);
@@ -582,6 +582,7 @@ async function onConnected(device) {
     device.addEventListener('gattserverdisconnected', onDisconnected);
     let container = document.querySelector("#container");
     container.classList.add("connected");
+    container.classList.remove("connecting");
     container.classList.remove("sleeping");
     await startNotifications(device);
 }
