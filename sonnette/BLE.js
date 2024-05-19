@@ -8,23 +8,16 @@ const UUID_MAP = [{
             value: 0,
             name: "back",
             after_class_remove: "wifi",
-            class:"wifi"
+            class: "wifi"
         }
-    }, {
+    },
+    {
         type: "label",
         id: "BATT_LEVEL",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b6",
         attr: {
             value: 0,
             name: "batt_level"
-        }
-    }, {
-        type: "switch",
-        id: "RGB_LED",
-        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
-        attr: {
-            value: 0,
-            name: "rgb_led"
         }
     },
     {
@@ -45,15 +38,15 @@ const UUID_MAP = [{
             name: "enable_notifications"
         }
     },
-    {
-        type: "switch",
-        id: "DRING_ENABLE",
-        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a7",
-        attr: {
-            value: 0,
-            name: "dring_enable"
-        }
-    },
+    /*{
+            type: "switch",
+            id: "DRING_ENABLE",
+            uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a7",
+            attr: {
+                value: 0,
+                name: "dring_enable"
+            }
+      },*/
     {
         type: "pressed",
         id: "MANUAL_ALARM",
@@ -77,27 +70,40 @@ const UUID_MAP = [{
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b3",
         attr: {
             type: "range",
-            class:"discrete",
+            class: "discrete",
             name: "discrete_count",
             min: "1",
-            max: Math.pow(2, 4) - 1,
+            max: "15",
             step: "1",
             value: "1"
         }
     }, {
         type: "range",
-        id: "DISCRETE_INTERVAL",
+        id: "DISCRETE_INTERVAL_OFF",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b4",
         attr: {
             type: "range",
-            class:"discrete",
-            name: "discrete_interval",
+            class: "discrete",
+            name: "discrete_interval_off",
             min: "1",
             max: Math.pow(2, 8) - 1,
             step: "1",
             value: "4"
         }
-    }, {
+      }, {
+          type: "range",
+          id: "DISCRETE_INTERVAL_ON",
+          uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b8",
+          attr: {
+              type: "range",
+              class: "discrete",
+              name: "discrete_interval_on",
+              min: "5",
+              max: Math.pow(2, 8) - 1,
+              step: "5",
+              value: "5"
+          }
+      }, {
         type: "range",
         id: "SLEEP_AFTER_MINUTES",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a9",
@@ -141,7 +147,7 @@ const UUID_MAP = [{
             name: "password",
             class: "wifi"
         }
-    }, , {
+    }, {
         type: "pressed",
         id: "SEND_WIFI_CREDENTIALS",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a4",
@@ -149,7 +155,16 @@ const UUID_MAP = [{
             value: 0,
             name: "OK",
             class: "wifi",
-            after_class_remove:"wifi"
+            after_class_remove: "wifi"
+        }
+    }, {
+        type: "pressed",
+        id: "RGB_LED",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a1",
+        attr: {
+            value: "0",
+            name: "rgb_led",
+            continuous: "1"
         }
     }
 ];
@@ -206,7 +221,7 @@ let createPushPressedButton = (id, uuid, attr) => {
     el.innerHTML = attr.name;
     if (uuid) el.dataset.uuid = uuid;
 
-    if (attr) Object.assign(el, attr);
+    if (attr.continuous) el.dataset.continuous = attr.continuous;
 
     el.addEventListener("pointerdown", async (event) => await buttonDidPressDown(event.target, attr));
     el.addEventListener("pointerup", async (event) => await buttonDidPressUp(event.target));
@@ -220,22 +235,22 @@ let buttonDidPressDown = async (el, attr) => {
     el.value = 1;
 
     if (el.id == "SEND_WIFI_CREDENTIALS") {
-      let ssid = document.querySelector("#SELECT_SSID").value;
-      let password = document.querySelector("#PASSWORD").value;
+        let ssid = document.querySelector("#SELECT_SSID").value;
+        let password = document.querySelector("#PASSWORD").value;
 
-      let n = (Number(ssid) << 5) | password.length;
-      let passwordBuffer = new TextEncoder().encode(password).buffer;
-      let buffer = new Int8Array([n, ...(new Int8Array(passwordBuffer))]).buffer;
+        let n = (Number(ssid) << 5) | password.length;
+        let passwordBuffer = new TextEncoder().encode(password).buffer;
+        let buffer = new Int8Array([n, ...(new Int8Array(passwordBuffer))]).buffer;
 
-      el.value = 2;
+        el.value = 2;
 
-      let ok = await writeBuffer(el.dataset.uuid, buffer);
-      if (ok) el.value = 1;
+        let ok = await writeBuffer(el.dataset.uuid, buffer);
+        if (ok) el.value = 1;
     } else {
-      let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
-      if (!ok) {
-          el.value = 0;
-      }
+        let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
+        if (!ok) {
+            el.value = 0;
+        }
     }
 
     if (attr.after_class_add) document.querySelector("#container").classList.add(attr.after_class_add);
@@ -246,7 +261,7 @@ let buttonDidPressUp = async (el) => {
     let isContinuous = Number(el.dataset.continuous);
 
     if (isContinuous) {
-        let ok = !el.dataset.uuid  || await writeValue(el.dataset.uuid, 0);
+        let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 0);
         if (ok) {
             el.value = 0;
         }
@@ -257,7 +272,7 @@ let buttonDidPressUp = async (el) => {
 
 let switchValueChange = async (input, attr) => {
     let new_value = input.checked;
-    let ok = !input.dataset.uuid  || await writeValue(input.dataset.uuid, Number(new_value));
+    let ok = !input.dataset.uuid || await writeValue(input.dataset.uuid, Number(new_value));
     if (ok) {
         if (input.id == "CONTINUOUS") {
             document.querySelector("button#MANUAL_ALARM").dataset.continuous = Number(new_value);
@@ -266,7 +281,7 @@ let switchValueChange = async (input, attr) => {
         if (attr.after_class_add) document.querySelector("#container").classList.add(attr.after_class_add);
         if (attr.after_class_remove) document.querySelector("#container").classList.remove(attr.after_class_remove);
     } else {
-      input.checked = !new_value;
+        input.checked = !new_value;
     }
 };
 
@@ -379,7 +394,7 @@ const INPUTS = {
 
 let updateUIFromDevice = (buffer) => {
     let hex_string = new TextDecoder().decode(buffer);
-    let regexp = new RegExp("^(?<flags>[0-9A-Z]{1})(?<VERSION>[0-9A-Z]{1})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{1})(?<DISCRETE_INTERVAL>[0-9A-Z]{2})(?<BATT_LEVEL>[0-9A-Z]{3})$");
+    let regexp = new RegExp("^(?<flags>[0-9A-Z]{1})(?<VERSION>[0-9A-Z]{1})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{1})(?<DISCRETE_INTERVAL_OFF>[0-9A-Z]{2})(?<DISCRETE_INTERVAL_ON>[0-9A-Z]{2})(?<BATT_LEVEL>[0-9A-Z]{3})$");
     console.log(`Received service data adv: '${hex_string}'`);
     let matches = hex_string.match(regexp);
     if (matches == null || matches.groups == null) throw `No matches for hex string '${hex_string}' with regular expression '${regexp}'`;
@@ -393,10 +408,12 @@ let updateUIFromDevice = (buffer) => {
     console.log(groups);
     Object.entries(groups).forEach(([id, hex_value]) => {
         let value = parseInt(hex_value, 16);
+        let def = UUID_MAP.find(m => m.id == id);
+
+        if (!def) return;
+
+        let type = def.type;
         let el = document.querySelector(`#${id}`);
-        let {
-            type
-        } = UUID_MAP.find(m => m.id == id);
 
         if (type == 'label') el.innerText = value;
         else if (type == 'switch') el.checked = Number(value);
@@ -518,7 +535,7 @@ async function connectToBluetoothDevice(device) {
     const abortController = new AbortController();
 
     let connect = new Promise(function(resolve, reject) {
-        //const abortController = new AbortController();
+        const abortController = new AbortController();
 
         device.addEventListener('advertisementreceived', (event) => {
             console.log('> Received advertisement from "' + device.name + '"...', event);
@@ -536,7 +553,7 @@ async function connectToBluetoothDevice(device) {
                     return onConnected(device);
                 })
                 .then(() => {
-                    //abortController.abort();
+                    abortController.abort();
                     resolve(true);
                 })
                 .catch(error => {
@@ -549,7 +566,7 @@ async function connectToBluetoothDevice(device) {
 
         console.log('Watching advertisements from "' + device.name + '"...');
         device.watchAdvertisements({
-                //signal: abortController.signal
+                signal: abortController.signal
             })
             .catch(error => {
                 reject(error);

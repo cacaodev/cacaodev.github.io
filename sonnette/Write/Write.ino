@@ -14,6 +14,7 @@
 #include <Preferences.h>
 #include "driver/gpio.h"
 
+#define DEBUG_ESP_PORT
 //#define ENABLE_WIFI_UPDATES
 #define ENABLE_WIFI
 
@@ -41,7 +42,7 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define ENABLE_PIR "beb5483e-36e1-4688-b7f5-ea07361b26a2"
 #define MANUAL_ALARM "beb5483e-36e1-4688-b7f5-ea07361b26a3"
 #define WIFI_PARAMS "beb5483e-36e1-4688-b7f5-ea07361b26a4"
-//#define PASSWORD "beb5483e-36e1-4688-b7f5-ea07361b26a5"
+
 #define ENABLE_NOTIFICATIONS "beb5483e-36e1-4688-b7f5-ea07361b26a6"
 #define ENABLE_DRING "beb5483e-36e1-4688-b7f5-ea07361b26a7"
 #define SLEEP_AFTER_MINUTES "beb5483e-36e1-4688-b7f5-ea07361b26a9"
@@ -50,15 +51,14 @@ esp32FOTA esp32FOTA("sonnette", "1.0.0");
 #define MANUAL_ALARM_DISCRETE_COUNT "beb5483e-36e1-4688-b7f5-ea07361b26b3"
 #define MANUAL_ALARM_DISCRETE_INTERVAL "beb5483e-36e1-4688-b7f5-ea07361b26b4"
 #define NOTIFICATION "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#define MANUAL_ALARM_DISCRETE_ON_DELAY "beb5483e-36e1-4688-b7f5-ea07361b26b8"
 
 #define DEFAULT_WAKEUP_LEVEL ESP_GPIO_WAKEUP_GPIO_HIGH
-#define DICRETE_ON_DURATION 500
+#define DISCRETE_ON_DURATION 50
 #define ADVERTISING_MIN_INTERVAL 0x0020
 #define ADVERTISING_MAX_INTERVAL 0x0320
 #define ADVERTISING_MANUFACTURER_DATA "TONTON MARTIN"
 #define BATTERY_NOTIFICATION_PERIODIC_DELAY 300000
-
-//#define DEBUG_ESP_PORT
 
 #ifdef DEBUG_ESP_PORT
 #define DEBUG_PRINTLN(x) Serial.println(x)
@@ -99,7 +99,8 @@ struct {
   uint8_t counter = 1;
   mutable uint8_t iteration = 0;
   unsigned long timer = 0;
-  uint16_t delay = 200;
+  uint16_t delay_off = 200;
+  uint16_t delay_on = 50;
 } BlinkMode;
 
 bool enable_notifications;
@@ -108,7 +109,6 @@ bool enable_dring;
 uint8_t sleep_after_minutes;
 bool manual_alarm_continuous;
 uint8_t manual_alarm_discrete_count;
-uint8_t manual_alarm_discrete_interval;
 uint16_t battery_level_old = 0;
 
 BLECharacteristic *notif = NULL;
@@ -155,12 +155,15 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == ENABLE_PIR) {
         enable_pir = value;
         digitalWrite(ENABLE_PIR_PIN, !enable_pir);
+        preferences.putBool("enable_pir", enable_pir);
       } else if (uuid == ENABLE_DRING) {
         enable_dring = value;
         digitalWrite(ENABLE_DRING_PIN, enable_dring);
         if (enable_dring == 0) abortDring();
+        preferences.putBool("enable_dring", enable_dring);
       } else if (uuid == ENABLE_NOTIFICATIONS) {
         enable_notifications = value;
+        preferences.putBool("enable_notifs", enable_notifications);
       } else if (uuid == SLEEP_AFTER_MINUTES) {
         sleep_after_minutes = value;
         preferences.putUChar("sleep_after", sleep_after_minutes);
@@ -186,16 +189,20 @@ class MyCallbacks : public BLECharacteristicCallbacks {
       } else if (uuid == MANUAL_ALARM_CONTINUOUS) {
         manual_alarm_continuous = value;
         if (manual_alarm_continuous == 1) abortDring();
+        preferences.putBool("continuous", manual_alarm_continuous);
       } else if (uuid == MANUAL_ALARM_DISCRETE_COUNT) {
-        manual_alarm_discrete_count = value;
+        preferences.putUChar("discrete_count", value);
         BlinkMode.counter = value;
       } else if (uuid == MANUAL_ALARM_DISCRETE_INTERVAL) {
-        BlinkMode.delay = value * 100;
-        manual_alarm_discrete_interval = value;
+        preferences.putUChar("discrete_off", value);
+        BlinkMode.delay_off = value * 100;
+     } else if (uuid == MANUAL_ALARM_DISCRETE_ON_DELAY) {
+        preferences.putUChar("discrete_on", value);
+        BlinkMode.delay_on = value * 10;
 #ifdef ENABLE_WIFI_UPDATES
       } else if (uuid == FIRMWARE_UPDATE) {
-        handle_update = true;
         connect_to_wifi();
+        handle_update = true;
 #endif
       }
 
@@ -285,19 +292,18 @@ void setup() {
   enable_notifications = preferences.getBool("enable_notifs", false);
   sleep_after_minutes = preferences.getUChar("sleep_after", 5);
   manual_alarm_continuous = preferences.getBool("continuous", true);
-  manual_alarm_discrete_count = preferences.getUChar("discrete_count", 1);
-  manual_alarm_discrete_interval = preferences.getUShort("discrete_delay", 10);
 
-  BlinkMode.counter = manual_alarm_discrete_count;
-  BlinkMode.delay = manual_alarm_discrete_interval * 100;
+  BlinkMode.counter = preferences.getUShort("discrete_count", 10);
+  BlinkMode.delay_on = preferences.getUChar("discrete_on", DISCRETE_ON_DURATION) * 10;
+  BlinkMode.delay_off = preferences.getUShort("discrete_off", 10) * 100;
 
   digitalWrite(ENABLE_PIR_PIN, !enable_pir);
   digitalWrite(ENABLE_DRING_PIN, enable_dring);
   digitalWrite(MANUAL_ALARM_PIN, HIGH);
-  delay(DICRETE_ON_DURATION);
+  delay(BlinkMode.delay_on);
   digitalWrite(MANUAL_ALARM_PIN, LOW);
 
-  DEBUG_PRINTF("enable_pir=%u enable_dring=%u enable_notifications=%u manual_alarm_continuous=%u sleep_after_minutes=%u manual_alarm_discrete_count=%u manual_alarm_discrete_interval=%u\n", enable_pir, enable_dring, enable_notifications, manual_alarm_continuous, sleep_after_minutes, manual_alarm_discrete_count, manual_alarm_discrete_interval);
+  DEBUG_PRINTF("enable_pir=%u enable_dring=%u enable_notifications=%u manual_alarm_continuous=%u sleep_after_minutes=%u manual_alarm_discrete_count=%u manual_alarm_discrete_interval_on=%u manual_alarm_discrete_interval_off=%u \n", enable_pir, enable_dring, enable_notifications, manual_alarm_continuous, sleep_after_minutes, BlinkMode.counter, BlinkMode.delay_on, BlinkMode.delay_off);
   BLEDevice::init(DEVICE_NAME);
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallbacks());
@@ -311,33 +317,27 @@ void setup() {
   createCharacteristic(pService, ENABLE_PIR, (uint8_t)enable_pir, clbk);
   createCharacteristic(pService, ENABLE_DRING, (uint8_t)enable_dring, clbk);
   createCharacteristic(pService, ENABLE_NOTIFICATIONS, (uint8_t)enable_notifications, clbk);
-  createCharacteristic(pService, SLEEP_AFTER_MINUTES, sleep_after_minutes, clbk);
+  createCharacteristic(pService, SLEEP_AFTER_MINUTES, (uint8_t)sleep_after_minutes, clbk);
   createCharacteristic(pService, FIRMWARE_VERSION, FIRMWARE_VERSION_NUMBER, clbk);
   createCharacteristic(pService, MANUAL_ALARM_CONTINUOUS, (uint8_t)manual_alarm_continuous, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, manual_alarm_discrete_count, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t)manual_alarm_discrete_interval, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, (uint8_t)BlinkMode.counter, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_INTERVAL, (uint8_t)BlinkMode.delay_off, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_ON_DELAY, (uint8_t)BlinkMode.delay_on, clbk);
 
 #ifdef ENABLE_WIFI
-  String ssid = preferences.getString("ssid", "");
-  String password = preferences.getString("password", "");
   createCharacteristic(pService, START_WIFI_SCAN, (uint8_t)0, clbk);
   createCharacteristic(pService, WIFI_PARAMS, (uint8_t)0, clbk);
+
+  WiFi.onEvent(WiFiStationConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
+  WiFi.onEvent(WiFiGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
+  WiFi.onEvent(WiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
+  WiFi.onEvent(WiFiScanDone, WiFiEvent_t::ARDUINO_EVENT_WIFI_SCAN_DONE);
 #endif
 
   notif = alertService->createCharacteristic(NOTIFICATION,
                                              BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
   BLE2902 *desc = new BLE2902();
   notif->addDescriptor(desc);
-
-  // battery = alertService->createCharacteristic(BATT_LEVEL,
-  //                                              BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
-  // BLE2902 *desc2 = new BLE2902();
-  // battery->addDescriptor(desc2);
-
-  // networks = alertService->createCharacteristic(NETWORKS,
-  //                                               BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
-  // BLE2902 *desc3 = new BLE2902();
-  // networks->addDescriptor(desc3);
 
   pService->start();
   alertService->start();
@@ -347,14 +347,11 @@ void setup() {
   //pAdvertising->addServiceUUID(SERVICE_ALERT_UUID);
   pAdvertising->setScanResponse(true);
 
-  pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
-  pAdvertising->setMinPreferred(0x12);
+  pAdvertising->setMinPreferred(0x12);  // functions that help with iPhone connections issue
   // Minimum advertising interval for undirected and low duty cycle directed advertising.
   // Range: 0x0020 to 0x4000 Default: N = 0x0800 (1.28 second) Time = N * 0.625 msec Time Range: 20 ms to 10.24 sec
   pAdvertising->setMinInterval(ADVERTISING_MIN_INTERVAL);
   pAdvertising->setMaxInterval(ADVERTISING_MAX_INTERVAL);
-  //pAdvertising->setScanResponse(false);
-  //pAdvertising->setMinPreferred(0x0);  // set value to 0x00 to not advertise this parameter
 
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
   setAdvertisementData();
@@ -365,22 +362,17 @@ void setup() {
   neopixelWrite(RGB_BUILTIN, 0, 0, 0);
 #endif
 
-  WiFi.onEvent(WiFiStationConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
-  WiFi.onEvent(WiFiGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
-  WiFi.onEvent(WiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
-  WiFi.onEvent(WiFiScanDone, WiFiEvent_t::ARDUINO_EVENT_WIFI_SCAN_DONE);
-
 #ifdef ENABLE_WIFI_UPDATES
   esp32FOTA.setManifestURL(MANIFEST_URL);
 #endif
 }
 
 void setAdvertisementData() {
-  char data[11];
+  char data[13];
   uint16_t batt_level = analogRead(ADC_IN_PIN);  // 0-4095
   DEBUG_PRINTF("batt_level=%u\n", batt_level);
   uint8_t flags = enable_pir | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
-  snprintf(data, 11, "%01X%01X%02X%01X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, max(manual_alarm_discrete_count, (uint8_t)15), manual_alarm_discrete_interval, batt_level);
+  snprintf(data, 13, "%01X%01X%02X%01X%02X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, min(BlinkMode.counter, (uint8_t)15), BlinkMode.delay_off, BlinkMode.delay_on, batt_level);
 
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
   advert.setServiceData(BLEUUID(SERVICE_UUID), data);
@@ -414,6 +406,41 @@ void notifyBatteryLevel(uint16_t batt_level) {
 }
 
 #ifdef ENABLE_WIFI
+void connect_to_wifi() {
+  //static unsigned int wifi_timer = millis();
+
+  String ssid = preferences.getString("ssid", "");
+  String password = preferences.getString("password", "");
+
+  WiFi.setAutoReconnect(false);
+  WiFi.disconnect(true);
+  WiFi.begin(ssid, password);
+
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   DEBUG_PRINTF(".");
+  //   delay(500);
+
+  //   if ((millis() - wifi_timer) > WIFI_TIMEOUT) {
+  //     //notifyWifiConnectionStatus(3);
+  //   }
+  // }
+}
+
+void WiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
+  DEBUG_PRINTLN("WiFiStationConnected to AP!");
+  notifyWifiConnectionStatus(0);
+}
+
+void WiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
+  DEBUG_PRINTLN("WiFiGotIP from AP!");
+  notifyWifiConnectionStatus(1);
+}
+
+void WiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
+  DEBUG_PRINTLN("WiFiStationDisconnected from AP!");
+  //notifyWifiConnectionStatus(2);
+}
+
 void notifyNetworksScanResult(int16_t networksFound) {
   char result[512];
   int16_t position = 0;
@@ -471,16 +498,16 @@ void sortWifiAccessPoints(uint8_t n, uint8_t a[]) {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  static unsigned long timer = 0;
+  static unsigned long battery_timer = 0;
 
-  if (millis() - timer > BATTERY_NOTIFICATION_PERIODIC_DELAY) {
+  if (millis() - battery_timer > BATTERY_NOTIFICATION_PERIODIC_DELAY) {
     uint16_t batt_level = round(analogRead(ADC_IN_PIN) / 10) * 10;
     if (batt_level != battery_level_old) {
       notifyBatteryLevel(batt_level);
       battery_level_old = batt_level;
     }
 
-    timer = millis();
+    battery_timer = millis();
   }
 
   if (deviceConnected && enable_notifications && INT_STATE == true) {
@@ -493,7 +520,7 @@ void loop() {
   if (!deviceConnected && oldDeviceConnected) {
     delay(500);                   // give the bluetooth stack the chance to get things ready
     pServer->startAdvertising();  // restart advertising
-    DEBUG_PRINTLN("start advertising");
+    DEBUG_PRINTLN("restart advertising");
     oldDeviceConnected = deviceConnected;
   }
   // connecting
@@ -504,36 +531,14 @@ void loop() {
 
   unsigned long use_duration = abs((signed long)(millis() - last_activity));
   unsigned long max_duration = (unsigned long)(sleep_after_minutes * 60UL * 1000UL);
+
   if (use_duration > max_duration) {
-    DEBUG_PRINTF("Go to sleep after %u minutes of inactivity. use_duration:%u max:%u\n", sleep_after_minutes, use_duration, max_duration);
+    DEBUG_PRINTF("Go to sleep after %u minutes of inactivity.", sleep_after_minutes);
     go_to_sleep();
   }
 
-  if (BlinkMode.state == 1) {
-    dring(HIGH);
+  handleDring();
 
-    BlinkMode.timer = millis();
-    BlinkMode.state = 2;
-  } else if (BlinkMode.state == 2) {
-    if (millis() - BlinkMode.timer > DICRETE_ON_DURATION) {
-      dring(LOW);
-
-      BlinkMode.iteration = BlinkMode.iteration + 1;
-      BlinkMode.timer = millis();
-      BlinkMode.state = 3;
-    }
-  } else if (BlinkMode.state == 3) {
-    if (millis() - BlinkMode.timer > BlinkMode.delay) {
-
-      if (BlinkMode.iteration == BlinkMode.counter) {
-        BlinkMode.state = 0;
-        BlinkMode.iteration = 0;
-        BlinkMode.timer = 0;
-      } else {
-        BlinkMode.state = 1;
-      }
-    }
-  }
 #ifdef ENABLE_WIFI
 #ifdef ENABLE_WIFI_UPDATES
   if (handle_update) {
@@ -544,40 +549,36 @@ void loop() {
 #endif
 }
 
-void connect_to_wifi() {
-  static unsigned int wifi_timer = millis();
+void handleDring() {
+  if (BlinkMode.state == 1) {
+    dring(HIGH);
 
-  String ssid = preferences.getString("ssid", "");
-  String password = preferences.getString("password", "");
-  WiFi.begin(ssid, password);
+    BlinkMode.timer = millis();
+    BlinkMode.state = 2;
+  } else if (BlinkMode.state == 2) {
+    if (millis() - BlinkMode.timer > BlinkMode.delay_on) {
+      dring(LOW);
 
-  while (WiFi.status() != WL_CONNECTED) {
-    DEBUG_PRINTF(".");
-    delay(500);
+      BlinkMode.iteration = BlinkMode.iteration + 1;
+      BlinkMode.timer = millis();
+      BlinkMode.state = 3;
+    }
+  } else if (BlinkMode.state == 3) {
+    if (millis() - BlinkMode.timer > BlinkMode.delay_off) {
 
-    if ((millis() - wifi_timer) > WIFI_TIMEOUT) {
-      notifyWifiConnectionStatus(3);
+      if (BlinkMode.iteration == BlinkMode.counter) {
+        BlinkMode.state = 0;
+        BlinkMode.iteration = 0;
+        BlinkMode.timer = 0;
+      } else {
+        BlinkMode.state = 1;
+      }
     }
   }
 }
 
-void WiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info) {
-  Serial.println("WiFiStationConnected to AP!");
-  notifyWifiConnectionStatus(0);
-}
-
-void WiFiGotIP(WiFiEvent_t event, WiFiEventInfo_t info) {
-  Serial.println("WiFiGotIP from AP!");
-  notifyWifiConnectionStatus(1);
-}
-
-void WiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info) {
-  Serial.println("WiFiStationDisconnected from AP!");
-  notifyWifiConnectionStatus(2);
-}
-
 void WiFiScanDone(WiFiEvent_t event, WiFiEventInfo_t info) {
-  Serial.println("WiFiScanDone");
+  DEBUG_PRINTLN("WiFiScanDone");
 
   int16_t WiFiScanStatus = WiFi.scanComplete();
   if (WiFiScanStatus < 0) {  // it is busy scanning or got an error
@@ -609,13 +610,6 @@ void go_to_sleep() {
   neopixelWrite(RGB_BUILTIN, 0, 0, 0);
 #endif
 
-  preferences.putBool("enable_pir", enable_pir);
-  preferences.putBool("enable_dring", enable_dring);
-  preferences.putBool("enable_notifs", enable_notifications);
-  preferences.putUChar("sleep_after", sleep_after_minutes);
-  preferences.putBool("continuous", manual_alarm_continuous);
-  preferences.putUChar("discrete_count", manual_alarm_discrete_count);
-  preferences.putUChar("discrete_delay", manual_alarm_discrete_interval);
   preferences.end();
 
   gpio_deep_sleep_hold_en();
