@@ -224,40 +224,27 @@ let createPushPressedButton = (id, uuid, attr) => {
     if (attr.continuous) el.dataset.continuous = attr.continuous;
 
     el.addEventListener("pointerdown", async (event) => await buttonDidPressDown(event.target, attr));
-    el.addEventListener("pointerup", async (event) => await buttonDidPressUp(event.target));
+    el.addEventListener("pointerup", async (event) => await buttonDidPressUp(event.target, attr));
     //el.addEventListener("pointerleave", async (event) => await buttonDidPressUp(event.target));
 
     return el;
 };
 
 let buttonDidPressDown = async (el, attr) => {
-    //let isContinuous = Number(el.dataset.continuous);
-    el.value = 1;
+    let isContinuous = Number(el.dataset.continuous);
 
-    if (el.id == "SEND_WIFI_CREDENTIALS") {
-        let ssid = document.querySelector("#SELECT_SSID").value;
-        let password = document.querySelector("#PASSWORD").value;
-
-        let n = (Number(ssid) << 5) | password.length;
-        let passwordBuffer = new TextEncoder().encode(password).buffer;
-        let buffer = new Int8Array([n, ...(new Int8Array(passwordBuffer))]).buffer;
-
-        el.value = 2;
-
-        let ok = await writeBuffer(el.dataset.uuid, buffer);
-        if (ok) el.value = 1;
+    if (isContinuous) {
+      el.value = 1;
+      let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
+      if (!ok) {
+          el.value = 0;
+      }
     } else {
-        let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
-        if (!ok) {
-            el.value = 0;
-        }
+      el.value = 0;
     }
-
-    if (attr.after_class_add) document.querySelector("#container").classList.add(attr.after_class_add);
-    if (attr.after_class_remove) document.querySelector("#container").classList.remove(attr.after_class_remove);
 };
 
-let buttonDidPressUp = async (el) => {
+let buttonDidPressUp = async (el, attr) => {
     let isContinuous = Number(el.dataset.continuous);
 
     if (isContinuous) {
@@ -266,7 +253,23 @@ let buttonDidPressUp = async (el) => {
             el.value = 0;
         }
     } else {
-        el.value = 0;
+        el.value = 1;
+
+        if (el.id == "SEND_WIFI_CREDENTIALS") {
+            let ssid = document.querySelector("#SELECT_SSID").value;
+            let password = document.querySelector("#PASSWORD").value;
+
+            let n = (Number(ssid) << 5) | password.length;
+            let passwordBuffer = new TextEncoder().encode(password).buffer;
+            let buffer = new Int8Array([n, ...(new Int8Array(passwordBuffer))]).buffer;
+
+            let ok = await writeBuffer(el.dataset.uuid, buffer);
+        } else {
+            let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
+        }
+
+        if (attr.after_class_add) document.querySelector("#container").classList.add(attr.after_class_add);
+        if (attr.after_class_remove) document.querySelector("#container").classList.remove(attr.after_class_remove);
     }
 };
 
