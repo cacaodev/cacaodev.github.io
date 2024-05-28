@@ -26,7 +26,8 @@ const UUID_MAP = [{
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a2",
         attr: {
             value: 0,
-            name: "pir_enable"
+            name: "pir_enable",
+            section: "detection"
         }
     },
     {
@@ -35,7 +36,8 @@ const UUID_MAP = [{
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a6",
         attr: {
             value: 0,
-            name: "enable_notifications"
+            name: "enable_notifications",
+            section: "detection"
         }
     },
     /*{
@@ -53,7 +55,8 @@ const UUID_MAP = [{
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a3",
         attr: {
             value: 0,
-            name: "manual_alarm"
+            name: "manual_alarm",
+            section: "bell"
         }
     }, {
         type: "switch",
@@ -62,6 +65,7 @@ const UUID_MAP = [{
         attr: {
             value: 0,
             name: "continuous",
+            section: "bell"
         }
 
     }, {
@@ -75,35 +79,38 @@ const UUID_MAP = [{
             min: "1",
             max: "15",
             step: "1",
-            value: "1"
+            value: "1",
+            section: "bell-discrete"
         }
     }, {
-        type: "range",
+        type: "range16",
         id: "DISCRETE_INTERVAL_OFF",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b4",
         attr: {
             type: "range",
             class: "discrete",
             name: "discrete_interval_off",
-            min: "1",
-            max: Math.pow(2, 8) - 1,
-            step: "1",
-            value: "4"
+            min: 0,
+            max: Math.pow(2, 16) - 1,
+            step: 500,
+            value: 0,
+            section: "bell-discrete"
         }
-      }, {
-          type: "range",
-          id: "DISCRETE_INTERVAL_ON",
-          uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b8",
-          attr: {
-              type: "range",
-              class: "discrete",
-              name: "discrete_interval_on",
-              min: "5",
-              max: Math.pow(2, 8) - 1,
-              step: "5",
-              value: "5"
-          }
-      }, {
+    }, {
+        type: "range16",
+        id: "DISCRETE_INTERVAL_ON",
+        uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b8",
+        attr: {
+            type: "range",
+            class: "discrete",
+            name: "discrete_interval_on",
+            min: 0,
+            max: Math.pow(2, 16) - 1,
+            step: 500,
+            value: 0,
+            section: "bell-discrete"
+        }
+    }, {
         type: "range",
         id: "SLEEP_AFTER_MINUTES",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26a9",
@@ -113,14 +120,16 @@ const UUID_MAP = [{
             min: "1",
             max: Math.pow(2, 8) - 1,
             step: "1",
-            value: "1"
+            value: "1",
+            section: "energy-saving"
         }
     }, {
         type: "label",
         id: "VERSION",
         uuid: "beb5483e-36e1-4688-b7f5-ea07361b26b1",
         attr: {
-            name: "version"
+            name: "version",
+            section: "info"
         }
     }, {
         type: "pressed",
@@ -129,7 +138,8 @@ const UUID_MAP = [{
         attr: {
             value: 0,
             name: "wifi_scan",
-            after_class_add: "wifi"
+            after_class_add: "wifi",
+            section: "wifi"
         }
     }, {
         type: "select",
@@ -137,7 +147,8 @@ const UUID_MAP = [{
         attr: {
             value: 0,
             name: "ssid",
-            class: "wifi"
+            class: "wifi",
+            section: "wifi"
         }
     }, {
         type: "text",
@@ -145,7 +156,8 @@ const UUID_MAP = [{
         attr: {
             value: "",
             name: "password",
-            class: "wifi"
+            class: "wifi",
+            section: "wifi"
         }
     }, {
         type: "pressed",
@@ -155,7 +167,8 @@ const UUID_MAP = [{
             value: 0,
             name: "OK",
             class: "wifi",
-            after_class_remove: "wifi"
+            after_class_remove: "wifi",
+            section: "wifi"
         }
     }, {
         type: "pressed",
@@ -169,10 +182,10 @@ const UUID_MAP = [{
     }
 ];
 
-const FLAGS_IDENTIFIERS = ["PIR_ENABLE", "DRING_ENABLE", "ENABLE_NOTIFICATIONS", "CONTINUOUS"];
 const NOTIFICATION_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 const BATTERY_LEVEL_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c33191b6";
 const NETWORKS_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26b8";
+const PERSISTENT_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26b9"
 const GATT_CONNECT_TIMEOUT = 10000;
 const FILTER_OPTIONS = {
     optionalServices: [ALERT_SERVICE_UUID],
@@ -234,13 +247,13 @@ let buttonDidPressDown = async (el, attr) => {
     let isContinuous = Number(el.dataset.continuous);
 
     if (isContinuous) {
-      el.value = 1;
-      let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
-      if (!ok) {
-          el.value = 0;
-      }
+        el.value = 1;
+        let ok = !el.dataset.uuid || await writeValue(el.dataset.uuid, 1);
+        if (!ok) {
+            el.value = 0;
+        }
     } else {
-      el.value = 0;
+        el.value = 0;
     }
 };
 
@@ -303,7 +316,15 @@ let createTimerInput = (id, uuid, attr) => {
     return el;
 };
 
-let createRangeInput = (id, uuid, attr) => {
+let createRangeInputUint8 = (id, uuid, attr) => {
+    return createRangeInput(id, uuid, attr, Uint8Array);
+};
+
+let createRangeInputUint16 = (id, uuid, attr) => {
+    return createRangeInput(id, uuid, attr, Uint16Array);
+};
+
+let createRangeInput = (id, uuid, attr, TypedArray) => {
     let el = document.createElement("input");
     el.id = id;
     el.type = "range";
@@ -313,7 +334,7 @@ let createRangeInput = (id, uuid, attr) => {
 
     el.addEventListener("change", async () => {
         let new_value = el.value;
-        let ok = await writeValue(uuid, new_value);
+        let ok = await writeUint(uuid, new_value, TypedArray);
         if (ok) el.dataset.value = new_value;
         else el.value = el.dataset.value;
     });
@@ -389,28 +410,34 @@ const INPUTS = {
     "switch": createSwitchToggle,
     "pressed": createPushPressedButton,
     "timer": createTimerInput,
-    "range": createRangeInput,
+    "range": createRangeInputUint8,
+    "range16": createRangeInputUint16,
     "label": createLabel,
     "select": createSelect,
     "text": createInputText
 };
 
-let updateUIFromDevice = (buffer) => {
-    let hex_string = new TextDecoder().decode(buffer);
-    let regexp = new RegExp("^(?<flags>[0-9A-Z]{1})(?<VERSION>[0-9A-Z]{1})(?<SLEEP_AFTER_MINUTES>[0-9A-Z]{2})(?<DISCRETE_COUNT>[0-9A-Z]{1})(?<DISCRETE_INTERVAL_OFF>[0-9A-Z]{2})(?<DISCRETE_INTERVAL_ON>[0-9A-Z]{2})(?<BATT_LEVEL>[0-9A-Z]{3})$");
-    console.log(`Received service data adv: '${hex_string}'`);
-    let matches = hex_string.match(regexp);
-    if (matches == null || matches.groups == null) throw `No matches for hex string '${hex_string}' with regular expression '${regexp}'`;
-    let groups = matches.groups;
-    let flags_value = parseInt(groups.flags, 16);
-    let flags = FLAGS_IDENTIFIERS.forEach((flag, i) => {
-        groups[flag] = Number(Boolean(flags_value & (1 << i)));
-    });
+let updateUIFromDevice = async (device) => {
+    let values = {};
 
-    delete groups.flags;
-    console.log(groups);
-    Object.entries(groups).forEach(([id, hex_value]) => {
-        let value = parseInt(hex_value, 16);
+    const service = await device.gatt.getPrimaryService(SERVICE_UUID);
+    const characteristic = await service.getCharacteristic(PERSISTENT_UUID);
+    let dataView = await characteristic.readValue();
+
+    let flags_value = dataView.getUint8(0);
+    values.PIR_ENABLE = Number(Boolean(flags_value & (1 << 0)));
+    values.DRING_ENABLE = Number(Boolean(flags_value & (1 << 1)));
+    values.ENABLE_NOTIFICATIONS = Number(Boolean(flags_value & (1 << 2)));
+    values.CONTINUOUS = Number(Boolean(flags_value & (1 << 3)));
+    values.VERSION = dataView.getUint8(1);
+    values.SLEEP_AFTER_MINUTES = dataView.getUint8(2);
+    values.DISCRETE_COUNT = dataView.getUint8(3);
+    values.DISCRETE_INTERVAL_ON = dataView.getUint8(4) | (dataView.getUint8(5) << 8);
+    values.DISCRETE_INTERVAL_OFF = dataView.getUint8(6) | (dataView.getUint8(7) << 8);
+    values.BATT_LEVEL = dataView.getUint8(8) | (dataView.getUint8(9) << 8);
+
+    Object.entries(values).forEach(([id, value]) => {
+        console.log(id, value);
         let def = UUID_MAP.find(m => m.id == id);
 
         if (!def) return;
@@ -452,10 +479,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (device) container.classList.add("paired");
 
     connect_btn.addEventListener('click', async () => {
-        if (!device) {
+        let acceptAllDevices = !!document.querySelector("#acceptAllDevices:checked");
+
+        if (!device || acceptAllDevices) {
             try {
                 console.log("Requested device");
-                device = await requestDevice(DEVICE_NAME);
+                device = await requestDevice(DEVICE_NAME, acceptAllDevices);
             } catch (e) {
                 device = null;
                 console.warn(e);
@@ -469,6 +498,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 let connected = await connectToBluetoothDevice(device);
                 if (!connected) {
                     console.log('Could not connect to gatt server');
+                    document.querySelector('#container').classList.remove('connecting');
                 }
             } catch (e) {
                 console.warn(e);
@@ -482,8 +512,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         uuid,
         attr
     }) => {
+        let parent;
+        if (attr.section) {
+            parent = document.getElementById(attr.section);
+            if (!parent) {
+                parent = document.createElement('div');
+                parent.classList.add('section');
+                parent.id = attr.section;
+                container.appendChild(parent);
+            }
+        } else {
+            parent = container;
+        }
+
         let elmt = INPUTS[type](id, uuid, attr);
-        document.getElementById("container").appendChild(elmt);
+        parent.appendChild(elmt);
     });
 
     if ('serviceWorker' in navigator) {
@@ -515,9 +558,8 @@ async function pairedDevice(name) {
     return devices.find(dd => dd.name.startsWith(name));
 }
 
-async function requestDevice(name) {
+async function requestDevice(name, acceptAllDevices = false) {
 
-    let acceptAllDevices = !!document.querySelector("#acceptAllDevices:checked");
     let options = acceptAllDevices ? REQUEST_ALL_OPTIONS : FILTER_OPTIONS;
 
     console.log('Requesting Bluetooth Device...');
@@ -541,13 +583,7 @@ async function connectToBluetoothDevice(device) {
         document.querySelector('#container').classList.add('connecting');
 
         device.addEventListener('advertisementreceived', (event) => {
-            console.log('> Received advertisement from "' + device.name + '"...', event);
-            let buffer = event.serviceData.get(SERVICE_UUID);
-            try {
-                updateUIFromDevice(buffer);
-            } catch (e) {
-                console.warn(e);
-            }
+
             // Stop watching advertisements to conserve battery life.
 
             console.log('Connecting to GATT Server from "' + device.name + '"...');
@@ -584,9 +620,12 @@ async function onConnected(device) {
 
     device.addEventListener('gattserverdisconnected', onDisconnected);
     let container = document.querySelector("#container");
-    container.classList.add("connected");
     container.classList.remove("connecting");
     container.classList.remove("sleeping");
+
+    await updateUIFromDevice(device);
+    container.classList.add("connected");
+
     await startNotifications(device);
 }
 
@@ -780,7 +819,11 @@ async function startNotifications(device) {
 }
 
 async function writeValue(uuid, value) {
-    let buffer = new Uint8Array([value]).buffer;
+    return writeUint(uuid, value, Uint8Array);
+}
+
+async function writeUint(uuid, value, TypedArray) {
+    let buffer = new TypedArray([value]).buffer;
     return await writeBuffer(uuid, buffer);
 }
 

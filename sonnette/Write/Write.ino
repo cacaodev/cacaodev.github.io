@@ -22,10 +22,9 @@
 #define START_WIFI_SCAN "beb5483e-36e1-4688-b7f5-ea07361b26b7"
 #endif
 
-
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
-#define FIRMWARE_VERSION_NUMBER 1
+#define FIRMWARE_VERSION_NUMBER 1U
 
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914a"
 #define SERVICE_ALERT_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
@@ -118,7 +117,7 @@ bool handle_update = false;
 Preferences preferences;
 BLEAdvertisementData advert;
 
-void setAdvertisementData();
+void updatePersistentValues();
 void dring(uint8_t value);
 void abortDring();
 void startWifiScan();
@@ -189,14 +188,20 @@ class MyCallbacks : public BLECharacteristicCallbacks {
         preferences.putUChar("discrete_count", value);
         BlinkMode.counter = value;
       } else if (uuid == MANUAL_ALARM_DISCRETE_OFF_DELAY) {
-        preferences.putUChar("discrete_off", value);
-        BlinkMode.delay_off = value * 100;
-     } else if (uuid == MANUAL_ALARM_DISCRETE_ON_DELAY) {
-        preferences.putUChar("discrete_on", value);
-        BlinkMode.delay_on = value * 10;
+        uint16_t delay;
+        memcpy(&delay, data, 2);
+        DEBUG_PRINTF("delay off=%u\n", delay);
+        BlinkMode.delay_off = delay;
+        preferences.putUShort("discrete_off", delay);
+      } else if (uuid == MANUAL_ALARM_DISCRETE_ON_DELAY) {
+        uint16_t delay;
+        memcpy(&delay, data, 2);
+        DEBUG_PRINTF("delay on=%u\n", delay);
+        BlinkMode.delay_on = delay;
+        preferences.putUShort("discrete_on", delay);
       }
 
-      setAdvertisementData();
+      updatePersistentValues();
       last_activity = millis();
     }
   }
@@ -283,9 +288,9 @@ void setup() {
   sleep_after_minutes = preferences.getUChar("sleep_after", 5);
   manual_alarm_continuous = preferences.getBool("continuous", true);
 
-  BlinkMode.counter = preferences.getUShort("discrete_count", 10);
-  BlinkMode.delay_on = preferences.getUChar("discrete_on", DISCRETE_ON_DURATION) * 10;
-  BlinkMode.delay_off = preferences.getUShort("discrete_off", 10) * 100;
+  BlinkMode.counter = preferences.getUChar("discrete_count", 10);
+  BlinkMode.delay_on = preferences.getUShort("discrete_on", DISCRETE_ON_DURATION);
+  BlinkMode.delay_off = preferences.getUShort("discrete_off", 10);
 
   digitalWrite(ENABLE_HRS_PIN, !enable_hrs);
   digitalWrite(ENABLE_DRING_PIN, enable_dring);
@@ -310,9 +315,9 @@ void setup() {
   createCharacteristic(pService, SLEEP_AFTER_MINUTES, (uint8_t)sleep_after_minutes, clbk);
   createCharacteristic(pService, FIRMWARE_VERSION, FIRMWARE_VERSION_NUMBER, clbk);
   createCharacteristic(pService, MANUAL_ALARM_CONTINUOUS, (uint8_t)manual_alarm_continuous, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, (uint8_t)BlinkMode.counter, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_OFF_DELAY, (uint8_t)BlinkMode.delay_off / 100U, clbk);
-  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_ON_DELAY, (uint8_t)BlinkMode.delay_on / 10U, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_COUNT, (uint8_t)0, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_OFF_DELAY, (uint8_t)0, clbk);
+  createCharacteristic(pService, MANUAL_ALARM_DISCRETE_ON_DELAY, (uint8_t)0, clbk);
 
 #ifdef ENABLE_WIFI
   createCharacteristic(pService, START_WIFI_SCAN, (uint8_t)0, clbk);
@@ -323,6 +328,8 @@ void setup() {
   WiFi.onEvent(WiFiStationDisconnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
   WiFi.onEvent(WiFiScanDone, WiFiEvent_t::ARDUINO_EVENT_WIFI_SCAN_DONE);
 #endif
+
+  persistent = createCharacteristic(pService, PERSISTENT, (uint8_t)0, clbk);
 
   notif = alertService->createCharacteristic(NOTIFICATION,
                                              BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
@@ -342,8 +349,9 @@ void setup() {
   // Range: 0x0020 to 0x4000 Default: N = 0x0800 (1.28 second) Time = N * 0.625 msec Time Range: 20 ms to 10.24 sec
   pAdvertising->setMinInterval(ADVERTISING_MIN_INTERVAL);
   pAdvertising->setMaxInterval(ADVERTISING_MAX_INTERVAL);
-
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
+
+  updatePersistentValues();
   setAdvertisementData();
 
 #ifdef ARDUINO_LOLIN_C3_PICO
@@ -351,23 +359,32 @@ void setup() {
   delay(1000);
   neopixelWrite(RGB_BUILTIN, 0, 0, 0);
 #endif
-
 }
 
 void setAdvertisementData() {
-  char data[13];
-  uint16_t batt_level = analogRead(ADC_IN_PIN);  // 0-4095
-  DEBUG_PRINTF("batt_level=%u\n", batt_level);
-  uint8_t flags = enable_hrs | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
-  snprintf(data, 13, "%01X%01X%02X%01X%02X%02X%03X", flags, FIRMWARE_VERSION_NUMBER, sleep_after_minutes, min(BlinkMode.counter, (uint8_t)15), BlinkMode.delay_off, BlinkMode.delay_on, batt_level);
-
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-  advert.setServiceData(BLEUUID(SERVICE_UUID), data);
+  //advert.setServiceData(BLEUUID(SERVICE_UUID), "SONNETTE");
   advert.setName("SONNETTE");
   //advert.setCompleteServices(BLEUUID(SERVICE_UUID));
   //advert.setManufacturerData(ADVERTISING_MANUFACTURER_DATA);
   pAdvertising->setAdvertisementData(advert);
   BLEDevice::startAdvertising();
+}
+
+void updatePersistentValues() {
+  uint16_t batt_level = analogRead(ADC_IN_PIN);  // 0-4095
+  DEBUG_PRINTF("batt_level=%u\n", batt_level);
+  uint8_t flags = enable_hrs | (enable_dring << 1) | (enable_notifications << 2) | (manual_alarm_continuous << 3);
+  uint8_t result[10];
+  uint8_t version = FIRMWARE_VERSION_NUMBER;
+  memcpy(result, (uint8_t*)&flags, 1);
+  memcpy(result + 1, (uint8_t *)&version, 1);
+  memcpy(result + 2, (uint8_t*)&sleep_after_minutes, 1);
+  memcpy(result + 3, (uint8_t*)&(BlinkMode.counter), 1);
+  memcpy(result + 4, (uint8_t*)&(BlinkMode.delay_on), 2);
+  memcpy(result + 6, (uint8_t*)&(BlinkMode.delay_off), 2);
+  memcpy(result + 8, (uint8_t*)&batt_level, 2);
+  persistent->setValue(result, 10);
 }
 
 void notifyDetection() {
@@ -525,7 +542,6 @@ void loop() {
   }
 
   handleDring();
-
 }
 
 void handleDring() {
@@ -550,7 +566,8 @@ void handleDring() {
       } else {
         BlinkMode.state = 0;
         BlinkMode.iteration = 0;
-        BlinkMode.timer = 0;      }
+        BlinkMode.timer = 0;
+      }
     }
   }
 }

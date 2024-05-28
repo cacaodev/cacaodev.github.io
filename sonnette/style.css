@@ -102,16 +102,23 @@ label#VERSION::before {
 }
 
 
-input#acceptAllDevices {
+input#acceptAllDevices, input#forgetAllDevices {
     align-self: flex-start;
-    /* border: solid black thin; */
-    /* background-color: blue; */
-    /* display: block; */
     scale: 2;
+    margin:1em;
 }
 
 input#acceptAllDevices::before {
     content: "Montrer tous les appareils";
+    display: block;
+    width: max-content;
+    margin-left: 1.2em;
+    font-size: small;
+    /* background-color: red; */
+}
+
+input#forgetAllDevices::before {
+    content: "Réappairer les appareils";
     display: block;
     width: max-content;
     margin-left: 1.2em;
@@ -190,4 +197,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+
+.section {
+    display: flex;
+    flex-direction: column;
 }
